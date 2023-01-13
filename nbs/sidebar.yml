@@ -7,7 +7,7 @@ website:
         contents:
           - ml/evaluation.ipynb
           - ml/loss.ipynb
-          - ml/vision.ipynb
+          - vision.ipynb
       - section: Notes
         contents:
           - notes/craft.aws.lambda.ipynb
