@@ -1,6 +1,10 @@
 name: CI
 on:  [workflow_dispatch, pull_request, push]
 
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
