@@ -3,12 +3,12 @@ website:
     contents:
       - index.ipynb
       - utils.ipynb
-      - vision.ipynb
-      - section: ml
+      - section: Machine Learning
         contents:
           - ml/evaluation.ipynb
           - ml/loss.ipynb
-      - section: notes
+          - ml/vision.ipynb
+      - section: Notes
         contents:
           - notes/craft.aws.lambda.ipynb
           - notes/craft.colab.ipynb
