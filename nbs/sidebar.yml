@@ -7,6 +7,7 @@ website:
           - ml.evaluation.ipynb
           - ml.loss.ipynb
           - ml.vision.ipynb
+          - ml.cocoop.ipynb
       - section: Utilities
         contents:
           - utils.ipynb
