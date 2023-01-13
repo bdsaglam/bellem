@@ -2,12 +2,15 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - utils.ipynb
       - section: Machine Learning
         contents:
           - ml.evaluation.ipynb
           - ml.loss.ipynb
           - ml.vision.ipynb
+      - section: Utilities
+        contents:
+          - utils.ipynb
+          - testing.ipynb
       - section: Notes
         contents:
           - notes/craft.aws.lambda.ipynb

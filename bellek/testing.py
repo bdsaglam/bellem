@@ -6,7 +6,7 @@ __all__ = ['TEST_IMAGE', 'fixture_directory', 'fixture_path']
 # %% ../nbs/testing.ipynb 3
 from pathlib import Path
 
-# %% ../nbs/testing.ipynb 5
+# %% ../nbs/testing.ipynb 4
 def fixture_directory() -> Path:
     cwd = Path('.').resolve()
     if cwd.name == 'nbs':
@@ -17,5 +17,5 @@ def fixture_directory() -> Path:
 def fixture_path(relative_path) -> Path:
     return fixture_directory() / relative_path
 
-# %% ../nbs/testing.ipynb 6
+# %% ../nbs/testing.ipynb 5
 TEST_IMAGE = fixture_path('puppy.jpeg')
