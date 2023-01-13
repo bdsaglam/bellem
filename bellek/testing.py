@@ -18,4 +18,4 @@ def fixture_path(relative_path) -> Path:
     return fixture_directory() / relative_path
 
 # %% ../nbs/testing.ipynb 5
-TEST_IMAGE = fixture_path('puppy.jpeg')
+TEST_IMAGE = fixture_path('puppy.jpg')

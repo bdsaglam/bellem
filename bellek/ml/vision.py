@@ -12,7 +12,7 @@ from fastai.vision.core import PILImage
 
 # %% ../../nbs/ml.vision.ipynb 4
 class Make3Channel:
-    '''Tiles 1 channel image to 3 channel'''
+    """Tiles 1 channel image to 3 channel"""
 
     def __call__(self, x):
         if isinstance(x, Image):
@@ -25,6 +25,7 @@ class Make3Channel:
 
 # %% ../../nbs/ml.vision.ipynb 5
 class TorchVisionTransform(Transform):
+    """Converts a torchvision transform to fastai transform"""
     def __init__(self, transform):
         self.tfm = transform
 
