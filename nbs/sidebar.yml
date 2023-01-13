@@ -2,12 +2,12 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - 01_utils.ipynb
+      - utils.ipynb
+      - vision.ipynb
       - section: ml
         contents:
-          - ml/ml.evaluation.ipynb
-          - ml/ml.loss.ipynb
-          - ml/ml.vision.ipynb
+          - ml/evaluation.ipynb
+          - ml/loss.ipynb
       - section: notes
         contents:
           - notes/craft.aws.lambda.ipynb
