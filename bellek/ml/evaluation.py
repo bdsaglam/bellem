@@ -48,20 +48,20 @@ from sklearn.metrics import classification_report
 from fastcore.meta import delegates
 
 def classification_summary(targets, preds, class_names, show=True, figsize=(16, 12)):
+    label_indices = list(range(len(class_names)))
     clf_dict = classification_report(
         targets,
         preds,
-        labels=list(range(len(class_names))),
+        labels=label_indices,
         target_names=class_names,
         output_dict=True,
     )
     df = pd.DataFrame.from_records(clf_dict).T
-    df = df.loc[list(class_names) + sorted(list(set(df.index.values).difference(class_names)))] 
+    df = df.loc[class_names + sorted(list(set(df.index.values).difference(class_names)))] 
     if show:
         from sklearn.metrics import ConfusionMatrixDisplay
         import matplotlib.pyplot as plt
 
-        label_indices = list(range(len(class_names)))
         fig, ax = plt.subplots(figsize=figsize)
         ConfusionMatrixDisplay.from_predictions(
             targets, 
@@ -78,4 +78,4 @@ def evaluate_slmc(learn, *, dls=None, dl=None, class_names=None, **kwargs):
     class_names = ifnone(class_names, dls.vocab)
     dl = ifnone(dl, dls.valid)
     _, targets, preds = learn.get_preds(dl=dl, with_decoded=True)
-    return classification_summary(targets.cpu().numpy(), preds.cpu().numpy(), class_names, **kwargs)
+    return classification_summary(targets.cpu().numpy(), preds.cpu().numpy(), list(class_names), **kwargs)
