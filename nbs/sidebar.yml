@@ -4,8 +4,9 @@ website:
       - index.ipynb
       - section: Machine Learning
         contents:
-          - ml.evaluation.ipynb
+          - ml.layer.ipynb
           - ml.loss.ipynb
+          - ml.evaluation.ipynb
           - ml.vision.ipynb
           - ml.cocoop.ipynb
       - section: Utilities

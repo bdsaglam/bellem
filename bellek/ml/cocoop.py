@@ -4,14 +4,14 @@
 __all__ = ['TextEncoder', 'PromptLearner', 'ClipVisualEncoder', 'PromptLearningTextEncoder', 'ClipClassificationHead',
            'PromptLearningClip', 'make_prompt_learning_clip', 'prepare_prompt_learning_clip', 'get_clip_preprocess']
 
-# %% ../../nbs/ml.cocoop.ipynb 2
+# %% ../../nbs/ml.cocoop.ipynb 3
 import torch
 import torch.nn as nn
 
 from clip import clip
 from clip.simple_tokenizer import SimpleTokenizer
 
-# %% ../../nbs/ml.cocoop.ipynb 3
+# %% ../../nbs/ml.cocoop.ipynb 4
 class TextEncoder(nn.Module):
     def __init__(self, clip_model):
         super().__init__()
@@ -162,7 +162,7 @@ class PromptLearner(nn.Module):
 
         return prompts
 
-# %% ../../nbs/ml.cocoop.ipynb 4
+# %% ../../nbs/ml.cocoop.ipynb 5
 class ClipVisualEncoder(nn.Module):
     def __init__(self, clip_model):
         super().__init__()
@@ -209,7 +209,7 @@ class PromptLearningClip(nn.Module):
         return logits
 
 
-# %% ../../nbs/ml.cocoop.ipynb 5
+# %% ../../nbs/ml.cocoop.ipynb 6
 def make_prompt_learning_clip(class_names, clip_model_name="ViT-B/32", prec='fp32', **kwargs):
     clip_model = clip.load(clip_model_name, device='cpu')[0]
     
