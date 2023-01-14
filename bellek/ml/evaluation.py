@@ -56,7 +56,7 @@ def classification_summary(targets, preds, class_names, show=True, figsize=(16, 
         output_dict=True,
     )
     df = pd.DataFrame.from_records(clf_dict).T
-    df = df.loc[class_names + sorted(list(set(df.index.values).difference(class_names)))] 
+    df = df.loc[list(class_names) + sorted(list(set(df.index.values).difference(class_names)))] 
     if show:
         from sklearn.metrics import ConfusionMatrixDisplay
         import matplotlib.pyplot as plt
