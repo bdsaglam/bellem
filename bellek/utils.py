@@ -4,8 +4,11 @@
 __all__ = ['flatten_dict', 'most_common', 'set_dir', 'generate_time_id', 'get_node', 'apply_nested', 'resolve_path']
 
 # %% ../nbs/utils.ipynb 3
+import os
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Union
+
 from fastcore.basics import patch
 
 # %% ../nbs/utils.ipynb 4
@@ -33,10 +36,6 @@ def most_common(lst):
     return Counter(lst).most_common(1)[0][0]
 
 # %% ../nbs/utils.ipynb 9
-import os
-from contextlib import contextmanager
-from typing import Union
-
 # ref: https://dev.to/teckert/changing-directory-with-a-python-context-manager-2bj8
 @contextmanager
 def set_dir(path: Union[Path, str]):
