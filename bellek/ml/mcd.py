@@ -54,4 +54,5 @@ class Predictor(nn.Module):
             x = self.gr(x)
         x = F.relu(self.bn2_fc(self.fc2(x)))
         x = self.fc3(x)
-        
+        return x
+
