@@ -65,8 +65,8 @@ class Predictor(nn.Module):
         self.bn_fc3 = nn.BatchNorm1d(10)
         self.gr = GradReverse(lambd)
 
-    def forward(self, x, reverse=False):
-        if reverse:
+    def forward(self, x, grad_reverse=False):
+        if grad_reverse:
             x = self.gr(x)
         x = F.relu(self.bn2_fc(self.fc2(x)))
         x = self.fc3(x)
@@ -98,12 +98,13 @@ class McdModel(nn.Module):
         output2 = self.classifier2(feat, grad_reverse)
         return output1, output2
 
+# %% ../../nbs/ml.mcd.ipynb 10
 class McdCallback(Callback):
     def __init__(self, classification_loss_func, discrepancy_loss_func):
         super().__init__()
         store_attr()
     
-    def before_batch(self, *args, **kwargs):
+    def before_batch(self):
         self._do_one_batch()
         raise CancelBatchException
 
@@ -123,7 +124,7 @@ class McdCallback(Callback):
         self.learn.pred = tuple([*source_pred, *target_pred])
         self.learn('after_pred')
         if source_loss is not None and target_loss is not None:
-            self.learn.loss = torch.Tensor([source_loss.clone(), target_loss.clone()])
+            self.learn.loss = source_loss.clone() + target_loss.clone()
         self.learn('after_loss')
         if not self.training or not len(self.yb): 
             return
