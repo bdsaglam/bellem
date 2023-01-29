@@ -57,7 +57,6 @@ class PromptLearner(nn.Module):
             ctx_init = ctx_init.replace("_", " ")
             n_ctx = len(ctx_init.split(" "))
             tokens = clip.tokenize(ctx_init)
-            assert n_ctx == tokenizer.encode(ctx_init)
             with torch.no_grad():
                 embedding = clip_model.token_embedding(tokens).type(dtype)
             # taking only the part of context corresponding to the given context, i.e. excluding special tokens or padding
