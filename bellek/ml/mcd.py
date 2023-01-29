@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['discrepancy', 'DiscrepancyLoss', 'discrepancy_metric', 'Feature', 'Predictor', 'McdDataset', 'McdDataLoader',
-           'McdModel', 'McdCallback']
+           'McdModel', 'EnsembleMcdModel', 'McdCallback']
 
 # %% ../../nbs/ml.mcd.ipynb 3
 import torch
@@ -120,6 +120,22 @@ class McdModel(nn.Module):
         output1 = self.classifier1(feat, grad_reverse)
         output2 = self.classifier2(feat, grad_reverse)
         return output1, output2
+
+class EnsembleMcdModel(nn.Module):
+    def __init__(self, feature_extractor, classifier1, classifier2):
+        super().__init__()
+        store_attr()
+    
+    def forward(self, img):
+        feat = self.feature_extractor(img)
+        output1 = self.classifier1(feat)
+        output2 = self.classifier2(feat)
+        return (output1 + output2) / 2
+
+    @classmethod
+    def from_mcd_model(cls, mcd_model):
+        return cls(mcd_model.feature_extractor, mcd_model.classifier1, mcd_model.classifier2)
+
 
 # %% ../../nbs/ml.mcd.ipynb 11
 class McdCallback(Callback):
