@@ -15,6 +15,6 @@ def load_clip_preprocess(clip_model_name):
 
 # %% ../../nbs/ml.clip.ipynb 5
 def make_tfms_from_clip_preprocess(clip_preprocess):
-    item_tfms = TorchVisionTransform(transforms.Compose(clip_preprocess.transforms[:-1]))
-    batch_tfms = TorchVisionTransform(transforms.Compose(clip_preprocess.transforms[-1:]))
+    item_tfms = TorchVisionTransform(transforms.Compose(clip_preprocess.transforms[:-2]))
+    batch_tfms = TorchVisionTransform(transforms.Compose(clip_preprocess.transforms[-2:]))
     return item_tfms, batch_tfms
