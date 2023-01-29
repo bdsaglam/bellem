@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['TextEncoder', 'PromptLearner', 'ClipVisualEncoder', 'PromptLearningTextEncoder', 'ClipClassificationHead',
-           'PromptLearningClip', 'make_prompt_learning_clip', 'prepare_prompt_learning_clip', 'get_clip_preprocess']
+           'PromptLearningClip', 'make_prompt_learning_clip', 'prepare_prompt_learning_clip']
 
 # %% ../../nbs/ml.cocoop.ipynb 3
 import torch
@@ -227,7 +227,3 @@ def prepare_prompt_learning_clip(model):
         if "prompt_learner" not in name:
             param.requires_grad_(False)
     return model
-
-def get_clip_preprocess(clip_model_name="ViT-B/32"):
-    return clip.load(clip_model_name, device='cpu')[1]
-
