@@ -108,6 +108,10 @@ class McdDataLoader:
     def to(self, device):
         self.source_dl.to(device)
         self.target_dl.to(device)
+    
+    def new(self, dataset=None, cls=None, **kwargs):
+        if cls is None: cls = type(self)
+        return cls(self.source_dl.new(**kwargs), self.source_dl.new(**kwargs))
 
 # %% ../../nbs/ml.mcd.ipynb 10
 class McdModel(nn.Module):
