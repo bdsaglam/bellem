@@ -169,9 +169,7 @@ class ClipVisualEncoder(nn.Module):
         self.image_encoder = clip_model.visual
     
     def forward(self, image):
-        image_features = self.image_encoder(image.type(self.dtype))
-        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-        return image_features
+        return self.image_encoder(image.type(self.dtype))
 
 class PromptLearningTextEncoder(nn.Module):
     def __init__(self, clip_model, tokenizer, class_names, **kwargs):
@@ -182,7 +180,6 @@ class PromptLearningTextEncoder(nn.Module):
     def forward(self):
         prompts = self.prompt_learner()
         text_features = self.text_encoder(prompts, self.prompt_learner.tokenized_prompts)
-        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
         return text_features
 
 class ClipClassificationHead(nn.Module):
@@ -191,6 +188,8 @@ class ClipClassificationHead(nn.Module):
         self.logit_scale = nn.Parameter(clip_model.logit_scale.detach().clone(), requires_grad=True) 
     
     def forward(self, image_features, text_features):
+        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
         logits = self.logit_scale.exp() * (image_features @ text_features.t())
         return logits
 
