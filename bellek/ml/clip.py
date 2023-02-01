@@ -28,13 +28,19 @@ class ClipZeroShotClassifier(nn.Module):
         super().__init__()
         self.clip_model = clip_model
         with torch.inference_mode():
-            text_tokens = clip.tokenize(class_descriptions)
-            text_features = clip_model.encode_text(text_tokens).float()
-            text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-        self.text_features = nn.Parameter(text_features.cpu(), requires_grad=False)
+            ctf = self.compute_text_features(class_descriptions)
+        self.class_text_features = nn.Parameter(ctf, requires_grad=False)
     
     def forward(self, image):
         image_features = self.clip_model.encode_image(image.type(self.clip_model.dtype))
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-        logits = image_features @ self.text_features.T
+        logits = image_features @ self.class_text_features.T
         return logits
+
+    def compute_text_features(self, texts):
+        device = next(self.clip_model.parameters()).device
+        text_tokens = clip.tokenize(texts)
+        text_features = self.clip_model.encode_text(text_tokens.to(device)).float()
+        text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+        return text_features
+
