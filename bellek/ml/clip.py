@@ -31,7 +31,7 @@ class ClipZeroShotClassifier(nn.Module):
             text_tokens = clip.tokenize(class_descriptions)
             text_features = clip_model.encode_text(text_tokens).float()
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-        self.text_features = nn.Parameter(text_features, requires_grad=False)
+        self.text_features = nn.Parameter(text_features.cpu(), requires_grad=False)
     
     def forward(self, image):
         image_features = self.clip_model.encode_image(image.type(self.clip_model.dtype))
