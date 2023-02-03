@@ -124,6 +124,8 @@ d = { 'settings': { 'branch': 'master',
                               'bellek.utils.flatten_dict': ('utils.html#flatten_dict', 'bellek/utils.py'),
                               'bellek.utils.generate_time_id': ('utils.html#generate_time_id', 'bellek/utils.py'),
                               'bellek.utils.get_node': ('utils.html#get_node', 'bellek/utils.py'),
+                              'bellek.utils.make_nested_dict': ('utils.html#make_nested_dict', 'bellek/utils.py'),
                               'bellek.utils.most_common': ('utils.html#most_common', 'bellek/utils.py'),
                               'bellek.utils.resolve_path': ('utils.html#resolve_path', 'bellek/utils.py'),
-                              'bellek.utils.set_dir': ('utils.html#set_dir', 'bellek/utils.py')}}}
+                              'bellek.utils.set_dir': ('utils.html#set_dir', 'bellek/utils.py'),
+                              'bellek.utils.unflatten_dict': ('utils.html#unflatten_dict', 'bellek/utils.py')}}}
