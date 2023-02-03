@@ -115,16 +115,20 @@ class McdDataLoader:
 
 # %% ../../nbs/ml.mcd.ipynb 10
 class McdModel(nn.Module):
-    def __init__(self, feature_extractor, classifier1, classifier2):
+    def __init__(self, feature_extractor, classifier1, classifier2, lambd=1.0):
         super().__init__()
         store_attr()
+        self.gr = GradReverse(lambd)
     
     def forward(self, img, grad_reverse=False):
         feat = self.feature_extractor(img)
-        output1 = self.classifier1(feat, grad_reverse)
-        output2 = self.classifier2(feat, grad_reverse)
+        if grad_reverse:
+            feat = self.gr(feat)
+        output1 = self.classifier1(feat)
+        output2 = self.classifier2(feat)
         return output1, output2
 
+# %% ../../nbs/ml.mcd.ipynb 11
 class EnsembleMcdModel(nn.Module):
     def __init__(self, feature_extractor, classifier1, classifier2):
         super().__init__()
@@ -141,7 +145,7 @@ class EnsembleMcdModel(nn.Module):
         return cls(mcd_model.feature_extractor, mcd_model.classifier1, mcd_model.classifier2)
 
 
-# %% ../../nbs/ml.mcd.ipynb 11
+# %% ../../nbs/ml.mcd.ipynb 12
 class McdCallback(Callback):
     def __init__(self, classification_loss_func, discrepancy_loss_func):
         super().__init__()
