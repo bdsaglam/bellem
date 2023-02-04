@@ -1,5 +1,6 @@
 import shutil
 from pathlib import Path
+
 from bellek.ml.data import get_imagenet_label_map
 
 
@@ -27,16 +28,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--src")
     parser.add_argument("--dst")
-    parser.add_argument("-n", type=int, required=None)
-    parser.add_argument("--labelfile", type=str, required=None)
+    parser.add_argument("-n", type=int, required=False, default=None)
+    parser.add_argument("--labelfile", type=str, required=False, default=None)
     args = parser.parse_args()
 
     if args.labelfile:
         with open(args.labelfile) as f:
             label_ids = [line.strip() for line in f.readlines()]
-    elif args.n is not None:
-        assert args.n > 0
-        label_ids = sorted(list(get_imagenet_label_map().keys()))[:args.n]
+    elif args.n:
+        label_ids = sorted(list(get_imagenet_label_map().keys()))[: args.n]
     else:
         raise RuntimeError("Either -n or --labelfile must be specified")
 
