@@ -4,6 +4,10 @@
 __all__ = ['context_wandb']
 
 # %% ../../nbs/ml.experiment.ipynb 3
+from contextlib import contextmanager
+
+# %% ../../nbs/ml.experiment.ipynb 4
+@contextmanager
 def context_wandb(entity, project, **kwargs):
     import wandb
     try:
