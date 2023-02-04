@@ -5,6 +5,9 @@ __all__ = ['ZippedDataset', 'ZippedDataLoader', 'fetch_imagenet_label_synsets', 
            'get_imagenet_label_map']
 
 # %% ../../nbs/ml.data.ipynb 3
+from functools import lru_cache
+
+# %% ../../nbs/ml.data.ipynb 4
 class ZippedDataset:
     def __init__(self, *datasets):
         self.datasets = datasets
@@ -15,7 +18,7 @@ class ZippedDataset:
     def __len__(self):
         return min(len(ds) for ds in self.datasets)
 
-# %% ../../nbs/ml.data.ipynb 4
+# %% ../../nbs/ml.data.ipynb 5
 class ZippedDataLoader:
     def __init__(self, *data_loaders):
         self.data_loaders = data_loaders
@@ -27,7 +30,7 @@ class ZippedDataLoader:
     def __next__(self):
         return next(self.it)
 
-# %% ../../nbs/ml.data.ipynb 5
+# %% ../../nbs/ml.data.ipynb 6
 def fetch_imagenet_label_synsets(url='https://raw.githubusercontent.com/torch/tutorials/master/7_imagenet_classification/synset_words.txt'):
     from urllib.request import urlopen
     with urlopen(url) as f:
@@ -37,5 +40,6 @@ def make_imagenet_label_map(label_synset):
     lines = label_synset.splitlines()
     return dict(line.strip().split(' ', 1) for line in lines if line.strip())
 
+@lru_cache(maxsize=1)
 def get_imagenet_label_map():
     return make_imagenet_label_map(fetch_imagenet_label_synsets())
