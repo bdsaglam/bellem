@@ -7,7 +7,7 @@ __all__ = ['most_common', 'context_chdir', 'generate_time_id', 'flatten_dict', '
 import os
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Dict, Union, List
+from typing import Dict, List, Tuple, Union
 
 import pandas as pd
 from fastcore.basics import patch
@@ -69,7 +69,7 @@ class Tree(dict):
         super().__init__(data)
         self.sep = sep
     
-    def at(self, keys: List | str, default=None):
+    def at(self, keys: Union[str, List, Tuple], default=None):
         if isinstance(keys, str):
             keys = keys.split(self.sep)
         node = self
@@ -79,7 +79,7 @@ class Tree(dict):
             node = node.get(key)
         return node
 
-    def set(self, keys: List | str, value):
+    def set(self, keys: Union[str, List, Tuple], value):
         if isinstance(keys, str):
             keys = keys.split(self.sep)
         node = self
