@@ -72,10 +72,10 @@ def classification_summary(targets, preds, class_names, show=True, figsize=(16, 
         )
     return df
 
-@delegates(classification_summary)
+@delegates(classification_summary, but=["targets", "preds", "class_names"])
 def evaluate_slmc(learn, *, dls=None, dl=None, class_names=None, **kwargs):
     assert not (dls is None and dl is None)
     class_names = ifnone(class_names, dls.vocab)
     dl = ifnone(dl, dls.valid)
     _, targets, preds = learn.get_preds(dl=dl, with_decoded=True)
-    return classification_summary(targets.cpu().numpy(), preds.cpu().numpy(), list(class_names), **kwargs)
+    return classification_summary(targets.cpu().numpy(), preds.cpu().numpy(), class_names=list(class_names), **kwargs)
