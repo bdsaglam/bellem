@@ -94,6 +94,6 @@ class Tree(dict):
         return flatten_dict(self, sep=self.sep)
     
     @classmethod
-    def from_flat_dict(cls, data):
-        return cls(unflatten_dict(data))
+    def from_flat_dict(cls, data, sep='.'):
+        return cls(unflatten_dict(data, sep=sep))
      
