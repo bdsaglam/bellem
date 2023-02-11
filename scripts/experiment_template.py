@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
+import wandb
 from fastai.callback.wandb import *
 from fastai.data.all import *
 from fastai.torch_core import set_seed
@@ -54,6 +55,6 @@ if __name__ == "__main__":
 
     with context_chdir(make_experiment_dir()):
         wandb_config = config["wandb"]
-        with context_wandb(**wandb_config) as wandb_run:
+        with wandb.init(**wandb_config) as wandb_run:
             wandb_run.config.update(config.flat())
             run_experiment(config, wandb_run)
