@@ -28,5 +28,5 @@ def prepare_config(config):
     return config
 
 # %% ../../nbs/ml.experiment.ipynb 6
-def merge_config_with_sweep_config(base_config, sweep_config):
-    return Tree({**flatten_dict(base_config), **flatten_dict(sweep_config)})
+def merge_config_with_sweep_config(base_config, sweep_config, sep='.'):
+    return Tree.from_flat_dict({**flatten_dict(base_config, sep=sep), **flatten_dict(sweep_config, sep=sep)}, sep=sep)
