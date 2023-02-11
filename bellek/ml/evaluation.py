@@ -47,7 +47,7 @@ import pandas as pd
 from sklearn.metrics import classification_report
 from fastcore.meta import delegates
 
-def classification_summary(targets, preds, class_names, show=True, figsize=(16, 12)):
+def classification_summary(targets, preds, class_names, show=False, figsize=(16, 12)):
     label_indices = list(range(len(class_names)))
     clf_dict = classification_report(
         targets,
@@ -73,7 +73,7 @@ def classification_summary(targets, preds, class_names, show=True, figsize=(16, 
     return df
 
 @delegates(classification_summary, but=["targets", "preds", "class_names"])
-def evaluate_slmc(learn, *, dls=None, dl=None, class_names=None, **kwargs):
+def evaluate_slmc(learn, dls=None, dl=None, class_names=None, **kwargs):
     assert not (dls is None and dl is None)
     class_names = ifnone(class_names, dls.vocab)
     dl = ifnone(dl, dls.valid)
