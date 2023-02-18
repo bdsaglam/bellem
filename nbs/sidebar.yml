@@ -28,6 +28,7 @@ website:
           - notes/craft.latex.ipynb
           - notes/craft.mac.ipynb
           - notes/craft.miscellaneous.ipynb
+          - notes/craft.ml.dataset.ipynb
           - notes/craft.python.ipynb
           - notes/craft.shell.ipynb
           - notes/craft.ssh.ipynb
