@@ -6,7 +6,7 @@ __all__ = ['make_experiment_dir', 'prepare_config', 'merge_config_with_sweep_con
 # %% ../../nbs/ml.experiment.ipynb 3
 from pathlib import Path
 import torch
-from ..utils import Tree, flatten_dict
+from ..utils import NestedDict, flatten_dict
 
 # %% ../../nbs/ml.experiment.ipynb 4
 def make_experiment_dir(root="./experiments", name=None):
@@ -29,4 +29,4 @@ def prepare_config(config):
 
 # %% ../../nbs/ml.experiment.ipynb 6
 def merge_config_with_sweep_config(base_config, sweep_config, sep='.'):
-    return Tree.from_flat_dict({**flatten_dict(base_config, sep=sep), **flatten_dict(sweep_config, sep=sep)}, sep=sep)
+    return NestedDict.from_flat_dict({**flatten_dict(base_config, sep=sep), **flatten_dict(sweep_config, sep=sep)}, sep=sep)

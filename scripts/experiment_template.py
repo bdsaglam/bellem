@@ -23,7 +23,7 @@ from bellek.utils import *
 
 
 def run_experiment(wandb_run):
-    config = Tree.from_flat_dict(wandb_run.config)
+    config = NestedDict.from_flat_dict(wandb_run.config)
     print("Config")
     print(config)
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     with open(args.cfg) as f:
-        config = prepare_config(Tree(json.load(f)))
+        config = prepare_config(NestedDict(json.load(f)))
 
     with context_chdir(make_experiment_dir()):
         wandb_config = config["wandb"]
