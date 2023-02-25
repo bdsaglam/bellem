@@ -15,7 +15,7 @@ from fastai.learner import CancelBatchException
 from fastai.learner import Learner, Recorder
 from fastai.losses import BaseLoss, CrossEntropyLossFlat
 from fastai.torch_core import default_device
-from fastcore.basics import store_attr
+from fastcore.basics import GetAttr, store_attr
 from fastcore.meta import delegates
 from typing import Callable
 
@@ -99,8 +99,10 @@ class McdDataset:
         return min(len(self.source_ds), len(self.target_ds))
 
 # %% ../../nbs/ml.mcd.ipynb 9
-class McdDataLoader:
+class McdDataLoader(GetAttr):
     """Dataloader for MCD."""
+    
+    _default = 'source_dl'
 
     def __init__(self, source_dl, target_dl):
         store_attr()
