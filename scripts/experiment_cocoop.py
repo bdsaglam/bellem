@@ -2,7 +2,6 @@ import os
 import warnings
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
@@ -71,9 +70,7 @@ def run_experiment(wandb_run):
     cbs = [SaveModelCallback(), WandbCallback()]
     if config.at("train.early_stop"):
         cbs.append(
-            EarlyStoppingCallback(
-                patience=config.at("train.early_stop.patience")
-            )
+            EarlyStoppingCallback(patience=config.at("train.early_stop.patience"))
         )
     model = prepare_prompt_learning_clip(
         make_prompt_learning_clip(class_names, **config["cocoop"])
@@ -95,6 +92,7 @@ def run_experiment(wandb_run):
             "classification-summary": wandb.Table(dataframe=clf_summary.reset_index()),
         }
     )
+
 
 def make_run_experiment_sweep(base_config):
     def func(sweep_config=None):
@@ -121,12 +119,16 @@ if __name__ == "__main__":
             sweep_config = json.load(f)
     else:
         sweep_config = {}
-    
+
     run_experiment_sweep = make_run_experiment_sweep(config)
     with context_chdir(make_experiment_dir()):
         wandb_config = config["wandb"]
         if args.sweep_cfg:
-            sweep_id = wandb.sweep(sweep_config, entity=wandb_config['entity'], project=wandb_config['project'])
-            wandb.agent(sweep_id, run_experiment_sweep, count=sweep_config.get('count'))
+            sweep_id = wandb.sweep(
+                sweep_config,
+                entity=wandb_config["entity"],
+                project=wandb_config["project"],
+            )
+            wandb.agent(sweep_id, run_experiment_sweep, count=sweep_config.get("count"))
         else:
             run_experiment_sweep()
