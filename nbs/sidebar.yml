@@ -9,6 +9,7 @@ website:
           - ml.evaluation.ipynb
           - ml.vision.ipynb
           - ml.cocoop.ipynb
+          - ml.data.ipynb
       - section: Utilities
         contents:
           - utils.ipynb
