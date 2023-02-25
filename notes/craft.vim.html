@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>bellek - vim</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="bellek - vim">
+<meta property="og:description" content="With the plugin manager, vim-plug, we can easily add a new plugin to .vimrc.">
+<meta property="og:site-name" content="bellek">
+<meta name="twitter:title" content="bellek - vim">
+<meta name="twitter:description" content="With the plugin manager, vim-plug, we can easily add a new plugin to .vimrc.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">bellek</span>
+    </a>
+  </div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">vim</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">bellek</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Machine Learning</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.layer.html" class="sidebar-item-text sidebar-link">Layers</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.loss.html" class="sidebar-item-text sidebar-link">Loss functions</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.evaluation.html" class="sidebar-item-text sidebar-link">Model evaluation utilities</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.vision.html" class="sidebar-item-text sidebar-link">Vision</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.cocoop.html" class="sidebar-item-text sidebar-link">CoCoop</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../ml.data.html" class="sidebar-item-text sidebar-link">Data</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">Utilities</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../utils.html" class="sidebar-item-text sidebar-link">General utilities</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../testing.html" class="sidebar-item-text sidebar-link">Testing utilities</a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Notes</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.aws.lambda.html" class="sidebar-item-text sidebar-link">AWS Lambda</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.colab.html" class="sidebar-item-text sidebar-link">Colab</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.conda.html" class="sidebar-item-text sidebar-link">Conda</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.docker.html" class="sidebar-item-text sidebar-link">Docker</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.fastai.html" class="sidebar-item-text sidebar-link">fastai</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.git.html" class="sidebar-item-text sidebar-link">git</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.java.html" class="sidebar-item-text sidebar-link">Java</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.jupyter.html" class="sidebar-item-text sidebar-link">Jupyter</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.kaggle.html" class="sidebar-item-text sidebar-link">Kaggle</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.kubernetes.html" class="sidebar-item-text sidebar-link">Kubernetes</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.latex.html" class="sidebar-item-text sidebar-link">LaTeX</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.mac.html" class="sidebar-item-text sidebar-link">macOS</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.miscellaneous.html" class="sidebar-item-text sidebar-link">Miscellaneous</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.ml.dataset.html" class="sidebar-item-text sidebar-link">ML Datasets</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.python.html" class="sidebar-item-text sidebar-link">Python</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.shell.html" class="sidebar-item-text sidebar-link">Shell</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.ssh.html" class="sidebar-item-text sidebar-link">ssh</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.terminal.html" class="sidebar-item-text sidebar-link">Terminal</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.tmux.html" class="sidebar-item-text sidebar-link">tmux</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.torch.html" class="sidebar-item-text sidebar-link">Torch</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.truba.html" class="sidebar-item-text sidebar-link">TRUBA</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.typescript.html" class="sidebar-item-text sidebar-link">TypeScript</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.vim.html" class="sidebar-item-text sidebar-link active">vim</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.vscode.html" class="sidebar-item-text sidebar-link">Visual Studio Code</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/craft.wandb.html" class="sidebar-item-text sidebar-link">W&amp;B (Weights and Biases)</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#basics" id="toc-basics" class="nav-link active" data-scroll-target="#basics">Basics</a>
+  <ul class="collapse">
+  <li><a href="#command-line" id="toc-command-line" class="nav-link" data-scroll-target="#command-line">Command-line</a></li>
+  <li><a href="#movement" id="toc-movement" class="nav-link" data-scroll-target="#movement">Movement</a></li>
+  <li><a href="#counts" id="toc-counts" class="nav-link" data-scroll-target="#counts">Counts</a></li>
+  <li><a href="#visual-mode" id="toc-visual-mode" class="nav-link" data-scroll-target="#visual-mode">Visual mode</a></li>
+  <li><a href="#edits" id="toc-edits" class="nav-link" data-scroll-target="#edits">Edits</a></li>
+  <li><a href="#modifiers" id="toc-modifiers" class="nav-link" data-scroll-target="#modifiers">Modifiers</a></li>
+  <li><a href="#command-mode" id="toc-command-mode" class="nav-link" data-scroll-target="#command-mode">Command mode</a></li>
+  <li><a href="#macros" id="toc-macros" class="nav-link" data-scroll-target="#macros">Macros</a></li>
+  </ul></li>
+  <li><a href="#plugins" id="toc-plugins" class="nav-link" data-scroll-target="#plugins">Plugins</a>
+  <ul class="collapse">
+  <li><a href="#vim-surround" id="toc-vim-surround" class="nav-link" data-scroll-target="#vim-surround">vim-surround</a></li>
+  <li><a href="#vim-commentary" id="toc-vim-commentary" class="nav-link" data-scroll-target="#vim-commentary">vim-commentary</a></li>
+  </ul></li>
+  <li><a href="#advanced-vim" id="toc-advanced-vim" class="nav-link" data-scroll-target="#advanced-vim">Advanced Vim</a>
+  <ul class="collapse">
+  <li><a href="#search-and-replace" id="toc-search-and-replace" class="nav-link" data-scroll-target="#search-and-replace">Search and replace</a></li>
+  <li><a href="#multiple-files-and-viewports" id="toc-multiple-files-and-viewports" class="nav-link" data-scroll-target="#multiple-files-and-viewports">Multiple files and viewports</a></li>
+  <li><a href="#terminal-in-vim" id="toc-terminal-in-vim" class="nav-link" data-scroll-target="#terminal-in-vim">Terminal in vim</a></li>
+  </ul></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices">Best practices</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/bdsaglam/bellek/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">vim</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="basics" class="level2">
+<h2 class="anchored" data-anchor-id="basics">Basics</h2>
+<section id="command-line" class="level3">
+<h3 class="anchored" data-anchor-id="command-line">Command-line</h3>
+<ul>
+<li><p><code>:q</code> quit (close window)</p></li>
+<li><p><code>:w</code> save (“write”)</p></li>
+<li><p><code>:wq</code> save and quit</p></li>
+<li><p><code>:e {name of file}</code> open file for editing</p></li>
+<li><p><code>:ls</code> show open buffers</p></li>
+<li><p><code>:bp</code> <code>:bn</code> switch between buffers</p></li>
+<li><p><code>:help {topic}</code> open help</p>
+<ul>
+<li><p><code>:help :w</code> opens help for the <code>:w</code> command</p></li>
+<li><p><code>:help w</code> opens help for the <code>w</code> movement</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="movement" class="level3">
+<h3 class="anchored" data-anchor-id="movement">Movement</h3>
+<ul>
+<li><p>Basic movement: <code>hjkl</code> (left, down, up, right)</p></li>
+<li><p>Words: <code>w</code> (next word), <code>b</code> (beginning of word), <code>e</code> (end of word)</p></li>
+<li><p>Lines: <code>0</code> (beginning of line), <code>^</code> (first non-blank character), <code>$</code> (end of line)</p>
+<ul>
+<li>When a line is wrapped, it is displayed in multiple visual lines.</li>
+</ul>
+<p>Motions become confusing with display lines as they constitute a vim line object. By prepending motion keys with <code>g</code>, we can instead modify motion commands to take display lines into accounts. For example, <code>gk</code> moves one display line upward. <code>g0</code> goes to the beginning of the display line, instead of beginning of vim line object.</p></li>
+<li><p>Screen: <code>H</code> (top of screen), <code>M</code> (middle of screen), <code>L</code> (bottom of screen)</p></li>
+<li><p>Scroll with cursor: <code>&lt;C-u&gt;</code> (up), <code>&lt;C-d&gt;</code> (down)</p></li>
+<li><p>Scroll only screen not cursor: <code>&lt;C-y&gt;</code> (up), <code>&lt;C-e&gt;</code> (down)</p></li>
+<li><p><code>zz</code> to center the cursor vertically on your screen, e.g.&nbsp;250gzz</p></li>
+<li><p>File: <code>gg</code> (beginning of file), <code>G</code> (end of file)</p></li>
+<li><p>Line numbers: <code>:{number}&lt;CR&gt;</code> or <code>{number}G</code> (line {number})</p></li>
+<li><p>Jump to matching character such as (), [], {} by <code>%</code></p></li>
+<li><p>Find: <code>f{character}</code>, <code>t{character}</code>, <code>F{character}</code>, <code>T{character}</code></p>
+<ul>
+<li><p>find/to forward/backward {character} on the current line</p></li>
+<li><p><code>,</code> / <code>;</code> for navigating matches</p></li>
+</ul></li>
+<li><p>Search: <code>/{regex}</code>, <code>n</code> / <code>N</code> for navigating matches</p>
+<ul>
+<li><p><code>*</code> find next occurrence of word under cursor</p></li>
+<li><p><code>#</code> find previous occurrence of word under cursor</p></li>
+<li><p><code>gn</code> / <code>gN</code> also visually select matches, which is handy for rerunnin commands with <code>.</code></p></li>
+</ul></li>
+<li><p>Go back/forward with <code>&lt;C-o&gt;</code>/<code>&lt;C-i&gt;</code></p></li>
+<li><p>CamelCaseMotion</p>
+<ul>
+<li><p><code>&lt;leader&gt;{w|b|e|ge}</code></p></li>
+<li><p><code>ci&lt;leader&gt;w</code></p></li>
+</ul></li>
+<li><p>Folding</p>
+<ul>
+<li><p><code>zo</code> open fold, <code>zO</code> open all folds on the cursor</p></li>
+<li><p><code>zc</code> close fold, <code>zC</code> close all folds on the cursor</p></li>
+<li><p><code>za</code> toggle fold, <code>zA</code> toggle all folds on the cursor</p></li>
+<li><p><code>zr</code> open one more level of fold, <code>zR</code> open all folds independent of the cursor</p></li>
+<li><p><code>zm</code> close one more level of fold, <code>zM</code> close all folds independent of the cursor</p></li>
+</ul></li>
+<li><p>Marks</p>
+<ul>
+<li><p><code>m{lowercase character}</code> to create a local mark</p></li>
+<li><p><code>m{uppercase character}</code> to create a global mark</p></li>
+<li><p>`{char} jump to mark</p></li>
+<li><p>Quickly come back <code>mm</code> and `m</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="counts" class="level3">
+<h3 class="anchored" data-anchor-id="counts">Counts</h3>
+<ul>
+<li><p><code>3w</code> move 3 words forward</p></li>
+<li><p><code>5j</code> move 5 lines down</p></li>
+<li><p><code>7dw</code> delete 7 words</p></li>
+</ul>
+</section>
+<section id="visual-mode" class="level3">
+<h3 class="anchored" data-anchor-id="visual-mode">Visual mode</h3>
+<ul>
+<li><p>Visual: <code>v</code></p></li>
+<li><p>Visual line: <code>V</code></p></li>
+<li><p>Visual block (multi cursor): <code>^v</code></p>
+<ul>
+<li>it does not show the command on all lines but applies when escaped</li>
+</ul></li>
+<li><p>Toggle cursor position to either ends of visual selection with <code>o</code></p></li>
+</ul>
+</section>
+<section id="edits" class="level3">
+<h3 class="anchored" data-anchor-id="edits">Edits</h3>
+<ul>
+<li><p>Insert mode</p>
+<ul>
+<li><p><code>i</code> puts cursor before the current place</p></li>
+<li><p><code>I</code> puts cursor at the beginning of current line</p></li>
+<li><p><code>a</code> puts cursor after the current place</p></li>
+<li><p><code>A</code> puts cursor at the end of current line</p></li>
+</ul></li>
+<li><p><code>o</code> / <code>O</code> insert line below / above</p></li>
+<li><p><code>d{motion}</code> delete {motion}</p>
+<ul>
+<li><p><code>dw</code> is delete word</p></li>
+<li><p><code>d$</code> is delete to end of line</p></li>
+<li><p><code>d0</code> is delete to beginning of line</p></li>
+<li><p>deleted text put into unnamed register <code>"</code></p></li>
+<li><p><code>"_d{motion}</code> delete into black hole so that it does not change unnamed register</p></li>
+</ul></li>
+<li><p><code>D</code> delete rest of the line (equal to <code>d$</code>)</p></li>
+<li><p><code>c{motion}</code> change {motion}</p>
+<ul>
+<li><code>cw</code> is change word</li>
+</ul></li>
+<li><p><code>C</code> change rest of the line (equal to <code>Di</code>)</p></li>
+<li><p><code>&gt;{motion}</code> indent</p></li>
+<li><p><code>&lt;{motion}</code> dedent</p></li>
+<li><p><code>x</code> delete character (equal do <code>dl</code>)</p></li>
+<li><p><code>r</code> replace one character</p></li>
+<li><p><code>s</code> substitute character (equal to <code>xi</code>)</p></li>
+<li><p><code>S</code> substitute line (equal to <code>ddO</code> or <code>0C</code>)</p></li>
+<li><p>Visual mode + manipulation</p>
+<ul>
+<li>select text, <code>d</code> to delete it or <code>c</code> to change it</li>
+</ul></li>
+<li><p><code>u</code> to undo, <code>&lt;C-r&gt;</code> to redo</p></li>
+<li><p><code>y</code> to copy / “yank” (some other commands like <code>d</code> also copy)</p>
+<ul>
+<li>all yanked texts are saved into numbered registers(0,1,2…), like a queue.</li>
+</ul>
+<p><code>:reg</code> list all registers.</p>
+<ul>
+<li><p>copy to a register by <code>"{character}y</code> and then paste it by <code>"{character}p</code></p>
+<ul>
+<li><p><code>"*y</code> copy to system clipboard</p></li>
+<li><p><code>"*p</code> paste from system clipboard</p></li>
+<li><p>copy content of register <code>a</code> to register <code>b</code></p>
+<pre class="vim"><code>
+:let @b=@a
+</code></pre></li>
+</ul></li>
+</ul></li>
+<li><p>Paste</p>
+<ul>
+<li><p><code>p</code> to paste in normal mode</p></li>
+<li><p><code>&lt;C-r&gt; &lt;register&gt;</code> to paste in insert mode</p>
+<ul>
+<li><code>&lt;C-r&gt; "</code> to paste unnamed register in insert mode</li>
+</ul></li>
+<li><p>after pasting over a visual selection, that visual selection is put into unnamed register</p></li>
+</ul></li>
+<li><p><code>~</code> flips the case of a character</p></li>
+<li><p><code>gu{motion}</code> lowercase <code>gU{motion}</code> uppercase</p></li>
+<li><p>Text objects</p>
+<ul>
+<li><p><code>aw</code> word including white space after</p></li>
+<li><p><code>iw</code> inner word</p></li>
+<li><p><code>it</code> inner tag</p></li>
+<li><p><code>i"</code> inner quotes</p></li>
+<li><p><code>ip</code> inner paragraphs</p></li>
+<li><p><code>as</code> as sentence</p></li>
+<li><p><code>aa</code> as argument</p></li>
+<li><p><code>ia</code> inner argument</p></li>
+</ul></li>
+<li><p>Delete until next occurence including new lines <code>d/{regex} + enter</code></p></li>
+<li><p><code>&lt;C-A&gt;</code> increment <code>&lt;C-X&gt;</code> decrement</p></li>
+</ul>
+</section>
+<section id="modifiers" class="level3">
+<h3 class="anchored" data-anchor-id="modifiers">Modifiers</h3>
+<ul>
+<li><p><code>ci(</code> change the contents inside the current pair of parentheses</p></li>
+<li><p><code>ci[</code> change the contents inside the current pair of square brackets</p></li>
+<li><p><code>da'</code> delete a single-quoted string, including the surrounding single quotes</p></li>
+</ul>
+</section>
+<section id="command-mode" class="level3">
+<h3 class="anchored" data-anchor-id="command-mode">Command mode</h3>
+<p>syntax <code>:&lt;range&gt;&lt;command&gt;</code></p>
+<ul>
+<li><p>To substitute new for the first old in a line type</p></li>
+<li><p>current line</p>
+<ul>
+<li><p><code>:s/old/new</code> first occurrence of <code>old</code> in current line</p></li>
+<li><p><code>:s/old/new/g</code> all occurrences of <code>old</code> in current line</p></li>
+<li><p><code>:.s/old/new/g</code></p></li>
+</ul></li>
+<li><p>last line <code>$</code></p></li>
+<li><p>a specific line <code>:21s/old/new/g</code></p></li>
+<li><p><code>%</code> entire file, e.g.&nbsp;<code>:%s/old/new/g</code></p></li>
+<li><p>to ask for confirmation each time add <code>c</code></p>
+<ul>
+<li><code>:%s/old/new/gc</code></li>
+</ul></li>
+<li><p><code>11,15</code> from line 11 to 15 both inclusive, e.g.&nbsp;<code>:11,15s/old/new/g</code></p></li>
+<li><p><code>.,.+5</code> from current line to 5 lines after</p></li>
+<li><p>delete all lines that matches pattern <code>:g/pattern/d</code></p></li>
+<li><p>delete all lines that does not match pattern</p>
+<ul>
+<li><p><code>:!g/pattern/d</code></p></li>
+<li><p><code>:v/pattern/d</code></p></li>
+</ul></li>
+<li><p>put a new line after every line, i.e.&nbsp;double space lines, <code>:g/^/pu =\"\n\"</code></p></li>
+<li><p>delete every empty line, <code>:g/^\s*$/d</code></p></li>
+<li><p>reverse lines, <code>:g/^/m0</code> move every line to the first line</p></li>
+<li><p>execute a command on a range <code>:'&lt;,'&gt;normal A;</code></p>
+<ul>
+<li>puts <code>;</code> to the end of each line</li>
+</ul></li>
+<li><p>execute a macro on range <code>:'&lt;,'&gt;normal @a</code></p></li>
+<li><p><code>:6t.</code> copy line 6 to current line</p></li>
+<li><p><code>:{range}m$</code> move range to the end of the file</p></li>
+<li><p><code>@:</code> repeat last Ex command</p></li>
+<li><p><code>&lt;C-r&gt;&lt;C-w&gt;</code> copies the word under the cursor to the command-line prompt</p></li>
+<li><p>command window (cmdwin) is useful for finding previous commands and searches as it allows editing with vim</p>
+<ul>
+<li><p><code>q:</code> in normal mode and <code>&lt;C-f&gt;</code> in command mode to open command history</p></li>
+<li><p><code>q/</code> or <code>q?</code> for search history</p></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+<section id="macros" class="level3">
+<h3 class="anchored" data-anchor-id="macros">Macros</h3>
+<ul>
+<li><p><code>q{lowercase character}</code> to start recording a macro in register</p></li>
+<li><p><code>q{uppercase character}</code> to append an existing macro in register</p></li>
+<li><p><code>q</code> to stop recording</p></li>
+<li><p><code>@{character}</code> replays the macro</p></li>
+<li><p>Macro execution stops on error</p></li>
+<li><p><code>{number}@{character}</code> executes a macro {number} times</p></li>
+<li><p>Macros can be recursive</p>
+<ul>
+<li><p>first clear the macro with <code>q{character}q</code></p></li>
+<li><p>record the macro, with <code>@{character}</code> to invoke the macro recursively</p></li>
+</ul>
+<p>(will be a no-op until recording is complete)</p></li>
+<li><p>Example: convert xml to json (<a href="../2020/files/example-data.xml">file</a>)</p>
+<ul>
+<li><p>Array of objects with keys “name” / “email”</p></li>
+<li><p>Use a Python program?</p></li>
+<li><p>Use sed / regexes</p>
+<ul>
+<li><p><code>g/people/d</code></p></li>
+<li><p><code>%s/&lt;person&gt;/{/g</code></p></li>
+<li><p><code>%s/&lt;name&gt;\(.*\)&lt;\/name&gt;/"name": "\1",/g</code></p></li>
+<li><p>…</p></li>
+</ul></li>
+<li><p>Vim commands / macros</p>
+<ul>
+<li><p><code>Gdd</code>, <code>ggdd</code> delete first and last lines</p></li>
+<li><p>Macro to format a single element (register <code>e</code>)</p>
+<ul>
+<li><p>Go to line with <code>&lt;name&gt;</code></p></li>
+<li><p><code>qe^r"f&gt;s": "&lt;ESC&gt;f&lt;C"&lt;ESC&gt;q</code></p></li>
+</ul></li>
+<li><p>Macro to format a person</p>
+<ul>
+<li><p>Go to line with <code>&lt;person&gt;</code></p></li>
+<li><p><code>qpS{&lt;ESC&gt;j@eA,&lt;ESC&gt;j@ejS},&lt;ESC&gt;q</code></p></li>
+</ul></li>
+<li><p>Macro to format a person and go to the next person</p>
+<ul>
+<li><p>Go to line with <code>&lt;person&gt;</code></p></li>
+<li><p><code>qq@pjq</code></p></li>
+</ul></li>
+<li><p>Execute macro until end of file</p>
+<ul>
+<li><code>999@q</code></li>
+</ul></li>
+<li><p>Manually remove last <code>,</code> and add <code>[</code> and <code>]</code> delimiters</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="plugins" class="level2">
+<h2 class="anchored" data-anchor-id="plugins">Plugins</h2>
+<p>With the plugin manager, <a href="https://github.com/junegunn/vim-plug">vim-plug</a>, we can easily add a new plugin to <code>.vimrc</code>.</p>
+<p>Don’t forget to reload <code>.vimrc</code> and <code>:PlugInstall</code> to install plugins.</p>
+<section id="vim-surround" class="level3">
+<h3 class="anchored" data-anchor-id="vim-surround">vim-surround</h3>
+<p><a href="https://github.com/tpope/vim-surround/blob/master/doc/surround.txt">Docs and examples</a></p>
+<ul>
+<li><p><code>ysiw[</code> surround word with <code>[]</code></p></li>
+<li><p>Wrap the entire line in parentheses with <code>yss)</code></p></li>
+<li><p>whee! -&gt; <code>v4lS'</code> -&gt; ‘whee!’</p></li>
+<li><p>“hello” -&gt; ysWfprint<cr> -&gt; print(“hello”)</cr></p></li>
+<li><p>A custom surround command is defined for markdown which surrounds visual selection with markdown code block of prompted language.</p>
+<pre class="vim"><code>let b:surround_99 = "```\1lang: \1\r```"</code></pre>
+<ul>
+<li><p>pwd -&gt; <code>VScbash&lt;enter&gt;</code> -&gt;</p>
+<p>```sh</p>
+<p>pwd</p>
+<p>```</p></li>
+</ul></li>
+</ul>
+</section>
+<section id="vim-commentary" class="level3">
+<h3 class="anchored" data-anchor-id="vim-commentary">vim-commentary</h3>
+<ul>
+<li><p><code>gc{motion}</code> to toggle comment out</p></li>
+<li><p><code>gcc</code> to toggle line comment out</p></li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="advanced-vim" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-vim">Advanced Vim</h2>
+<section id="search-and-replace" class="level3">
+<h3 class="anchored" data-anchor-id="search-and-replace">Search and replace</h3>
+<p><code>:s</code> (substitute) command (<a href="http://vim.wikia.com/wiki/Search_and_replace">documentation</a>).</p>
+<ul>
+<li><p><code>:%s/foo/bar/g</code></p>
+<ul>
+<li>replace foo with bar globally in file</li>
+</ul></li>
+<li><p><code>:%s/\[.*\](\(.*\))/\1/g</code></p>
+<ul>
+<li>replace named Markdown links with plain URLs</li>
+</ul></li>
+</ul>
+</section>
+<section id="multiple-files-and-viewports" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-files-and-viewports">Multiple files and viewports</h3>
+<section id="file-exploration" class="level4">
+<h4 class="anchored" data-anchor-id="file-exploration">File exploration</h4>
+<p>Vim displays buffers in windows and tabs.</p>
+<ul>
+<li><p><code>:Explore</code> or <code>:E</code> opens file explorer</p></li>
+<li><p>fzf.vim commands</p>
+<ul>
+<li><p><code>:Files</code> lists files in cwd</p></li>
+<li><p><code>:Buffer</code> lists current open buffers</p></li>
+<li><p><code>:Windows</code> lists current open windows</p></li>
+<li><p><code>&lt;C-T&gt;</code> to open the selected file in new tab</p></li>
+<li><p><code>&lt;C-X&gt;</code> to open the selected file in horizontal split</p></li>
+<li><p><code>&lt;C-V&gt;</code> to open the selected file in vertical split</p></li>
+<li><p>My fzf.vim shortcuts</p>
+<ul>
+<li><p><code>&lt;leader&gt;f :Buffers&lt;CR&gt;</code></p></li>
+<li><p><code>&lt;leader&gt;t :Files&lt;CR&gt;</code></p></li>
+<li><p><code>&lt;leader&gt;rg :Rg&lt;CR&gt;</code> ripgrep, i.e.&nbsp;search keyword in files</p></li>
+<li><p><code>&lt;leader&gt;l :BLines&lt;CR&gt;</code> show lines matching search term, more useful than <code>/</code></p></li>
+<li><p><code>&lt;leader&gt;m :Marks&lt;CR&gt;</code></p></li>
+<li><p><code>&lt;leader&gt;h :History&lt;CR&gt;</code> file history</p></li>
+<li><p><code>&lt;leader&gt;: :History:&lt;CR&gt;</code> command history</p></li>
+<li><p><code>&lt;leader&gt;/ :History/&lt;CR&gt;</code> search history</p></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="tabs" class="level4">
+<h4 class="anchored" data-anchor-id="tabs">Tabs</h4>
+<p>A tab can have multiple windows.</p>
+<ul>
+<li><p><code>tabnew filename</code> opens a new tab</p></li>
+<li><p><code>gt</code> to switch between tabs</p></li>
+<li><p><code>{number}gt</code> goes to numbered tab. Numbering starts from 1.</p></li>
+<li><p><code>:q</code> to close current tab</p></li>
+</ul>
+</section>
+<section id="windows-splits" class="level4">
+<h4 class="anchored" data-anchor-id="windows-splits">Windows (Splits)</h4>
+<ul>
+<li><p><code>:sp</code> / <code>:vsp</code> to split windows</p></li>
+<li><p><code>&lt;C-w&gt;[hjkl]</code> to navigate between windows</p></li>
+<li><p><code>&lt;C-w&gt;q</code> to close window. Be careful <code>q</code> closes the whole tab.</p></li>
+<li><p>We can have multiple views of the same buffer with windows.</p></li>
+</ul>
+<p>Useful for viewing different parts of a file.</p>
+</section>
+</section>
+<section id="terminal-in-vim" class="level3">
+<h3 class="anchored" data-anchor-id="terminal-in-vim">Terminal in vim</h3>
+<ul>
+<li><p><code>:terminal</code> or <code>:ter</code> to open a terminal</p>
+<ul>
+<li><p><code>:below vert terminal</code> to open a terminal at right split</p></li>
+<li><p><code>:ter ++curwin</code> to open in current window without splitting</p></li>
+</ul></li>
+<li><p><code>&lt;C-w&gt;N</code> to enter to Normal mode</p></li>
+<li><p><code>&lt;C-w&gt;:</code> to enter to Command mode</p></li>
+<li><p><code>i</code> to enter Insert mode</p></li>
+<li><p><code>:sp</code> or <code>:vsp</code> to split terminal window in Normal mode</p></li>
+<li><p><code>&lt;C-w&gt;c</code> to close window</p></li>
+<li><p><code>&lt;C-d&gt;</code> to quit window</p></li>
+</ul>
+</section>
+</section>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">Best practices</h2>
+<section id="vim-can-save-you-hours-of-work" class="level4">
+<h4 class="anchored" data-anchor-id="vim-can-save-you-hours-of-work">Vim Can Save You Hours Of Work</h4>
+<p><a href="https://www.youtube.com/watch?v=bshMXXX40_4">Video</a></p>
+<ul>
+<li><p><code>ddp</code> to swap lines</p></li>
+<li><p><code>/keyword/m$</code> to move line matches keyword to last</p></li>
+<li><p><code>/keyword/+1m-2</code> to move the next line of the line matches keyword to two lines up</p></li>
+<li><p><code>:10,20&gt;</code> indent lines between 10 and 20</p></li>
+<li><p><code>:10,20 norm A"</code> insert ” to every the end of lines between 10 and 20</p></li>
+<li><p><code>:ab bds Baris Deniz Saglam</code> define abbreviation</p>
+<ul>
+<li>add <code>^</code> to end of word to prevent expansion</li>
+</ul></li>
+<li><p><code>:w !sudo tee %</code> write to current file when not have permission</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

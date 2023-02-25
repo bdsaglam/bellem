@@ -1,0 +1,450 @@
+[
+  {
+    "objectID": "ml.cocoop.html",
+    "href": "ml.cocoop.html",
+    "title": "CoCoop",
+    "section": "",
+    "text": "source\n\nPromptLearner\n\n PromptLearner (clip_model, tokenizer, class_names, ctx_init=None,\n                n_ctx=None, class_specific_contexts=False,\n                class_token_position='end', **kwargs)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nTextEncoder\n\n TextEncoder (clip_model)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nPromptLearningClip\n\n PromptLearningClip (clip_model, tokenizer, class_names, **kwargs)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nPromptLearningTextEncoder\n\n PromptLearningTextEncoder (clip_model, tokenizer, class_names, **kwargs)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nClipVisualEncoder\n\n ClipVisualEncoder (clip_model)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nprepare_prompt_learning_clip\n\n prepare_prompt_learning_clip (model)\n\n\nsource\n\n\nmake_prompt_learning_clip\n\n make_prompt_learning_clip (class_names, clip_model_name='ViT-B/32',\n                            prec='fp32', **kwargs)"
+  },
+  {
+    "objectID": "testing.html",
+    "href": "testing.html",
+    "title": "Testing utilities",
+    "section": "",
+    "text": "source\n\nfixture_path\n\n fixture_path (relative_path)\n\n\nsource\n\n\nfixture_directory\n\n fixture_directory ()"
+  },
+  {
+    "objectID": "ml.layer.html",
+    "href": "ml.layer.html",
+    "title": "Layers",
+    "section": "",
+    "text": "source\n\nGradReverse\n\n GradReverse (lambd=1.0)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nreverse_grad\n\n reverse_grad (*args, **kwargs)\n\nBase class to create custom autograd.Function\nTo create a custom autograd.Function, subclass this class and implement the :meth:forward and :meth:backward static methods. Then, to use your custom op in the forward pass, call the class method apply. Do not call :meth:forward directly.\nTo ensure correctness and best performance, make sure you are calling the correct methods on ctx and validating your backward function using :func:torch.autograd.gradcheck.\nSee :ref:extending-autograd for more details on how to use this class.\nExamples::\n>>> class Exp(Function):\n>>>     @staticmethod\n>>>     def forward(ctx, i):\n>>>         result = i.exp()\n>>>         ctx.save_for_backward(result)\n>>>         return result\n>>>\n>>>     @staticmethod\n>>>     def backward(ctx, grad_output):\n>>>         result, = ctx.saved_tensors\n>>>         return grad_output * result\n>>>\n>>> # Use it by calling the apply method:\n>>> # xdoctest: +SKIP\n>>> output = Exp.apply(input)\n\ngr = GradReverse(lambd=2.0)\n\nx = torch.tensor(1.0)\nx.requires_grad_()\n\ny = gr(x)\ny.retain_grad()\n\nz = torch.pow(y, 2)\nz.backward()\n\ntest_eq(y.grad.item(), 2.0)\ntest_eq(x.grad.item(), -4.0)"
+  },
+  {
+    "objectID": "utils.html",
+    "href": "utils.html",
+    "title": "General utilities",
+    "section": "",
+    "text": "source"
+  },
+  {
+    "objectID": "utils.html#nested-dictionary-utils",
+    "href": "utils.html#nested-dictionary-utils",
+    "title": "General utilities",
+    "section": "Nested dictionary utils",
+    "text": "Nested dictionary utils\n\nsource\n\nunflatten_dict\n\n unflatten_dict (d:Dict, sep='.')\n\n\nsource\n\n\nflatten_dict\n\n flatten_dict (d:Dict, sep='.')\n\n\nsource\n\n\nNestedDict\n\n NestedDict (data, sep='.')"
+  },
+  {
+    "objectID": "notes/craft.shell.html",
+    "href": "notes/craft.shell.html",
+    "title": "Shell",
+    "section": "",
+    "text": "cd -\n\n\n\necho \"There are $(ls | wc -w) files in this directory.\"\n\n\n\necho $PATH\n\n\n\ncat sometext > newfile.txt\n\n\n\ncat sometext >> existing_or_newfile.txt\n\n\n\ncmd > file.txt 2>&1\n\n\n\nfind /etc name '*passwd*'\n\n\n\nfind /etc -iname '*passwd*'\n\n\n\nfind /etc -iname iptables -exec echo \"I found {}\" \\;\n\n\n\nfind . -type f -name '*gz' -print0\n\n\n\ngrep -i keyword /path/to/file\n\n\n\ngrep -rl keyword /usr/share/doc/\n\n\n\nip addr show | grep keyword\n\n\n\nls [agw]*[ne]\n\n\n\nfind . -type f -name '*gz' -print0 | xargs -0 -I{} rm {}\n\n\n\nfind . -name '*.txt' -print0 | xargs -0 \n\n\n\nfind . -name '*.txt' -print0 | xargs -0 -n 1\nIf there is no space or new line in file names, this works too:\n\nls -1 | xargs -L1 wc -l\nfind . -name '*.txt' | xargs -L1 echo 'Path: '\n\n\n\nfind . -type f -name '*' -print0 | xargs -0 mv -t ..\n\n\n\ncat file.txt | tr '\\n' '\\0' | xargs -0 -L1 -I{} echo 'prefix{}'\n\n\n\ntar -cvf archive.tar directory_or_file\nzip myzip file1 file2 file3`\n\n\n\ntar -xvf archive.tar directory\nunzip Myzip.zip\n\n\n\nwhich command\n\n\n\nalias p='pwd ; ls –CF'\n\n\n\nchmod 700 file\n\n\n\ntouch memo{1,2,3,4,5}\n\n\n\nlsof -i :8000\nkill -9 <PID>\n\n\n\nsudo mount /dev/xvdf /data\n\n\n\nsudo umount /dev/xvdf\n\n\n\nfind /usr > /tmp/allusrfiles &\n\n\n\necho $PATH | cut -d':' -f6\n\n\n\nfor file in * ; do\n    f=`echo $file | tr [:blank:] [_]`\n    [ \"$file\" = \"$f\" ] || mv -i -- \"$file\" \"$f\"\ndone\n\n\n\n<Ctrl + z>\nbg\ndisown %1\n\n\n\n\nfunction jsonValue {\n    KEY=$1\n    num=$2\n    awk -F\"[,:}]\" '{for(i=1;i<=NF;i++){if($i~/'$KEY'\\042/){print $(i+1)}}}' | tr -d '\"' | sed -n ${num}p\n}\ncurl -s -X GET http://twitter.com/users/show/$1.json | jsonValue profile_image_url 1\n\n\n\n\n# <(CMD)\ndiff <(ls foo) <(ls bar)\n\n\n\n\ndate +%s\n\n\n\n\nfor f in * ; do mv -- \"$f\" \"2022-02-04-$f\" ; done\n\n# or\nfor f in $(find . -maxdepth 1 -type f  -name '*.json'); do  \nmv -v $f ${f%/*}/$(date +%Y-%m-%d)_prefix_${f##*/}\ndone\n\n\n\ndate +%Y-%m-%d-T%H:%M:%S%z\n\n\n\nexport $(echo $(cat .env | sed 's/#.*//g' | sed 's/\\r//g' | xargs) | envsubst)\nreference\nset -o allexport\nsource ./.env\nset +o allexport\n\n\n\n# split zip file into parts by size\nzip existing.zip --out new.zip -s 100m\n\n# collect parts before unzip\nzip -F new.zip --out merged.zip\n\n# unzip\nunzip merge.zip\n\n\n\nRemove leading whitespace\nsed 's/^ *//g'\n\n\n\n\n# usage\n# cli.sh -l Newton EINSTEIN HawKING\n# output: newton einstein hawking\nlower=1\nwhile getopts \":l:u:\" flag\ndo\n    case \"${flag}\" in\n        l) \n        lower=1\n        OPTIND=$OPTIND-1\n        ;;\n        u) lower=0\n        OPTIND=$OPTIND-1\n        ;;\n        \\?)\n        echo \"Invalid option: -$OPTARG\" >&2\n        exit 1\n        ;;\n        :)\n        echo \"Option -$OPTARG requires an argument.\" >&2\n        exit 1\n        ;;\n    esac\ndone\nshift $((OPTIND -1))\n\nfor word in $@\ndo\nif [[ $lower -eq 1 ]]; then\n    echo -n $word ' '| tr '[:upper:]' '[:lower:]'\nelse\n    echo -n $word ' '| tr '[:lower:]' '[:upper:]'\nfi\ndone\necho"
+  },
+  {
+    "objectID": "notes/craft.shell.html#bash-zine-summary",
+    "href": "notes/craft.shell.html#bash-zine-summary",
+    "title": "Shell",
+    "section": "Bash zine summary",
+    "text": "Bash zine summary\n\nShebang\n\n!#/bin/bash\nCheck shell script for errors\n\nshellcheck my-script.sh\nAlways escape variables with double quote for expansion\n\nfilename=\"my file.txt\"\n\necho \"$filename\"\n\necho \"${filename}.zip\" # to concatenate\nSee all environment variables with env\nUse single quotes to not expand string, i.e. take it exactly same\nBash automatically expands globs (*) if not quoted\nBash skips hidden files when expanding globs\nsudo does not affect redirects\n\necho \"something\" > sudo tee /etc/xyz\nAlways use double brackets for if conditions\nUse local for local variables\n\nlocal x\nx=$(ls -l)\n# this one never fails\nlocal y=$(some_error_prone_command)\nDefining functions\n\nsay_hello() {\n    # all arguments $@\n    # script name $0\n    # arguments are $1, $2 ...\n    echo \"Hello $1 $2\"\n}\nConcurrent processes\n\nWait for multiple commands to finish. Each terminal window has its own set of jobs.\n\n\ncommand1 &\ncommand2 &\nwait\nParameter expansion ${...}\n\nlength of string or array ${#var}\nremove prefix/suffix\n\n${var#pattern} # prefix\n${var%pattern} # suffix\nsubstring ${var:offset:length}\n\ntrap command. It’s like defer in Golang.\n\nSyntax trap COMMAND EVENT\n\nfunction clean_up() {\n    rm -rf $TEMP_DIR\n    rm $TEMP_FILE\n} \ntrap cleanup EXIT\n\nErrors\n\nStop execution on errors, undefined variables and fail pipe\n\nset -euo pipefail\nPrint error message after failure\n\ndie() { echo $1 >%2; exit 1; }\nsome_command || die 'oh no'\n\nset -x prints each line as executed"
+  },
+  {
+    "objectID": "notes/craft.typescript.html",
+    "href": "notes/craft.typescript.html",
+    "title": "TypeScript",
+    "section": "",
+    "text": "declare global {\n    interface Array<T extends number> {\n        sq(): Array<T>;\n    }\n}\n\nArray.prototype.sq = function () {\n    return this.map(n => n*n);\n}\n\nlet array:Array<number> = [1,2,3];\nconsole.log(array.sq());"
+  },
+  {
+    "objectID": "notes/craft.typescript.html#concepts",
+    "href": "notes/craft.typescript.html#concepts",
+    "title": "TypeScript",
+    "section": "Concepts",
+    "text": "Concepts\n\nArrow function vs function expression\nStackoverflow post\nArrow functions don’t have their own this or arguments binding. Instead, those identifiers are resolved in the lexical scope like any other variable. That means that inside an arrow function, this and arguments refer to the values of this and arguments in the environment the arrow function is defined in (i.e. “outside” the arrow function):\nIn the function expression case, this refers to the object that was created inside the createObject. In the arrow function case, this refers to this of createObject itself.\n\n// we want to bind to this when adding new method to a type\n// hence, using function expression\nnumber.prototype.even = function () {\n    return this % 2 == 0;\n}\n\n// function exp. vs arrow exp.\n\nfunction makeAdder(offset) {\n    return {\n        value: offset,\n        add_func: function (n) {\n            return this.value + n;\n        },\n        add_arrow: (n) => { this.value + n },\n    }\n}\n\nconst adder = makeAdder(10);\nconsole.log(adder.add_func(4)); // 14\nconsole.log(adder.add_arrow(4)); // undefined"
+  },
+  {
+    "objectID": "notes/craft.jupyter.html",
+    "href": "notes/craft.jupyter.html",
+    "title": "Jupyter",
+    "section": "",
+    "text": "import sys\n!{sys.executable} -m pip install h5py --user\n\n\n\n%load_ext autoreload\n%autoreload 2\n\n\n\n%pdb"
+  },
+  {
+    "objectID": "notes/craft.ssh.html",
+    "href": "notes/craft.ssh.html",
+    "title": "ssh",
+    "section": "",
+    "text": "Connect to remote server with SSH\n\nssh -i \"free-ec2-keys.pem\" ec2-user@ec2-54-88-204-63.compute-1.amazonaws.com\nCreate configs in .ssh/config file for easier use\n\nHost myinstance\n\n    HostName ec2-asdf.us-west-2.amazonaws.com\n\n    User ec2-user\n\n    IdentityFile ~/secrets/key.pem\n\n    Port 12345\n\n\nssh myinstance\nCompress data for all hosts in .ssh/config file\n\nHost *\n\n    Compression yes\n\nPort forwarding (local:9999-remote:8888)\n\nssh -N -L 9999:localhost:8888 <remote_user>@<remote_host>\nFile transfer with scp\n\nscp -i \"key.pem\" user@example.com:/folder/file.txt ~/Downloads/\n\nscp -i \"free-ec2-keys.pem\" ec2-user@ec2-107-21-199-121.compute-1.amazonaws.com:/data/kitti/depth/train ~/Downloads/"
+  },
+  {
+    "objectID": "notes/craft.colab.html",
+    "href": "notes/craft.colab.html",
+    "title": "Colab",
+    "section": "",
+    "text": "from google.colab import drive\ndrive.mount(\"/content/drive\", force_remount=True)\n\n\n\n%load_ext tensorboard\n\n!mkdir /content/training_logs\n%tensorboard --logdir '/content/training_logs\n\n\n\nimport urllib.parse\nfrom getpass import getpass\n\nusername = input(\"Github username: \")\npassword = getpass(\"Github password: \")\n\nusername_encoded = urllib.parse.quote(username)\npassword_encoded = urllib.parse.quote(password)\nrepo_url = f\"https://{username_encoded}:{password_encoded}@github.com/bdsaglam/torch-scae.git\"\n\n!git clone $repo_url"
+  },
+  {
+    "objectID": "notes/craft.tmux.html",
+    "href": "notes/craft.tmux.html",
+    "title": "tmux",
+    "section": "",
+    "text": "list sessions\n\ntmux ls\nstart a new session\n\ntmux new -s session_name\ndetach from session <prefix> d\nre-attaching to a session\n\ntmux attach-session -t 0\nkill a session\n\ntmux kill-session -t myname"
+  },
+  {
+    "objectID": "notes/craft.tmux.html#working-with-tmux-windows-and-panes",
+    "href": "notes/craft.tmux.html#working-with-tmux-windows-and-panes",
+    "title": "tmux",
+    "section": "Working with tmux windows and panes",
+    "text": "Working with tmux windows and panes\nWhen you start a new Tmux session, by default, it creates a single window with a shell in it.\nTo create a new window with shell type <prefix> c, the first available number from the range 0…9 will be assigned to it.\nA list of all windows is shown on the status line at the bottom of the screen.\nBelow are some most common commands for managing Tmux windows and panes:\n\nCreate a new window (with shell) <prefix> c\nKill a window <prefix> &\nChoose window from a list <prefix> w\nSwitch to window 0 (by number ) <prefix> 0\nRename the current pane <prefix> ,\nSplit current pane horizontally into two panes <prefix> %\nSplit current pane vertically into two panes <prefix> \"\nNavigate between panes <prefix> <arrow-key>\nGo to the next pane <prefix> o\nToggle between the current and previous pane <prefix> ;\nClose the current pane <prefix> x\nSwitch between layouts <prefix> space\nCopy buffer\n\n<prefix> [ to enter navigation mode, then use arrow keys\nPress ctrl+space to start copying.\nUse arrow keys to select. Press alt+w or ctrl+w to copy into tmux buffer.\n<prefix> ] to paste in a possibly different tmux pane/window."
+  },
+  {
+    "objectID": "notes/craft.docker.html",
+    "href": "notes/craft.docker.html",
+    "title": "Docker",
+    "section": "",
+    "text": "docker image ls\n\ndocker image rm <image-id>\n\ndocker tag <image> <username/repository:tag>\n\nBuild image\n\n\ndocker build --tag <image_name>:<tag> <folder of DOCKERFILE>\n\nBuild image behind firewall\n\n\ndocker build --network=host -t <image-name> .\n\nRun an image\n\n\ndocker run -it --rm \\\n\n    -p <host-port>:<container-port> \\ \n\n    -v <host-directory>:<container-directory>  \\\n\n    --name <container-name> \\\n\n    <image> <command>\n\nCreate a new image from container changes\n\ndocker commit <CONTAINER_ID> <IMAGE_NAME:TAG>\n\nDelete all images\n\n\ndocker rmi $(docker images -q)\n\nPush image to docker hub\n\n\ndocker tag <local-image>:<tag> <new-repo>:<tag>\n\ndocker push <new-repo>:<tag>\n\n\n\n\ndocker container ls -a \n\ndocker ps -a\n\ndocker container start <container-id>\n\ndocker container start -ia <container-id>\n\ndocker container stop <container-id>\n\ndocker container rm <container-id>\n\nKill and delete all containers\n\n\ndocker rm $(docker ps -a -q)\n\ndocker kill $(docker ps -q)\n\nDelete all stopped containers\n\n\ndocker rm $(docker ps -a -q)\n\nStart existing container with bash\n\n\ndocker container start <container_id>\n\ndocker exec -it <container_id> bash\n\nStart jupyter notebook in container\n\n\njupyter notebook --ip 0.0.0.0 --allow-root --no-browser\n\nClean up\n\n\ndocker system prune -a"
+  },
+  {
+    "objectID": "notes/craft.docker.html#docker-for-data-science",
+    "href": "notes/craft.docker.html#docker-for-data-science",
+    "title": "Docker",
+    "section": "Docker for data science",
+    "text": "Docker for data science\nDocker for data science projects\nDocker client communicates with docker daemon which is responsible of managing containers and images. A Docker container instance is a read-write container layer put on top of read-only image layers.\n\nJupyter notebook in Docker container\nFROM python:3.9-slim-buster\n\nWORKDIR /app\nCOPY . /app\n\nVOLUME /shared_dir\n\nEXPOSE 8888\n\nRUN pip install --no-cache-dir jupyter \n\nCMD jupyter notebook --ip='*' --port=8888 --no-browser --allow-root\nThen, build image and start container:\ndocker build -t data-science-image\ndocker run -v \"$(pwd)/host_dir\":/shared_dir -p 9999:8888 -it data-science-image"
+  },
+  {
+    "objectID": "notes/craft.docker.html#resources",
+    "href": "notes/craft.docker.html#resources",
+    "title": "Docker",
+    "section": "Resources",
+    "text": "Resources\n\nHamel’s notes\nDockerfile best practices\nDocker development best practices"
+  },
+  {
+    "objectID": "notes/craft.vim.html",
+    "href": "notes/craft.vim.html",
+    "title": "vim",
+    "section": "",
+    "text": ":q quit (close window)\n:w save (“write”)\n:wq save and quit\n:e {name of file} open file for editing\n:ls show open buffers\n:bp :bn switch between buffers\n:help {topic} open help\n\n:help :w opens help for the :w command\n:help w opens help for the w movement\n\n\n\n\n\n\nBasic movement: hjkl (left, down, up, right)\nWords: w (next word), b (beginning of word), e (end of word)\nLines: 0 (beginning of line), ^ (first non-blank character), $ (end of line)\n\nWhen a line is wrapped, it is displayed in multiple visual lines.\n\nMotions become confusing with display lines as they constitute a vim line object. By prepending motion keys with g, we can instead modify motion commands to take display lines into accounts. For example, gk moves one display line upward. g0 goes to the beginning of the display line, instead of beginning of vim line object.\nScreen: H (top of screen), M (middle of screen), L (bottom of screen)\nScroll with cursor: <C-u> (up), <C-d> (down)\nScroll only screen not cursor: <C-y> (up), <C-e> (down)\nzz to center the cursor vertically on your screen, e.g. 250gzz\nFile: gg (beginning of file), G (end of file)\nLine numbers: :{number}<CR> or {number}G (line {number})\nJump to matching character such as (), [], {} by %\nFind: f{character}, t{character}, F{character}, T{character}\n\nfind/to forward/backward {character} on the current line\n, / ; for navigating matches\n\nSearch: /{regex}, n / N for navigating matches\n\n* find next occurrence of word under cursor\n# find previous occurrence of word under cursor\ngn / gN also visually select matches, which is handy for rerunnin commands with .\n\nGo back/forward with <C-o>/<C-i>\nCamelCaseMotion\n\n<leader>{w|b|e|ge}\nci<leader>w\n\nFolding\n\nzo open fold, zO open all folds on the cursor\nzc close fold, zC close all folds on the cursor\nza toggle fold, zA toggle all folds on the cursor\nzr open one more level of fold, zR open all folds independent of the cursor\nzm close one more level of fold, zM close all folds independent of the cursor\n\nMarks\n\nm{lowercase character} to create a local mark\nm{uppercase character} to create a global mark\n`{char} jump to mark\nQuickly come back mm and `m\n\n\n\n\n\n\n3w move 3 words forward\n5j move 5 lines down\n7dw delete 7 words\n\n\n\n\n\nVisual: v\nVisual line: V\nVisual block (multi cursor): ^v\n\nit does not show the command on all lines but applies when escaped\n\nToggle cursor position to either ends of visual selection with o\n\n\n\n\n\nInsert mode\n\ni puts cursor before the current place\nI puts cursor at the beginning of current line\na puts cursor after the current place\nA puts cursor at the end of current line\n\no / O insert line below / above\nd{motion} delete {motion}\n\ndw is delete word\nd$ is delete to end of line\nd0 is delete to beginning of line\ndeleted text put into unnamed register \"\n\"_d{motion} delete into black hole so that it does not change unnamed register\n\nD delete rest of the line (equal to d$)\nc{motion} change {motion}\n\ncw is change word\n\nC change rest of the line (equal to Di)\n>{motion} indent\n<{motion} dedent\nx delete character (equal do dl)\nr replace one character\ns substitute character (equal to xi)\nS substitute line (equal to ddO or 0C)\nVisual mode + manipulation\n\nselect text, d to delete it or c to change it\n\nu to undo, <C-r> to redo\ny to copy / “yank” (some other commands like d also copy)\n\nall yanked texts are saved into numbered registers(0,1,2…), like a queue.\n\n:reg list all registers.\n\ncopy to a register by \"{character}y and then paste it by \"{character}p\n\n\"*y copy to system clipboard\n\"*p paste from system clipboard\ncopy content of register a to register b\n\n:let @b=@a\n\n\n\nPaste\n\np to paste in normal mode\n<C-r> <register> to paste in insert mode\n\n<C-r> \" to paste unnamed register in insert mode\n\nafter pasting over a visual selection, that visual selection is put into unnamed register\n\n~ flips the case of a character\ngu{motion} lowercase gU{motion} uppercase\nText objects\n\naw word including white space after\niw inner word\nit inner tag\ni\" inner quotes\nip inner paragraphs\nas as sentence\naa as argument\nia inner argument\n\nDelete until next occurence including new lines d/{regex} + enter\n<C-A> increment <C-X> decrement\n\n\n\n\n\nci( change the contents inside the current pair of parentheses\nci[ change the contents inside the current pair of square brackets\nda' delete a single-quoted string, including the surrounding single quotes\n\n\n\n\nsyntax :<range><command>\n\nTo substitute new for the first old in a line type\ncurrent line\n\n:s/old/new first occurrence of old in current line\n:s/old/new/g all occurrences of old in current line\n:.s/old/new/g\n\nlast line $\na specific line :21s/old/new/g\n% entire file, e.g. :%s/old/new/g\nto ask for confirmation each time add c\n\n:%s/old/new/gc\n\n11,15 from line 11 to 15 both inclusive, e.g. :11,15s/old/new/g\n.,.+5 from current line to 5 lines after\ndelete all lines that matches pattern :g/pattern/d\ndelete all lines that does not match pattern\n\n:!g/pattern/d\n:v/pattern/d\n\nput a new line after every line, i.e. double space lines, :g/^/pu =\\\"\\n\\\"\ndelete every empty line, :g/^\\s*$/d\nreverse lines, :g/^/m0 move every line to the first line\nexecute a command on a range :'<,'>normal A;\n\nputs ; to the end of each line\n\nexecute a macro on range :'<,'>normal @a\n:6t. copy line 6 to current line\n:{range}m$ move range to the end of the file\n@: repeat last Ex command\n<C-r><C-w> copies the word under the cursor to the command-line prompt\ncommand window (cmdwin) is useful for finding previous commands and searches as it allows editing with vim\n\nq: in normal mode and <C-f> in command mode to open command history\nq/ or q? for search history\n\n\n\n\n\n\n\nq{lowercase character} to start recording a macro in register\nq{uppercase character} to append an existing macro in register\nq to stop recording\n@{character} replays the macro\nMacro execution stops on error\n{number}@{character} executes a macro {number} times\nMacros can be recursive\n\nfirst clear the macro with q{character}q\nrecord the macro, with @{character} to invoke the macro recursively\n\n(will be a no-op until recording is complete)\nExample: convert xml to json (file)\n\nArray of objects with keys “name” / “email”\nUse a Python program?\nUse sed / regexes\n\ng/people/d\n%s/<person>/{/g\n%s/<name>\\(.*\\)<\\/name>/\"name\": \"\\1\",/g\n…\n\nVim commands / macros\n\nGdd, ggdd delete first and last lines\nMacro to format a single element (register e)\n\nGo to line with <name>\nqe^r\"f>s\": \"<ESC>f<C\"<ESC>q\n\nMacro to format a person\n\nGo to line with <person>\nqpS{<ESC>j@eA,<ESC>j@ejS},<ESC>q\n\nMacro to format a person and go to the next person\n\nGo to line with <person>\nqq@pjq\n\nExecute macro until end of file\n\n999@q\n\nManually remove last , and add [ and ] delimiters"
+  },
+  {
+    "objectID": "notes/craft.vim.html#plugins",
+    "href": "notes/craft.vim.html#plugins",
+    "title": "vim",
+    "section": "Plugins",
+    "text": "Plugins\nWith the plugin manager, vim-plug, we can easily add a new plugin to .vimrc.\nDon’t forget to reload .vimrc and :PlugInstall to install plugins.\n\nvim-surround\nDocs and examples\n\nysiw[ surround word with []\nWrap the entire line in parentheses with yss)\nwhee! -> v4lS' -> ‘whee!’\n“hello” -> ysWfprint -> print(“hello”)\nA custom surround command is defined for markdown which surrounds visual selection with markdown code block of prompted language.\nlet b:surround_99 = \"```\\1lang: \\1\\r```\"\n\npwd -> VScbash<enter> ->\n```sh\npwd\n```\n\n\n\n\nvim-commentary\n\ngc{motion} to toggle comment out\ngcc to toggle line comment out"
+  },
+  {
+    "objectID": "notes/craft.vim.html#advanced-vim",
+    "href": "notes/craft.vim.html#advanced-vim",
+    "title": "vim",
+    "section": "Advanced Vim",
+    "text": "Advanced Vim\n\nSearch and replace\n:s (substitute) command (documentation).\n\n:%s/foo/bar/g\n\nreplace foo with bar globally in file\n\n:%s/\\[.*\\](\\(.*\\))/\\1/g\n\nreplace named Markdown links with plain URLs\n\n\n\n\nMultiple files and viewports\n\nFile exploration\nVim displays buffers in windows and tabs.\n\n:Explore or :E opens file explorer\nfzf.vim commands\n\n:Files lists files in cwd\n:Buffer lists current open buffers\n:Windows lists current open windows\n<C-T> to open the selected file in new tab\n<C-X> to open the selected file in horizontal split\n<C-V> to open the selected file in vertical split\nMy fzf.vim shortcuts\n\n<leader>f :Buffers<CR>\n<leader>t :Files<CR>\n<leader>rg :Rg<CR> ripgrep, i.e. search keyword in files\n<leader>l :BLines<CR> show lines matching search term, more useful than /\n<leader>m :Marks<CR>\n<leader>h :History<CR> file history\n<leader>: :History:<CR> command history\n<leader>/ :History/<CR> search history\n\n\n\n\n\nTabs\nA tab can have multiple windows.\n\ntabnew filename opens a new tab\ngt to switch between tabs\n{number}gt goes to numbered tab. Numbering starts from 1.\n:q to close current tab\n\n\n\nWindows (Splits)\n\n:sp / :vsp to split windows\n<C-w>[hjkl] to navigate between windows\n<C-w>q to close window. Be careful q closes the whole tab.\nWe can have multiple views of the same buffer with windows.\n\nUseful for viewing different parts of a file.\n\n\n\nTerminal in vim\n\n:terminal or :ter to open a terminal\n\n:below vert terminal to open a terminal at right split\n:ter ++curwin to open in current window without splitting\n\n<C-w>N to enter to Normal mode\n<C-w>: to enter to Command mode\ni to enter Insert mode\n:sp or :vsp to split terminal window in Normal mode\n<C-w>c to close window\n<C-d> to quit window"
+  },
+  {
+    "objectID": "notes/craft.vim.html#best-practices",
+    "href": "notes/craft.vim.html#best-practices",
+    "title": "vim",
+    "section": "Best practices",
+    "text": "Best practices\n\nVim Can Save You Hours Of Work\nVideo\n\nddp to swap lines\n/keyword/m$ to move line matches keyword to last\n/keyword/+1m-2 to move the next line of the line matches keyword to two lines up\n:10,20> indent lines between 10 and 20\n:10,20 norm A\" insert ” to every the end of lines between 10 and 20\n:ab bds Baris Deniz Saglam define abbreviation\n\nadd ^ to end of word to prevent expansion\n\n:w !sudo tee % write to current file when not have permission"
+  },
+  {
+    "objectID": "notes/craft.kaggle.html",
+    "href": "notes/craft.kaggle.html",
+    "title": "Kaggle",
+    "section": "",
+    "text": "mkdir ~/.kaggle\necho \"{'username':'bdsaglam','key':$kaggle_token}\" > ~/.kaggle/kaggle.json\nchmod 600 ~/.kaggle/kaggle.json\nimport os\nfrom getpass import getpass\n\nos.environ['KAGGLE_USERNAME'] = 'bdsaglam'\nos.environ['KAGGLE_KEY'] = getpass('Kaggle token:')\n\n\n\nimport os\nos.environ['KAGGLE_CONFIG_DIR'] = \"/content/kaggle\"\n\n\n\nkaggle competitions submit -c competition_name -f ./submission.csv -m \"New submission with RF\"\n\n\n\nFirst, define a secret from add-ons for the notebook; then, retrieve it in the notebook by\nfrom kaggle_secrets import UserSecretsClient\nuser_secrets = UserSecretsClient()\nwandb_token = user_secrets.get_secret(\"wandb_toke\")"
+  },
+  {
+    "objectID": "notes/craft.kaggle.html#my-setup",
+    "href": "notes/craft.kaggle.html#my-setup",
+    "title": "Kaggle",
+    "section": "My setup",
+    "text": "My setup\n!pip install -Uqq fastai nbdev\n!pip install -Uqq wandb\nimport wandb\nfrom getpass import getpass\n\nwandb_username = \"bdsaglam\"\nwandb_token = \"WANDB_TOKEN\"\n\n!wandb login --relogin $wandb_token\nwandb.init(project=\"PROJECT-NAME\", entity=wandb_username)\nfrom pathlib import Path\n\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\nimport torch.nn as nn\nfrom fastai.vision.all import *\nfrom fastai.callback.wandb import *\nwandb.finish()"
+  },
+  {
+    "objectID": "notes/craft.kaggle.html#resources",
+    "href": "notes/craft.kaggle.html#resources",
+    "title": "Kaggle",
+    "section": "Resources",
+    "text": "Resources\n\nLocal kaggle env.\nhttps://github.com/Witalia008/kaggle-public"
+  },
+  {
+    "objectID": "notes/craft.aws.lambda.html",
+    "href": "notes/craft.aws.lambda.html",
+    "title": "AWS Lambda",
+    "section": "",
+    "text": "Initialize new project\nsam init\nBuild the application\nsam build\nDeploy your application\nsam deploy --guided\n\n\n\n\nStart a local Lambda endpoint when running integration tests locally or in CI stage.\nsam local start-lambda\nThen, in integration tests, use Lambda endpoint\nimport boto3\nimport botocore\n\n# Set \"running_locally\" flag if you are running the integration test locally\nrunning_locally = True\n\nif running_locally:\n    # Create Lambda SDK client to connect to appropriate Lambda endpoint\n    lambda_client = boto3.client('lambda',\n        region_name=\"us-west-2\",\n        endpoint_url=\"http://127.0.0.1:3001\",\n        use_ssl=False,\n        verify=False,\n        config=botocore.client.Config(\n            signature_version=botocore.UNSIGNED,\n            read_timeout=1,\n            retries={'max_attempts': 0},\n        )\n    )\nelse:\n    lambda_client = boto3.client('lambda')\n\nresponse = lambda_client.invoke(FunctionName=\"HelloWorldFunction\")\n\nassert response == \"Hello World\"\n\n\n\nsam local invoke \"HelloWorldFunction\" -e events/event.json\n\n\n\nStart the API\nsam local start-api\nThen, send a request\ncurl http://127.0.0.1:3000/hello"
+  },
+  {
+    "objectID": "notes/craft.aws.lambda.html#lambda-powertools-for-python",
+    "href": "notes/craft.aws.lambda.html#lambda-powertools-for-python",
+    "title": "AWS Lambda",
+    "section": "Lambda Powertools for Python",
+    "text": "Lambda Powertools for Python\nhttps://awslabs.github.io/aws-lambda-powertools-python/latest"
+  },
+  {
+    "objectID": "notes/craft.aws.lambda.html#events",
+    "href": "notes/craft.aws.lambda.html#events",
+    "title": "AWS Lambda",
+    "section": "Events",
+    "text": "Events\nhttps://michaelbrewer.github.io/aws-lambda-events"
+  },
+  {
+    "objectID": "notes/craft.vscode.html",
+    "href": "notes/craft.vscode.html",
+    "title": "Visual Studio Code",
+    "section": "",
+    "text": "cmd+k cmd+s open keybord shortcuts\ncmd+g open a file in the project\ncmd+shift+p open command palette\ncmd+shift+o or cmd+g+@ go to symbol\ncmd+shift+. navigate symbols\nctrl+space option+esc toggle intellisense suggestions\nshift+u redo\n\n\n\n\nctrl+n ctrl+p to navigate suggestions"
+  },
+  {
+    "objectID": "notes/craft.torch.html",
+    "href": "notes/craft.torch.html",
+    "title": "Torch",
+    "section": "",
+    "text": "device = torch.device(\"cuda:0\" if torch.cuda.is_available() else \"cpu\")\n\n\n\ntorch.cuda.reset_max_memory_cached()\ntorch.cuda.reset_max_memory_allocated()\ntorch.cuda.reset_accumulated_memory_stats()"
+  },
+  {
+    "objectID": "notes/craft.java.html",
+    "href": "notes/craft.java.html",
+    "title": "Java",
+    "section": "",
+    "text": "Since Java does not have Self keyword for enclosing type as in Swift and\ngenerics are implemented with type-erasure in Java, for generic interfaces, we need\nto provide the types explicitly. This results some odd-looking statements. For instance,\n\npublic interface Comparable<T> {\n\n    int compareTo(T t);\n\n}\n\n\n\nclass Book implements Comparable<Book> {\n\n    String author;\n\n    int publishedYear;\n\n\n\n    int compareTo(Book other) {\n\n        return Integer.compare(publishedYear, other.publishedYear);\n\n    }\n\n}"
+  },
+  {
+    "objectID": "notes/craft.terminal.html",
+    "href": "notes/craft.terminal.html",
+    "title": "Terminal",
+    "section": "",
+    "text": "Enter edit-and-execute mode by ESC+v\nCopy mode\n\nEnter by cmd+shift+c\nVim bindings"
+  },
+  {
+    "objectID": "notes/craft.terminal.html#tools",
+    "href": "notes/craft.terminal.html#tools",
+    "title": "Terminal",
+    "section": "Tools",
+    "text": "Tools\n\nfzf\n\nSearches with regular expressions such as .css$ ^text\ntab to select one or multiple lines\n** to trigger\n\ncd ./projects/**\n\nctrl+r find in command history\nctrl+t find in current directory\nIgnores files according to gitignore by default"
+  },
+  {
+    "objectID": "notes/craft.miscellaneous.html",
+    "href": "notes/craft.miscellaneous.html",
+    "title": "Miscellaneous",
+    "section": "",
+    "text": "option+click puts cursor with mouse in Terminal/iTerm\nChange subtitle encoding\n\niconv -f CP1254 -t utf-8 ~/Downloads/broken.srt > ~/Downloads/corrected.srt\nDownload a website with wget\n\nwget -r -np -k url\nPython Youtube downloading library pytube\n\npytube -e mp4 -r 720p https://www.youtube.com/watch?v=0XVI5B2jUSw\nRestart Dock\n\nkillall Dock\nChange colors of remote terminal\n\nalias ls=\"ls --color=always\"\n\nexport LS_COLORS=\"di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43\"\nRotate images\n\nfor f in *.jpg ; do \n\n    convert -rotate \"90\" \"$f\" \"../rotated/${f%.jpg}.jpg\"\n\ndone"
+  },
+  {
+    "objectID": "notes/craft.fastai.html",
+    "href": "notes/craft.fastai.html",
+    "title": "fastai",
+    "section": "",
+    "text": "learn.fit_one_cycle(10, 2e-5, cbs=[EarlyStoppingCallback(monitor='error_rate', comp=np.less, patience=3)])"
+  },
+  {
+    "objectID": "notes/craft.fastai.html#inference",
+    "href": "notes/craft.fastai.html#inference",
+    "title": "fastai",
+    "section": "Inference",
+    "text": "Inference\n\nLoad saved model weights\ndevice = torch.device(\"cuda:0\" if torch.cuda.is_available() else \"cpu\")\nlearn = cnn_learner(\n    dls, \n    arch=resnet18,\n    pretrained=False,\n)\nlearn.model.load_state_dict(torch.load('path/to/model_weights', map_location=device))"
+  },
+  {
+    "objectID": "notes/craft.fastai.html#vision",
+    "href": "notes/craft.fastai.html#vision",
+    "title": "fastai",
+    "section": "Vision",
+    "text": "Vision\n\nResize images\nFastai provides a utility function resize_images for resizing images in parallel.\nfrom fastai.vision.utils import resize_images\nresize_images('/path/to/images', max_size=640, dest='path/to/resized-images', max_worker=2)\n\n\nCustom model with vision_learner\nFind the index of pooling layer to determine cut value and then register the model.\nfrom fastai.vision.all import imagenet_stats, default_split\nfrom torchvision.models import efficientnet_b0\n\n# register the model metadata\nmodel_meta[efficientnet_b0] = {'cut': -2, 'split': default_split, 'stats': imagenet_stats}\n\n\nToy vision dataloaders\npath = untar_data(URLs.PETS)\nfiles = get_image_files(path/\"images\")\ndef label_func(f): return f[0].isupper()\ndls = ImageDataLoaders.from_name_func(path, files, label_func, item_tfms=Resize(224))"
+  },
+  {
+    "objectID": "notes/craft.truba.html",
+    "href": "notes/craft.truba.html",
+    "title": "TRUBA",
+    "section": "",
+    "text": "Use /truba_scratch/basaglam directory to execute long-running scripts; otherwise, your account may be suspended.\nSpecify time limit for each job based on the estimated execution time so that the job is optimally prioritized.\nUse debug partition for debugging jobs."
+  },
+  {
+    "objectID": "notes/craft.truba.html#slurm",
+    "href": "notes/craft.truba.html#slurm",
+    "title": "TRUBA",
+    "section": "Slurm",
+    "text": "Slurm\nHere is a “Hello World” Slurm script for TRUBA. This script prints a few things and create new files in the directory that it’s executed.\n#!/bin/bash\n\n#SBATCH -J hello-truba    # job name\n#SBATCH -A basaglam       # username\n#SBATCH -p debug          # partition\n#SBATCH --nodes 1\n#SBATCH --ntasks 2\n#SBATCH --cpus 1\n#SBATCH --time=0:03       # time limit, 3 seconds\n#SBATCH --threads 1       # no hyperthreading\n\ndate\n\necho \"Hello Truba\"\necho \"Current working directory: $(pwd)\"\necho \"Host: $(hostname)\"\necho \"Python3 version: $(python3 --version)\"\nls -al > directory-content.txt\ntouch example.txt\n\ndate\nexit\nThere are sample Slurm scripts in /truba/sw/scripts/ directory."
+  },
+  {
+    "objectID": "notes/craft.truba.html#resources",
+    "href": "notes/craft.truba.html#resources",
+    "title": "TRUBA",
+    "section": "Resources",
+    "text": "Resources\nIntroduction to TRUBA"
+  },
+  {
+    "objectID": "notes/craft.conda.html",
+    "href": "notes/craft.conda.html",
+    "title": "Conda",
+    "section": "",
+    "text": "List environments\n\nconda env list\nCreate new environment\n\nconda env create -f environment.yml\nUpdate an environment\n\nconda env update -f environment.yml --prune\nDelete an environment\n\nconda env remove --name myenv"
+  },
+  {
+    "objectID": "notes/craft.python.html",
+    "href": "notes/craft.python.html",
+    "title": "Python",
+    "section": "",
+    "text": "from getpass import getpass\npassword = get_pass('password:')\n\n\n\npip show fastai\n\n\n\nfrom fastai.vision.all import *\nLearner.__module__\n\n\n\nimport sklearn\nsklearn.model_selection.__file__\n\n\n\nfrom fastai.vision.all import *\nfrom time import sleep\nfrom IPython.display import clear_output\nfrom random import sample\n\nfiles = get_image_files(directory)\nfor fp in files:\n    display(Image.create(fp))\n    clear_output(wait=True)\n    sleep(0.2)"
+  },
+  {
+    "objectID": "notes/craft.python.html#add-directory-to-python-path-and-import-modules",
+    "href": "notes/craft.python.html#add-directory-to-python-path-and-import-modules",
+    "title": "Python",
+    "section": "Add directory to Python PATH and import modules",
+    "text": "Add directory to Python PATH and import modules\nimport sys\nsys.path.insert(0,'/path/to/directory') # contains utils.py\n\nimport utils"
+  },
+  {
+    "objectID": "notes/craft.python.html#sliding-window-with-stride",
+    "href": "notes/craft.python.html#sliding-window-with-stride",
+    "title": "Python",
+    "section": "Sliding window with stride",
+    "text": "Sliding window with stride\nfrom itertools import islice\n\ndef window(iterable, size, stride=1, prefix=None):\n    it = iter(iterable)\n    if prefix is None:\n        prefix = list(islice(it, size))\n        yield prefix\n    tail = list(islice(it, stride))\n    if len(tail)==0:\n        return\n    result = [*prefix[stride:], *tail]\n    yield result\n    yield from window(it, size, stride, result)"
+  },
+  {
+    "objectID": "notes/craft.python.html#generate-uuid-from-command-line",
+    "href": "notes/craft.python.html#generate-uuid-from-command-line",
+    "title": "Python",
+    "section": "Generate UUID from command line",
+    "text": "Generate UUID from command line\npython -c 'import uuid;print(uuid.uuid4())'"
+  },
+  {
+    "objectID": "notes/craft.python.html#copy-text-to-clipboard",
+    "href": "notes/craft.python.html#copy-text-to-clipboard",
+    "title": "Python",
+    "section": "Copy text to clipboard",
+    "text": "Copy text to clipboard\nFor macOS\nimport subprocess \ndata = \"hello world\"\nsubprocess.run(\"pbcopy\", text=True, input=data)"
+  },
+  {
+    "objectID": "notes/craft.kubernetes.html",
+    "href": "notes/craft.kubernetes.html",
+    "title": "Kubernetes",
+    "section": "",
+    "text": "Abstraction over container.\nSmallest unit of k8s.\nUsually 1 app per pod\nEach pod has its own IP address\n\n\n\n\n\nPermanent IP address\nLoadbalancer\nLifecycle of pod and service not connected\n\n\n\n\n\nExternal configuration for application\n\n\n\n\n\nStore for secret data\n\n\n\n\n\nBlueprint for stateless application pod\n\n\n\n\n\nBlueprint for stateful app pod\n\n\n\n\n\nWorker nodes\n\nEach node has multiple pods on it\n3 processess must be installed on each node\n\nContainer runtime\nKubelet: for managing node and container\nKubeproxy: forwarding requests for a service to appropriate pod\n\n\nMaster node\n\n4 processes run on every master node\n\nAPI Server: cluster gateway\nController manager: detects cluster state changes\nScheduler: schedule worker nodes\netcd: key-value store for cluster state\n\n\n\n\n\n\n\ntargetPort: The target port on the pod(s) to forward traffic to, same as containerPort\nport: The port of this service\nnodePort: The port on the node where external traffic will come in on, in range [30000, 32767]"
+  },
+  {
+    "objectID": "notes/craft.kubernetes.html#minikube",
+    "href": "notes/craft.kubernetes.html#minikube",
+    "title": "Kubernetes",
+    "section": "Minikube",
+    "text": "Minikube\n\nInstall on macOS\nbrew install hyperkit\nbrew install minikube\nminikube\n\n\nCreate a cluster\nminikube start --vm-driver=hyperkit\n# or start in debug mode\nminikube start --vm-driver=hyperkit --v=7 --alsologtostderr\n\n\nGet cluster status\nminikube status\n\n\nGet IP address of nodes\nminikube ip\n\n\nSSH into node\nminikube ssh\n\n\nList services\nminikube service list\n\n\nGet IP address of a service\nminikube service $SERVICE_NAME\n\n\nStop cluster\nminikube stop\n\n\nDelete cluster\nminikube delete\n\n\nList addons\nminikube addons list\n\n\nEnabled addons\nminikube addons enable dashboard\n\n\nLaunch kubernetes dashboard\n# minikube addons enable metrics-server\n# minikube addons enable dashboard\nminikube dashboard"
+  },
+  {
+    "objectID": "notes/craft.kubernetes.html#kubectl",
+    "href": "notes/craft.kubernetes.html#kubectl",
+    "title": "Kubernetes",
+    "section": "kubectl",
+    "text": "kubectl\nkubectl get nodes\nkubectl get pods\nGet pods by label\nkubectl get pods -l k8s-app=web-dash\nkubectl get services\nkubectl create deployment nginx-depl --image=nginx\nkubectl get deployment\nkubectl get replicaset\nkubectl edit deployment nginx-depl\n\nDebugging\nkubectl logs {pod-name}\nkubectl exec {pod-name} -it -- bin/bash\nkubectl exec {pod-name} -c {container_name} -- ls -al /var\n\n\nCreate mongo deployment\nkubectl create deployment mongo-depl --image=mongo\nkubectl logs mongo-depl-{pod-name}\nkubectl describe pod mongo-depl-{pod-name}\n\n\nDelete deployment\nkubectl delete deployment mongo-depl\nkubectl delete deployment nginx-depl\n\n\nCreate or edit config file\nvim nginx-deployment.yaml\nkubectl apply -f nginx-deployment.yaml\nkubectl get pod\nkubectl get deployment\n\n\nDelete with config\nkubectl delete -f nginx-deployment.yaml\n\n\nMetrics\nkubectl top command returns current CPU and memory usage for a cluster’s pods or nodes, or for a particular pod or node if specified."
+  },
+  {
+    "objectID": "notes/craft.ml.dataset.html",
+    "href": "notes/craft.ml.dataset.html",
+    "title": "ML Datasets",
+    "section": "",
+    "text": "Use ImageNetV2_pytorch library to download ImageNetV2 by Recht et al.\n!pip install git+https://github.com/modestyachts/ImageNetV2_pytorch\n\nfrom imagenetv2_pytorch import ImageNetV2Dataset\nfrom bellek.ml.data import get_imagenet_label_map, IMAGENET_SIMPLE_LABELS\n\n\nimages = ImageNetV2Dataset(transform=preprocess)\nloader = torch.utils.data.DataLoader(images, batch_size=32, num_workers=2)"
+  },
+  {
+    "objectID": "notes/craft.latex.html",
+    "href": "notes/craft.latex.html",
+    "title": "LaTeX",
+    "section": "",
+    "text": "Install package and set the directory for images\n\n\\usepackage{graphicx}\n\\graphicspath{ {./images/} }\nThen, in the body, embed the image by\n\n\\includegraphics[width=16cm]{image_filename_without_extension}"
+  },
+  {
+    "objectID": "notes/craft.wandb.html",
+    "href": "notes/craft.wandb.html",
+    "title": "W&B (Weights and Biases)",
+    "section": "",
+    "text": "Fastai integration"
+  },
+  {
+    "objectID": "notes/craft.wandb.html#recipes",
+    "href": "notes/craft.wandb.html#recipes",
+    "title": "W&B (Weights and Biases)",
+    "section": "Recipes",
+    "text": "Recipes\n\nSetup\nimport wandb\nfrom getpass import getpass\n\nwandb_username = \"bdsaglam\"\nwandb_token = \"WANDB_TOKEN\"\n\nwandb.login() \n# !wandb login --relogin $wandb_token\n\nwandb.init(project=\"PROJECT-NAME\", entity=wandb_username)\n\n\nDownload an artifact\nrun = wandb.init(project=\"di504\", entity=\"bdsaglam\")\nartifact = run.use_artifact('bdsaglam/di504/run-1rub7bk8-model:v1', type='model')\nartifact_dir = artifact.download()"
+  },
+  {
+    "objectID": "notes/craft.git.html",
+    "href": "notes/craft.git.html",
+    "title": "git",
+    "section": "",
+    "text": "Print to stdout instead of less\n\ngit --no-pager branch\nRemove any remote-tracking branches which no longer exist on the remote\n\ngit fetch --prune\nShow commit changes\n\n# last commit\ngit show\n# offset from last commit\ngit show HEAD~2\ngit show <commit_hash>\nChange last commit’s attributes\n\ngit commit --amend --author=\"<name> <email>“\nClone a single branch\n\ngit clone -b mybranch --single-branch https://github.com/user/repo.git\nShallow clone (not full history, saves disk space)\n\ngit clone --depth 1 https://github.com/user/repo.git\nDelete a local branch\n\ngit branch -d <branch-name>\nDelete a remote branch\n\ngit push origin --delete <branch-name>\nRemove (untrack) file after adding .gitignore\n\ngit rm --cached path/to/file\nPre-commit hook\n\nSave the following file as .git/hooks/pre-commit and make it executable.\n\n\n#!/bin/sh\nif git rev-parse --verify HEAD >/dev/null 2>&1\nthen\n    against=HEAD\nelse\n    # Initial commit: diff against an empty tree object\n    against=<CHANGE-HERE>\nfi\n# The special marker tag to mark things which we still need to change\nmarker=\"#CRUMB#\"\n# Redirect output to stderr.\nexec 1>&2\n\nif test $(git diff --cached -z $against | grep $marker | wc -c) != 0 \nthen\n    cat <<\\EOF\n    Error: Still has invalid debug markers in code:\n    EOF\n    echo `git diff --cached -z $against -G $marker`\n    exit 1\nfi"
+  },
+  {
+    "objectID": "notes/craft.mac.html",
+    "href": "notes/craft.mac.html",
+    "title": "macOS",
+    "section": "",
+    "text": "Disable smart quotes\n\nSystem Preferences > Keyboard > Text\nDisable curly quotes and anti-symmetric quotes\n\nInput source switch shortcut\n\nSystem Preferences > Keyboard > Shortcuts > Input Sources\nEnable only Select the previous input source and change it to control+option+space\n\nText replacements (expansions)\n\nSystem Preferences > Keyboard > Shortcuts\nDrag and drop to export and import text replacements\n\nNavigate buttons with tab\n\nSystem Preferences > Keyboard > Shortcuts\nEnable Use keyboard navigation to move focus between controls\nDefine Move focus to next window as ‘command+`’\n\nShow help menu\n\nSystem Preferences > Keyboard > Shortcuts > App shortcuts\nChange to command+shift+\\"
+  },
+  {
+    "objectID": "notes/craft.mac.html#shortcuts-and-commands",
+    "href": "notes/craft.mac.html#shortcuts-and-commands",
+    "title": "macOS",
+    "section": "Shortcuts and commands",
+    "text": "Shortcuts and commands\nMac Keyboard Shortcuts\n\nTake a screen shot\n\ncommand+shift+3 for entire screen\ncommand+shift+4 to select the box\nPress control while taking screenshot to copy it to clipboard\n\nOpen task manager\n\ncommand+option+ESC\n\nEnter full screen (green button)\n\ncontrol+command+f\n\nGet CPU temperature\n\nsudo powermetrics\nOpen emoji pallet control+command+space\ncontrol+click for right click\nNavigate with keyboard in terminal\n\nfn+up_arrow page up\nfn+down_arrow page down\ncommand+up_arrow line up\ncommand+down_arrow line down\n\nAdd Open in Visual Studio Code action to context menu of files and folders https://gist.github.com/idleberg/bc65021a736e9139e3e31f7f2c761d5d"
+  },
+  {
+    "objectID": "notes/craft.mac.html#productivity-apps",
+    "href": "notes/craft.mac.html#productivity-apps",
+    "title": "macOS",
+    "section": "Productivity apps",
+    "text": "Productivity apps\n\nCopyless 2\n\nChange shortcuts\noption+c to open window\n\nSpectacle\n\ncommand+option+<arrow-key> to make window half of screen\n\nKarabiner Elements\n\nRemap keys\n\niTerm2\n\nPreferences -> Profiles\n\ncreate a new profile and make it default\nColors -> Color Presents -> Pastel Dark\nText -> Cursor -> Box\nText -> Font -> Size 13"
+  },
+  {
+    "objectID": "ml.vision.html",
+    "href": "ml.vision.html",
+    "title": "Vision",
+    "section": "",
+    "text": "source\n\nMake3Channel\n\n Make3Channel ()\n\nTiles 1 channel image to 3 channel\n\nsource\n\n\nTorchVisionTransform\n\n TorchVisionTransform (transform)\n\nConverts a torchvision transform to fastai transform\n\nfrom fastai.vision.core import PILImage\nfrom torchvision.transforms import Resize\nfrom bellek.testing import TEST_IMAGE\n\ntarget_size = (224, 224)\nimg = PILImage.create(TEST_IMAGE)\ntfm = TorchVisionTransform(Resize(size=target_size))\nout = tfm(img)\ntest_eq(out.size, target_size)"
+  },
+  {
+    "objectID": "ml.clip.html",
+    "href": "ml.clip.html",
+    "title": "CLIP utilities",
+    "section": "",
+    "text": "source\n\nload_clip_preprocess\n\n load_clip_preprocess (clip_model_name)\n\n\nsource\n\n\nmake_tfms_from_clip_preprocess\n\n make_tfms_from_clip_preprocess (clip_preprocess)\n\n\nsource\n\n\nClipClassificationHead\n\n ClipClassificationHead (clip_model)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nClipZeroShotClassifier\n\n ClipZeroShotClassifier (clip_model, class_descriptions)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool"
+  },
+  {
+    "objectID": "ml.experiment.html",
+    "href": "ml.experiment.html",
+    "title": "Experiment",
+    "section": "",
+    "text": "source\n\nmake_experiment_dir\n\n make_experiment_dir (root='./experiments', name=None)\n\n\nsource\n\n\nprepare_config\n\n prepare_config (config)\n\n\nsource\n\n\nmerge_config_with_sweep_config\n\n merge_config_with_sweep_config (base_config, sweep_config, sep='.')"
+  },
+  {
+    "objectID": "ml.loss.html",
+    "href": "ml.loss.html",
+    "title": "Loss functions",
+    "section": "",
+    "text": "source\n\nBinaryFocalLoss\n\n BinaryFocalLoss (alpha=1, gamma=2, weight=None, reduction=<built-in\n                  method mean of type object at 0x7f1b5c8dd460>,\n                  thresh=0.5)\n\n T.-Y. Lin, P. Goyal, R. Girshick, K. He, and P. Dollar, “Focal loss for dense object detection,” in Proceedings of the IEEE International Conference on Computer Vision (ICCV), Oct 2017. \n$ p_T =\n\\[\\begin{cases}\n        p &\\quad \\text{if y = 1} \\\\\n        1 - p &\\quad \\text{otherwise}\n    \\end{cases}\\]\n$\n$ (p_t) = -_t (1 - p_t)^{} $\n\ntargets = torch.tensor([\n    [1,0,0,1,0],\n    [0,0,1,0,1],\n    [0,1,0,1,0],\n    [0,0,0,1,1],\n], dtype=float)\n\nlogits = torch.tensor([\n    [1,-1,-1,1,-1],\n    [-1,-1,1,-1,1],\n    [-1,1,-1,1,-1],\n    [-1,-1,-1,1,1],\n],dtype=float)*1e6\n\n# verify BCE results in zero loss with these inputs\nbce = nn.BCEWithLogitsLoss()\ntest_close(bce(logits, targets).numpy(), 0.0)\n\n# test binary focal loss\nfl = BinaryFocalLoss()\nactivations = fl.activation(logits)\n\ntest_close(fl(logits, targets).numpy(), 0.0)\ntest_close(activations, targets)\ntest_close(fl.decodes(activations).float(), targets)\n\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\ntargets = torch.tensor([\n    [1,0,0,1,0],\n    [0,0,1,0,1],\n    [0,1,0,1,0],\n    [0,0,0,1,1],\n], dtype=float)\n\nfl = BinaryFocalLoss()\nlogits = torch.rand(targets.shape) * 1e6\nps = np.arange(0.2, 1.0, 0.1)\nlosses = np.array([fl(logits, targets*p).numpy() for p in ps])\n\nplt.figure()\nplt.plot(ps, losses)"
+  },
+  {
+    "objectID": "ml.data.html",
+    "href": "ml.data.html",
+    "title": "Data",
+    "section": "",
+    "text": "source\n\nZippedDataset\n\n ZippedDataset (*datasets)\n\nInitialize self. See help(type(self)) for accurate signature.\n\nsource\n\n\nZippedDataLoader\n\n ZippedDataLoader (*data_loaders)\n\nInitialize self. See help(type(self)) for accurate signature.\n\nsource\n\n\nget_imagenet_label_map\n\n get_imagenet_label_map ()\n\n\nsource\n\n\nmake_imagenet_label_map\n\n make_imagenet_label_map (label_synset)\n\n\nsource\n\n\nfetch_imagenet_label_synsets\n\n fetch_imagenet_label_synsets (url='https://raw.githubusercontent.com/torc\n                               h/tutorials/master/7_imagenet_classificatio\n                               n/synset_words.txt')"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "bellek",
+    "section": "",
+    "text": "pip install bellek"
+  },
+  {
+    "objectID": "ml.evaluation.html",
+    "href": "ml.evaluation.html",
+    "title": "Model evaluation utilities",
+    "section": "",
+    "text": "source\n\nfind_binary_clf_threshold\n\n find_binary_clf_threshold (targets, preds, metrics, threshold_range=None,\n                            weight=None, metric_names=None, show=True)\n\nFind the best threshold for binary classification given targets and predicted probabilities\n\nfrom sklearn.metrics import f1_score, accuracy_score, recall_score\nfrom functools import partial\n\nf1_macro = partial(f1_score, average='macro')\n\nbs = 32\npreds = np.random.rand(bs)\ntargets = np.random.randint(0, 2, bs)\nthreshold = find_binary_clf_threshold(\n    targets, \n    preds, \n    [accuracy_score, f1_macro, recall_score], \n    weight=[0.5, 0.5, 0], \n    metric_names=[None, 'F1(macro)', None]\n)\n\n\n\n\n\nsource\n\n\nevaluate_slmc\n\n evaluate_slmc (learn, dls=None, dl=None, class_names=None, **kwargs)\n\n\nsource\n\n\nclassification_summary\n\n classification_summary (targets, preds, class_names, show=False,\n                         figsize=(16, 12))\n\n\nimport torch\nfrom unittest.mock import Mock\nimport warnings\nfrom sklearn.exceptions import UndefinedMetricWarning\nfrom IPython.display import display\n\nn = 128\nclass_names = ['cat', 'dog', 'fox', 'cow', 'snake']\ntargets = np.random.randint(0, len(class_names), size=(n, 1))\npreds = np.clip(targets + np.random.randint(-2, 2, size=(n, 1)), 0, len(class_names))\n\ndls = Mock()\ndls.vocab = class_names\ndls.valid = None\nlearn = Mock()\nlearn.get_preds.return_value = None, torch.from_numpy(targets), torch.from_numpy(preds)\n\nwith warnings.catch_warnings():\n    warnings.filterwarnings(action='ignore', category=UndefinedMetricWarning, module=r'.*')\n    clf_df = evaluate_slmc(learn, dls=dls, figsize=(4, 3))\ndisplay(clf_df)\n\ntest_eq(clf_df.columns.tolist(), ['precision', 'recall', 'f1-score', 'support'])\ntest_eq(len(set(class_names).difference(clf_df.index.values)), 0)\n\n\n\n\n\n  \n    \n      \n      precision\n      recall\n      f1-score\n      support\n    \n  \n  \n    \n      cat\n      0.545455\n      0.827586\n      0.657534\n      29.0\n    \n    \n      dog\n      0.103448\n      0.150000\n      0.122449\n      20.0\n    \n    \n      fox\n      0.269231\n      0.218750\n      0.241379\n      32.0\n    \n    \n      cow\n      0.100000\n      0.037037\n      0.054054\n      27.0\n    \n    \n      snake\n      0.500000\n      0.300000\n      0.375000\n      20.0\n    \n    \n      macro avg\n      0.303627\n      0.306675\n      0.290083\n      128.0\n    \n    \n      micro avg\n      0.338843\n      0.320312\n      0.329317\n      128.0\n    \n    \n      weighted avg\n      0.306270\n      0.320312\n      0.298446\n      128.0"
+  },
+  {
+    "objectID": "ml.mcd.html",
+    "href": "ml.mcd.html",
+    "title": "MCD",
+    "section": "",
+    "text": "source\n\ndiscrepancy\n\n discrepancy (a, b)\n\n\nsource\n\n\ndiscrepancy_metric\n\n discrepancy_metric (pred, *targets)\n\n\nsource\n\n\nDiscrepancyLoss\n\n DiscrepancyLoss ()\n\nInitialize self. See help(type(self)) for accurate signature.\n\nsource\n\n\nPredictor\n\n Predictor (prob=0.5, lambd=1.0)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nFeature\n\n Feature ()\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nMcdDataset\n\n McdDataset (source_ds, target_ds)\n\nInitialize self. See help(type(self)) for accurate signature.\n\nsource\n\n\nMcdDataLoader\n\n McdDataLoader (source_dl, target_dl)\n\nInitialize self. See help(type(self)) for accurate signature.\n\nsource\n\n\nMcdModel\n\n McdModel (feature_extractor, classifier1, classifier2, lambd=1.0)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nEnsembleMcdModel\n\n EnsembleMcdModel (feature_extractor, classifier1, classifier2)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool\n\nsource\n\n\nMcdCallback\n\n McdCallback (classification_loss_func, discrepancy_loss_func)\n\nBasic class handling tweaks of the training loop by changing a Learner in various events"
+  }
+]
