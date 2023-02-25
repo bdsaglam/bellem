@@ -2,18 +2,22 @@
 
 # %% auto 0
 __all__ = ['discrepancy', 'DiscrepancyLoss', 'discrepancy_metric', 'Feature', 'Predictor', 'McdDataset', 'McdDataLoader',
-           'McdModel', 'EnsembleMcdModel', 'McdCallback']
+           'McdModel', 'EnsembleMcdModel', 'McdCallback', 'mcd_learner']
 
 # %% ../../nbs/ml.mcd.ipynb 3
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from .layer import GradReverse
-from fastcore.basics import store_attr
 from fastai.callback.core import Callback
+from fastai.data.core import DataLoaders
 from fastai.learner import CancelBatchException
-from fastai.losses import BaseLoss
+from fastai.learner import Learner
+from fastai.losses import BaseLoss, CrossEntropyLossFlat
 from fastai.torch_core import default_device
+from fastcore.basics import store_attr
+from fastcore.meta import delegates
+from typing import Callable
 
 # %% ../../nbs/ml.mcd.ipynb 4
 def discrepancy(a, b):
@@ -31,6 +35,8 @@ def discrepancy_metric(pred, *targets):
 
 # %% ../../nbs/ml.mcd.ipynb 7
 class Feature(nn.Module):
+    "Image feature extractor"
+
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=5, stride=1, padding=2)
@@ -52,6 +58,8 @@ class Feature(nn.Module):
         return x
 
 class Predictor(nn.Module):
+    "Classifier on image features"
+
     def __init__(self, prob=0.5, lambd=1.0):
         super().__init__()
         self.prob = prob
@@ -74,6 +82,11 @@ class Predictor(nn.Module):
 
 # %% ../../nbs/ml.mcd.ipynb 8
 class McdDataset:
+    """Dataset for MCD. 
+    A data point is a tuple of 4 tensors, in the following order:
+    
+    (source_domain_x, target_domain_x, source_domain_y, target_domain_y)
+    """
     def __init__(self, source_ds, target_ds):
         store_attr()
     
@@ -87,6 +100,8 @@ class McdDataset:
 
 # %% ../../nbs/ml.mcd.ipynb 9
 class McdDataLoader:
+    """Dataloader for MCD."""
+
     def __init__(self, source_dl, target_dl):
         store_attr()
         self.source_it = None
@@ -115,6 +130,8 @@ class McdDataLoader:
 
 # %% ../../nbs/ml.mcd.ipynb 10
 class McdModel(nn.Module):
+    """Image classification model with a gradient reversal layer and two classifier heads."""
+
     def __init__(self, feature_extractor, classifier1, classifier2, lambd=1.0):
         super().__init__()
         store_attr()
@@ -130,6 +147,8 @@ class McdModel(nn.Module):
 
 # %% ../../nbs/ml.mcd.ipynb 11
 class EnsembleMcdModel(nn.Module):
+    """Ensemble of two classifiers trained by MCD."""
+
     def __init__(self, feature_extractor, classifier1, classifier2):
         super().__init__()
         store_attr()
@@ -147,6 +166,8 @@ class EnsembleMcdModel(nn.Module):
 
 # %% ../../nbs/ml.mcd.ipynb 12
 class McdCallback(Callback):
+    """It expects data in the form of `McdDataset`."""
+
     def __init__(self, classification_loss_func, discrepancy_loss_func):
         super().__init__()
         store_attr()
@@ -200,4 +221,46 @@ class McdCallback(Callback):
     def _do_grad_opt(self):
         self.learn.opt.step()
         self.learn.opt.zero_grad()
+
+
+# %% ../../nbs/ml.mcd.ipynb 13
+@delegates(Learner.__init__)
+def mcd_learner(
+        dls:DataLoaders, # `DataLoaders` containing fastai or PyTorch `DataLoader`s
+        model:Callable, # PyTorch model for training or inference
+        **kwargs
+    ):
+    """Creates a Learner for MCD by arranging loss functions, metrics, and adding `McdCallback` to callbacks."""
+    from fastmtl.loss import CombinedLoss, LossRouting
+    from fastmtl.metric import route_to_metric
+    from fastai.metrics import accuracy
+    
+    source_classification_loss_func = CombinedLoss(
+        LossRouting(CrossEntropyLossFlat(), pred_idx=0, target_idx=0, weight=1.0),
+        LossRouting(CrossEntropyLossFlat(), pred_idx=1, target_idx=0, weight=1.0),
+    )
+    discrepancy_loss_func = DiscrepancyLoss()
+    mcd_callback = McdCallback(source_classification_loss_func, discrepancy_loss_func)
+    cbs = [mcd_callback, *list(kwargs.pop('cbs', []))]
+
+    classification_metrics = [route_to_metric(accuracy, 0, 0), route_to_metric(accuracy, 1, 0)]
+    discrepancy_metrics = [route_to_metric(accuracy, 2, 1), route_to_metric(accuracy, 3, 1), discrepancy_metric] 
+
+    learn = Learner(
+        dls,
+        model,
+        loss_func=source_classification_loss_func,
+        metrics=[*classification_metrics, *discrepancy_metrics],
+        cbs=cbs,
+        **kwargs,
+    )
+    for metric, name in zip(
+        learn.metrics, 
+        ['clf1_acc_s', 'clf2_acc_s', 'clf1_acc_t', 'clf2_acc_t', 'discrep_t']
+    ):
+        try:
+            metric.name = name
+        except AttributeError:
+            metric.func.__name__ = name
+    return learn
 

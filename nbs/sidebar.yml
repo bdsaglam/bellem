@@ -4,12 +4,13 @@ website:
       - index.ipynb
       - section: Machine Learning
         contents:
-          - ml.layer.ipynb
-          - ml.loss.ipynb
-          - ml.evaluation.ipynb
-          - ml.vision.ipynb
           - ml.cocoop.ipynb
           - ml.data.ipynb
+          - ml.evaluation.ipynb
+          - ml.mcd.ipynb
+          - ml.layer.ipynb
+          - ml.loss.ipynb
+          - ml.vision.ipynb
       - section: Utilities
         contents:
           - utils.ipynb
