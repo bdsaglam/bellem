@@ -9,7 +9,6 @@ import torch
 import torch.nn as nn
 
 from clip import clip
-from clip.simple_tokenizer import SimpleTokenizer
 from .clip import ClipClassificationHead
 
 # %% ../../nbs/ml.cocoop.ipynb 4
@@ -199,8 +198,9 @@ class PromptLearningClip(nn.Module):
 
 # %% ../../nbs/ml.cocoop.ipynb 6
 def make_prompt_learning_clip(class_names, clip_model_name="ViT-B/32", prec='fp32', **kwargs):
+    from clip.simple_tokenizer import SimpleTokenizer
+
     clip_model = clip.load(clip_model_name, device='cpu')[0]
-    
     if prec == "fp32" or prec == "amp":
         # CLIP's default precision is fp16
         clip_model.float()
