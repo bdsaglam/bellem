@@ -12,7 +12,7 @@ from .layer import GradReverse
 from fastai.callback.core import Callback
 from fastai.data.core import DataLoaders
 from fastai.learner import CancelBatchException
-from fastai.learner import Learner
+from fastai.learner import Learner, Recorder
 from fastai.losses import BaseLoss, CrossEntropyLossFlat
 from fastai.torch_core import default_device
 from fastcore.basics import store_attr
@@ -167,6 +167,7 @@ class EnsembleMcdModel(nn.Module):
 # %% ../../nbs/ml.mcd.ipynb 12
 class McdCallback(Callback):
     """It expects data in the form of `McdDataset`."""
+    order = Recorder.order + 10
 
     def __init__(self, classification_loss_func, discrepancy_loss_func):
         super().__init__()
