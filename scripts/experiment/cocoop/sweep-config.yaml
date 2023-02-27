@@ -11,9 +11,9 @@ parameters:
   cocoop.n_ctx:
     values:
       - 1
-      - 10
-      - 20
-      - 50
+      - 8
+      - 16
+      - 32
   train.lr:
     max: 0.01
     min: 0.0001
