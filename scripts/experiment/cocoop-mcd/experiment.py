@@ -10,6 +10,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import wandb
+from clip import clip
+from clip.simple_tokenizer import SimpleTokenizer
 from fastai.callback.wandb import *
 from fastai.data.all import *
 from fastai.torch_core import set_seed
@@ -17,8 +19,6 @@ from fastai.vision.all import *
 from fastcore.basics import ifnone, store_attr
 from torchvision import transforms
 
-from clip import clip
-from clip.simple_tokenizer import SimpleTokenizer
 from bellek.ml.clip import *
 from bellek.ml.cocoop import *
 from bellek.ml.data import *
@@ -84,6 +84,7 @@ def make_pdls(source_dls, target_dls):
         McdDataLoader(source_dls.valid, target_dls.valid),
     )
 
+
 def make_dls(config):
     imagenette_dls = make_imagenet_dls(config)
     imagenette_sketch_dls = make_imagenet_sketch_dls(config)
@@ -91,6 +92,7 @@ def make_dls(config):
     dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
     dls.n_inp = 2
     return dls
+
 
 class CoCoopClassifier(nn.Module):
     def __init__(self, clip_model, tokenizer, class_names, **kwargs):
@@ -113,6 +115,7 @@ def load_clip(model_name, prec="fp32"):
         model.float()
     return model
 
+
 def make_cocoop_feature_extractor(clip_model, trainable=False):
     model = ClipVisualEncoder(clip_model)
     for param in model.parameters():
@@ -134,15 +137,17 @@ def make_model(class_names, config):
     )
     return model
 
+
 def evaluate_ensemble(learn, dls):
     ensemble_model = EnsembleMcdModel.from_mcd_model(learn.model)
     elearn = Learner(
-        dls, 
-        ensemble_model, 
+        dls,
+        ensemble_model,
         loss_func=CrossEntropyLossFlat(),
         metrics=accuracy,
     )
     return evaluate_slmc(elearn, dls=dls, show=False)
+
 
 def run_experiment(wandb_run):
     config = NestedDict.from_flat_dict(wandb_run.config)
@@ -168,15 +173,13 @@ def run_experiment(wandb_run):
     cbs = [SaveModelCallback(), WandbCallback()]
     if config.at("train.early_stop"):
         cbs.append(
-            EarlyStoppingCallback(
-                patience=config.at("train.early_stop.patience")
-            )
+            EarlyStoppingCallback(patience=config.at("train.early_stop.patience"))
         )
-    
+
     print("Creating learner")
     learn = mcd_learner(
-        dls, 
-        model, 
+        dls,
+        model,
         cbs=cbs,
     )
     print(f"Training on {config.get('device')}")
@@ -192,40 +195,10 @@ def run_experiment(wandb_run):
     )
 
 
-def make_run_experiment_sweep(config):
-    def func():
-        wandb_params = config.pop("wandb")
-        with wandb.init(config=flatten_dict(config), **wandb_params) as wandb_run:
-            run_experiment(wandb_run)
-    return func
-
-def main(args):
-    with open(args.cfg) as f:
-        config = prepare_config(NestedDict(json.load(f)))
-
-    if args.sweep_cfg:
-        with open(args.sweep_cfg) as f:
-            sweep_config = json.load(f)
-    else:
-        sweep_config = {}
-
-    run_experiment_sweep = make_run_experiment_sweep(config)
-    with context_chdir(make_experiment_dir()):
-        wandb_config = config["wandb"]
-        if args.sweep_cfg:
-            sweep_id = wandb.sweep(
-                sweep_config,
-                entity=wandb_config["entity"],
-                project=wandb_config["project"],
-            )
-            wandb.agent(sweep_id, run_experiment_sweep, count=sweep_config.get("count"))
-        else:
-            run_experiment_sweep()
-
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--cfg")
     parser.add_argument("--sweep-cfg", required=False)
     args = parser.parse_args()
-    main(args)
+    main(run_experiment, args)
