@@ -1,0 +1,19 @@
+program: experiment.py
+metric:
+  name: accuracy
+  goal: maximize
+method: bayes
+parameters:
+  clip.model_name:
+    values:
+      - RN50
+      - ViT-B/32
+  cocoop.n_ctx:
+    values:
+      - 1
+      - 10
+      - 20
+      - 50
+  train.lr:
+    max: 0.01
+    min: 0.0001

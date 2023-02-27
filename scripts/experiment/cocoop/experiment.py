@@ -1,3 +1,4 @@
+import json
 import os
 import warnings
 from pathlib import Path
@@ -54,7 +55,7 @@ def make_imagenet_sketch_dls(config):
 
 
 def run_experiment(wandb_run):
-    config = NestedDict(wandb_run.config)
+    config = NestedDict.from_flat_dict(wandb_run.config)
     seed = config.get("seed")
     if seed is not None:
         set_seed(seed)
@@ -94,41 +95,22 @@ def run_experiment(wandb_run):
     )
 
 
-def make_run_experiment_sweep(base_config):
-    def func(sweep_config=None):
-        config = merge_config_with_sweep_config(base_config, sweep_config or {})
-        with wandb.init(config=config, **config["wandb"]) as wandb_run:
+def main(args):
+    with open(args.cfg) as f:
+        config = prepare_config(NestedDict(json.load(f)))
+    wandb_params = config.pop("wandb")
+    with wandb.init(config=flatten_dict(config), **wandb_params) as wandb_run:
+        print("=" * 80)
+        print(wandb.config)
+        print("=" * 80)
+        with context_chdir(make_experiment_dir()):
             run_experiment(wandb_run)
-    return func
 
 
 if __name__ == "__main__":
     import argparse
-    import json
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cfg")
-    parser.add_argument("--sweep-cfg", required=False)
-    args = parser.parse_args()
-
-    with open(args.cfg) as f:
-        config = prepare_config(NestedDict(json.load(f)))
-
-    if args.sweep_cfg:
-        with open(args.sweep_cfg) as f:
-            sweep_config = json.load(f)
-    else:
-        sweep_config = {}
-
-    run_experiment_sweep = make_run_experiment_sweep(config)
-    with context_chdir(make_experiment_dir()):
-        wandb_config = config["wandb"]
-        if args.sweep_cfg:
-            sweep_id = wandb.sweep(
-                sweep_config,
-                entity=wandb_config["entity"],
-                project=wandb_config["project"],
-            )
-            wandb.agent(sweep_id, run_experiment_sweep, count=sweep_config.get("count"))
-        else:
-            run_experiment_sweep()
+    parser.add_argument("--cfg", default="./config.json")
+    args, _ = parser.parse_known_args()
+    main(args)
