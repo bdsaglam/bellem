@@ -99,11 +99,8 @@ def main(args):
     with open(args.cfg) as f:
         config = prepare_config(NestedDict(json.load(f)))
     wandb_params = config.pop("wandb")
-    with wandb.init(config=flatten_dict(config), **wandb_params) as wandb_run:
-        print("=" * 80)
-        print(wandb.config)
-        print("=" * 80)
-        with context_chdir(make_experiment_dir()):
+    with context_chdir(make_experiment_dir()):
+        with wandb.init(config=flatten_dict(config), **wandb_params) as wandb_run:
             run_experiment(wandb_run)
 
 
