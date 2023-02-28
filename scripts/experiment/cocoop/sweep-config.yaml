@@ -4,10 +4,6 @@ metric:
   goal: maximize
 method: bayes
 parameters:
-  clip.model_name:
-    values:
-      - RN50
-      - ViT-B/32
   cocoop.n_ctx:
     values:
       - 1

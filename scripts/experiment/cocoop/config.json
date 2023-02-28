@@ -16,11 +16,11 @@
       "n_ctx": 16
     },
     "train": {
-      "n_epoch": 1,
+      "n_epoch": 5,
       "lr": 1e-4
     },
     "wandb": {
-      "mode": "offline",
+      "mode": "online",
       "entity": "bdsaglam",
       "project": "cocoop"
     }
