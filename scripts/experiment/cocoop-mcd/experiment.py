@@ -43,20 +43,21 @@ def synset_label_func(fname):
     return ",".join(words[:2])
 
 
+def make_label_func(config):
+    return (
+        synset_label_func
+        if config.at("data.imagenet_sketch.labelling.kind") == "synset"
+        else simple_label_func
+    )
+
+
 def make_imagenet_sketch_dls(config):
-    device = config["device"]
-    path = config.at("data.imagenet_sketch.path")
-    valid_pct = config.at("data.imagenet_sketch.valid_pct", 0.2)
-    batch_size = config.at("data.imagenet_sketch.batch_size", 64)
     clip_model_name = config.at("clip.model_name", "RN50")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
     )
-    label_func = (
-        simple_label_func
-        if config.at("data.imagenet_sketch.labelling.kind") == "simple"
-        else synset_label_func
-    )
+    label_func = make_label_func(config)
+    valid_pct = config.at("data.imagenet_sketch.valid_pct", 0.2)
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
         get_items=get_image_files,
@@ -65,23 +66,19 @@ def make_imagenet_sketch_dls(config):
         item_tfms=item_tfms,
         batch_tfms=batch_tfms,
     )
+    device = config["device"]
+    path = config.at("data.imagenet_sketch.path")
+    batch_size = config.at("data.imagenet_sketch.batch_size", 64)
     dls = dblock.dataloaders(path, bs=batch_size, device=device)
     return dls
 
 
 def make_imagenet_dls(config):
-    device = config["device"]
-    path = config.at("data.imagenet.path")
-    batch_size = config.at("data.imagenet.batch_size", 64)
     clip_model_name = config.at("clip.model_name", "RN50")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
     )
-    label_func = (
-        simple_label_func
-        if config.at("data.imagenet_sketch.labelling.kind") == "simple"
-        else synset_label_func
-    )
+    label_func = make_label_func(config)
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
         get_items=get_image_files,
@@ -90,6 +87,9 @@ def make_imagenet_dls(config):
         item_tfms=item_tfms,
         batch_tfms=batch_tfms,
     )
+    path = config.at("data.imagenet.path")
+    batch_size = config.at("data.imagenet.batch_size", 64)
+    device = config["device"]
     dls = dblock.dataloaders(path, bs=batch_size, device=device)
     return dls
 
