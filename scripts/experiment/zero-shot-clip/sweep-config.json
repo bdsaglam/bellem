@@ -1,0 +1,17 @@
+{
+  "metric": { "name": "accuracy", "goal": "maximize" },
+  "method": "grid",
+  "parameters": {
+    "clip.prompt": {
+      "values": [
+        "A photo of",
+        "A black and white photo of",
+        "A sketch of",
+        "A black and white sketch of"
+      ]
+    },
+    "data.imagenet_sketch.labelling.kind": {
+      "values": ["simple", "synset"]
+    }
+  }
+}

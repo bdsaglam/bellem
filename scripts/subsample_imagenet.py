@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from bellek.ml.data import get_imagenet_label_map
+from bellek.ml.data import IMAGENET_LABEL_IDS
 
 
 class ClassCopier:
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         with open(args.labelfile) as f:
             label_ids = [line.strip() for line in f.readlines()]
     elif args.n:
-        label_ids = sorted(list(get_imagenet_label_map().keys()))[: args.n]
+        label_ids = IMAGENET_LABEL_IDS[: args.n]
     else:
         raise RuntimeError("Either -n or --labelfile must be specified")
 

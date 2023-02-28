@@ -1,0 +1,23 @@
+{
+  "seed": 42,
+  "data": {
+    "imagenet_sketch": {
+      "path": "./imagenette-sketch",
+      "valid_pct": 0.002,
+      "batch_size": 32,
+      "labelling": {
+        "kind": "simple"
+      }
+    }
+  },
+  "clip": {
+    "model_name": "RN50",
+    "prec": "fp32",
+    "prompt": "A black and white photo of"
+  },
+  "wandb": {
+    "mode": "online",
+    "entity": "bdsaglam",
+    "project": "zsclip"
+  }
+}

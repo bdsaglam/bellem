@@ -24,7 +24,7 @@ from bellek.ml.experiment import *
 from bellek.ml.vision import *
 from bellek.utils import *
 
-imagenet_label_map = get_imagenet_label_map()
+imagenet_label_map = get_imagenet_id_label_map()
 
 def label_func(fname):
     return imagenet_label_map[Path(fname).parent.name]

@@ -30,8 +30,17 @@ from bellek.utils import *
 
 imagenet_label_map = get_imagenet_id_label_map()
 
-def label_func(fname):
+
+def simple_label_func(fname):
     return imagenet_label_map[Path(fname).parent.name]
+
+
+imagenet_synset_map = get_imagenet_id_synset_map()
+
+
+def synset_label_func(fname):
+    words = imagenet_synset_map[Path(fname).parent.name].split(",")
+    return ",".join(words[:2])
 
 
 def make_imagenet_sketch_dls(config):
@@ -42,6 +51,11 @@ def make_imagenet_sketch_dls(config):
     clip_model_name = config.at("clip.model_name", "RN50")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
+    )
+    label_func = (
+        simple_label_func
+        if config.at("data.imagenet_sketch.labelling.kind") == 'simple'
+        else synset_label_func
     )
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
@@ -75,36 +89,6 @@ def make_imagenet_dls(config):
     return dls
 
 
-def make_pdls(source_dls, target_dls):
-    return (
-        McdDataLoader(source_dls.train, target_dls.train),
-        McdDataLoader(source_dls.valid, target_dls.valid),
-    )
-
-
-def make_dls(config):
-    imagenette_dls = make_imagenet_dls(config)
-    imagenette_sketch_dls = make_imagenet_sketch_dls(config)
-    train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
-    dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
-    dls.n_inp = 2
-    return dls
-
-
-class CoCoopClassifier(nn.Module):
-    def __init__(self, clip_model, tokenizer, class_names, **kwargs):
-        super().__init__()
-        self.text_encoder = PromptLearningTextEncoder(
-            clip_model, tokenizer, class_names, **kwargs
-        )
-        self.head = ClipClassificationHead(clip_model)
-
-    def forward(self, image_features):
-        text_features = self.text_encoder()
-        logits = self.head(image_features, text_features)
-        return logits
-
-
 def load_clip(model_name, prec="fp32"):
     model = clip.load(model_name, device="cpu")[0]
     if prec == "fp32" or prec == "amp":
@@ -113,37 +97,12 @@ def load_clip(model_name, prec="fp32"):
     return model
 
 
-def make_cocoop_feature_extractor(clip_model, trainable=False):
-    model = ClipVisualEncoder(clip_model)
-    for param in model.parameters():
-        param.requires_grad_(trainable)
-    return model
-
-
-def make_cocoop_classifier(clip_model, class_names, **kwargs):
-    tokenizer = SimpleTokenizer()
-    return CoCoopClassifier(clip_model, tokenizer, class_names, **kwargs)
-
-
 def make_model(class_names, config):
-    clip_model = load_clip(**config.get("clip"))
-    model = McdModel(
-        make_cocoop_feature_extractor(clip_model, trainable=False),
-        make_cocoop_classifier(clip_model, class_names, **config.get("cocoop")),
-        make_cocoop_classifier(clip_model, class_names, **config.get("cocoop")),
-    )
+    prompt = config.at("clip.prompt")
+    prompted_class_names = [f"{prompt} {c}".strip() for c in class_names]
+    clip_model = load_clip(config.at("clip.model_name"), config.at("clip.prec"))
+    model = ClipZeroShotClassifier(clip_model, prompted_class_names)
     return model
-
-
-def evaluate_ensemble(learn, dls):
-    ensemble_model = EnsembleMcdModel.from_mcd_model(learn.model)
-    elearn = Learner(
-        dls,
-        ensemble_model,
-        loss_func=CrossEntropyLossFlat(),
-        metrics=accuracy,
-    )
-    return evaluate_slmc(elearn, dls=dls, show=False)
 
 
 def run_experiment(wandb_run):
@@ -154,11 +113,7 @@ def run_experiment(wandb_run):
 
     # dataloaders
     print("Creating dataloaders")
-    imagenette_dls = make_imagenet_dls(config)
-    imagenette_sketch_dls = make_imagenet_sketch_dls(config)
-    train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
-    dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
-    dls.n_inp = 2
+    dls = make_imagenet_sketch_dls(config)
     class_names = sorted(list(dls.vocab))
     print(f"#class: {len(class_names)}")
 
@@ -166,28 +121,21 @@ def run_experiment(wandb_run):
     print("Creating model")
     model = make_model(class_names, config)
 
-    # training
-    cbs = [SaveModelCallback(), WandbCallback()]
-    if config.at("train.early_stop"):
-        cbs.append(
-            EarlyStoppingCallback(patience=config.at("train.early_stop.patience"))
-        )
-
+    # evaluation
     print("Creating learner")
-    learn = mcd_learner(
+    learn = Learner(
         dls,
         model,
-        cbs=cbs,
+        loss_func=CrossEntropyLossFlat(),
+        metrics=accuracy,
     )
-    print(f"Training on {config.get('device')}")
-    learn.fit(config.at("train.n_epoch"), lr=config.at("train.lr"))
-
-    # evaluation
-    print("Evaluation model on validation set of target domain")
-    clf_summary = evaluate_ensemble(learn, imagenette_sketch_dls)
+    print("Evaluation model on train set of target domain")
+    clf_summary = evaluate_slmc(learn, dl=dls[0], class_names=class_names)
+    accuracy_score = clf_summary.loc["accuracy"][0]
     wandb_run.log(
         {
             "classification-summary": wandb.Table(dataframe=clf_summary.reset_index()),
+            "accuracy": accuracy_score,
         }
     )
 
