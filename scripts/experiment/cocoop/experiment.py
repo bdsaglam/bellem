@@ -24,14 +24,10 @@ from bellek.ml.experiment import *
 from bellek.ml.vision import *
 from bellek.utils import *
 
-imagenet_label_id_to_synset = get_imagenet_label_map()
-assert len(imagenet_label_id_to_synset) == 1000
-
+imagenet_label_map = get_imagenet_label_map()
 
 def label_func(fname):
-    words = imagenet_label_id_to_synset[Path(fname).parent.name].split(",")
-    return ",".join(words[:2])
-
+    return imagenet_label_map[Path(fname).parent.name]
 
 def make_imagenet_sketch_dls(config):
     path = config.at("data.imagenet_sketch.path")
