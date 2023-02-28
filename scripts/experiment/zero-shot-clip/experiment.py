@@ -129,7 +129,7 @@ def run_experiment(wandb_run):
         loss_func=CrossEntropyLossFlat(),
         metrics=accuracy,
     )
-    print("Evaluation model on train set of target domain")
+    print("Evaluating model on train set of target domain")
     clf_summary = evaluate_slmc(learn, dl=dls[0], class_names=class_names)
     accuracy_score = clf_summary.loc["accuracy"][0]
     wandb_run.log(

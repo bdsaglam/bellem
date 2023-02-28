@@ -97,7 +97,7 @@ def run_experiment(wandb_run):
     learn.fit(config.at("train.n_epoch"), config.at("train.lr"))
 
     # evaluation
-    print("Evaluation model on validation set")
+    print("Evaluating model on validation set")
     clf_summary = evaluate_slmc(learn, dls=dls, show=False)
     wandb_run.log(
         {

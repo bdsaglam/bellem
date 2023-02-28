@@ -202,7 +202,7 @@ def run_experiment(wandb_run):
     learn.fit(config.at("train.n_epoch"), lr=config.at("train.lr"))
 
     # evaluation
-    print("Evaluation model on validation set of target domain")
+    print("Evaluating model on validation set of target domain")
     clf_summary = evaluate_ensemble(learn, imagenette_sketch_dls)
     wandb_run.log(
         {
