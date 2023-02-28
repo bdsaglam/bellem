@@ -72,8 +72,12 @@ def classification_summary(targets, preds, class_names, show=False, figsize=(16,
     return df
 
 def evaluate_slmc(learn, *, dls=None, dl=None, class_names=None, **kwargs):
-    assert not (dls is None and dl is None)
-    class_names = ifnone(class_names, dls.vocab)
-    dl = ifnone(dl, dls.valid)
+    if dl is None:
+        assert dls is not None and dls.valid is not None, "You must specify either dls or dl"
+        dl = dls.valid
+    if class_names is None:
+        assert dls is not None, "You must specify either dls or class_names"
+        assert dls.vocab is not None, "dls must have vocab"
+        class_names = dls.vocab
     _, targets, preds = learn.get_preds(dl=dl, with_decoded=True)
     return classification_summary(targets.cpu().numpy(), preds.cpu().numpy(), class_names=list(class_names), **kwargs)
