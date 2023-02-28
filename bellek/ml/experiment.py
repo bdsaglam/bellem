@@ -51,7 +51,7 @@ def main(run_experiment, args):
     with context_chdir(make_experiment_dir()):
         wandb_params = config["wandb"]
         if args.sweep_cfg:
-            count = sweep_config.pop("count")
+            count = sweep_config.pop("count") if "count" in sweep_config else None
             sweep_id = wandb.sweep(
                 sweep_config,
                 entity=wandb_params["entity"],
