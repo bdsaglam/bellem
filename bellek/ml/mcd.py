@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from .layer import GradReverse
 from fastai.callback.core import Callback
 from fastai.data.core import DataLoaders
-from fastai.learner import CancelBatchException
+from fastai.learner import CancelBatchException, CancelStepException
 from fastai.learner import Learner, Recorder
 from fastai.losses import BaseLoss, CrossEntropyLossFlat
 from fastai.torch_core import default_device
@@ -195,7 +195,7 @@ class McdCallback(Callback):
         self.learn.pred = tuple([*source_pred, *target_pred])
         self.learn('after_pred')
         if source_loss is not None and target_loss is not None:
-            self.learn.loss = source_loss.clone() + target_loss.clone()
+            self.learn.loss = source_loss.detach().cpu() + target_loss.detach().cpu()
         self.learn('after_loss')
         if not self.training or not len(self.yb): 
             return
@@ -222,7 +222,7 @@ class McdCallback(Callback):
         return pred, loss
 
     def _do_grad_opt(self):
-        self.learn.opt.step()
+        self._with_events(self.learn.opt.step, 'step', CancelStepException)
         self.learn.opt.zero_grad()
 
 
