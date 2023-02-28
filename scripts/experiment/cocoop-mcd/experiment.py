@@ -77,6 +77,11 @@ def make_imagenet_dls(config):
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
     )
+    label_func = (
+        simple_label_func
+        if config.at("data.imagenet_sketch.labelling.kind") == "simple"
+        else synset_label_func
+    )
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
         get_items=get_image_files,

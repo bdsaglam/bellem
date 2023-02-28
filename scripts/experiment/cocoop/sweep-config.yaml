@@ -4,6 +4,10 @@ metric:
   goal: maximize
 method: bayes
 parameters:
+  data.imagenet_sketch.labelling.kind:
+    values:
+      - simple
+      - synset
   cocoop.n_ctx:
     values:
       - 1

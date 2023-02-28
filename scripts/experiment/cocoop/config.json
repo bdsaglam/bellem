@@ -1,28 +1,30 @@
 {
-    "seed": 42,
-    "data": {
-      "imagenet_sketch": {
-        "path": "/Users/bdsaglam/knowledge/bellek/tmp/imagenette-sketch",
-        "valid_pct": 0.2,
-        "batch_size": 32
+  "seed": 42,
+  "data": {
+    "imagenet_sketch": {
+      "path": "/Users/bdsaglam/knowledge/bellek/tmp/imagenette-sketch",
+      "valid_pct": 0.2,
+      "batch_size": 32,
+      "labelling": {
+        "kind": "simple"
       }
-    },
-    "clip": {
-      "model_name": "RN50",
-      "prec": "fp32"
-    },
-    "cocoop": {
-      "class_specific_contexts": true,
-      "n_ctx": 16
-    },
-    "train": {
-      "n_epoch": 5,
-      "lr": 1e-4
-    },
-    "wandb": {
-      "mode": "online",
-      "entity": "bdsaglam",
-      "project": "cocoop"
     }
+  },
+  "clip": {
+    "model_name": "RN50",
+    "prec": "fp32"
+  },
+  "cocoop": {
+    "class_specific_contexts": true,
+    "n_ctx": 16
+  },
+  "train": {
+    "n_epoch": 5,
+    "lr": 1e-4
+  },
+  "wandb": {
+    "mode": "online",
+    "entity": "bdsaglam",
+    "project": "cocoop"
   }
-  
+}
