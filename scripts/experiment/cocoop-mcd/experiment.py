@@ -30,8 +30,17 @@ from bellek.utils import *
 
 imagenet_label_map = get_imagenet_id_label_map()
 
-def label_func(fname):
+
+def simple_label_func(fname):
     return imagenet_label_map[Path(fname).parent.name]
+
+
+imagenet_synset_map = get_imagenet_id_synset_map()
+
+
+def synset_label_func(fname):
+    words = imagenet_synset_map[Path(fname).parent.name].split(",")
+    return ",".join(words[:2])
 
 
 def make_imagenet_sketch_dls(config):
@@ -42,6 +51,11 @@ def make_imagenet_sketch_dls(config):
     clip_model_name = config.at("clip.model_name", "RN50")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
+    )
+    label_func = (
+        simple_label_func
+        if config.at("data.imagenet_sketch.labelling.kind") == "simple"
+        else synset_label_func
     )
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
