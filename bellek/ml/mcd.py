@@ -102,7 +102,7 @@ class McdDataset:
 class McdDataLoader(GetAttr):
     """Dataloader for MCD."""
     
-    _default = 'source_dl'
+    _default = 'target_dl'
 
     def __init__(self, source_dl, target_dl):
         store_attr()
