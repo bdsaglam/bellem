@@ -204,9 +204,11 @@ def run_experiment(wandb_run):
     # evaluation
     print("Evaluating model on validation set of target domain")
     clf_summary = evaluate_ensemble(learn, imagenette_sketch_dls)
+    accuracy_score = clf_summary.loc["accuracy"][0]
     wandb_run.log(
         {
             "classification-summary": wandb.Table(dataframe=clf_summary.reset_index()),
+            "accuracy": accuracy_score,
         }
     )
 

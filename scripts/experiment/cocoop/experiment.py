@@ -99,9 +99,11 @@ def run_experiment(wandb_run):
     # evaluation
     print("Evaluating model on validation set")
     clf_summary = evaluate_slmc(learn, dls=dls, show=False)
+    accuracy_score = clf_summary.loc["accuracy"][0]
     wandb_run.log(
         {
             "classification-summary": wandb.Table(dataframe=clf_summary.reset_index()),
+            "accuracy": accuracy_score,
         }
     )
 
