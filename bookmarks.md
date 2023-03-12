@@ -1,5 +1,16 @@
 # Engineering log
 
+## 2023-03-11
+Dockerfile'da ENTRYPOINT vs CMD farkları neler?
+https://www.youtube.com/watch?v=HD6yKEOzvhw&ab_channel=ahmetalpbalkan
+
+Annotated Transformer
+http://nlp.seas.harvard.edu/annotated-transformer/
+
+Dockerfile good practices for Node.js
+https://snyk.io/blog/10-best-practices-to-containerize-nodejs-web-applications-with-docker/
+https://twitter.com/sidpalas/status/1634194026500096000
+
 ## 2023-01-09
 Multiple SSH keys
 https://gist.github.com/jexchan/2351996
