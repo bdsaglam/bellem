@@ -73,7 +73,7 @@ def make_imagenet_sketch_dls(config):
     return dls
 
 
-def make_imagenet_dls(config):
+def make_imagenette_dls(config):
     clip_model_name = config.at("clip.model_name", "RN50")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
         load_clip_preprocess(clip_model_name)
@@ -87,8 +87,8 @@ def make_imagenet_dls(config):
         item_tfms=item_tfms,
         batch_tfms=batch_tfms,
     )
-    path = config.at("data.imagenet.path")
-    batch_size = config.at("data.imagenet.batch_size", 64)
+    path = config.at("data.imagenette.path")
+    batch_size = config.at("data.imagenette.batch_size", 64)
     device = config["device"]
     dls = dblock.dataloaders(path, bs=batch_size, device=device)
     return dls
@@ -102,7 +102,7 @@ def make_pdls(source_dls, target_dls):
 
 
 def make_dls(config):
-    imagenette_dls = make_imagenet_dls(config)
+    imagenette_dls = make_imagenette_dls(config)
     imagenette_sketch_dls = make_imagenet_sketch_dls(config)
     train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
     dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
@@ -173,7 +173,7 @@ def run_experiment(wandb_run):
 
     # dataloaders
     print("Creating dataloaders")
-    imagenette_dls = make_imagenet_dls(config)
+    imagenette_dls = make_imagenette_dls(config)
     imagenette_sketch_dls = make_imagenet_sketch_dls(config)
     train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
     dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])

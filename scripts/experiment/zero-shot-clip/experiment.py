@@ -69,26 +69,6 @@ def make_imagenet_sketch_dls(config):
     return dls
 
 
-def make_imagenet_dls(config):
-    device = config["device"]
-    path = config.at("data.imagenet.path")
-    batch_size = config.at("data.imagenet.batch_size", 64)
-    clip_model_name = config.at("clip.model_name", "RN50")
-    item_tfms, batch_tfms = make_tfms_from_clip_preprocess(
-        load_clip_preprocess(clip_model_name)
-    )
-    dblock = DataBlock(
-        blocks=(ImageBlock, CategoryBlock),
-        get_items=get_image_files,
-        get_y=label_func,
-        splitter=GrandparentSplitter(train_name="train", valid_name="val"),
-        item_tfms=item_tfms,
-        batch_tfms=batch_tfms,
-    )
-    dls = dblock.dataloaders(path, bs=batch_size, device=device)
-    return dls
-
-
 def load_clip(model_name, prec="fp32"):
     model = clip.load(model_name, device="cpu")[0]
     if prec == "fp32" or prec == "amp":

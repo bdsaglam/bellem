@@ -1,5 +1,14 @@
 # Engineering log
 
+## 2023-03-12
+Paper tracking by aman.ai
+https://aman.ai/papers/
+
+Transformers Explained
+https://e2eml.school/transformers.html
+https://jalammar.github.io/illustrated-transformer/
+https://aman.ai/primers/ai/transformers
+
 ## 2023-03-11
 Dockerfile'da ENTRYPOINT vs CMD farkları neler?
 https://www.youtube.com/watch?v=HD6yKEOzvhw&ab_channel=ahmetalpbalkan

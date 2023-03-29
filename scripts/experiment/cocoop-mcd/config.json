@@ -1,7 +1,7 @@
 {
   "seed": 42,
   "data": {
-    "imagenet": {
+    "imagenette": {
       "path": "/Users/bdsaglam/.fastai/data/imagenette2-320",
       "batch_size": 16
     },
