@@ -41,7 +41,8 @@ def main(run_experiment, args):
     with open(args.cfg) as f:
         config = prepare_config(NestedDict(json.load(f)))
 
-    if args.sweep_cfg:
+    is_sweep = hasattr(args, "sweep_cfg") and args.sweep_cfg
+    if is_sweep:
         with open(args.sweep_cfg) as f:
             sweep_config = json.load(f)
     else:
@@ -50,7 +51,7 @@ def main(run_experiment, args):
     run_experiment_sweep = make_run_experiment_sweep(run_experiment, config)
     with context_chdir(make_experiment_dir()):
         wandb_params = config["wandb"]
-        if args.sweep_cfg:
+        if is_sweep:
             count = sweep_config.pop("count") if "count" in sweep_config else None
             sweep_id = wandb.sweep(
                 sweep_config,

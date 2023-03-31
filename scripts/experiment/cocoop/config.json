@@ -19,7 +19,7 @@
     "n_ctx": 16
   },
   "train": {
-    "n_epoch": 5,
+    "n_epoch": 1,
     "lr": 1e-4
   },
   "wandb": {

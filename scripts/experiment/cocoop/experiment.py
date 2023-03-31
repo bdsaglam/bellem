@@ -108,14 +108,6 @@ def run_experiment(wandb_run):
     )
 
 
-def main(args):
-    with open(args.cfg) as f:
-        config = prepare_config(NestedDict(json.load(f)))
-    wandb_params = config.pop("wandb")
-    with context_chdir(make_experiment_dir()):
-        with wandb.init(config=flatten_dict(config), **wandb_params) as wandb_run:
-            run_experiment(wandb_run)
-
 
 if __name__ == "__main__":
     import argparse
@@ -123,4 +115,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cfg", default="./config.json")
     args, _ = parser.parse_known_args()
-    main(args)
+    main(run_experiment, args)

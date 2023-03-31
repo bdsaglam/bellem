@@ -186,7 +186,7 @@ def run_experiment(wandb_run):
     model = make_model(class_names, config)
 
     # training
-    cbs = [SaveModelCallback(), WandbCallback(log_preds=False)]
+    cbs = [WandbCallback(log_preds=False)]
     if config.at("train.early_stop"):
         cbs.append(
             EarlyStoppingCallback(patience=config.at("train.early_stop.patience"))
