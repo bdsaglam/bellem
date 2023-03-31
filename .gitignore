@@ -146,3 +146,6 @@ checklink/cookies.txt
 
 # Quarto
 .quarto
+
+# Misc
+.experiments

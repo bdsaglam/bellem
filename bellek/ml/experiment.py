@@ -11,7 +11,7 @@ import json
 from ..utils import context_chdir, NestedDict, flatten_dict
 
 # %% ../../nbs/ml.experiment.ipynb 4
-def make_experiment_dir(root="./experiments", name=None):
+def make_experiment_dir(root=".experiments", name=None):
     if name is None:
         from bellek.utils import generate_time_id
         name = generate_time_id()
