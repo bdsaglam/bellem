@@ -6,5 +6,6 @@ bellek
 ## Install
 
 ``` sh
+pip install clip@git+https://github.com/openai/CLIP.git
 pip install bellek
 ```
