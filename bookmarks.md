@@ -1,5 +1,9 @@
 # Engineering log
 
+## 2023-04-02
+GPT 4 Can Improve Itself - (ft. Reflexion, HuggingGPT, Bard Upgrade and much more)
+https://www.youtube.com/watch?v=5SgJKZLBrmg&ab_channel=AIExplained
+
 ## 2023-03-12
 Paper tracking by aman.ai
 https://aman.ai/papers/
