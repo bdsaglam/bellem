@@ -1,5 +1,13 @@
 # Engineering log
 
+
+## 2023-04-15
+What Are Transformer Models and How Do They Work?
+https://txt.cohere.ai/what-are-transformer-models/
+
+How GPT3 Works
+https://jalammar.github.io/how-gpt3-works-visualizations-animations/?ref=txt.cohere.ai
+
 ## 2023-04-02
 GPT 4 Can Improve Itself - (ft. Reflexion, HuggingGPT, Bard Upgrade and much more)
 https://www.youtube.com/watch?v=5SgJKZLBrmg&ab_channel=AIExplained

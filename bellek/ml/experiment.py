@@ -49,16 +49,15 @@ def main(run_experiment, args):
         sweep_config = {}
 
     run_experiment_sweep = make_run_experiment_sweep(run_experiment, config)
-    with context_chdir(make_experiment_dir()):
-        wandb_params = config["wandb"]
-        if is_sweep:
-            count = sweep_config.pop("count") if "count" in sweep_config else None
-            sweep_id = wandb.sweep(
-                sweep_config,
-                entity=wandb_params["entity"],
-                project=wandb_params["project"],
-            )
-            wandb.agent(sweep_id, run_experiment_sweep, count=count)
-        else:
-            run_experiment_sweep()
+    wandb_params = config["wandb"]
+    if is_sweep:
+        count = sweep_config.pop("count") if "count" in sweep_config else None
+        sweep_id = wandb.sweep(
+            sweep_config,
+            entity=wandb_params["entity"],
+            project=wandb_params["project"],
+        )
+        wandb.agent(sweep_id, run_experiment_sweep, count=count)
+    else:
+        run_experiment_sweep()
 
