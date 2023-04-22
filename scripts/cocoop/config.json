@@ -4,7 +4,7 @@
     "imagenet_sketch": {
       "path": "/Users/bdsaglam/knowledge/bellek/tmp/imagenette-sketch",
       "valid_pct": 0.2,
-      "batch_size": 32,
+      "batch_size": 2,
       "labelling": {
         "kind": "simple"
       }
@@ -16,7 +16,7 @@
   },
   "cocoop": {
     "class_specific_contexts": true,
-    "n_ctx": 8
+    "n_ctx": 4
   },
   "train": {
     "n_epoch": 1,
