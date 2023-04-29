@@ -4,7 +4,7 @@ website:
       - index.ipynb
       - section: Machine Learning
         contents:
-          - ml.cocoop.ipynb
+          - ml.coop.ipynb
           - ml.data.ipynb
           - ml.evaluation.ipynb
           - ml.mcd.ipynb

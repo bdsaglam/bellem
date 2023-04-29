@@ -1,10 +1,9 @@
 {
   "seed": 42,
   "data": {
-    "imagenet_sketch": {
-      "path": "/Users/bdsaglam/knowledge/bellek/tmp/imagenette-sketch",
-      "valid_pct": 0.2,
-      "batch_size": 2,
+    "imagenet": {
+      "path": "/mnt/vol_b/datasets/imagenet/",
+      "batch_size": 8,
       "labelling": {
         "kind": "simple"
       }
@@ -12,19 +11,20 @@
   },
   "clip": {
     "model_name": "RN50",
-    "prec": "fp32"
+    "prec": "fp16"
   },
-  "cocoop": {
+  "coop": {
     "class_specific_contexts": true,
     "n_ctx": 4
   },
   "train": {
     "n_epoch": 1,
-    "lr": 1e-4
+    "lr": 1e-4,
+    "precision": "fp16"
   },
   "wandb": {
-    "mode": "online",
+    "mode": "disabled",
     "entity": "bdsaglam",
-    "project": "cocoop"
+    "project": "coop-debug"
   }
 }

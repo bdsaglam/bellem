@@ -21,7 +21,7 @@ from fastcore.basics import ifnone, store_attr
 from torchvision import transforms
 
 from bellek.ml.clip import load_clip_preprocess, make_tfms_from_clip_preprocess
-from bellek.ml.cocoop import *
+from bellek.ml.coop import *
 from bellek.ml.data import *
 from bellek.ml.evaluation import evaluate_slmc
 from bellek.ml.experiment import *
@@ -77,9 +77,9 @@ def make_imagenet_dls(config):
     clip_model_name = config.at("clip.model_name")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(load_clip_preprocess(clip_model_name))
     label_func = simple_label_func if config.at("data.imagenet.labelling.kind") == "simple" else synset_label_func
-    # subset = sorted(list(imagenet_label_map.keys()))[:100]
-    # get_items = lambda path: get_image_files_subset(path, folders = subset)
-    get_items = get_image_files
+    subset = sorted(list(imagenet_label_map.keys()))[:500]
+    get_items = lambda path: get_image_files_subset(path, folders = subset)
+    # get_items = get_image_files
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
         get_items=get_items,
@@ -103,7 +103,7 @@ def run_experiment(wandb_run):
 
     # dataloaders
     print("Creating dataloaders")
-    dls = make_imagenet_sketch_dls(config)
+    dls = make_imagenet_dls(config)
     class_names = list(dls.vocab)
     print(f"#class: {len(class_names)}")
 
@@ -117,7 +117,7 @@ def run_experiment(wandb_run):
             class_names,
             clip_model_name=config.at("clip.model_name"),
             prec=config.at("clip.prec"),
-            **config["cocoop"],
+            **config["coop"],
         )
     )
     learn = Learner(
@@ -133,8 +133,8 @@ def run_experiment(wandb_run):
     lr = config.at("train.lr")
     training_ctx_mgr = learn.distrib_ctx() if config.at("train.distributed") else contextlib.nullcontext()
     with training_ctx_mgr:
-        with learn.no_bar():
-            learn.fit(n_epoch, lr)
+        # with learn.no_bar():
+        learn.fit(n_epoch, lr)
 
     # evaluation
     print("Evaluating model on validation set")

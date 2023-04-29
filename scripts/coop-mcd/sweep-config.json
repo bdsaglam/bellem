@@ -3,7 +3,7 @@
     "method": "bayes",
     "parameters": {
         "clip.model_name": {"values": ["RN50"]},
-        "cocoop.n_ctx": {"values": [1, 8, 16, 32]},
+        "coop.n_ctx": {"values": [1, 8, 16, 32]},
         "train.lr": {"max": 1e-2, "min": 1e-4}
     },
     "count": 20

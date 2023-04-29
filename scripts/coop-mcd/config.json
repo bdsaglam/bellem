@@ -15,7 +15,7 @@
     "model_name": "RN50",
     "prec": "fp32"
   },
-  "cocoop": {
+  "coop": {
     "class_specific_contexts": true,
     "n_ctx": 16
   },
@@ -26,6 +26,6 @@
   "wandb": {
     "mode": "online",
     "entity": "bdsaglam",
-    "project": "cocoop-mcd"
+    "project": "coop-mcd"
   }
 }

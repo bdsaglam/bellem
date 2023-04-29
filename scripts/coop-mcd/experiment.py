@@ -20,7 +20,7 @@ from fastcore.basics import ifnone, store_attr
 from torchvision import transforms
 
 from bellek.ml.clip import *
-from bellek.ml.cocoop import *
+from bellek.ml.coop import *
 from bellek.ml.data import *
 from bellek.ml.evaluation import evaluate_slmc
 from bellek.ml.experiment import *
@@ -110,7 +110,7 @@ def make_dls(config):
     return dls
 
 
-class CoCoopClassifier(nn.Module):
+class coopClassifier(nn.Module):
     def __init__(self, clip_model, tokenizer, class_names, **kwargs):
         super().__init__()
         self.text_encoder = PromptLearningTextEncoder(
@@ -132,24 +132,24 @@ def load_clip(model_name, prec="fp32"):
     return model
 
 
-def make_cocoop_feature_extractor(clip_model, trainable=False):
+def make_coop_feature_extractor(clip_model, trainable=False):
     model = ClipVisualEncoder(clip_model)
     for param in model.parameters():
         param.requires_grad_(trainable)
     return model
 
 
-def make_cocoop_classifier(clip_model, class_names, **kwargs):
+def make_coop_classifier(clip_model, class_names, **kwargs):
     tokenizer = SimpleTokenizer()
-    return CoCoopClassifier(clip_model, tokenizer, class_names, **kwargs)
+    return coopClassifier(clip_model, tokenizer, class_names, **kwargs)
 
 
 def make_model(class_names, config):
     clip_model = load_clip(**config.get("clip"))
     model = McdModel(
-        make_cocoop_feature_extractor(clip_model, trainable=False),
-        make_cocoop_classifier(clip_model, class_names, **config.get("cocoop")),
-        make_cocoop_classifier(clip_model, class_names, **config.get("cocoop")),
+        make_coop_feature_extractor(clip_model, trainable=False),
+        make_coop_classifier(clip_model, class_names, **config.get("coop")),
+        make_coop_classifier(clip_model, class_names, **config.get("coop")),
     )
     return model
 

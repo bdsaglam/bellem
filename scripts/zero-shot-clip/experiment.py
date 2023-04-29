@@ -20,7 +20,7 @@ from fastcore.basics import ifnone, store_attr
 from torchvision import transforms
 
 from bellek.ml.clip import *
-from bellek.ml.cocoop import *
+from bellek.ml.coop import *
 from bellek.ml.data import *
 from bellek.ml.evaluation import evaluate_slmc
 from bellek.ml.experiment import *

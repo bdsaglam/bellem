@@ -8,7 +8,7 @@ parameters:
     values:
       - simple
       - synset
-  cocoop.n_ctx:
+  coop.n_ctx:
     values:
       - 1
       - 8
