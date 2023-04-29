@@ -110,7 +110,7 @@ def make_dls(config):
     return dls
 
 
-class coopClassifier(nn.Module):
+class CoopClassifier(nn.Module):
     def __init__(self, clip_model, tokenizer, class_names, **kwargs):
         super().__init__()
         self.text_encoder = PromptLearningTextEncoder(
@@ -141,7 +141,7 @@ def make_coop_feature_extractor(clip_model, trainable=False):
 
 def make_coop_classifier(clip_model, class_names, **kwargs):
     tokenizer = SimpleTokenizer()
-    return coopClassifier(clip_model, tokenizer, class_names, **kwargs)
+    return CoopClassifier(clip_model, tokenizer, class_names, **kwargs)
 
 
 def make_model(class_names, config):
