@@ -28,61 +28,22 @@ from bellek.ml.mcd import *
 from bellek.ml.vision import *
 from bellek.utils import *
 
-imagenet_label_map = get_imagenet_id_label_map()
 
-
-def simple_label_func(fname):
-    return imagenet_label_map[Path(fname).parent.name]
-
-
-imagenet_synset_map = get_imagenet_id_synset_map()
-
-
-def synset_label_func(fname):
-    words = imagenet_synset_map[Path(fname).parent.name].split(",")
-    return ",".join(words[:2])
-
-
-def make_label_func(config):
-    return synset_label_func if config.at("data.imagenet_sketch.labelling.kind") == "synset" else simple_label_func
-
-
-def make_imagenet_sketch_dls(config):
-    clip_model_name = config.at("clip.model_name", "RN50")
+def make_office_home_dls(config, domain):
+    valid_pct = config.at("data.office_home.valid_pct", 0.3)
+    batch_size = config.at("data.office_home.batch_size", 64)
+    clip_model_name = config.at("clip.model_name")
     item_tfms, batch_tfms = make_tfms_from_clip_preprocess(load_clip_preprocess(clip_model_name))
-    label_func = make_label_func(config)
-    valid_pct = config.at("data.imagenet_sketch.valid_pct", 0.2)
     dblock = DataBlock(
         blocks=(ImageBlock, CategoryBlock),
         get_items=get_image_files,
-        get_y=label_func,
+        get_y=lambda p: Path(p).parent.name.lower().replace("_", " "),
         splitter=RandomSplitter(valid_pct=valid_pct),
         item_tfms=item_tfms,
         batch_tfms=batch_tfms,
     )
-    device = config["device"]
-    path = config.at("data.imagenet_sketch.path")
-    batch_size = config.at("data.imagenet_sketch.batch_size", 64)
-    dls = dblock.dataloaders(path, bs=batch_size, device=device)
-    return dls
-
-
-def make_imagenette_dls(config):
-    clip_model_name = config.at("clip.model_name", "RN50")
-    item_tfms, batch_tfms = make_tfms_from_clip_preprocess(load_clip_preprocess(clip_model_name))
-    label_func = make_label_func(config)
-    dblock = DataBlock(
-        blocks=(ImageBlock, CategoryBlock),
-        get_items=get_image_files,
-        get_y=label_func,
-        splitter=GrandparentSplitter(train_name="train", valid_name="val"),
-        item_tfms=item_tfms,
-        batch_tfms=batch_tfms,
-    )
-    path = config.at("data.imagenette.path")
-    batch_size = config.at("data.imagenette.batch_size", 64)
-    device = config["device"]
-    dls = dblock.dataloaders(path, bs=batch_size, device=device)
+    path = Path(config.at("data.office_home.path"))
+    dls = dblock.dataloaders(path / domain, bs=batch_size)
     return dls
 
 
@@ -93,19 +54,10 @@ def make_pdls(source_dls, target_dls):
     )
 
 
-def make_dls(config):
-    imagenette_dls = make_imagenette_dls(config)
-    imagenette_sketch_dls = make_imagenet_sketch_dls(config)
-    train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
-    dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
-    dls.n_inp = 2
-    return dls
-
-
 class CoopClassifier(nn.Module):
     def __init__(self, clip_model, class_names, **kwargs):
         super().__init__()
-        self.text_encoder = PromptLearningTextEncoder(clip_model, SimpleTokenizer(), class_names, **kwargs)
+        self.text_encoder = PromptLearningTextEncoder(clip_model, SimpleTokenizer(), class_names, **kwargs )
         self.head = ClipClassificationHead(clip_model)
 
     def forward(self, image_features):
@@ -158,9 +110,9 @@ def run_experiment(wandb_run):
 
     # dataloaders
     print("Creating dataloaders")
-    imagenette_dls = make_imagenette_dls(config)
-    imagenette_sketch_dls = make_imagenet_sketch_dls(config)
-    train_pdl, valid_pdl = make_pdls(imagenette_dls, imagenette_sketch_dls)
+    source_dls = make_office_home_dls(config, 'Real World')
+    target_dls = make_office_home_dls(config, 'Clipart')
+    train_pdl, valid_pdl = make_pdls(source_dls, target_dls)
     dls = DataLoaders(train_pdl, valid_pdl, device=config["device"])
     dls.n_inp = 2
     class_names = sorted(list(dls.vocab))
@@ -176,17 +128,13 @@ def run_experiment(wandb_run):
         cbs.append(EarlyStoppingCallback(patience=config.at("train.early_stop.patience")))
 
     print("Creating learner")
-    learn = mcd_learner(
-        dls,
-        model,
-        cbs=cbs,
-    )
+    learn = mcd_learner(dls, model, cbs=cbs)
     print(f"Training on {config.get('device')}")
     learn.fit(config.at("train.n_epoch"), lr=config.at("train.lr"))
 
     # evaluation
     print("Evaluating model on validation set of target domain")
-    clf_summary = evaluate_ensemble(learn, imagenette_sketch_dls)
+    clf_summary = evaluate_ensemble(learn, target_dls)
     accuracy_score = clf_summary.loc["accuracy"][0]
     wandb_run.log(
         {
@@ -194,7 +142,6 @@ def run_experiment(wandb_run):
             "accuracy": accuracy_score,
         }
     )
-
 
 if __name__ == "__main__":
     import argparse

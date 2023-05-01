@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "data": {
+    "office_home": {
+      "path": "/mnt/vol_b/datasets/office-home-dataset",
+      "batch_size": 1,
+      "valid_pct": 0.3
+    }
+  },
+  "clip": {
+    "model_name": "RN50",
+    "prec": "fp16"
+  },
+  "coop": {
+    "class_specific_contexts": true,
+    "n_ctx": 4
+  },
+  "train": {
+    "n_epoch": 2,
+    "lr": 1e-3,
+    "precision": "fp16"
+  },
+  "wandb": {
+    "mode": "disabled",
+    "entity": "bdsaglam",
+    "project": "coop-mcd-debug"
+  }
+}
