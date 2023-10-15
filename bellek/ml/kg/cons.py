@@ -2,14 +2,14 @@
 
 # %% auto 0
 __all__ = ['Entity', 'Relation', 'Triplet', 'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions',
-           'parse_triplet_strings', 'parse_triplets']
+           'parse_triplet_strings', 'parse_triplets', 'format_few_shot_example', 'format_few_shot_examples']
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
 from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any
 import numpy as np
 
 # %% ../../../nbs/ml.kg.cons.ipynb 4
-Entity: TypeAlias = tuple[str, str]
+Entity: TypeAlias = str | tuple[str, str]
 Relation: TypeAlias = str
 Triplet: TypeAlias = tuple[Entity, Relation, Entity]
 
@@ -49,5 +49,14 @@ def evaluate_joint_er_extractions(*, references: Iterable[Iterable[Triplet]], pr
 def parse_triplet_strings(text: str, delimiter: str=" | ") -> List[str]:
     return [line for line in text.splitlines() if line and line.count(delimiter) == 2]
 
-def parse_triplets(text: str, delimiter: str=" | ") -> List[Tuple]:
+def parse_triplets(text: str, delimiter: str=" | ") -> List[Triplet]:
     return [tuple(triplet_string.split(delimiter)) for triplet_string in parse_triplet_strings(text, delimiter=delimiter)]
+
+# %% ../../../nbs/ml.kg.cons.ipynb 10
+def format_few_shot_example(example, text_prefix="# Text\n", triplets_prefix="# Triplets\n"):
+    text = example['text']
+    triplets = '\n'.join(example['triplets'])
+    return f"{text_prefix}{text}\n{triplets_prefix}{triplets}"
+
+def format_few_shot_examples(examples):
+    return "\n\n".join([format_few_shot_example(example) for example in examples])
