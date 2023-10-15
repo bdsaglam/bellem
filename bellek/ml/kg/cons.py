@@ -92,8 +92,6 @@ class ERXFormatter:
     relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
     relation_set: set | None = None
 
-    _system_prompt: str | None = None
-
     def __post_init__(self):
         self._system_prompt = self.make_system_prompt()
 
