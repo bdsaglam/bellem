@@ -101,7 +101,7 @@ class ERXFormatter:
         return example
 
     def format_for_train(self, example: Dict):
-        example['text'] = self.format_for_inference(example) + " " + '\n'.join(example['triplets'])
+        example['text'] = self.format_for_inference(example)['text'] + " " + '\n'.join(example['triplets'])
         return example
 
     @property
