@@ -4,10 +4,20 @@
 __all__ = ['batch_transform_webnlg']
 
 # %% ../../../nbs/ml.kg.dataset.ipynb 3
+from ...utils import split_camel_case
+
+# %% ../../../nbs/ml.kg.dataset.ipynb 4
+def _transform_triplet(triplet_string: str):
+    delimiter = " | "
+    entity1,rel,entity2 = triplet_string.split(delimiter)
+    rel = ' '.join([word.lower() for word in split_camel_case(rel)])
+    return delimiter.join([entity1, rel, entity2])
+
 def _batch_transform_webnlg(examples):
     for lex, mts in zip(examples['lex'], examples['modified_triple_sets']):
         for text in lex['text']:
-            yield dict(text=text, triplets=mts['mtriple_set'][0])
+            triplets = [_transform_triplet(triplet_string) for triplet_string in mts['mtriple_set'][0]]
+            yield dict(text=text, triplets=triplets)
 
 def batch_transform_webnlg(examples):
     records = list(_batch_transform_webnlg(examples))
