@@ -1,7 +1,7 @@
 {
     "seed": 42,
     "dataset": {
-        "subset": "10%"
+        "split": "train[:10%]"
     },
     "base_model": {
         "name": "NousResearch/llama-2-7b-chat-hf"
@@ -17,8 +17,8 @@
     },
     "train": {
         "num_train_epochs": 1,
-        "per_device_train_batch_size": 2,
-        "per_device_eval_batch_size": 2,
+        "per_device_train_batch_size": 4,
+        "per_device_eval_batch_size": 4,
         "gradient_accumulation_steps": 1,
         "gradient_checkpointing": true,
         "max_grad_norm": 0.3,

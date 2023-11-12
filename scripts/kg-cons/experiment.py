@@ -2,7 +2,7 @@ import os
 from typing import Any, Dict, List, Tuple  # noqa: F401
 
 import torch
-from datasets import load_dataset
+from datasets import load_dataset, DatasetDict
 from peft import LoraConfig
 from transformers import (
     AutoModelForCausalLM,
@@ -74,14 +74,11 @@ def load_model_tokenizer(
     return model, tokenizer
 
 
-def prepare_erx_dataset(subset=None):
+def prepare_erx_dataset(split = None):
     from bellek.ml.kg.dataset import batch_transform_webnlg
-
-    split = "train"
-    if subset:
-        split += f"[:{subset}]"
     ds = load_dataset("web_nlg", "release_v3.0_en", split=split)
-    return ds.map(batch_transform_webnlg, batched=True, remove_columns=ds.column_names)
+    column_names = list(ds.column_names.values())[0] if isinstance(ds, DatasetDict) else ds.column_names
+    return ds.map(batch_transform_webnlg, batched=True, remove_columns=column_names)
 
 
 def prepare_finetuning_dataset(erx_dataset):
@@ -109,7 +106,7 @@ def run_experiment(wandb_run):
 
     # Dataset
     print("Preparing entity-extraction dataset")
-    erx_ds = prepare_erx_dataset(subset=config.at("dataset.subset"))
+    erx_ds = prepare_erx_dataset(subset=config.at("dataset.split"))
     rel_ds = erx_ds.map(
         lambda example: dict(relations=[triplet.split("|")[1].strip() for triplet in example["triplets"]])
     )
