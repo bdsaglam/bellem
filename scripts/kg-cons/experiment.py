@@ -172,7 +172,7 @@ def run_experiment(wandb_run):
         set_seed(seed)
 
     os.environ["WANDB_PROJECT"] = wandb_run.project
-    os.environ["WANDB_LOG_MODEL"] = "checkpoint"
+    # os.environ["WANDB_LOG_MODEL"] = "checkpoint"
 
     # Base model
     model_name = config.at("base_model.name")
