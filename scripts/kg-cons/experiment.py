@@ -1,8 +1,10 @@
+import logging
 import os
 from typing import Any, Dict, List, Tuple  # noqa: F401
 
+import evaluate
 import torch
-from datasets import load_dataset, DatasetDict
+from datasets import DatasetDict, load_dataset
 from peft import LoraConfig
 from transformers import (
     AutoModelForCausalLM,
@@ -12,11 +14,35 @@ from transformers import (
 )
 from trl import SFTTrainer
 
+import wandb
 from bellek.ml.experiment import main
+from bellek.ml.kg.cons import parse_triplet_strings
 from bellek.utils import NestedDict
 
 DEVICE_MAP = {"": 0}
 
+
+def setup_logger():
+    # Create a logger
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+
+    # Create a console handler and set the log level
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+
+    # Create a formatter and add it to the handlers
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    console_handler.setFormatter(formatter)
+
+    # Add the handlers to the logger
+    logger.addHandler(console_handler)
+
+    return logger
+
+log = setup_logger()
 
 def get_default_bnb_config(
     # Activate 4-bit precision base model loading
@@ -34,9 +60,7 @@ def get_default_bnb_config(
     if compute_dtype == torch.float16 and use_4bit:
         major, _ = torch.cuda.get_device_capability()
         if major >= 8:
-            print("=" * 80)
-            print("Your GPU supports bfloat16: accelerate training with bf16=True")
-            print("=" * 80)
+            log.warning("Your GPU supports bfloat16: accelerate training with bf16=True")
 
     return BitsAndBytesConfig(
         load_in_4bit=use_4bit,
@@ -68,25 +92,76 @@ def load_model_tokenizer(
     model.config.pretraining_tp = 1
 
     # Load LLaMA tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name_or_path, trust_remote_code=True
+    )
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 trainin
     return model, tokenizer
 
 
-def prepare_erx_dataset(split = None):
+def prepare_erx_dataset(split=None):
     from bellek.ml.kg.dataset import batch_transform_webnlg
+
     ds = load_dataset("web_nlg", "release_v3.0_en", split=split)
-    column_names = list(ds.column_names.values())[0] if isinstance(ds, DatasetDict) else ds.column_names
+    column_names = (
+        list(ds.column_names.values())[0]
+        if isinstance(ds, DatasetDict)
+        else ds.column_names
+    )
     return ds.map(batch_transform_webnlg, batched=True, remove_columns=column_names)
 
 
-def prepare_finetuning_dataset(erx_dataset):
+def make_erx_formatter(erx_dataset):
     from bellek.ml.kg.cons import ERXFormatter
 
     few_shot_examples = erx_dataset.select(list(range(3)))
-    formatter = ERXFormatter(few_shot_examples=few_shot_examples)
-    return erx_dataset.map(formatter.format_for_train)
+    return ERXFormatter(few_shot_examples=few_shot_examples)
+
+
+def prepare_training_dataset(ds, erx_formatter):
+    return ds.map(erx_formatter.format_for_train)
+
+
+def prepare_evaluation_dataset(ds, erx_formatter):
+    return ds.map(erx_formatter.format_for_inference)
+
+
+def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
+    from transformers import pipeline
+
+    config = NestedDict.from_flat_dict(wandb_run.config)
+    pipe = pipeline(
+        task="text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        max_new_tokens=config.at("evaluation.max_new_tokens", 128),
+        batch_size=config.at("evaluation.batch_size", 4),
+        return_full_text=False,
+        device=0,
+    )
+
+    def _evaluate(pipe, dataset):
+        metric = evaluate.load("bdsaglam/jer")
+        results = pipe(dataset["text"])
+        generated_texts = [result[0]["generated_text"] for result in results]
+        predictions = [
+            parse_triplet_strings(gen_text.strip()) for gen_text in generated_texts
+        ]
+        references = dataset["triplets"]
+        scores = metric.compute(predictions=predictions, references=references)
+        return generated_texts, predictions, scores
+
+    generated_texts, predicted_triplets, scores = _evaluate(pipe, evaluation_dataset)
+    evaluation_df = evaluation_dataset.to_pandas()
+    evaluation_df["generated_texts"] = generated_texts
+    evaluation_df["predicted_triplets"] = predicted_triplets
+    wandb_run.log(
+        {
+            **scores,
+            "evaluation-dataframe": wandb.Table(dataframe=evaluation_df.reset_index()),
+        }
+    )
 
 
 def run_experiment(wandb_run):
@@ -101,28 +176,31 @@ def run_experiment(wandb_run):
 
     # Base model
     model_name = config.at("base_model.name")
-    print(f"Loading base model {model_name}")
+    log.info(f"Loading base model {model_name}")
     base_model, tokenizer = load_model_tokenizer(model_name)
 
     # Dataset
-    print("Preparing entity-extraction dataset")
-    erx_ds = prepare_erx_dataset(subset=config.at("dataset.split"))
-    rel_ds = erx_ds.map(
-        lambda example: dict(relations=[triplet.split("|")[1].strip() for triplet in example["triplets"]])
+    log.info("Preparing entity-extraction dataset")
+    train_erx_ds = prepare_erx_dataset(split=config.at("dataset.train.split"))
+    rel_ds = train_erx_ds.map(
+        lambda example: dict(
+            relations=[triplet.split("|")[1].strip() for triplet in example["triplets"]]
+        )
     )
     relation_set = {rel for rels in rel_ds["relations"] for rel in rels}
-    print("Number of unique relations:", len(relation_set))
-    print(
-        "Number of tokens for all relations:",
-        len(tokenizer.encode(" ".join(relation_set))),
+    log.info(f"Number of unique relations:{len(relation_set)}")
+    log.info(f"Number of tokens for all relations: {len(tokenizer.encode(' '.join(relation_set)))}" 
     )
+    erx_formatter = make_erx_formatter(train_erx_ds)
 
     # Fine-tuning
-    print("Preparing fine-tuning dataset")
-    finetune_ds = prepare_finetuning_dataset(erx_ds)
-    tokenized_datasets = finetune_ds.map(lambda examples: tokenizer(examples["text"]), batched=True)
+    log.info("Preparing training dataset")
+    train_ds = prepare_training_dataset(train_erx_ds, erx_formatter)
+    tokenized_datasets = train_ds.map(
+        lambda examples: tokenizer(examples["text"]), batched=True
+    )
     token_counts = [len(input_ids) for input_ids in tokenized_datasets["input_ids"]]
-    print(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
+    log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
     ## PEFT
     peft_config = LoraConfig(**config.at("fine_tuning.lora", {}))
@@ -130,13 +208,13 @@ def run_experiment(wandb_run):
     # Supervised fine-tuning
     training_args = TrainingArguments(
         output_dir="./results",
-        **config["train"],
+        **config["training"],
     )
     trainer = SFTTrainer(
         model=base_model,
         tokenizer=tokenizer,
         peft_config=peft_config,
-        train_dataset=finetune_ds,
+        train_dataset=train_ds,
         dataset_text_field="text",
         max_seq_length=None,
         packing=False,
@@ -144,14 +222,20 @@ def run_experiment(wandb_run):
     )
 
     # Train model
-    print("Training model")
+    log.info("Training model")
     trainer.train()
 
     # Save trained model
     final_model_name = f"{model_name.split('/')[-1]}-kg-cons"
     trainer.model.save_pretrained(final_model_name)
     trainer.model.push_to_hub(final_model_name)
-    print(f"Uploaded PEFT adapters to HF Hub with name {final_model_name}")
+    log.info(f"Uploaded PEFT adapters to HF Hub with name {final_model_name}")
+
+    # Evaluate model
+    log.info("Evaluation model")
+    eval_erx_ds = prepare_erx_dataset(split=config.at("dataset.eval.split"))
+    eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
+    evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
 
 
 if __name__ == "__main__":

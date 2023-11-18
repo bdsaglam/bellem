@@ -1,44 +1,53 @@
 {
-    "seed": 42,
-    "dataset": {
-        "split": "train[:10%]"
-    },
-    "base_model": {
-        "name": "NousResearch/llama-2-7b-chat-hf"
-    },
-    "fine_tuning": {
-        "lora": {
-            "lora_alpha": 16,
-            "lora_dropout": 0.1,
-            "r": 64,
-            "bias": "none",
-            "task_type": "CAUSAL_LM"
-        }
-    },
+  "seed": 42,
+  "dataset": {
     "train": {
-        "num_train_epochs": 1,
-        "per_device_train_batch_size": 4,
-        "per_device_eval_batch_size": 4,
-        "gradient_accumulation_steps": 1,
-        "gradient_checkpointing": true,
-        "max_grad_norm": 0.3,
-        "optim": "paged_adamw_32bit",
-        "weight_decay": 0.001,
-        "learning_rate": 0.0002,
-        "lr_scheduler_type": "cosine",
-        "warmup_ratio": 0.03,
-        "fp16": false,
-        "bf16": false,
-        "group_by_length": true,
-        "save_steps": 0,
-        "logging_steps": 25,
-        "max_steps": -1,
-        "report_to": "wandb",
-        "run_name": "llama2_chat-web_ngl-lora"
+      "split": "train[:10%]"
     },
-    "wandb": {
-        "mode": "offline",
-        "entity": "bdsaglam",
-        "project": "thesis-kgcons"
+    "eval": {
+      "split": "dev[:10%]"
     }
+  },
+  "base_model": {
+    "name": "NousResearch/llama-2-7b-chat-hf"
+  },
+  "fine_tuning": {
+    "lora": {
+      "lora_alpha": 16,
+      "lora_dropout": 0.1,
+      "r": 64,
+      "bias": "none",
+      "task_type": "CAUSAL_LM"
+    }
+  },
+  "training": {
+    "num_train_epochs": 1,
+    "per_device_train_batch_size": 4,
+    "per_device_eval_batch_size": 4,
+    "gradient_accumulation_steps": 1,
+    "gradient_checkpointing": true,
+    "max_grad_norm": 0.3,
+    "optim": "paged_adamw_32bit",
+    "weight_decay": 0.001,
+    "learning_rate": 0.0002,
+    "lr_scheduler_type": "cosine",
+    "warmup_ratio": 0.03,
+    "fp16": false,
+    "bf16": false,
+    "group_by_length": true,
+    "save_steps": 0,
+    "logging_steps": 25,
+    "max_steps": -1,
+    "report_to": "wandb",
+    "run_name": "llama2_chat-web_ngl-lora"
+  },
+  "evaluation": {
+    "max_new_tokens": 128,
+    "batch_size": 4
+  },
+  "wandb": {
+    "mode": "offline",
+    "entity": "bdsaglam",
+    "project": "thesis-kgcons"
+  }
 }

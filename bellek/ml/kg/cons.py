@@ -8,7 +8,6 @@ __all__ = ['Entity', 'Relation', 'Triplet', 'DEFAULT_RELATION_SET_PROMPT_TEMPLAT
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
 from dataclasses import dataclass
-from functools import cache
 from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any, Dict
 import numpy as np
 from ..llm.utils import LLAMA2_CHAT_PROMPT_TEMPLATE
