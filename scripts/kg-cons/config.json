@@ -38,15 +38,14 @@
     "save_steps": 0,
     "logging_steps": 25,
     "max_steps": -1,
-    "report_to": "wandb",
-    "run_name": "llama2_chat-web_ngl-lora"
+    "report_to": "wandb"
   },
   "evaluation": {
     "max_new_tokens": 128,
     "batch_size": 4
   },
   "wandb": {
-    "mode": "offline",
+    "mode": "online",
     "entity": "bdsaglam",
     "project": "thesis-kgcons"
   }

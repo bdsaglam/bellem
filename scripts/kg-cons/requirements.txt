@@ -1,0 +1,11 @@
+accelerate==0.21.0 
+bellek==0.15.0
+bitsandbytes==0.40.2 
+clip@git+https://github.com/openai/CLIP.git
+datasets
+evaluate
+huggingface_hub
+peft==0.4.0 
+transformers==4.31.0 
+trl==0.4.7 
+wandb

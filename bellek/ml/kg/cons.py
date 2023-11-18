@@ -88,27 +88,32 @@ class ERXFormatter:
     system_prompt_template: str = DEFAULT_SYSTEM_PROMPT_TEMPLATE
     few_shot_examples_prompt_template: str = DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE
     few_shot_examples: List[Dict] | None = None
+    n_few_shot_examples: int = 3
     relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
     relation_set: set | None = None
 
     def __post_init__(self):
-        self._system_prompt = self.make_system_prompt()
+        if self.relation_set:
+            self.relation_set = sorted(self.relation_set)
 
     def format_for_inference(self, example: Dict):
+        example = {**example}
         user_message = example['text']
-        example['text'] = self.chat_prompt_template.format(system_prompt=self.system_prompt, user_message=user_message)
+        example['text'] = self.chat_prompt_template.format(system_prompt=self.make_system_prompt(), user_message=user_message)
         return example
 
     def format_for_train(self, example: Dict):
+        example = {**example}
         example['text'] = self.format_for_inference(example)['text'] + " " + '\n'.join(example['triplets'])
         return example
 
-    @property
-    def system_prompt(self) -> str:
-        return self._system_prompt
-
     def make_system_prompt(self) -> str:
-        rsp = self.relation_set_prompt_template.format(relation_set=','.join(sorted(self.relation_set))) if self.relation_set else ""
-        fsp = self.few_shot_examples_prompt_template.format(few_shot_examples=format_few_shot_examples(self.few_shot_examples)) if self.few_shot_examples else ""
+        rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
+        fsp = self.few_shot_examples_prompt_template.format(few_shot_examples=format_few_shot_examples(self._choose_few_shot_examples())) if self.few_shot_examples else ""
         return self.system_prompt_template.format(relation_set_prompt=rsp, few_shot_prompt=fsp)
 
+    def _choose_few_shot_examples(self) -> list[dict]:
+        if len(self.few_shot_examples) <= self.n_few_shot_examples:
+            return self.few_shot_examples
+        else:
+            return np.random.choice(self.few_shot_examples, self.n_few_shot_examples, replace=False).tolist()

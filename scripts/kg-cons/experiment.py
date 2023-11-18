@@ -193,7 +193,7 @@ def run_experiment(wandb_run):
     )
     erx_formatter = make_erx_formatter(train_erx_ds)
 
-    # Fine-tuning
+    # Instruction tuning dataset
     log.info("Preparing training dataset")
     train_ds = prepare_training_dataset(train_erx_ds, erx_formatter)
     tokenized_datasets = train_ds.map(
@@ -220,19 +220,18 @@ def run_experiment(wandb_run):
         packing=False,
         args=training_args,
     )
-
-    # Train model
     log.info("Training model")
     trainer.train()
 
     # Save trained model
+    log.info("Saving model")
     final_model_name = f"{model_name.split('/')[-1]}-kg-cons"
     trainer.model.save_pretrained(final_model_name)
     trainer.model.push_to_hub(final_model_name)
     log.info(f"Uploaded PEFT adapters to HF Hub with name {final_model_name}")
 
     # Evaluate model
-    log.info("Evaluation model")
+    log.info("Evaluating model")
     eval_erx_ds = prepare_erx_dataset(split=config.at("dataset.eval.split"))
     eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
     evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
