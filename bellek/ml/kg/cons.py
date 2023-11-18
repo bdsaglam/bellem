@@ -68,17 +68,15 @@ def format_few_shot_examples(examples):
 # %% ../../../nbs/ml.kg.cons.ipynb 11
 DEFAULT_RELATION_SET_PROMPT_TEMPLATE = """Here are the list of relations that you can use:
 {relation_set}
-
 """
 
-DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE = """Here are a few examples:
+DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE = """Use the same format for triplets as in the examples provided below.
 {few_shot_examples}
-
 """
 
 DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are helpful assistant that extracts entity-relation-entity triplets from given text.
-{relation_set_prompt}{few_shot_prompt}
-Use the same format for triplets as in examples provided above. No explanation needed, just output the triplets starting from the next line.
+{relation_set_prompt}
+{few_shot_prompt}
 """.strip()
 
 
