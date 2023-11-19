@@ -7,6 +7,7 @@ __all__ = ['Entity', 'Relation', 'Triplet', 'DEFAULT_RELATION_SET_PROMPT_TEMPLAT
            'ERXFormatter']
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
+import random
 from dataclasses import dataclass
 from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any, Dict
 import numpy as np
@@ -114,4 +115,4 @@ class ERXFormatter:
         if len(self.few_shot_examples) <= self.n_few_shot_examples:
             return self.few_shot_examples
         else:
-            return np.random.choice(self.few_shot_examples, self.n_few_shot_examples, replace=False).tolist()
+            return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
