@@ -8,9 +8,7 @@
       "split": "dev[:10%]"
     }
   },
-  "base_model": {
-    "name": "NousResearch/llama-2-7b-chat-hf"
-  },
+  "base_model_id": "NousResearch/llama-2-7b-chat-hf",
   "fine_tuning": {
     "lora": {
       "lora_alpha": 16,
@@ -48,5 +46,8 @@
     "mode": "online",
     "entity": "bdsaglam",
     "project": "thesis-kgcons"
+  },
+  "hfhub": {
+    "model_id": "bdsaglam/llama-2-7b-hf-kg-cons"
   }
 }
