@@ -4,10 +4,10 @@ from typing import Any, Dict, List, Tuple  # noqa: F401
 import torch
 from peft import AutoPeftModelForCausalLM
 
+from bellek.logging import get_logger
 from bellek.utils import NestedDict
-from bellek.logging import setup_logger
 
-log = setup_logger()
+log = get_logger()
 
 
 def main(args):

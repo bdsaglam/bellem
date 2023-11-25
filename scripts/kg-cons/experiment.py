@@ -14,7 +14,7 @@ from transformers import (
 from trl import SFTTrainer
 
 import wandb
-from bellek.logging import setup_logger
+from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.ml.kg.cons import parse_triplet_strings
 from bellek.utils import NestedDict
@@ -22,7 +22,7 @@ from bellek.utils import NestedDict
 DEVICE_MAP = {"": 0}
 
 
-log = setup_logger()
+log = get_logger()
 
 
 def get_default_bnb_config(
