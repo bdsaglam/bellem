@@ -1,76 +1,73 @@
-base_model: NousResearch/Llama-2-7b-hf
+seed: 42
+
+base_model: NousResearch/llama-2-7b-chat-hf
 model_type: LlamaForCausalLM
 tokenizer_type: LlamaTokenizer
 is_llama_derived_model: true
 
-output_dir: ./llama-2-7b-hf-kg-cons-axolotl
-hub_model_id: bdsaglam/llama-2-7b-hf-kg-cons-axolotl
+output_dir: ./llama-2-7b-chat-hf-kg-cons-axolotl
+hub_model_id: bdsaglam/llama-2-7b-chat-hf-kg-cons-axolotl
 
 special_tokens:
   bos_token: "<s>"
   eos_token: "</s>"
   unk_token: "<unk>"
 
-load_in_8bit: true
-load_in_4bit: false
-strict: false
-
 datasets:
-  - path: bdsaglam/web_nlg-erx-instruction-alpaca-debug
-    type: alpaca
-dataset_prepared_path:
+  - path: bdsaglam/web_nlg-erx-instruction-llama2chat
+    type: sharegpt
+    conversation: llama-2
+  # - path: bdsaglam/web_nlg-erx-instruction-alpaca-debug
+  #   type: alpaca
 val_set_size: 0
 
-adapter: lora
-lora_r: 64
-lora_alpha: 16
-lora_dropout: 0.1
-lora_target_modules:
-lora_target_linear: true
-lora_fan_in_fan_out:
-lora_model_dir:
-
-sequence_len: 600
-sample_packing: false
-pad_to_sequence_len: true
-
-bf16: false
+load_in_8bit: false
+load_in_4bit: true
+bf16: true
 fp16: false
 tf32: false
-early_stopping_patience:
-gradient_accumulation_steps: 1
-gradient_checkpointing: false
+
+adapter: lora
+lora_alpha: 16
+lora_dropout: 0.1
+lora_r: 64
+lora_target_modules:
+lora_target_linear: true
+lora_model_dir:
+
+flash_attention: true
+
+sequence_len: 600
+pad_to_sequence_len: true
+sample_packing: false
 group_by_length: true
-learning_rate: 0.0002
-logging_steps: 25
-lr_scheduler: cosine
-micro_batch_size: 4
-num_epochs: 1
-optimizer: adamw_bnb_8bit
 train_on_inputs: false
+
+num_epochs: 1
+micro_batch_size: 2
+gradient_accumulation_steps: 4
+gradient_checkpointing: false
+learning_rate: 0.0002
+lr_scheduler: cosine
+optimizer: paged_adamw_32bit
 warmup_steps: 10
 weight_decay: 0.001
-resume_from_checkpoint:
-
-xformers_attention:
-flash_attention: false
-
+logging_steps: 25
+save_steps:
 eval_steps: 
 eval_table_size:
 eval_table_max_new_tokens: 256
-
-save_steps:
-
-local_rank:
-
-deepspeed:
-fsdp:
-fsdp_config:
-
-debug:
+resume_from_checkpoint:
 
 wandb_project: thesis-kgcons
 wandb_entity: bdsaglam
-wandb_watch:
+wandb_mode: online
+wandb_log_model: end
 wandb_run_id:
-wandb_log_model: false
+wandb_watch:
+
+debug:
+strict: false
+
+# Don't mess with this, it's here for accelerate and torchrun
+local_rank:
