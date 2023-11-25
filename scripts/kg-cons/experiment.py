@@ -26,12 +26,10 @@ def load_model_tokenizer(
     quantization_config,
     device_map={"": 0},
 ):
-    quantization_config = BitsAndBytesConfig(quantization_config)
-
     # Load base model
     model = AutoModelForCausalLM.from_pretrained(
         model_name_or_path,
-        quantization_config=quantization_config,
+        quantization_config=BitsAndBytesConfig(quantization_config),
         device_map=device_map,
     )
     model.config.use_cache = False
@@ -135,13 +133,13 @@ def run_experiment(wandb_run):
     token_counts = [len(input_ids) for input_ids in tokenized_datasets["input_ids"]]
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
-    ## PEFT
-    peft_config = LoraConfig(**config.at("fine_tuning.lora", {}))
-
     # Supervised fine-tuning
+    peft_config = LoraConfig(**config.at("trainer.lora", {}))
+    max_seq_length=config.at("trainer.max_seq_length")
+    packing=config.at("trainer.packing", False)
     training_args = TrainingArguments(
         output_dir="./results",
-        **config["training"],
+        **config.at["trainer.training_args"],
     )
     trainer = SFTTrainer(
         model=base_model,
@@ -149,8 +147,8 @@ def run_experiment(wandb_run):
         peft_config=peft_config,
         train_dataset=train_ds,
         dataset_text_field="text",
-        max_seq_length=None,
-        packing=False,
+        max_seq_length=max_seq_length,
+        packing=packing,
         args=training_args,
     )
     log.info("Training model")
@@ -159,7 +157,7 @@ def run_experiment(wandb_run):
     # Save trained model
     log.info("Saving model")
     final_model_id = config.at("hfhub.model_id")
-    trainer.model.save_pretrained(final_model_id.split("/", 1)[-1])
+    # trainer.model.save_pretrained(final_model_id.split("/", 1)[-1])
     trainer.model.push_to_hub(final_model_id)
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
 

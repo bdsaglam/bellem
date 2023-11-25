@@ -2,48 +2,49 @@
   "seed": 42,
   "dataset": {
     "train": {
-      "split": "train[:10%]"
+      "split": "train[:50%]"
     },
     "eval": {
-      "split": "dev[:10%]"
+      "split": "dev[:1%]"
     }
   },
   "base_model_id": "NousResearch/llama-2-7b-chat-hf",
   "quantization_config": {
     "load_in_8bit": true,
     "use_4bit": false,
-    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_compute_dtype": "bf16",
     "bnb_4bit_quant_type": "nf4",
     "use_nested_quant": false
   },
-  "fine_tuning": {
+  "trainer": {
+    "max_seq_length": 600,
+    "packing": false,
     "lora": {
       "lora_alpha": 16,
       "lora_dropout": 0.1,
       "r": 64,
       "bias": "none",
       "task_type": "CAUSAL_LM"
+    },
+    "training_args": {
+      "bf16": false,
+      "fp16": false,
+      "gradient_accumulation_steps": 1,
+      "gradient_checkpointing": false,
+      "group_by_length": true,
+      "learning_rate": 0.0002,
+      "logging_steps": 25,
+      "lr_scheduler_type": "cosine",
+      "max_grad_norm": 0.3,
+      "max_steps": -1,
+      "num_train_epochs": 1,
+      "optim": "adamw_bnb_8bit",
+      "per_device_train_batch_size": 4,
+      "warmup_ratio": 0.03,
+      "weight_decay": 0.001,
+      "save_steps": 0,
+      "report_to": "wandb"
     }
-  },
-  "training": {
-    "num_train_epochs": 1,
-    "per_device_train_batch_size": 4,
-    "per_device_eval_batch_size": 4,
-    "gradient_accumulation_steps": 1,
-    "gradient_checkpointing": true,
-    "max_grad_norm": 0.3,
-    "optim": "paged_adamw_32bit",
-    "weight_decay": 0.001,
-    "learning_rate": 0.0002,
-    "lr_scheduler_type": "cosine",
-    "warmup_ratio": 0.03,
-    "fp16": false,
-    "bf16": false,
-    "group_by_length": true,
-    "save_steps": 0,
-    "logging_steps": 25,
-    "max_steps": -1,
-    "report_to": "wandb"
   },
   "evaluation": {
     "max_new_tokens": 256,
