@@ -1,5 +1,4 @@
 import os
-from typing import Any, Dict, List, Tuple  # noqa: F401
 
 import evaluate
 import torch
