@@ -3,12 +3,13 @@ model_type: LlamaForCausalLM
 tokenizer_type: LlamaTokenizer
 is_llama_derived_model: true
 
+output_dir: ./llama-2-7b-hf-kg-cons-axolotl
+hub_model_id: bdsaglam/llama-2-7b-hf-kg-cons-axolotl
+
 special_tokens:
   bos_token: "<s>"
   eos_token: "</s>"
   unk_token: "<unk>"
-
-hub_model_id: bdsaglam/llama-2-7b-hf-kg-cons-axolotl
 
 load_in_8bit: true
 load_in_4bit: false
@@ -20,23 +21,19 @@ datasets:
 dataset_prepared_path:
 val_set_size: 0
 
-output_dir: ./llama-2-7b-hf-kg-cons-axolotl
-
 adapter: lora
-lora_model_dir:
-
-sequence_len: 600
-sample_packing: false
-pad_to_sequence_len: true
-
 lora_r: 64
 lora_alpha: 16
 lora_dropout: 0.1
 lora_target_modules:
 lora_target_linear: true
 lora_fan_in_fan_out:
+lora_model_dir:
 
-local_rank:
+
+sequence_len: 600
+sample_packing: false
+pad_to_sequence_len: true
 
 bf16: false
 fp16: false
@@ -64,6 +61,8 @@ eval_table_size:
 eval_table_max_new_tokens: 256
 
 save_steps:
+
+local_rank:
 
 deepspeed:
 fsdp:
