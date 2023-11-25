@@ -30,7 +30,6 @@ lora_target_linear: true
 lora_fan_in_fan_out:
 lora_model_dir:
 
-
 sequence_len: 600
 sample_packing: false
 pad_to_sequence_len: true
