@@ -48,6 +48,6 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "llama-2-7b-hf-kg-cons"
+    "model_id": "bdsaglam/llama-2-7b-chat-hf-kg-cons"
   }
 }
