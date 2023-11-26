@@ -27,7 +27,7 @@ def load_model_tokenizer(
     auto_model_cls=AutoModelForCausalLM,
     quantization_config=None,
     device_map={"": 0},
-    use_flash_attention_2=False,
+    **model_kwargs,
 ):
     # Setup quantization config
     if isinstance(quantization_config, dict):
@@ -37,7 +37,7 @@ def load_model_tokenizer(
         model_name_or_path,
         device_map=device_map,
         quantization_config=quantization_config,
-        use_flash_attention_2=use_flash_attention_2,
+        **model_kwargs
     )
     model.config.use_cache = False
     model.config.pretraining_tp = 1
@@ -127,8 +127,7 @@ def run_experiment(wandb_run):
     log.info(f"Loading base model {model_id}")
     base_model, tokenizer = load_model_tokenizer(
         model_id,
-        quantization_config=config.at("model_loading.quantization_config"),
-        use_flash_attention_2=config.at("model_loading.use_flash_attention_2", False),
+        **config.at("model_loading.base_model", {}),
     )
 
     # Dataset
