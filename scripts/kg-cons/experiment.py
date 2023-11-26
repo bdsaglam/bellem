@@ -18,7 +18,7 @@ from bellek.ml.experiment import main
 from bellek.ml.kg.cons import parse_triplet_strings
 from bellek.utils import NestedDict
 
-log = get_logger()
+log = get_logger(__name__)
 
 
 def load_model_tokenizer(

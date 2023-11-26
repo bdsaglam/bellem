@@ -6,7 +6,7 @@ from peft import AutoPeftModelForCausalLM
 from bellek.logging import get_logger
 from bellek.utils import NestedDict
 
-log = get_logger()
+log = get_logger(__name__)
 
 
 def main(args):
