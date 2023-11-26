@@ -84,7 +84,6 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
         max_new_tokens=config.at("evaluation.max_new_tokens", 128),
         batch_size=config.at("evaluation.batch_size", 4),
         return_full_text=False,
-        device=0,
     )
 
     def _evaluate(pipe, dataset):
