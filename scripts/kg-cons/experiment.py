@@ -25,19 +25,15 @@ def load_model_tokenizer(
     model_name_or_path: str,
     *,
     auto_model_cls=AutoModelForCausalLM,
-    quantization_config=None,
     device_map={"": 0},
     **model_kwargs,
 ):
     # Setup quantization config
-    if isinstance(quantization_config, dict):
-        quantization_config = BitsAndBytesConfig(**quantization_config)
+    if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
     # Load model
     model = auto_model_cls.from_pretrained(
-        model_name_or_path,
-        device_map=device_map,
-        quantization_config=quantization_config,
-        **model_kwargs
+        model_name_or_path, torch_dtype=torch.bfloat16, device_map=device_map, **model_kwargs
     )
     model.config.use_cache = False
     model.config.pretraining_tp = 1
