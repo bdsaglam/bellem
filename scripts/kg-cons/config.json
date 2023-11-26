@@ -2,7 +2,7 @@
   "seed": 42,
   "dataset": {
     "train": {
-      "split": "train[:50%]"
+      "split": "train"
     },
     "eval": {
       "split": "dev[:1%]"
