@@ -23,6 +23,7 @@ log = get_logger(__name__)
 
 def load_model_tokenizer(
     model_name_or_path: str,
+    *,
     auto_model_cls=AutoModelForCausalLM,
     quantization_config=None,
     device_map={"": 0},
@@ -126,7 +127,7 @@ def run_experiment(wandb_run):
     log.info(f"Loading base model {model_id}")
     base_model, tokenizer = load_model_tokenizer(
         model_id,
-        config.at("model_loading.quantization_config"),
+        quantization_config=config.at("model_loading.quantization_config"),
         use_flash_attention_2=config.at("model_loading.use_flash_attention_2", False),
     )
 
