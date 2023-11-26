@@ -10,7 +10,6 @@
   },
   "base_model_id": "NousResearch/llama-2-7b-chat-hf",
   "model_loading": {
-    "use_flash_attention_2": true,
     "quantization_config": {
       "load_in_8bit": false,
       "use_4bit": true,
