@@ -3,7 +3,7 @@ import os
 import evaluate
 import torch
 from datasets import DatasetDict, load_dataset
-from peft import LoraConfig
+from peft import AutoPeftModelForCausalLM, LoraConfig
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -22,21 +22,30 @@ log = get_logger()
 
 
 def load_model_tokenizer(
-    model_name_or_path,
-    quantization_config,
+    model_name_or_path: str,
+    auto_model_cls=AutoModelForCausalLM,
+    quantization_config=None,
     device_map={"": 0},
 ):
-    # Load base model
-    model = AutoModelForCausalLM.from_pretrained(
+    # Setup quantization config
+    if isinstance(quantization_config, dict):
+        quantization_config = BitsAndBytesConfig(**quantization_config)
+    # Load model
+    model = auto_model_cls.from_pretrained(
         model_name_or_path,
-        quantization_config=BitsAndBytesConfig(quantization_config),
         device_map=device_map,
+        quantization_config=quantization_config,
     )
     model.config.use_cache = False
     model.config.pretraining_tp = 1
 
-    # Load LLaMA tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(model_name_or_path, trust_remote_code=True)
+    # Load tokenizer
+    tokenizer_id = (
+        model.active_peft_config.base_model_name_or_path
+        if auto_model_cls == AutoPeftModelForCausalLM
+        else model_name_or_path
+    )
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 trainin
     return model, tokenizer
@@ -135,8 +144,8 @@ def run_experiment(wandb_run):
 
     # Supervised fine-tuning
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
-    max_seq_length=config.at("trainer.max_seq_length")
-    packing=config.at("trainer.packing", False)
+    max_seq_length = config.at("trainer.max_seq_length")
+    packing = config.at("trainer.packing", False)
     training_args = TrainingArguments(
         output_dir="./results",
         **config.at["trainer.training_args"],
@@ -159,6 +168,7 @@ def run_experiment(wandb_run):
     final_model_id = config.at("hfhub.model_id")
     # trainer.model.save_pretrained(final_model_id.split("/", 1)[-1])
     trainer.model.push_to_hub(final_model_id)
+    tokenizer.push_to_hub(final_model_id)
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
 
     # Evaluate model
