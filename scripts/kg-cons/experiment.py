@@ -154,7 +154,7 @@ def run_experiment(wandb_run):
     packing = config.at("trainer.packing", False)
     training_args = TrainingArguments(
         output_dir="./results",
-        **config.at["trainer.training_args"],
+        **config.at("trainer.training_args"),
     )
     trainer = SFTTrainer(
         model=base_model,
