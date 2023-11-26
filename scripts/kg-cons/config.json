@@ -9,12 +9,15 @@
     }
   },
   "base_model_id": "NousResearch/llama-2-7b-chat-hf",
-  "quantization_config": {
-    "load_in_8bit": false,
-    "use_4bit": true,
-    "bnb_4bit_compute_dtype": "bf16",
-    "bnb_4bit_quant_type": "nf4",
-    "use_nested_quant": false
+  "model_loading": {
+    "use_flash_attention_2": true,
+    "quantization_config": {
+      "load_in_8bit": false,
+      "use_4bit": true,
+      "bnb_4bit_compute_dtype": "bf16",
+      "bnb_4bit_quant_type": "nf4",
+      "use_nested_quant": false
+    }
   },
   "trainer": {
     "max_seq_length": 600,
