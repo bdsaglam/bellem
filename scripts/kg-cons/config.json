@@ -13,7 +13,7 @@
     "use_flash_attention": true,
     "quantization_config": {
       "load_in_8bit": true,
-      "use_4bit": false,
+      "load_in_4bit": false,
       "bnb_4bit_compute_dtype": "bf16",
       "bnb_4bit_quant_type": "nf4",
       "use_nested_quant": false
