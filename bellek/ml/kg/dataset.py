@@ -7,11 +7,19 @@ __all__ = ['batch_transform_webnlg']
 from ...utils import split_camel_case
 
 # %% ../../../nbs/ml.kg.dataset.ipynb 4
+def _transform_relation(relation: str):
+    return ' '.join([word.lower() for word in split_camel_case(relation)])
+
+def _transform_entity(entity: str):
+    return entity.replace('_', ' ')
+
 def _transform_triplet(triplet_string: str):
     delimiter = " | "
-    entity1,rel,entity2 = triplet_string.split(delimiter)
-    rel = ' '.join([word.lower() for word in split_camel_case(rel)])
-    return delimiter.join([entity1, rel, entity2])
+    entity1,relation,entity2 = triplet_string.split(delimiter)
+    relation = _transform_relation(relation)
+    entity1 = _transform_entity(entity1)
+    entity2 = _transform_entity(entity2)
+    return delimiter.join([entity1, relation, entity2])
 
 def _batch_transform_webnlg(examples):
     for lex, mts in zip(examples['lex'], examples['modified_triple_sets']):
