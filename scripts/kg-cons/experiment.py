@@ -36,7 +36,7 @@ def preprocess_config(config: NestedDict):
             bf16, fp16, bnb_4bit_compute_dtype = (True, False, "bfloat16")
         else:
             log.info("GPU does not support bf16, using fp16.")
-            bf16, fp16, bnb_4bit_compute_dtype = (False, True, None)
+            bf16, fp16, bnb_4bit_compute_dtype = (False, True, 'float16')
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
         if config.get("pretrained_model.quantization_config.load_in_4bit"):

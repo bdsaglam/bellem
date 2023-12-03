@@ -8,13 +8,13 @@ from ...utils import split_camel_case
 
 # %% ../../../nbs/ml.kg.dataset.ipynb 4
 def _transform_relation(relation: str):
-    return ' '.join([word.lower() for word in split_camel_case(relation)])
+    return ' '.join([word.lower() for word in split_camel_case(relation)]).strip()
 
 def _transform_entity(entity: str):
-    return entity.replace('_', ' ')
+    return entity.replace('_', ' ').strip()
 
 def _transform_triplet(triplet_string: str):
-    delimiter = " | "
+    delimiter = "|"
     entity1,relation,entity2 = triplet_string.split(delimiter)
     relation = _transform_relation(relation)
     entity1 = _transform_entity(entity1)
