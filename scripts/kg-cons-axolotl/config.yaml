@@ -17,8 +17,6 @@ datasets:
   - path: bdsaglam/web_nlg-erx-instruction-llama2chat
     type: sharegpt
     conversation: llama-2
-  # - path: bdsaglam/web_nlg-erx-instruction-alpaca-debug
-  #   type: alpaca
 val_set_size: 0
 
 load_in_8bit: false
