@@ -14,7 +14,7 @@ import numpy as np
 from ..llm.utils import LLAMA2_CHAT_PROMPT_TEMPLATE
 
 # %% ../../../nbs/ml.kg.cons.ipynb 4
-Entity: TypeAlias = str | tuple[str, str]
+Entity: TypeAlias = str|tuple[str, str]
 Relation: TypeAlias = str
 Triplet: TypeAlias = tuple[Entity, Relation, Entity]
 
@@ -51,10 +51,10 @@ def evaluate_joint_er_extractions(*, references: Iterable[Iterable[Triplet]], pr
     return {('mean_' + key): np.mean([scores[key] for scores in score_dicts]) for key in score_dicts[0].keys()}
 
 # %% ../../../nbs/ml.kg.cons.ipynb 8
-def parse_triplet_strings(text: str, delimiter: str=" | ") -> List[str]:
+def parse_triplet_strings(text: str, delimiter: str="|") -> List[str]:
     return [line for line in text.splitlines() if line and line.count(delimiter) == 2]
 
-def parse_triplets(text: str, delimiter: str=" | ") -> List[Triplet]:
+def parse_triplets(text: str, delimiter: str="|") -> List[Triplet]:
     return [tuple(triplet_string.split(delimiter)) for triplet_string in parse_triplet_strings(text, delimiter=delimiter)]
 
 # %% ../../../nbs/ml.kg.cons.ipynb 10
@@ -86,10 +86,10 @@ class ERXFormatter:
     chat_prompt_template: str = LLAMA2_CHAT_PROMPT_TEMPLATE
     system_prompt_template: str = DEFAULT_SYSTEM_PROMPT_TEMPLATE
     few_shot_examples_prompt_template: str = DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE
-    few_shot_examples: List[Dict] | None = None
+    few_shot_examples: List[Dict]|None = None
     n_few_shot_examples: int = 3
     relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
-    relation_set: set | None = None
+    relation_set: set|None = None
 
     def __post_init__(self):
         if self.relation_set:
