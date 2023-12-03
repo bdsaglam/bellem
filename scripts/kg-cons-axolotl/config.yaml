@@ -21,9 +21,9 @@ val_set_size: 0
 
 load_in_8bit: false
 load_in_4bit: true
-bf16: true
-fp16: false
-tf32: false
+bf16: false
+fp16: true
+float16: true
 
 adapter: lora
 lora_alpha: 16
@@ -45,16 +45,17 @@ num_epochs: 1
 micro_batch_size: 2
 gradient_accumulation_steps: 4
 gradient_checkpointing: false
-learning_rate: 0.0002
-lr_scheduler: cosine
-optimizer: paged_adamw_32bit
-warmup_steps: 10
+max_grad_norm: 0.3
 weight_decay: 0.001
+learning_rate: 0.0002
+optimizer: paged_adamw_32bit
+lr_scheduler: cosine
+warmup_steps: 10
 logging_steps: 25
 save_steps:
 eval_steps: 
 eval_table_size:
-eval_table_max_new_tokens: 256
+eval_table_max_new_tokens: 180
 resume_from_checkpoint:
 
 wandb_project: thesis-kgcons
