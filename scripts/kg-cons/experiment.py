@@ -25,10 +25,11 @@ def preprocess_config(config: NestedDict):
     config = deepcopy(config)
 
     # Use bfloat16 if GPU supports
+    breakpoint()
     if (
         config.at("trainer.training_args.bf16")
         or config.at("trainer.training_args.fp16")
-        or config.get("pretrained_model.quantization_config.load_in_4bit")
+        or config.at("pretrained_model.quantization_config.load_in_4bit")
     ):
         major, _ = torch.cuda.get_device_capability()
         if major >= 8:
@@ -36,10 +37,10 @@ def preprocess_config(config: NestedDict):
             bf16, fp16, bnb_4bit_compute_dtype = (True, False, "bfloat16")
         else:
             log.info("GPU does not support bf16, using fp16.")
-            bf16, fp16, bnb_4bit_compute_dtype = (False, True, 'float16')
+            bf16, fp16, bnb_4bit_compute_dtype = (False, True, "float16")
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
-        if config.get("pretrained_model.quantization_config.load_in_4bit"):
+        if config.at("pretrained_model.quantization_config.load_in_4bit"):
             config.set("pretrained_model.quantization_config.bnb_4bit_compute_dtype", bnb_4bit_compute_dtype)
     return config
 
