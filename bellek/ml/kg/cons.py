@@ -94,6 +94,8 @@ class ERXFormatter:
     def __post_init__(self):
         if self.relation_set:
             self.relation_set = sorted(self.relation_set)
+        if self.few_shot_examples is not None:
+            self.few_shot_examples = list(self.few_shot_examples)
 
     def format_for_inference(self, example: Dict):
         example = {**example}
