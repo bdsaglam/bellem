@@ -25,7 +25,6 @@ def preprocess_config(config: NestedDict):
     config = deepcopy(config)
 
     # Use bfloat16 if GPU supports
-    breakpoint()
     if (
         config.at("trainer.training_args.bf16")
         or config.at("trainer.training_args.fp16")
