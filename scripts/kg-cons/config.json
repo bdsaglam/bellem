@@ -9,14 +9,10 @@
     }
   },
   "base_model_id": "NousResearch/llama-2-7b-chat-hf",
-  "model_loading": {
-    "use_flash_attention_2": true,
+  "pretrained_model": {
     "quantization_config": {
       "load_in_8bit": false,
-      "load_in_4bit": true,
-      "bnb_4bit_compute_dtype": "bf16",
-      "bnb_4bit_quant_type": "nf4",
-      "bnb_4bit_use_double_quant": false
+      "load_in_4bit": true
     }
   },
   "trainer": {
@@ -41,7 +37,7 @@
       "learning_rate": 0.0002,
       "lr_scheduler_type": "cosine",
       "warmup_ratio": 0.03,
-      "optim": "paged_adamw_8bit",
+      "optim": "paged_adamw_32bit",
       "max_steps": -1,
       "num_train_epochs": 1,
       "logging_steps": 25,

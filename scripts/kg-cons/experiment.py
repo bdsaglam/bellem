@@ -1,6 +1,6 @@
 import os
+from copy import deepcopy
 
-import evaluate
 import torch
 from datasets import DatasetDict, load_dataset
 from peft import AutoPeftModelForCausalLM, LoraConfig
@@ -16,9 +16,32 @@ import wandb
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.ml.kg.cons import parse_triplet_strings
-from bellek.utils import NestedDict
+from bellek.utils import NestedDict, flatten_dict
 
 log = get_logger(__name__)
+
+
+def preprocess_config(config: NestedDict):
+    config = deepcopy(config)
+
+    # Use bfloat16 if GPU supports
+    if (
+        config.at("trainer.training_args.bf16")
+        or config.at("trainer.training_args.fp16")
+        or config.get("pretrained_model.quantization_config.load_in_4bit")
+    ):
+        major, _ = torch.cuda.get_device_capability()
+        if major >= 8:
+            log.info("GPU supports bf16.")
+            bf16, fp16, bnb_4bit_compute_dtype = (True, False, "bfloat16")
+        else:
+            log.info("GPU does not support bf16, using fp16.")
+            bf16, fp16, bnb_4bit_compute_dtype = (False, True, None)
+        config.set("trainer.training_args.bf16", bf16)
+        config.set("trainer.training_args.fp16", fp16)
+        if config.get("pretrained_model.quantization_config.load_in_4bit"):
+            config.set("pretrained_model.quantization_config.bnb_4bit_compute_dtype", bnb_4bit_compute_dtype)
+    return config
 
 
 def load_model_tokenizer(
@@ -33,11 +56,11 @@ def load_model_tokenizer(
         model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
     # Load model
     model = auto_model_cls.from_pretrained(
-        model_name_or_path, torch_dtype=torch.bfloat16, device_map=device_map, **model_kwargs
+        model_name_or_path,
+        device_map=device_map,
+        torch_dtype=torch.float16,
+        **model_kwargs,
     )
-    model.config.use_cache = False
-    model.config.pretraining_tp = 1
-
     # Load tokenizer
     tokenizer_id = (
         model.active_peft_config.base_model_name_or_path
@@ -45,9 +68,17 @@ def load_model_tokenizer(
         else model_name_or_path
     )
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
+    return tokenizer, model
+
+
+def fix_llama_model_tokenizer(tokenizer, model):
+    # fix tokenizer
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 trainin
-    return model, tokenizer
+    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
+    # fix model
+    model.config.use_cache = False
+    model.config.pretraining_tp = 1
+    return tokenizer, model
 
 
 def prepare_erx_dataset(split=None):
@@ -87,6 +118,8 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
     )
 
     def _evaluate(pipe, dataset):
+        import evaluate
+
         metric = evaluate.load("bdsaglam/jer")
         results = pipe(dataset["text"])
         generated_texts = [result[0]["generated_text"] for result in results]
@@ -108,7 +141,9 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
 
 
 def run_experiment(wandb_run):
-    config = NestedDict.from_flat_dict(wandb_run.config)
+    config = preprocess_config(NestedDict.from_flat_dict(wandb_run.config))
+    wandb_run.config.update(flatten_dict(config))
+
     if seed := config.get("seed"):
         from fastai.torch_core import set_seed
 
@@ -120,9 +155,11 @@ def run_experiment(wandb_run):
     # Base model
     model_id = config.at("base_model_id")
     log.info(f"Loading base model {model_id}")
-    base_model, tokenizer = load_model_tokenizer(
-        model_id,
-        **config.at("model_loading.base_model", {}),
+    tokenizer, base_model = fix_llama_model_tokenizer(
+        *load_model_tokenizer(
+            model_id,
+            **config.at("pretrained_model", {}),
+        )
     )
 
     # Dataset
@@ -167,7 +204,6 @@ def run_experiment(wandb_run):
     # Save trained model
     log.info("Saving model")
     final_model_id = config.at("hfhub.model_id")
-    # trainer.model.save_pretrained(final_model_id.split("/", 1)[-1])
     trainer.model.push_to_hub(final_model_id)
     tokenizer.push_to_hub(final_model_id)
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
