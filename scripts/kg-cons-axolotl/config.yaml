@@ -44,7 +44,6 @@ train_on_inputs: false
 num_epochs: 1
 micro_batch_size: 2
 gradient_accumulation_steps: 4
-gradient_checkpointing: false
 max_grad_norm: 0.3
 weight_decay: 0.001
 learning_rate: 0.0002
