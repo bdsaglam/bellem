@@ -57,7 +57,6 @@ def load_model_tokenizer(
     device_map={"": 0},
     **model_kwargs,
 ):
-    model_kwargs = deepcopy(model_kwargs)
     # Setup quantization config
     if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
