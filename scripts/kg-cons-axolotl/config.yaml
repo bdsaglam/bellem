@@ -14,7 +14,7 @@ special_tokens:
   unk_token: "<unk>"
 
 datasets:
-  - path: bdsaglam/web_nlg-erx-instruction-llama2chat
+  - path: bdsaglam/web_nlg-erx-sft-sharegpt
     type: sharegpt
     conversation: llama-2
 val_set_size: 0
