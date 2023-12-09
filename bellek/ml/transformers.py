@@ -44,8 +44,6 @@ def load_tokenizer_model(
     quantization_config=None,
     device_map={"": 0},
 ):
-    from peft import AutoPeftModelForCausalLM
-    
     # Setup quantization config
     if isinstance(quantization_config, dict):
         from transformers import BitsAndBytesConfig
@@ -59,7 +57,14 @@ def load_tokenizer_model(
     )
 
     # Load tokenizer
-    tokenizer_id = model.active_peft_config.base_model_name_or_path if auto_model_cls == AutoPeftModelForCausalLM else model_name_or_path
+    if auto_model_cls == AutoModelForCausalLM:
+        tokenizer_id = model_name_or_path
+    else:
+        from peft import AutoPeftModelForCausalLM
+        if auto_model_cls == AutoPeftModelForCausalLM:
+            tokenizer_id = model.active_peft_config.base_model_name_or_path
+        else:
+            raise ValueError(f"Unknown auto_model_cls: {auto_model_cls}")
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
     
     return tokenizer, model
