@@ -2,6 +2,7 @@ import json
 
 import torch
 from peft import AutoPeftModelForCausalLM
+from transformers import AutoTokenizer
 
 from bellek.logging import get_logger
 from bellek.utils import NestedDict
@@ -16,11 +17,16 @@ def main(args):
     model_id = config.at("hfhub.model_id")
     model = AutoPeftModelForCausalLM.from_pretrained(
         model_id,
-        low_cpu_mem_usage=True,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=torch.float16,
+        device_map={"": 0},
     )
+    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+
     model = model.merge_and_unload()
-    model.push_to_hub(f"{model_id}-merged")
+
+    merged_model_id = f"{model_id}-merged"
+    model.push_to_hub(merged_model_id)
+    tokenizer.push_to_hub(merged_model_id)
 
 
 if __name__ == "__main__":
