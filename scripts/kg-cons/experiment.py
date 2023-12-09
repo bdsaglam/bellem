@@ -215,6 +215,13 @@ def run_experiment(wandb_run):
         eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
         evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
 
+    # Merge adapters to model and publish
+    log.info("Merging adapters to model...") 
+    model = trainer.model.merge_and_unload()
+    merged_model_id = f"{final_model_id}-merged"
+    log.info(f"Pushing merged model to HF hub as {merged_model_id}") 
+    model.push_to_hub(merged_model_id)
+    tokenizer.push_to_hub(merged_model_id)
 
 if __name__ == "__main__":
     import argparse
