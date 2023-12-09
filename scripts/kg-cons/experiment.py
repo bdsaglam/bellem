@@ -209,10 +209,11 @@ def run_experiment(wandb_run):
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
 
     # Evaluate model
-    log.info("Evaluating model")
-    eval_erx_ds = prepare_erx_dataset(split=config.at("dataset.eval.split"))
-    eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
-    evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
+    if eval_split := config.at("dataset.eval.split"):
+        log.info("Evaluating model")
+        eval_erx_ds = prepare_erx_dataset(split=eval_split)
+        eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
+        evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
 
 
 if __name__ == "__main__":
