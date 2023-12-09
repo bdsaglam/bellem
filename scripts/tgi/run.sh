@@ -11,4 +11,4 @@ docker run --gpus all --shm-size 1g \
     -v "${VOLUME}":/data \
     -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
     ghcr.io/huggingface/text-generation-inference:latest \
-     --trust-remote-code --model-id $model --quantize bitsandbytes-nf4 --dtype float16
+    --trust-remote-code --model-id $model --quantize bitsandbytes-nf4 --dtype bfloat16
