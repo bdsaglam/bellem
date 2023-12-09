@@ -57,16 +57,24 @@ def load_model_tokenizer(
     device_map={"": 0},
     **model_kwargs,
 ):
+    model_kwargs = deepcopy(model_kwargs)
     # Setup quantization config
     if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
+    # Setup torch dtype
+    torch_dtype = model_kwargs.get("torch_dtype")
+    del model_kwargs["torch_dtype"]
+    if torch_dtype and torch_dtype != "auto":
+        torch_dtype = getattr(torch, torch_dtype)
     # Load model
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
         device_map=device_map,
+        torch_dtype=torch_dtype,
         **model_kwargs,
     )
     # Load tokenizer
+    AutoModelForCausalLM.from_pretrained
     tokenizer_id = (
         model.active_peft_config.base_model_name_or_path
         if auto_model_cls == AutoPeftModelForCausalLM
