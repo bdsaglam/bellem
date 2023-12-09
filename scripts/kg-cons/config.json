@@ -12,7 +12,8 @@
   "pretrained_model": {
     "quantization_config": {
       "load_in_8bit": false,
-      "load_in_4bit": true
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4"
     }
   },
   "trainer": {
