@@ -11,7 +11,7 @@ import random
 from dataclasses import dataclass
 from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any, Dict
 import numpy as np
-from ..llm.utils import LLAMA2_CHAT_PROMPT_TEMPLATE
+from ..llama import LLAMA2_CHAT_PROMPT_TEMPLATE
 
 # %% ../../../nbs/ml.kg.cons.ipynb 4
 Entity: TypeAlias = str|tuple[str, str]
