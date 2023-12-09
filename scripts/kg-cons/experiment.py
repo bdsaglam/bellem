@@ -142,7 +142,7 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
 
 def run_experiment(wandb_run):
     config = preprocess_config(NestedDict.from_flat_dict(wandb_run.config))
-    wandb_run.config.update(flatten_dict(config))
+    wandb_run.config.update(flatten_dict(config), allow_val_change=True)
 
     if seed := config.get("seed"):
         from fastai.torch_core import set_seed
