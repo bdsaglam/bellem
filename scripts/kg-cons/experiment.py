@@ -1,5 +1,6 @@
 import os
 from copy import deepcopy
+from time import time
 
 import torch
 from datasets import DatasetDict, load_dataset
@@ -24,6 +25,7 @@ log = get_logger(__name__)
 def preprocess_config(config: NestedDict):
     config = deepcopy(config)
 
+    # Set float precision
     major, _ = torch.cuda.get_device_capability()
     if major >= 8:
         log.info("GPU supports bfloat16.")
@@ -39,6 +41,11 @@ def preprocess_config(config: NestedDict):
     if config.at("trainer.training_args.bf16") or config.at("trainer.training_args.fp16"):
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
+
+    # Update model id
+    timestamp = int(time())
+    model_id = config.at("hfhub.model_id")
+    config.set("hfhub.model_id", f"{model_id}-{timestamp}")
 
     return config
 
