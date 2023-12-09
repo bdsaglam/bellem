@@ -62,17 +62,12 @@ def load_model_tokenizer(
     if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
     # Setup torch dtype
-    if "torch_dtype" in model_kwargs:
-        torch_dtype = model_kwargs.pop("torch_dtype")
-        if torch_dtype != "auto":
-            torch_dtype = getattr(torch, torch_dtype)
-    else:
-        torch_dtype = None
+    if (torch_dtype := model_kwargs.get("torch_dtype")) and (torch_dtype != "auto"):
+        model_kwargs["torch_dtype"] = getattr(torch, torch_dtype)
     # Load model
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
         device_map=device_map,
-        torch_dtype=torch_dtype,
         **model_kwargs,
     )
     # Load tokenizer
