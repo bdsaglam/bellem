@@ -24,23 +24,22 @@ log = get_logger(__name__)
 def preprocess_config(config: NestedDict):
     config = deepcopy(config)
 
-    # Use bfloat16 if GPU supports
-    if (
-        config.at("trainer.training_args.bf16")
-        or config.at("trainer.training_args.fp16")
-        or config.at("pretrained_model.quantization_config.load_in_4bit")
-    ):
-        major, _ = torch.cuda.get_device_capability()
-        if major >= 8:
-            log.info("GPU supports bf16.")
-            bf16, fp16, bnb_4bit_compute_dtype = (True, False, "bfloat16")
-        else:
-            log.info("GPU does not support bf16, using fp16.")
-            bf16, fp16, bnb_4bit_compute_dtype = (False, True, "float16")
+    major, _ = torch.cuda.get_device_capability()
+    if major >= 8:
+        log.info("GPU supports bfloat16.")
+        torch_dtype, bf16, fp16, bnb_4bit_compute_dtype = ("bfloat16", True, False, "bfloat16")
+    else:
+        log.info("GPU does not support bfloat16.")
+        torch_dtype, bf16, fp16, bnb_4bit_compute_dtype = ("float16", False, True, "float16")
+
+    if config.at("pretrained_model.torch_dtype"):
+        config.set("pretrained_model.torch_dtype", torch_dtype)
+    if config.at("pretrained_model.quantization_config.load_in_4bit"):
+        config.set("pretrained_model.quantization_config.bnb_4bit_compute_dtype", bnb_4bit_compute_dtype)
+    if config.at("trainer.training_args.bf16") or config.at("trainer.training_args.fp16"):
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
-        if config.at("pretrained_model.quantization_config.load_in_4bit"):
-            config.set("pretrained_model.quantization_config.bnb_4bit_compute_dtype", bnb_4bit_compute_dtype)
+
     return config
 
 
@@ -58,7 +57,6 @@ def load_model_tokenizer(
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
         device_map=device_map,
-        torch_dtype=torch.float16,
         **model_kwargs,
     )
     # Load tokenizer
@@ -216,12 +214,13 @@ def run_experiment(wandb_run):
         evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
 
     # Merge adapters to model and publish
-    log.info("Merging adapters to model...") 
+    log.info("Merging adapters to model...")
     model = trainer.model.merge_and_unload()
     merged_model_id = f"{final_model_id}-merged"
     model.push_to_hub(merged_model_id)
     tokenizer.push_to_hub(merged_model_id)
     log.info(f"Uploaded merged model to HF Hub as {merged_model_id}")
+
 
 if __name__ == "__main__":
     import argparse

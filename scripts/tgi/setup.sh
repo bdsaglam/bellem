@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Setup Genesis GPU instance for HuggingFace Text Generation Inference
 
 ## Add Docker's official GPG key:

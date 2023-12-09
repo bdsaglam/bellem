@@ -1,7 +1,14 @@
-model=NousResearch/llama-2-7b-chat-hf
+#!/bin/bash
 
-volume="${HOME}/hf-tgi/data"
-mkdir $volume
+model=bdsaglam/llama-2-7b-chat-hf-kg-cons-merged
+# model=NousResearch/llama-2-7b-chat-hf
 
-docker run --gpus all --shm-size 1g -p 8080:80 -v $volume:/data ghcr.io/huggingface/text-generation-inference:1.2 \
-    --model-id $model --trust-remote-code --quantize bitsandbytes-fp4 --dtype float16 
+VOLUME="${HOME}/.cache/huggingface/tgi"
+mkdir -p $VOLUME
+
+docker run --gpus all --shm-size 1g \
+    -p 8080:80 \
+    -v "${VOLUME}":/data \
+    -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
+    ghcr.io/huggingface/text-generation-inference:latest \
+     --trust-remote-code --model-id $model --quantize bitsandbytes-nf4 --dtype float16
