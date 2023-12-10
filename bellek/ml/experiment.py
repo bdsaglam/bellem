@@ -5,7 +5,6 @@ __all__ = ['make_experiment_dir', 'prepare_config', 'make_run_experiment_sweep',
 
 # %% ../../nbs/ml.experiment.ipynb 3
 from pathlib import Path
-import torch
 import wandb
 import json
 from ..utils import NestedDict, flatten_dict
@@ -20,13 +19,16 @@ def make_experiment_dir(root=".experiments", name=None):
     return experiment_dir
 
 # %% ../../nbs/ml.experiment.ipynb 5
-def prepare_config(config):
+def prepare_config(config, resolve_paths=True, exclude_resolving_paths=None):
     if "device" not in config:
+        import torch
         config["device"] = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    
-    for k, v in config.flat().items():
-        if isinstance(k, str) and k.endswith("path"):
-            config.set(k, str(Path(v).resolve()))
+
+    if resolve_paths:
+        exclude_resolving_paths = exclude_resolving_paths or []
+        for k, v in config.flat().items():
+            if isinstance(k, str) and k.endswith("path") and k not in exclude_resolving_paths:
+                config.set(k, str(Path(v).resolve()))
     return config
 
 # %% ../../nbs/ml.experiment.ipynb 6
@@ -37,9 +39,9 @@ def make_run_experiment_sweep(run_experiment, config_defaults):
             run_experiment(wandb_run)
     return func
 
-def main(run_experiment, args):
+def main(run_experiment, args, prepare_config_kwargs=None):
     with open(args.cfg) as f:
-        config = prepare_config(NestedDict(json.load(f)))
+        config = prepare_config(NestedDict(json.load(f)), **(prepare_config_kwargs or {}))
 
     is_sweep = hasattr(args, "sweep_cfg") and args.sweep_cfg
     if is_sweep:
