@@ -100,9 +100,9 @@ class ERX2AlpacaFormatter:
         input = example['text']
         output = '\n'.join(example['triplets'])
         return {
-            'instruction': instruction,
-            'input': input,
-            'output': output,
+            'instruction': instruction.strip(),
+            'input': input.strip(),
+            'output': output.strip(),
         }
 
     def make_system_prompt(self) -> str:
