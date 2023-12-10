@@ -40,22 +40,24 @@ def merge_adapters_and_publish(
 # %% ../../nbs/ml.transformers.ipynb 5
 def load_tokenizer_model(
     model_name_or_path: str,
+    *,
     auto_model_cls=AutoModelForCausalLM,
-    quantization_config=None,
     device_map={"": 0},
+    **model_kwargs,
 ):
     # Setup quantization config
-    if isinstance(quantization_config, dict):
+    if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         from transformers import BitsAndBytesConfig
-        quantization_config = BitsAndBytesConfig(**quantization_config)
-    
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
+    # Setup torch dtype
+    if (torch_dtype := model_kwargs.get("torch_dtype")) and (torch_dtype != "auto"):
+        model_kwargs["torch_dtype"] = getattr(torch, torch_dtype)
     # Load model
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
         device_map=device_map,
-        quantization_config=quantization_config,
+        **model_kwargs,
     )
-
     # Load tokenizer
     if auto_model_cls == AutoModelForCausalLM:
         tokenizer_id = model_name_or_path
@@ -66,5 +68,4 @@ def load_tokenizer_model(
         else:
             raise ValueError(f"Unknown auto_model_cls: {auto_model_cls}")
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
-    
     return tokenizer, model
