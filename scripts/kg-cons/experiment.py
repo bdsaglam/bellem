@@ -3,20 +3,19 @@ from copy import deepcopy
 from time import time
 
 import torch
-from datasets import DatasetDict, load_dataset
-from peft import AutoPeftModelForCausalLM, LoraConfig
+from datasets import load_dataset
+from peft import LoraConfig
 from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    BitsAndBytesConfig,
     TrainingArguments,
 )
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
-
 import wandb
+
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.ml.kg.cons import parse_triplet_strings
+from bellek.ml.llama import prepare_llama2_for_inference, prepare_llama2_for_training
+from bellek.ml.transformers import load_tokenizer_model
 from bellek.utils import NestedDict, flatten_dict
 
 log = get_logger(__name__)
@@ -50,73 +49,31 @@ def preprocess_config(config: NestedDict):
     return config
 
 
-def load_model_tokenizer(
-    model_name_or_path: str,
-    *,
-    auto_model_cls=AutoModelForCausalLM,
-    device_map={"": 0},
-    **model_kwargs,
-):
-    # Setup quantization config
-    if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
-        model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
-    # Setup torch dtype
-    if (torch_dtype := model_kwargs.get("torch_dtype")) and (torch_dtype != "auto"):
-        model_kwargs["torch_dtype"] = getattr(torch, torch_dtype)
-    # Load model
-    model = auto_model_cls.from_pretrained(
-        model_name_or_path,
-        device_map=device_map,
-        **model_kwargs,
+def load_ds(dataset_config):
+    return load_dataset(
+        dataset_config["path"],
+        dataset_config.get("name"),
+        split=dataset_config.get("split"),
     )
-    # Load tokenizer
-    AutoModelForCausalLM.from_pretrained
-    tokenizer_id = (
-        model.active_peft_config.base_model_name_or_path
-        if auto_model_cls == AutoPeftModelForCausalLM
-        else model_name_or_path
-    )
-    tokenizer = AutoTokenizer.from_pretrained(tokenizer_id, trust_remote_code=True)
-    return tokenizer, model
-
-
-def fix_llama_model_tokenizer(tokenizer, model):
-    # fix tokenizer
-    tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
-    # fix model
-    model.config.use_cache = False
-    model.config.pretraining_tp = 1
-    return tokenizer, model
-
-
-def prepare_erx_dataset(split=None):
-    from bellek.ml.kg.dataset import batch_transform_webnlg
-
-    ds = load_dataset("web_nlg", "release_v3.0_en", split=split)
-    column_names = list(ds.column_names.values())[0] if isinstance(ds, DatasetDict) else ds.column_names
-    return ds.map(batch_transform_webnlg, batched=True, remove_columns=column_names)
-
-
-def make_erx_formatter(erx_dataset):
-    from bellek.ml.kg.cons import ERXFormatter
-
-    few_shot_examples = erx_dataset.select(list(range(3)))
-    return ERXFormatter(few_shot_examples=few_shot_examples)
-
-
-def prepare_training_dataset(ds, erx_formatter):
-    return ds.map(erx_formatter.format_for_train)
-
-
-def prepare_evaluation_dataset(ds, erx_formatter):
-    return ds.map(erx_formatter.format_for_inference)
 
 
 def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
     from transformers import pipeline
 
     config = NestedDict.from_flat_dict(wandb_run.config)
+
+    # prepare evaluation dataset
+    def extract_triplets(example):
+        response_template = config.at("trainer.response_template")
+        assert response_template is not None
+        output = example["text"].rsplit(response_template, 1)[-1].strip()
+        triplet_strings = parse_triplet_strings(output)
+        return {"triplet_strings": triplet_strings}
+
+    evaluation_dataset = evaluation_dataset.map(extract_triplets)
+
+    # setup generation pipeline
+    prepare_llama2_for_inference(tokenizer, model)
     pipe = pipeline(
         task="text-generation",
         model=model,
@@ -133,11 +90,13 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
         results = pipe(dataset["text"])
         generated_texts = [result[0]["generated_text"] for result in results]
         predictions = [parse_triplet_strings(gen_text.strip()) for gen_text in generated_texts]
-        references = dataset["triplets"]
+        references = dataset["triplet_strings"]
         scores = metric.compute(predictions=predictions, references=references)
         return generated_texts, predictions, scores
 
     generated_texts, predicted_triplets, scores = _evaluate(pipe, evaluation_dataset)
+
+    # log predictions to wandb
     evaluation_df = evaluation_dataset.to_pandas()
     evaluation_df["generated_texts"] = generated_texts
     evaluation_df["predicted_triplets"] = predicted_triplets
@@ -162,36 +121,22 @@ def run_experiment(wandb_run):
     os.environ["WANDB_LOG_MODEL"] = "end"
 
     # Base model
-    model_id = config.at("base_model_id")
+    pretrained_model_config = config["pretrained_model"]
+    model_id = pretrained_model_config.pop("model_name_or_path")
     log.info(f"Loading base model {model_id}")
-    tokenizer, base_model = fix_llama_model_tokenizer(
-        *load_model_tokenizer(
-            model_id,
-            **config.at("pretrained_model", {}),
-        )
-    )
+    tokenizer, base_model = load_tokenizer_model(model_id, **pretrained_model_config)
+    prepare_llama2_for_training(tokenizer, base_model)
 
-    # Dataset
-    log.info("Preparing entity-extraction dataset")
-    train_erx_ds = prepare_erx_dataset(split=config.at("dataset.train.split"))
-    rel_ds = train_erx_ds.map(
-        lambda example: dict(relations=[triplet.split("|")[1].strip() for triplet in example["triplets"]])
-    )
-    relation_set = {rel for rels in rel_ds["relations"] for rel in rels}
-    log.info(f"Number of unique relations:{len(relation_set)}")
-    log.info(f"Number of tokens for all relations: {len(tokenizer.encode(' '.join(relation_set)))}")
-    erx_formatter = make_erx_formatter(train_erx_ds)
-
-    # Instruction tuning dataset
+    # Train dataset
     log.info("Preparing training dataset")
-    train_ds = prepare_training_dataset(train_erx_ds, erx_formatter)
+    train_ds = load_ds(config.at("dataset.train"))
     tokenized_datasets = train_ds.map(lambda examples: tokenizer(examples["text"]), batched=True)
     token_counts = [len(input_ids) for input_ids in tokenized_datasets["input_ids"]]
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
     # Supervised fine-tuning
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
-    max_seq_length = config.at("trainer.max_seq_length")
+    max_seq_length = config.at("trainer.max_seq_length", max(token_counts))
     packing = config.at("trainer.packing", False)
     if response_template := config.at("trainer.response_template"):
         data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
@@ -222,20 +167,19 @@ def run_experiment(wandb_run):
     tokenizer.push_to_hub(final_model_id)
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
 
-    # Evaluate model
-    if eval_split := config.at("dataset.eval.split"):
-        log.info("Evaluating model")
-        eval_erx_ds = prepare_erx_dataset(split=eval_split)
-        eval_ds = prepare_evaluation_dataset(eval_erx_ds, erx_formatter)
-        evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, eval_ds)
-
     # Merge adapters to model and publish
     log.info("Merging adapters to model...")
-    model = trainer.model.merge_and_unload()
+    merged_model = trainer.model.merge_and_unload()
     merged_model_id = f"{final_model_id}-merged"
     model.push_to_hub(merged_model_id)
     tokenizer.push_to_hub(merged_model_id)
     log.info(f"Uploaded merged model to HF Hub as {merged_model_id}")
+
+    # Evaluate model
+    if val_ds_config := config.at("dataset.validation"):
+        val_ds = load_ds(val_ds_config)
+        log.info(f"Evaluating model on validation dataset with {len(val_ds)} samples.")
+        evaluate_finetuned_model(wandb_run, tokenizer, trainer.model, val_ds)
 
 
 if __name__ == "__main__":
@@ -244,4 +188,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cfg", default="./config.json")
     args, _ = parser.parse_known_args()
-    main(run_experiment, args)
+
+    prepare_config_kwargs = {
+        "exclude_resolving_paths": [
+            "pretrained_model.model_name_or_path",
+            "dataset.train.path",
+            "dataset.validation.path",
+        ]
+    }
+    main(run_experiment, args, prepare_config_kwargs)
