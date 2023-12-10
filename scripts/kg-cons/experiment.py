@@ -11,7 +11,7 @@ from transformers import (
     BitsAndBytesConfig,
     TrainingArguments,
 )
-from trl import SFTTrainer
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 import wandb
 from bellek.logging import get_logger
@@ -193,6 +193,10 @@ def run_experiment(wandb_run):
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
     max_seq_length = config.at("trainer.max_seq_length")
     packing = config.at("trainer.packing", False)
+    if response_template := config.at("trainer.response_template"):
+        data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
+    else:
+        data_collator = None
     training_args = TrainingArguments(
         output_dir="./results",
         **config.at("trainer.training_args"),
@@ -205,6 +209,7 @@ def run_experiment(wandb_run):
         dataset_text_field="text",
         max_seq_length=max_seq_length,
         packing=packing,
+        data_collator=data_collator,
         args=training_args,
     )
     log.info("Training model")

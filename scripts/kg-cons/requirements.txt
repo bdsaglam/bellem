@@ -1,10 +1,7 @@
 accelerate==0.21.0 
-bellek==0.18.0
-bitsandbytes==0.40.2 
-datasets
-evaluate
-huggingface_hub
-peft==0.4.0 
-transformers==4.31.0 
-trl==0.4.7 
-wandb
+transformers==4.35.2
+huggingface_hub==0.19.4
+peft==0.7.0
+bitsandbytes==0.41.3
+trl==0.7.
+bellek
