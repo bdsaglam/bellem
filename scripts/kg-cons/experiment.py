@@ -9,8 +9,8 @@ from transformers import (
     TrainingArguments,
 )
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
-import wandb
 
+import wandb
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.ml.kg.cons import parse_triplet_strings
@@ -166,14 +166,6 @@ def run_experiment(wandb_run):
     trainer.model.push_to_hub(final_model_id)
     tokenizer.push_to_hub(final_model_id)
     log.info(f"Uploaded PEFT adapters to HF Hub as {final_model_id}")
-
-    # Merge adapters to model and publish
-    log.info("Merging adapters to model...")
-    merged_model = trainer.model.merge_and_unload()
-    merged_model_id = f"{final_model_id}-merged"
-    model.push_to_hub(merged_model_id)
-    tokenizer.push_to_hub(merged_model_id)
-    log.info(f"Uploaded merged model to HF Hub as {merged_model_id}")
 
     # Evaluate model
     if val_ds_config := config.at("dataset.validation"):
