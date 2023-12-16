@@ -40,6 +40,8 @@ def prepare_config(config: NestedDict):
 
 def before_experiment(wandb_run):
     config = prepare_config(NestedDict.from_flat_dict(wandb_run.config))
+    with open("./config.proc.json", "w") as f:
+        json.dump(config, f, indent=2)
     wandb_run.config.update(flatten_dict(config), allow_val_change=True)
     os.environ["WANDB_PROJECT"] = wandb_run.project
     os.environ["WANDB_LOG_MODEL"] = "end"
@@ -168,7 +170,7 @@ def evaluate_finetuned_model(wandb_run, config, tokenizer, model):
 
 
 def after_experiment(wandb_run, config):
-    with open("./config-post.json", "w") as f:
+    with open("./config.after.json", "w") as f:
         json.dump(config, f, indent=2)
 
 
