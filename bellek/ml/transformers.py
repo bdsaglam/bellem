@@ -18,6 +18,9 @@ def merge_adapters_and_publish(
     merged_model_id: str=None,
 ):
     from peft import AutoPeftModelForCausalLM
+    
+    if isinstance(torch_dtype, str) and torch_dtype != "auto":
+        torch_dtype = getattr(torch, torch_dtype) 
 
     log.info(f"Loading model and tokenizer for {model_id}")
     model = AutoPeftModelForCausalLM.from_pretrained(
