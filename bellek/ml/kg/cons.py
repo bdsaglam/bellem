@@ -2,10 +2,10 @@
 
 # %% auto 0
 __all__ = ['Entity', 'Relation', 'Triplet', 'DEFAULT_SYSTEM_PROMPT_TEMPLATE', 'DEFAULT_RELATION_SET_PROMPT_TEMPLATE',
-           'DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE', 'DEFAULT_USER_INST_PROMPT_TEMPLATE',
-           'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions', 'parse_triplet_strings', 'parse_triplets',
-           'format_triplets', 'format_few_shot_example', 'format_few_shot_examples', 'ERX2AlpacaFormatter',
-           'ERX2ChatFormatter']
+           'DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE', 'DEFAULT_SYSTEM_PROMPT_TEMPLATE2',
+           'DEFAULT_RELATION_SET_PROMPT_TEMPLATE2', 'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions',
+           'parse_triplet_strings', 'parse_triplets', 'format_triplets', 'format_few_shot_example',
+           'format_few_shot_examples', 'ERX2AlpacaFormatter', 'ERX2ChatFormatter']
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
 import random
@@ -71,8 +71,9 @@ def format_few_shot_examples(examples):
     return "\n\n".join([format_few_shot_example(example) for example in examples])
 
 # %% ../../../nbs/ml.kg.cons.ipynb 12
-DEFAULT_SYSTEM_PROMPT_TEMPLATE = """Extract entity-relation-entity triplets from given text. Use | as delimiter and provide one triplet per line.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts entity-relation-entity triplets from given text.
 {relation_set_prompt}
+{few_shot_prompt}
 """.strip()
 
 DEFAULT_RELATION_SET_PROMPT_TEMPLATE = """Here are the list of relations that you can use:
@@ -120,18 +121,18 @@ class ERX2AlpacaFormatter:
             return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
 
 # %% ../../../nbs/ml.kg.cons.ipynb 15
-DEFAULT_USER_INST_PROMPT_TEMPLATE = """Extract entity-relation-entity triplets from given text below. Use '|' as delimiter and provide one triplet per line.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE2 = """You are a helpful assistant that extracts entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
 {relation_set_prompt}
 """.strip()
 
-DEFAULT_RELATION_SET_PROMPT_TEMPLATE = """Here are the list of relations that you can use:
+DEFAULT_RELATION_SET_PROMPT_TEMPLATE2 = """Here are the list of relations that you can use:
 {relation_set}
 """.strip()
 
 @dataclass
 class ERX2ChatFormatter:
-    user_inst_prompt_template: str = DEFAULT_USER_INST_PROMPT_TEMPLATE
-    relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
+    system_prompt_template: str = DEFAULT_SYSTEM_PROMPT_TEMPLATE2
+    relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE2
     relation_set: set|None = None
     few_shot_examples: List[Dict]|None = None
     n_few_shot_examples: int = 3
@@ -143,17 +144,15 @@ class ERX2ChatFormatter:
             self.few_shot_examples = list(self.few_shot_examples)
 
     def format(self, example: dict):
-        messages = list(self.make_messages(*self._choose_few_shot_examples(), example))
-        instruction = self.make_user_inst()
         messages = [
-            {"role": "user", "content": instruction + messages[0]["content"]},
-            *messages[1:],
+            {"role": "system", "content": self.make_system_message()},
+            *list(self.make_messages(*self._choose_few_shot_examples(), example)),
         ]
-        return {'messages': messages}
+        return {'conversations': messages}
 
-    def make_user_inst(self) -> str:
+    def make_system_message(self) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
-        return self.user_inst_prompt_template.format(relation_set_prompt=rsp)
+        return self.system_prompt_template.format(relation_set_prompt=rsp)
 
     def make_messages(self, *examples) -> Generator[dict, None, None]:
         for example in examples:
