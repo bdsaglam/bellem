@@ -7,7 +7,7 @@
     },
     "validation": {
       "path": "bdsaglam/web_nlg-erx-sft-llama2",
-      "split": "dev[:64]"
+      "split": "dev[:256]"
     }
   },
   "pretrained_model": {
@@ -51,7 +51,7 @@
   },
   "evaluation": {
     "max_new_tokens": 256,
-    "batch_size": 2
+    "batch_size": 4
   },
   "wandb": {
     "mode": "online",
