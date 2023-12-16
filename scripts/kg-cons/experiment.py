@@ -1,4 +1,5 @@
 import os
+from math import ceil
 from copy import deepcopy
 from time import time
 
@@ -66,9 +67,8 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
     def extract_triplets(example):
         response_template = config.at("trainer.response_template")
         assert response_template is not None
-        output = example["text"].rsplit(response_template, 1)[-1].strip()
-        triplet_strings = parse_triplet_strings(output)
-        return {"triplet_strings": triplet_strings}
+        output = example["text"].rsplit(response_template, 1)[-1]
+        return {"output": output}
 
     evaluation_dataset = evaluation_dataset.map(extract_triplets)
 
@@ -89,8 +89,8 @@ def evaluate_finetuned_model(wandb_run, tokenizer, model, evaluation_dataset):
         metric = evaluate.load("bdsaglam/jer")
         results = pipe(dataset["text"])
         generated_texts = [result[0]["generated_text"] for result in results]
-        predictions = [parse_triplet_strings(gen_text.strip()) for gen_text in generated_texts]
-        references = dataset["triplet_strings"]
+        predictions = [parse_triplet_strings(text.strip()) for text in generated_texts]
+        references = [parse_triplet_strings(text.strip()) for text in dataset["output"]]
         scores = metric.compute(predictions=predictions, references=references)
         return generated_texts, predictions, scores
 
@@ -136,7 +136,8 @@ def run_experiment(wandb_run):
 
     # Supervised fine-tuning
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
-    max_seq_length = config.at("trainer.max_seq_length", max(token_counts))
+    max_seq_length = config.at("trainer.max_seq_length", ceil(max(token_counts)/8)*8)
+    log.info(f"Setting max_seq_length={max_seq_length}")
     packing = config.at("trainer.packing", False)
     if response_template := config.at("trainer.response_template"):
         data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
