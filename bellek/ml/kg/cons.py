@@ -2,23 +2,24 @@
 
 # %% auto 0
 __all__ = ['Entity', 'Relation', 'Triplet', 'DEFAULT_SYSTEM_PROMPT_TEMPLATE', 'DEFAULT_RELATION_SET_PROMPT_TEMPLATE',
-           'DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE', 'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions',
-           'parse_triplet_strings', 'parse_triplets', 'format_few_shot_example', 'format_few_shot_examples',
-           'ERX2AlpacaFormatter']
+           'DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE', 'DEFAULT_USER_INST_PROMPT_TEMPLATE',
+           'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions', 'parse_triplet_strings', 'parse_triplets',
+           'format_triplets', 'format_few_shot_example', 'format_few_shot_examples', 'ERX2AlpacaFormatter',
+           'ERX2ChatFormatter']
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
 import random
 from dataclasses import dataclass
-from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any, Dict
+from typing import TypeAlias, Iterable, List, Set, Tuple, Callable, Any, Dict, Generator
 import numpy as np
 from ..llama import LLAMA2_CHAT_PROMPT_TEMPLATE
 
-# %% ../../../nbs/ml.kg.cons.ipynb 4
+# %% ../../../nbs/ml.kg.cons.ipynb 5
 Entity: TypeAlias = str|tuple[str, str]
 Relation: TypeAlias = str
 Triplet: TypeAlias = tuple[Entity, Relation, Entity]
 
-# %% ../../../nbs/ml.kg.cons.ipynb 5
+# %% ../../../nbs/ml.kg.cons.ipynb 6
 def evaluate_joint_er_extraction(*, reference: Iterable[Triplet], prediction: Iterable[Triplet]):
     """
     Example: [(('John', 'PERSON'), 'works_at', ('Google', 'ORG'))]
@@ -50,26 +51,28 @@ def evaluate_joint_er_extractions(*, references: Iterable[Iterable[Triplet]], pr
     ]
     return {('mean_' + key): np.mean([scores[key] for scores in score_dicts]) for key in score_dicts[0].keys()}
 
-# %% ../../../nbs/ml.kg.cons.ipynb 8
+# %% ../../../nbs/ml.kg.cons.ipynb 9
 def parse_triplet_strings(text: str, delimiter: str="|") -> List[str]:
     return [line for line in text.splitlines() if line and line.count(delimiter) == 2]
 
 def parse_triplets(text: str, delimiter: str="|") -> List[Triplet]:
     return [tuple(triplet_string.split(delimiter)) for triplet_string in parse_triplet_strings(text, delimiter=delimiter)]
 
-# %% ../../../nbs/ml.kg.cons.ipynb 10
+# %% ../../../nbs/ml.kg.cons.ipynb 11
+def format_triplets(triplets: Iterable[str]) -> str:
+    return '\n'.join(triplets)
+
 def format_few_shot_example(example, text_prefix="# Text\n", triplets_prefix="# Triplets\n"):
     text = example['text']
-    triplets = '\n'.join(example['triplets'])
+    triplets = format_triplets(example['triplets'])
     return f"{text_prefix}{text}\n{triplets_prefix}{triplets}"
 
 def format_few_shot_examples(examples):
     return "\n\n".join([format_few_shot_example(example) for example in examples])
 
-# %% ../../../nbs/ml.kg.cons.ipynb 11
-DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts entity-relation-entity triplets from given text.
+# %% ../../../nbs/ml.kg.cons.ipynb 12
+DEFAULT_SYSTEM_PROMPT_TEMPLATE = """Extract entity-relation-entity triplets from given text. Use | as delimiter and provide one triplet per line.
 {relation_set_prompt}
-{few_shot_prompt}
 """.strip()
 
 DEFAULT_RELATION_SET_PROMPT_TEMPLATE = """Here are the list of relations that you can use:
@@ -109,6 +112,53 @@ class ERX2AlpacaFormatter:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
         fsp = self.few_shot_examples_prompt_template.format(few_shot_examples=format_few_shot_examples(self._choose_few_shot_examples())) if self.few_shot_examples else ""
         return self.system_prompt_template.format(relation_set_prompt=rsp, few_shot_prompt=fsp)
+
+    def _choose_few_shot_examples(self) -> list[dict]:
+        if len(self.few_shot_examples) <= self.n_few_shot_examples:
+            return self.few_shot_examples
+        else:
+            return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
+
+# %% ../../../nbs/ml.kg.cons.ipynb 15
+DEFAULT_USER_INST_PROMPT_TEMPLATE = """Extract entity-relation-entity triplets from given text below. Use '|' as delimiter and provide one triplet per line.
+{relation_set_prompt}
+""".strip()
+
+DEFAULT_RELATION_SET_PROMPT_TEMPLATE = """Here are the list of relations that you can use:
+{relation_set}
+""".strip()
+
+@dataclass
+class ERX2ChatFormatter:
+    user_inst_prompt_template: str = DEFAULT_USER_INST_PROMPT_TEMPLATE
+    relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
+    relation_set: set|None = None
+    few_shot_examples: List[Dict]|None = None
+    n_few_shot_examples: int = 3
+
+    def __post_init__(self):
+        if self.relation_set:
+            self.relation_set = sorted(self.relation_set)
+        if self.few_shot_examples is not None:
+            self.few_shot_examples = list(self.few_shot_examples)
+
+    def format(self, example: dict):
+        messages = list(self.make_messages(*self._choose_few_shot_examples(), example))
+        instruction = self.make_user_inst()
+        messages = [
+            {"role": "user", "content": instruction + messages[0]["content"]},
+            *messages[1:],
+        ]
+        return {'messages': messages}
+
+    def make_user_inst(self) -> str:
+        rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
+        return self.user_inst_prompt_template.format(relation_set_prompt=rsp)
+
+    def make_messages(self, *examples) -> Generator[dict, None, None]:
+        for example in examples:
+            yield {"role": "user", "content": example["text"]}
+            yield {"role": "assistant", "content": format_triplets(example["triplets"])}
 
     def _choose_few_shot_examples(self) -> list[dict]:
         if len(self.few_shot_examples) <= self.n_few_shot_examples:
