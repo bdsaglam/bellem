@@ -175,10 +175,15 @@ def evaluate_pipe_jer(dataset, pipe):
 
     log.info(f"Evaluating model for JER on dataset with {len(dataset)} samples.")
 
+    tokenizer = pipe.tokenizer
+
+    def _clean(text):
+        return text.replace(tokenizer.special_tokens_map["eos_token"], "").strip()
+
     results = pipe(dataset["input"])
     generations = [result[0]["generated_text"] for result in results]
-    predictions = [parse_triplet_strings(text.strip()) for text in generations]
-    references = [parse_triplet_strings(text.strip()) for text in dataset["output"]]
+    predictions = [parse_triplet_strings(_clean(text)) for text in generations]
+    references = [parse_triplet_strings(_clean(text)) for text in dataset["output"]]
 
     dataf = dataset.to_pandas()
     dataf["generation"] = generations
@@ -206,7 +211,6 @@ def evaluate_model_jer(
     def extract_input_output(example):
         input, output = example["text"].rsplit(response_template, 1)
         input += response_template
-        output = output.replace(tokenizer.special_tokens_map["eos_token"], "")
         return {"input": input, "output": output}
 
     dataset = dataset.map(extract_input_output)
