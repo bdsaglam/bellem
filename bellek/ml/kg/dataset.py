@@ -15,7 +15,7 @@ def _transform_entity(entity: str):
 
 def _transform_triplet(triplet_string: str):
     delimiter = "|"
-    entity1,relation,entity2 = triplet_string.split(delimiter)
+    entity1,relation,entity2 = triplet_string.replace('"', '').split(delimiter)
     relation = _transform_relation(relation)
     entity1 = _transform_entity(entity1)
     entity2 = _transform_entity(entity2)
