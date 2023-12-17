@@ -1,10 +1,8 @@
 import typer
-import wandb
 from datasets import load_dataset
 
+import wandb
 from bellek.logging import get_logger
-from bellek.ml.kg.cons import evaluate_model_jer
-from bellek.ml.transformers import load_tokenizer_model
 from bellek.utils import NestedDict
 
 log = get_logger(__name__)
@@ -19,6 +17,9 @@ def load_ds(dataset_config):
 
 
 def run(config):
+    from bellek.ml.kg.cons import evaluate_model_jer
+    from bellek.ml.transformers import load_tokenizer_model
+
     # Load validation dataset
     val_ds_config = config.at("dataset.validation")
     if val_ds_config is None:
@@ -59,7 +60,7 @@ def run(config):
     )
 
 
-def main(wandb_project: str, wandb_run_id: str):
+def main(wandb_project: str = typer.Option(), wandb_run_id: str = typer.Option()):
     wandb_run = wandb.init(project=wandb_project, resume=wandb_run_id)
     try:
         config = NestedDict.from_flat_dict(wandb_run.config)
