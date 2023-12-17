@@ -1,6 +1,6 @@
 seed: 42
 
-base_model: NousResearch/llama-2-7b-chat-hf
+base_model: NousResearch/Llama-2-7b-chat-hf
 model_type: LlamaForCausalLM
 tokenizer_type: LlamaTokenizer
 is_llama_derived_model: true

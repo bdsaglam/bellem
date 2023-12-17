@@ -1,7 +1,7 @@
 #!/bin/bash
 
 model=bdsaglam/llama-2-7b-chat-hf-kg-cons-merged
-# model=NousResearch/llama-2-7b-chat-hf
+# model=NousResearch/Llama-2-7b-chat-hf
 
 VOLUME="${HOME}/.cache/huggingface/tgi"
 mkdir -p $VOLUME

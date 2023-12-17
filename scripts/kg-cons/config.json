@@ -11,7 +11,7 @@
     }
   },
   "pretrained_model": {
-    "model_name_or_path": "NousResearch/llama-2-7b-chat-hf",
+    "model_name_or_path": "NousResearch/Llama-2-7b-chat-hf",
     "torch_dtype": "bfloat16",
     "quantization_config": {
       "load_in_8bit": false,
