@@ -11,7 +11,7 @@ from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 import wandb
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
-from bellek.ml.kg.cons import parse_triplet_strings
+from bellek.ml.kg.cons import evaluate_model_jer
 from bellek.ml.llama import prepare_llama2_for_inference, prepare_llama2_for_training
 from bellek.ml.transformers import load_tokenizer_model
 from bellek.utils import NestedDict, flatten_dict
@@ -70,8 +70,8 @@ def train(wandb_run, config: NestedDict):
     prepare_llama2_for_training(tokenizer, base_model)
 
     # Train dataset
-    log.info("Preparing training dataset")
     train_ds = load_ds(config.at("dataset.train"))
+    log.info(f"Loaded training dataset with {len(train_ds)} samples.")
 
     # Inspect token counts
     tokenized_train_ds = train_ds.map(lambda examples: tokenizer(examples["text"]), batched=True)
@@ -79,14 +79,16 @@ def train(wandb_run, config: NestedDict):
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
     # Supervised fine-tuning
-    peft_config = LoraConfig(**config.at("trainer.lora", {}))
-    max_seq_length = config.at("trainer.max_seq_length", ceil(max(token_counts) / 8) * 8)
+    if config.at("trainer.max_seq_length") is None:
+        config.set("trainer.max_seq_length", ceil(max(token_counts) / 8) * 8)
+    max_seq_length = config.at("trainer.max_seq_length")
     log.info(f"Setting max_seq_length={max_seq_length}")
     packing = config.at("trainer.packing", False)
     if response_template := config.at("trainer.response_template"):
         data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
     else:
         data_collator = None
+    peft_config = LoraConfig(**config.at("trainer.lora", {}))
     training_args = TrainingArguments(
         output_dir="./results",
         **config.at("trainer.training_args"),
@@ -115,58 +117,27 @@ def train(wandb_run, config: NestedDict):
     return trainer
 
 
-def evaluate_finetuned_model(wandb_run, config, tokenizer, model):
-    from transformers import pipeline
-
+def evaluate(wandb_run, config, tokenizer, model):
     val_ds_config = config.at("dataset.validation")
     if val_ds_config is None:
         return
-
     val_ds = load_ds(val_ds_config)
     log.info(f"Evaluating model on validation dataset with {len(val_ds)} samples.")
 
-    # prepare evaluation dataset
-    def extract_triplets(example):
-        response_template = config.at("trainer.response_template")
-        assert response_template is not None
-        output = example["text"].rsplit(response_template, 1)[-1]
-        return {"output": output}
-
-    val_ds = val_ds.map(extract_triplets)
-
-    # setup generation pipeline
     prepare_llama2_for_inference(tokenizer, model)
-    pipe = pipeline(
-        task="text-generation",
-        model=model,
+
+    scores, eval_df = evaluate_model_jer(
+        val_ds,
+        response_template=config.at("trainer.response_template"),
         tokenizer=tokenizer,
-        max_new_tokens=config.at("evaluation.max_new_tokens", 128),
-        batch_size=config.at("evaluation.batch_size", 4),
-        return_full_text=False,
+        model=model,
+        **config.at("evaluation", {}),
     )
 
-    def _evaluate(pipe, dataset):
-        import evaluate
-
-        metric = evaluate.load("bdsaglam/jer")
-        results = pipe(dataset["text"])
-        generations = [result[0]["generated_text"] for result in results]
-        predictions = [parse_triplet_strings(text.strip()) for text in generations]
-        references = [parse_triplet_strings(text.strip()) for text in dataset["output"]]
-        scores = metric.compute(predictions=predictions, references=references)
-        return generations, predictions, references, scores
-
-    generations, predictions, references, scores = _evaluate(pipe, val_ds)
-
-    # log predictions to wandb
-    evaluation_df = val_ds.to_pandas()
-    evaluation_df["generation"] = generations
-    evaluation_df["prediction"] = predictions
-    evaluation_df["reference"] = references
     wandb_run.log(
         {
             **scores,
-            "evaluation-dataframe": wandb.Table(dataframe=evaluation_df.reset_index()),
+            "evaluation-dataframe": wandb.Table(dataframe=eval_df.reset_index()),
         }
     )
 
@@ -180,7 +151,7 @@ def run_experiment(wandb_run):
     before_experiment(wandb_run)
     config = NestedDict.from_flat_dict(wandb_run.config)
     trainer = train(wandb_run, config)
-    evaluate_finetuned_model(wandb_run, config, trainer.tokenizer, trainer.model)
+    evaluate(wandb_run, config, trainer.tokenizer, trainer.model)
     after_experiment(wandb_run, config)
 
 
