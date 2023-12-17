@@ -35,15 +35,22 @@ def prepare_config(config: NestedDict):
 
 def before_experiment(wandb_run):
     config = prepare_config(NestedDict.from_flat_dict(wandb_run.config))
-    with open("./config.proc.json", "w") as f:
-        json.dump(config, f, indent=2)
+    config.set("wandb.run_id", wandb_run.id)
     wandb_run.config.update(flatten_dict(config), allow_val_change=True)
+
+    # Wandb env variables
     os.environ["WANDB_PROJECT"] = wandb_run.project
     os.environ["WANDB_LOG_MODEL"] = "end"
+
+    # Set random seed
     if seed := config.get("seed"):
         from fastai.torch_core import set_seed
 
         set_seed(seed)
+
+    # Save preprocessed config
+    with open("./config.proc.json", "w") as f:
+        json.dump(config, f, indent=2)
 
 
 def load_ds(dataset_config):
