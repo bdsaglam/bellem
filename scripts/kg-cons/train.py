@@ -24,9 +24,12 @@ def prepare_config(config: NestedDict):
     config = tpc(config)
 
     # Generate unique model id
-    timestamp = int(time())
     model_id = config.at("hfhub.model_id")
-    config.set("hfhub.model_id", f"{model_id}-peft-{timestamp}")
+    model_id += "-peft"
+    if "debug" not in model_id:
+        timestamp = int(time())
+        model_id += f"-{timestamp}"
+    config.set("hfhub.model_id", model_id)
 
     return config
 
