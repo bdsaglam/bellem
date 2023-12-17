@@ -8,11 +8,9 @@ from peft import LoraConfig
 from transformers import TrainingArguments
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
-import wandb
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
-from bellek.ml.kg.cons import evaluate_model_jer
-from bellek.ml.llama import prepare_llama2_for_inference, prepare_llama2_for_training
+from bellek.ml.llama import prepare_llama2_for_training
 from bellek.ml.transformers import load_tokenizer_model
 from bellek.utils import NestedDict, flatten_dict
 
@@ -117,31 +115,6 @@ def train(wandb_run, config: NestedDict):
     return trainer
 
 
-def evaluate(wandb_run, config, tokenizer, model):
-    val_ds_config = config.at("dataset.validation")
-    if val_ds_config is None:
-        return
-    val_ds = load_ds(val_ds_config)
-    log.info(f"Evaluating model on validation dataset with {len(val_ds)} samples.")
-
-    prepare_llama2_for_inference(tokenizer, model)
-
-    scores, eval_df = evaluate_model_jer(
-        val_ds,
-        response_template=config.at("trainer.response_template"),
-        tokenizer=tokenizer,
-        model=model,
-        **config.at("evaluation", {}),
-    )
-
-    wandb_run.log(
-        {
-            **scores,
-            "evaluation-dataframe": wandb.Table(dataframe=eval_df.reset_index()),
-        }
-    )
-
-
 def after_experiment(wandb_run, config):
     with open("./config.after.json", "w") as f:
         json.dump(config, f, indent=2)
@@ -150,8 +123,7 @@ def after_experiment(wandb_run, config):
 def run_experiment(wandb_run):
     before_experiment(wandb_run)
     config = NestedDict.from_flat_dict(wandb_run.config)
-    trainer = train(wandb_run, config)
-    evaluate(wandb_run, config, trainer.tokenizer, trainer.model)
+    train(wandb_run, config)
     after_experiment(wandb_run, config)
 
 
