@@ -5,7 +5,8 @@ __all__ = ['log', 'Entity', 'Relation', 'Triplet', 'DEFAULT_SYSTEM_PROMPT_TEMPLA
            'DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE', 'DEFAULT_SYSTEM_PROMPT_TEMPLATE2',
            'DEFAULT_RELATION_SET_PROMPT_TEMPLATE2', 'evaluate_joint_er_extraction', 'evaluate_joint_er_extractions',
            'parse_triplet_strings', 'parse_triplets', 'format_triplets', 'format_few_shot_example',
-           'format_few_shot_examples', 'ERX2AlpacaFormatter', 'ERX2ChatFormatter']
+           'format_few_shot_examples', 'ERX2AlpacaFormatter', 'ERX2ChatFormatter', 'evaluate_pipe_jer',
+           'evaluate_model_jer']
 
 # %% ../../../nbs/ml.kg.cons.ipynb 3
 import random
@@ -167,3 +168,58 @@ class ERX2ChatFormatter:
             return self.few_shot_examples
         else:
             return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
+
+# %% ../../../nbs/ml.kg.cons.ipynb 19
+def evaluate_pipe_jer(dataset, pipe):
+    import evaluate
+
+    log.info(f"Evaluating model for JER on dataset with {len(dataset)} samples.")
+
+    results = pipe(dataset["input"])
+    generations = [result[0]["generated_text"] for result in results]
+    predictions = [parse_triplet_strings(text.strip()) for text in generations]
+    references = [parse_triplet_strings(text.strip()) for text in dataset["output"]]
+    
+    dataf = dataset.to_pandas()
+    dataf["generation"] = generations
+    dataf["prediction"] = predictions
+    dataf["reference"] = references
+    
+    metric = evaluate.load("bdsaglam/jer")
+    scores = metric.compute(predictions=predictions, references=references)
+
+    return scores, dataf
+
+def evaluate_model_jer(
+    dataset,
+    *,
+    response_template: str,
+    tokenizer,
+    model,
+    max_new_tokens=256,
+    batch_size=4,
+    **kwargs,
+):
+    assert len(dataset) > 0, "Dataset is empty!"
+
+    def extract_input_output(example):
+        input, output = example["text"].rsplit(response_template, 1)
+        input += response_template
+        return {"input": input, "output": output}
+
+    dataset = dataset.map(extract_input_output)
+
+    # setup generation pipeline
+    from transformers import pipeline
+
+    pipe = pipeline(
+        task="text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        max_new_tokens=max_new_tokens,
+        batch_size=batch_size,
+        return_full_text=False,
+        **kwargs,
+    )
+
+    return evaluate_pipe_jer(dataset, pipe)
