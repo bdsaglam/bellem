@@ -179,16 +179,17 @@ def evaluate_pipe_jer(dataset, pipe):
     generations = [result[0]["generated_text"] for result in results]
     predictions = [parse_triplet_strings(text.strip()) for text in generations]
     references = [parse_triplet_strings(text.strip()) for text in dataset["output"]]
-    
+
     dataf = dataset.to_pandas()
     dataf["generation"] = generations
     dataf["prediction"] = predictions
     dataf["reference"] = references
-    
+
     metric = evaluate.load("bdsaglam/jer")
     scores = metric.compute(predictions=predictions, references=references)
 
     return scores, dataf
+
 
 def evaluate_model_jer(
     dataset,
@@ -205,6 +206,7 @@ def evaluate_model_jer(
     def extract_input_output(example):
         input, output = example["text"].rsplit(response_template, 1)
         input += response_template
+        output = output.replace(tokenizer.special_tokens_map["eos_token"], "")
         return {"input": input, "output": output}
 
     dataset = dataset.map(extract_input_output)
