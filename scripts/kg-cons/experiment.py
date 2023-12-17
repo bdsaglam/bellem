@@ -1,16 +1,11 @@
 import json
 import os
-from copy import deepcopy
 from math import ceil
-from pathlib import Path
 from time import time
 
-import torch
 from datasets import load_dataset
 from peft import LoraConfig
-from transformers import (
-    TrainingArguments,
-)
+from transformers import TrainingArguments
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 import wandb
@@ -33,7 +28,7 @@ def prepare_config(config: NestedDict):
     # Generate unique model id
     timestamp = int(time())
     model_id = config.at("hfhub.model_id")
-    config.set("hfhub.model_id", f"{model_id}-{timestamp}")
+    config.set("hfhub.model_id", f"{model_id}-peft-{timestamp}")
 
     return config
 
