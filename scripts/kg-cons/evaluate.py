@@ -1,6 +1,5 @@
 import typer
 from datasets import load_dataset
-from typing_extensions import Annotated
 
 import wandb
 from bellek.logging import get_logger
@@ -62,8 +61,8 @@ def run(config):
 
 
 def main(
-    wandb_project: Annotated[str, typer.Option()],
-    wandb_run_id: Annotated[str, typer.Option()],
+    wandb_project: str = typer.Option(default=...),
+    wandb_run_id: str = typer.Option(default=...),
 ):
     wandb_run = wandb.init(project=wandb_project, resume=wandb_run_id)
     try:
