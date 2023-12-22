@@ -64,7 +64,7 @@ def parse_triplets(text: str, delimiter: str="|") -> list[Triplet]:
 
 # %% ../../../nbs/ml.kg.cons.ipynb 12
 def format_triplets(triplets: Iterable[str]) -> str:
-    return '\n'.join(triplets)
+    return '\n'.join(sorted(triplets))
 
 def format_few_shot_example(example, text_prefix="# Text\n", triplets_prefix="# Triplets\n"):
     text = example['text']
@@ -75,7 +75,7 @@ def format_few_shot_examples(examples):
     return "\n\n".join([format_few_shot_example(example) for example in examples])
 
 # %% ../../../nbs/ml.kg.cons.ipynb 13
-DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts entity-relation-entity triplets from given text.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text.
 {relation_set_prompt}
 {few_shot_prompt}
 """.strip()
@@ -96,6 +96,7 @@ class ERX2AlpacaFormatter:
     few_shot_examples_prompt_template: str = DEFAULT_FEW_SHOT_EXAMPLES_PROMPT_TEMPLATE
     few_shot_examples: list[dict]|None = None
     n_few_shot_examples: int = 3
+    max_triplets: int = 5
 
     def __post_init__(self):
         if self.relation_set:
@@ -116,7 +117,7 @@ class ERX2AlpacaFormatter:
     def make_system_prompt(self) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
         fsp = self.few_shot_examples_prompt_template.format(few_shot_examples=format_few_shot_examples(self._choose_few_shot_examples())) if self.few_shot_examples else ""
-        return self.system_prompt_template.format(relation_set_prompt=rsp, few_shot_prompt=fsp)
+        return self.system_prompt_template.format(max_triplets=self.max_triplets, relation_set_prompt=rsp, few_shot_prompt=fsp)
 
     def _choose_few_shot_examples(self) -> list[dict]:
         if len(self.few_shot_examples) <= self.n_few_shot_examples:
