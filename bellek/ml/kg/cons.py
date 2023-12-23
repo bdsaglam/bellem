@@ -141,7 +141,6 @@ class ERX2ChatFormatter:
     relation_set: set|None = None
     few_shot_examples: list[dict]|None = None
     n_few_shot_examples: int = 3
-    max_triplets: int = 5
 
     def __post_init__(self):
         if self.relation_set:
@@ -150,15 +149,16 @@ class ERX2ChatFormatter:
             self.few_shot_examples = list(self.few_shot_examples)
 
     def format(self, example: dict):
+        max_triplets = len(example['triplets']) + 2
         messages = [
-            {"role": "system", "content": self.make_system_message()},
+            {"role": "system", "content": self.make_system_message(max_triplets=max_triplets)},
             *list(self.make_messages(*self._choose_few_shot_examples(), example)),
         ]
         return {'conversations': messages}
 
-    def make_system_message(self) -> str:
+    def make_system_message(self, max_triplets: int = 5) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
-        return self.system_prompt_template.format(max_triplets=self.max_triplets, relation_set_prompt=rsp)
+        return self.system_prompt_template.format(max_triplets=max_triplets, relation_set_prompt=rsp)
 
     def make_messages(self, *examples) -> Generator[dict, None, None]:
         for example in examples:
