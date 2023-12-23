@@ -126,7 +126,7 @@ class ERX2AlpacaFormatter:
             return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
 
 # %% ../../../nbs/ml.kg.cons.ipynb 16
-DEFAULT_SYSTEM_PROMPT_TEMPLATE2 = """You are a helpful assistant that extracts entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE2 = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
 {relation_set_prompt}
 """.strip()
 
@@ -141,6 +141,7 @@ class ERX2ChatFormatter:
     relation_set: set|None = None
     few_shot_examples: list[dict]|None = None
     n_few_shot_examples: int = 3
+    max_triplets: int = 5
 
     def __post_init__(self):
         if self.relation_set:
@@ -157,7 +158,7 @@ class ERX2ChatFormatter:
 
     def make_system_message(self) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
-        return self.system_prompt_template.format(relation_set_prompt=rsp)
+        return self.system_prompt_template.format(max_triplets=self.max_triplets, relation_set_prompt=rsp)
 
     def make_messages(self, *examples) -> Generator[dict, None, None]:
         for example in examples:
