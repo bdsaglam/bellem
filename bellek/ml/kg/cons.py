@@ -149,10 +149,11 @@ class ERX2ChatFormatter:
             self.few_shot_examples = list(self.few_shot_examples)
 
     def format(self, example: dict):
-        max_triplets = len(example['triplets']) + 2
+        few_shot_examples = self._choose_few_shot_examples()
+        max_triplets = max(*[len(example['triplets']) for example in few_shot_examples], len(example['triplets'])) + 2
         messages = [
             {"role": "system", "content": self.make_system_message(max_triplets=max_triplets)},
-            *list(self.make_messages(*self._choose_few_shot_examples(), example)),
+            *list(self.make_messages(*few_shot_examples, example)),
         ]
         return {'conversations': messages}
 
