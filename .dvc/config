@@ -1,0 +1,4 @@
+[core]
+    remote = localfs
+['remote "localfs"']
+    url = /tmp/dvcstore

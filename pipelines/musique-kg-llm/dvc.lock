@@ -1,0 +1,53 @@
+schema: '2.0'
+stages:
+  create_mhqa_dataset:
+    cmd: python pipelines/musique-kg-llm/create_mhqa_dataset.py --config-file data/raw/musique-kg-llm/train-dataset-config.json
+      --out data/generated/musique-kg-llm/train-dataset.jsonl
+    deps:
+    - path: data/raw/musique-kg-llm/train-dataset-config.json
+      hash: md5
+      md5: 880a054d656fc9163f940c459b7fd50f
+      size: 84
+    - path: pipelines/musique-kg-llm/create_mhqa_dataset.py
+      hash: md5
+      md5: 51842a6b4ab4ee24b652f411d2159958
+      size: 343
+    outs:
+    - path: data/generated/musique-kg-llm/train-dataset.jsonl
+      hash: md5
+      md5: c0127cd0cfae52d3b1c5461da6ff1a36
+      size: 93684
+  filter_supporting_paragraphs:
+    cmd: python pipelines/musique-kg-llm/filter_supporting_paragraphs.py --dataset-file
+      data/generated/musique-kg-llm/train-dataset.jsonl --out data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+    deps:
+    - path: data/generated/musique-kg-llm/train-dataset.jsonl
+      hash: md5
+      md5: c0127cd0cfae52d3b1c5461da6ff1a36
+      size: 93684
+    - path: pipelines/musique-kg-llm/filter_supporting_paragraphs.py
+      hash: md5
+      md5: 65b4b57754cc919add1f2057ba9e3224
+      size: 522
+    outs:
+    - path: data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      hash: md5
+      md5: 7229e21893c3c22e48db5431dcbbe795
+      size: 48748
+  decompose_question:
+    cmd: python pipelines/musique-kg-llm/decompose_question.py --dataset-file data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      --out data/generated/musique-kg-llm/train-dataset-question-decomposition.jsonl
+    deps:
+    - path: data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      hash: md5
+      md5: 7229e21893c3c22e48db5431dcbbe795
+      size: 48748
+    - path: pipelines/musique-kg-llm/decompose_question.py
+      hash: md5
+      md5: f7ac90a566c3bad266262a8c3d2f11ba
+      size: 1030
+    outs:
+    - path: data/generated/musique-kg-llm/train-dataset-question-decomposition.jsonl
+      hash: md5
+      md5: 7ba06760800b1e5b979563a568c7d7c6
+      size: 2581
