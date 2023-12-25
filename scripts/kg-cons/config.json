@@ -2,11 +2,11 @@
   "seed": 42,
   "dataset": {
     "train": {
-      "path": "bdsaglam/web_nlg-erx-sft-llama2",
+      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
       "split": "train"
     },
     "validation": {
-      "path": "bdsaglam/web_nlg-erx-sft-llama2",
+      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
       "split": "dev[:256]"
     }
   },
@@ -50,8 +50,8 @@
     }
   },
   "evaluation": {
-    "max_new_tokens": 256,
-    "batch_size": 4
+    "max_new_tokens": 200,
+    "batch_size": 8
   },
   "wandb": {
     "mode": "online",
@@ -59,6 +59,6 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-2-7b-chat-hf-kg-cons"
+    "model_id": "bdsaglam/llama-2-7b-chat-hf-kg-cons-multi"
   }
 }

@@ -1,0 +1,4 @@
+langchain==0.0.348
+llama-index==0.9.21
+kuzu==0.1.0
+pyvis==0.3.2
