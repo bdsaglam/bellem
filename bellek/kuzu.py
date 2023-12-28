@@ -72,6 +72,7 @@ class KuzuGraphStore(GraphStore):
         )
         return_clause = "RETURN n1, r, n2 LIMIT %d" % limit
         params = []
+        where_clause = ""
         if subjs is not None:
             for i, curr_subj in enumerate(subjs):
                 if i == 0:
@@ -79,8 +80,6 @@ class KuzuGraphStore(GraphStore):
                 else:
                     where_clause += " OR n1.ID = $%d" % i
                 params.append((str(i), curr_subj))
-        else:
-            where_clause = ""
         query = f"{match_clause} {where_clause} {return_clause}"
         prepared_statement = self.connection.prepare(query)
         if subjs is not None:

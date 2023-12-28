@@ -27,45 +27,49 @@ load_dotenv()
 
 set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
-# model to generate embeddings for triplets
-embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
+LLM_OBS_DIRECTORY = Path("/tmp/phoenix/thesis-kg-llm/kgcons/")
 
-# language model to use for triplet extraction
-llm = OpenAI(temperature=0, model="gpt-3.5-turbo")
+def make_service_context(model_type: str):
+    if model_type == "llama2-sft":
+        from bellek.ml.llama_index import HuggingFaceTextGenInferenceLLM
 
-# Setup LLM observability
-LLM_TRACES_FILEPATH = Path("/tmp/phoenix/thesis-kg-llm/kgcons/traces.jsonl")
-callback_manager = CallbackManager(handlers=[make_phoenix_trace_callback_handler(LLM_TRACES_FILEPATH)])
+        inference_server_url = "http://localhost:8080/"
+        llm = HuggingFaceTextGenInferenceLLM(
+            inference_server_url=inference_server_url,
+            do_sample=False,
+            max_new_tokens=200,
+            repetition_penalty=1.0,
+            # top_k=50,
+            # top_p=1.0,
+            # typical_p=1.0,
+            # temperature=0.0,
+        )
+    else:
+        llm = OpenAI(temperature=0, model="gpt-3.5-turbo")
 
-service_context = ServiceContext.from_defaults(
-    llm=llm,
-    embed_model=embed_model,
-    callback_manager=callback_manager,
-)
+    # model to generate embeddings for triplets
+    embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
+    # Setup LLM observability
+    traces_path = LLM_OBS_DIRECTORY / f"{model_type}" / "traces.jsonl"
+    traces_path.parent.mkdir(parents=True, exist_ok=True)
+    callback_manager = CallbackManager(handlers=[make_phoenix_trace_callback_handler(traces_path)])
 
-def make_docs(example, only_supporting=False):
-    ps = example["paragraphs"]
-    for p in ps:
-        if only_supporting and not p["is_supporting"]:
-            continue
-        idx = p["idx"]
-        title = p["title"]
-        body = p["paragraph_text"]
-        is_supporting = p["is_supporting"]
-        text = f"# {title}\n{body}"
-        yield Document(text=text, metadata=dict(parent_id=example["id"], idx=idx, is_supporting=is_supporting))
-
-
-# KG_TRIPLET_EXTRACT_TMPL = """<s>[INST] <<SYS>>
-# You are a helpful assistant that extracts up to {max_knowledge_triplets}  entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
-# <</SYS>>
-# Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC|ground|Al Khor
-# Alaa Abdul-Zahra|club|Al Kharaitiyat SC
-# Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
+    return ServiceContext.from_defaults(
+        llm=llm,
+        embed_model=embed_model,
+        callback_manager=callback_manager,
+    )
 
 
-KG_TRIPLET_EXTRACT_TMPL = """
+LLAMA2_KG_TRIPLET_EXTRACT_TMPL = """<s>[INST] <<SYS>>
+You are a helpful assistant that extracts up to {max_knowledge_triplets}  entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
+<</SYS>>
+Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC|ground|Al Khor
+Alaa Abdul-Zahra|club|Al Kharaitiyat SC
+Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
+
+DEFAULT_KG_TRIPLET_EXTRACT_TMPL = """
 Some text is provided below. Given the text, extract up to {max_knowledge_triplets}  knowledge triplets in the form of (subject, predicate, object) that might be relevant to the following question. The subject and object must be different.
 Prioritize triplets that:
 1. Offer temporal information like 'founded in,' 'created on,' 'abolished in,' etc.
@@ -87,16 +91,34 @@ Text: {text}
 Triplets:
 """.strip()
 
-KG_TRIPLET_EXTRACT_PROMPT = Prompt(
-    KG_TRIPLET_EXTRACT_TMPL,
-    prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,
-)
+
+def make_erx_prompt(model_type: str):
+    prompt_str = LLAMA2_KG_TRIPLET_EXTRACT_TMPL if model_type == "llama2-sft" else DEFAULT_KG_TRIPLET_EXTRACT_TMPL
+    return Prompt(
+        prompt_str,
+        prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,
+    )
+
+
+def make_docs(example, only_supporting=False):
+    ps = example["paragraphs"]
+    for p in ps:
+        if only_supporting and not p["is_supporting"]:
+            continue
+        idx = p["idx"]
+        title = p["title"]
+        body = p["paragraph_text"]
+        is_supporting = p["is_supporting"]
+        text = f"# {title}\n{body}"
+        yield Document(text=text, metadata=dict(parent_id=example["id"], idx=idx, is_supporting=is_supporting))
 
 
 def construct_knowledge_graph(
     example,
+    *,
     max_triplets_per_chunk: int,
     include_embeddings: bool,
+    model_type: str,
     out_dir: Path,
 ):
     db = kuzu.Database(str(out_dir / "kuzu"))
@@ -106,14 +128,22 @@ def construct_knowledge_graph(
     # documents to index into knowledge graph
     documents = list(make_docs(example, only_supporting=True))
 
+    if model_type == "llama2-sft":
+        from bellek.ml.kg.cons import parse_triplets
+
+        def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
+            return parse_triplets(response.strip())
+
+        KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
+
     # extract triplets from documents
     return KnowledgeGraphIndex.from_documents(
         documents=documents,
         max_triplets_per_chunk=max_triplets_per_chunk,
         storage_context=storage_context,
-        service_context=service_context,
+        service_context=make_service_context(model_type),
         include_embeddings=include_embeddings,
-        kg_triple_extract_template=KG_TRIPLET_EXTRACT_PROMPT,
+        kg_triple_extract_template=make_erx_prompt(model_type),
     )
 
 
@@ -144,6 +174,7 @@ def main(
                     example,
                     max_triplets_per_chunk=10,
                     include_embeddings=False,
+                    model_type="llama2-sft",
                     out_dir=example_out_dir,
                 )
                 index.storage_context.persist(persist_dir=(example_out_dir / "index"))

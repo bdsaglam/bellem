@@ -18,7 +18,8 @@ q: Quit app
 
 def get_trace_dataset(filepath: Path):
     with open(filepath) as f:
-        return TraceDataset(json_lines_to_df(f.readlines()))
+        lines = [line for line in f.readlines() if line.strip()]
+    return TraceDataset(json_lines_to_df(lines))
 
 
 def main(filepath: Path):
