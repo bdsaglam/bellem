@@ -3,34 +3,63 @@ stages:
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/create_mhqa_dataset.py
-      --config-file data/raw/musique-kg-llm/train-dataset-config.json
-      --out data/generated/musique-kg-llm/train-dataset.jsonl
+      --config-file data/raw/musique-kg-llm/train/dataset-config.json
+      --out data/generated/musique-kg-llm/train/dataset.jsonl
     deps:
       - pipelines/musique-kg-llm/create_mhqa_dataset.py
-      - data/raw/musique-kg-llm/train-dataset-config.json
+      - data/raw/musique-kg-llm/train/dataset-config.json
     outs:
-      - data/generated/musique-kg-llm/train-dataset.jsonl
-    
-  filter_supporting_paragraphs:
+      - data/generated/musique-kg-llm/train/dataset.jsonl
+
+  decompose_questions:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-kg-llm/filter_supporting_paragraphs.py
-      --dataset-file data/generated/musique-kg-llm/train-dataset.jsonl
-      --out data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      python pipelines/musique-kg-llm/decompose_questions.py
+      --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
+      --out data/generated/musique-kg-llm/train/question-decomposition.jsonl
     deps:
-      - pipelines/musique-kg-llm/filter_supporting_paragraphs.py
-      - data/generated/musique-kg-llm/train-dataset.jsonl
+      - pipelines/musique-kg-llm/decompose_questions.py
+      - data/generated/musique-kg-llm/train/dataset.jsonl
     outs:
-      - data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      - data/generated/musique-kg-llm/train/question-decomposition.jsonl
   
-  decompose_question:
+  construct_knowledge_graphs:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-kg-llm/decompose_question.py
-      --dataset-file data/generated/musique-kg-llm/train-dataset-supporting.jsonl
-      --out data/generated/musique-kg-llm/train-dataset-question-decomposition.jsonl
+      python pipelines/musique-kg-llm/construct_knowledge_graphs.py
+      --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
+      --out data/generated/musique-kg-llm/train/knowledge-graphs/
     deps:
-      - pipelines/musique-kg-llm/decompose_question.py
-      - data/generated/musique-kg-llm/train-dataset-supporting.jsonl
+      - pipelines/musique-kg-llm/construct_knowledge_graphs.py
+      - data/generated/musique-kg-llm/train/dataset.jsonl
     outs:
-      - data/generated/musique-kg-llm/train-dataset-question-decomposition.jsonl
+      - data/generated/musique-kg-llm/train/knowledge-graphs/timestamp.txt
+
+  answer_questions:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-kg-llm/answer_questions.py
+      --dataset-file data/generated/musique-kg-llm/train/question-decomposition.jsonl
+      --knowledge-graph-directory data/generated/musique-kg-llm/train/knowledge-graphs/ 
+      --out data/generated/musique-kg-llm/train/answers.jsonl
+    deps:
+      - pipelines/musique-kg-llm/answer_questions.py
+      - data/generated/musique-kg-llm/train/question-decomposition.jsonl
+      - data/generated/musique-kg-llm/train/knowledge-graphs/timestamp.txt
+    outs:
+      - data/generated/musique-kg-llm/train/answers.jsonl
+
+  evaluate_answers:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-kg-llm/evaluate_answers.py
+      --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
+      --answers-file data/generated/musique-kg-llm/train/answers.jsonl
+      --out data/generated/musique-kg-llm/train/answer-eval/
+    deps:
+      - pipelines/musique-kg-llm/evaluate_answers.py
+      - data/generated/musique-kg-llm/train/dataset.jsonl
+      - data/generated/musique-kg-llm/train/answers.jsonl
+    outs:
+      - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
+      - data/generated/musique-kg-llm/train/answer-eval/scores.json
