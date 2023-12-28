@@ -10,7 +10,7 @@ from fastcore.meta import delegates
 from langchain.llms.huggingface_text_gen_inference import HuggingFaceTextGenInference
 from llama_index.callbacks import CallbackManager
 from llama_index.llms import LangChainLLM
-from llama_index.llms.base import LLM
+from llama_index.llms.llm import LLM
 
 from ..logging import get_logger
 
