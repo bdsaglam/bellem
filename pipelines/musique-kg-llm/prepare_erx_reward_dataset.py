@@ -1,9 +1,9 @@
 import json
-from datasets import Dataset
 from pathlib import Path
 
 import pandas as pd
 import typer
+from datasets import Dataset
 from dotenv import load_dotenv
 from rich.console import Console
 
@@ -28,8 +28,8 @@ def make_llm_text(row):
     return llm_input + llm_output
 
 
-def load_llm_erx_generations(knowledge_graph_directory) -> pd.DataFrame:
-    df = pd.concat([read_llm_traces(fp) for fp in knowledge_graph_directory.glob("**/traces.jsonl")])
+def load_llm_erx_generations(knowledge_graph_directory: Path, example_ids: list[str]) -> pd.DataFrame:
+    df = pd.concat([read_llm_traces(knowledge_graph_directory / id / "traces.jsonl") for id in example_ids])
     df["text"] = df.apply(make_llm_text, axis=1)
     return df[["id", "text"]]
 
@@ -39,8 +39,8 @@ def main(
     answer_comparisons_file: Path = typer.Option(...),
     out: Path = typer.Option(...),
 ):
-    llm_erx_df = load_llm_erx_generations(knowledge_graph_directory)
     comparison_df = pd.read_json(answer_comparisons_file, orient="records", lines=True)
+    llm_erx_df = load_llm_erx_generations(knowledge_graph_directory, comparison_df["id"].tolist())
 
     reward_df = pd.merge(llm_erx_df, comparison_df[["id", "fuzzy_match"]], on="id")
     reward_df["reward"] = reward_df["fuzzy_match"].astype(int)

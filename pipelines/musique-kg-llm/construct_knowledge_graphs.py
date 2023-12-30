@@ -179,6 +179,7 @@ def main(
     dataset_file: Path = typer.Option(...),
     llm_config_file: Path = typer.Option(...),
     out: Path = typer.Option(...),
+    ignore_errors: bool = typer.Option(False),
 ):
     llm_config = json.loads(llm_config_file.read_text())
 
@@ -205,6 +206,8 @@ def main(
                 )
             except Exception as exc:
                 err(f"Failed to construct the knowledge graph for sample {id}.\n{exc}")
+                if not ignore_errors:
+                    raise exc
 
     (out / "timestamp.txt").write_text(str(datetime.now().isoformat(timespec="milliseconds")))
 
