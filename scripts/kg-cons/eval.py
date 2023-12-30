@@ -47,7 +47,7 @@ def run(config):
         quantization_config=quantization_config,
     )
     if "llama" in model_id:
-        from bellek.ml.llama import prepare_llama2_for_inference
+        from bellek.lang.llama import prepare_llama2_for_inference
 
         prepare_llama2_for_inference(tokenizer, model)
 

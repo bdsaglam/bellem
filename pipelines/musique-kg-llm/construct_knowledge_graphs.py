@@ -23,7 +23,7 @@ from pyvis.network import Network
 from rich.console import Console
 
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
-from bellek.ml.llm.obs import TraceRecorder
+from bellek.llama_index.obs import TraceRecorder
 from bellek.utils import set_seed
 
 err = Console(stderr=True).print

@@ -9,7 +9,7 @@ from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
-from bellek.ml.llama import prepare_llama2_for_training
+from bellek.lang.llama import prepare_llama2_for_training
 from bellek.ml.transformers import load_tokenizer_model
 from bellek.utils import NestedDict, flatten_dict, generate_time_id
 

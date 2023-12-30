@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
 from langchain.globals import set_llm_cache
 
-from bellek.ml.llm.qdecomp import make_question_decomposer
+from bellek.lang.qdecomp import make_question_decomposer
 
 load_dotenv()
 
