@@ -153,7 +153,8 @@ def construct_knowledge_graph(
         from bellek.jerx.utils import parse_triplets
 
         def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
-            return parse_triplets(response.strip())
+            triplets = parse_triplets(response.strip())
+            return [(e1, rel, e2) if e1!=e2 else (e1, rel, e2 + "(obj)") for e1,rel,e2 in triplets]
 
         KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
 
