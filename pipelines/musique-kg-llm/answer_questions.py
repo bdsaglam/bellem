@@ -12,6 +12,7 @@ from llama_index.llms import OpenAI
 from rich.console import Console
 
 from bellek.ml.llm.obs import make_phoenix_trace_callback_handler
+from bellek.utils import generate_time_id
 
 err = Console(stderr=True).print
 
@@ -26,7 +27,7 @@ embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 llm = OpenAI(temperature=0, model="gpt-3.5-turbo")
 
 # Setup LLM observability
-LLM_TRACES_FILEPATH = Path("/tmp/phoenix/thesis-kg-llm/qna/traces.jsonl")
+LLM_TRACES_FILEPATH = Path(f"/tmp/phoenix/thesis-kg-llm/qna/traces-{generate_time_id()}.jsonl")
 callback_manager = CallbackManager(handlers=[make_phoenix_trace_callback_handler(LLM_TRACES_FILEPATH)])
 
 service_context = ServiceContext.from_defaults(

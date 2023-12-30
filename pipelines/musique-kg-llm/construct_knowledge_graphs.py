@@ -2,6 +2,7 @@ import json
 import shutil
 from datetime import datetime
 from pathlib import Path
+from typing import Callable, List
 
 import kuzu
 import typer
@@ -15,11 +16,14 @@ from llama_index.llms import OpenAI
 from llama_index.prompts.base import Prompt
 from llama_index.prompts.prompt_type import PromptType
 from llama_index.storage.storage_context import StorageContext
+from phoenix.trace.llama_index import OpenInferenceTraceCallbackHandler
+from phoenix.trace.schemas import Span
 from pyvis.network import Network
 from rich.console import Console
 
 from bellek.kuzu import KuzuGraphStore
-from bellek.ml.llm.obs import make_phoenix_trace_callback_handler
+from bellek.ml.llm.obs import TraceRecorder
+from bellek.utils import generate_time_id
 
 err = Console(stderr=True).print
 
@@ -29,7 +33,8 @@ set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
 LLM_OBS_DIRECTORY = Path("/tmp/phoenix/thesis-kg-llm/kgcons/")
 
-def make_service_context(model_type: str):
+
+def make_service_context(model_type: str, trace_callback: Callable[[List[Span]], None]):
     if model_type == "llama2-sft":
         from bellek.ml.llama_index import HuggingFaceTextGenInferenceLLM
 
@@ -51,9 +56,9 @@ def make_service_context(model_type: str):
     embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
     # Setup LLM observability
-    traces_path = LLM_OBS_DIRECTORY / f"{model_type}" / "traces.jsonl"
+    traces_path = LLM_OBS_DIRECTORY / f"{model_type}" / f"traces-{generate_time_id()}.jsonl"
     traces_path.parent.mkdir(parents=True, exist_ok=True)
-    callback_manager = CallbackManager(handlers=[make_phoenix_trace_callback_handler(traces_path)])
+    callback_manager = CallbackManager(handlers=[OpenInferenceTraceCallbackHandler(trace_callback)])
 
     return ServiceContext.from_defaults(
         llm=llm,
@@ -119,6 +124,7 @@ def construct_knowledge_graph(
     max_triplets_per_chunk: int,
     include_embeddings: bool,
     model_type: str,
+    trace_callback: Callable[[List[Span]], None],
     out_dir: Path,
 ):
     db = kuzu.Database(str(out_dir / "kuzu"))
@@ -141,7 +147,7 @@ def construct_knowledge_graph(
         documents=documents,
         max_triplets_per_chunk=max_triplets_per_chunk,
         storage_context=storage_context,
-        service_context=make_service_context(model_type),
+        service_context=make_service_context(model_type, trace_callback),
         include_embeddings=include_embeddings,
         kg_triple_extract_template=make_erx_prompt(model_type),
     )
@@ -157,6 +163,7 @@ def visualize_knowledge_graph(index, out: Path):
 
 def main(
     dataset_file: Path = typer.Option(...),
+    model_type: str = typer.Option(...),
     out: Path = typer.Option(...),
 ):
     with open(dataset_file) as f:
@@ -170,11 +177,13 @@ def main(
 
             try:
                 err(f"Constructing the knowledge graph for the sample {id}")
+                trace_callback = TraceRecorder((example_out_dir / "traces.jsonl").open("w"))
                 index = construct_knowledge_graph(
                     example,
                     max_triplets_per_chunk=10,
                     include_embeddings=False,
-                    model_type="llama2-sft",
+                    model_type=model_type,
+                    trace_callback=trace_callback,
                     out_dir=example_out_dir,
                 )
                 index.storage_context.persist(persist_dir=(example_out_dir / "index"))

@@ -1,7 +1,6 @@
 import json
 import os
 from math import ceil
-from time import time
 
 from datasets import load_dataset
 from peft import LoraConfig
@@ -12,7 +11,7 @@ from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.ml.llama import prepare_llama2_for_training
 from bellek.ml.transformers import load_tokenizer_model
-from bellek.utils import NestedDict, flatten_dict
+from bellek.utils import NestedDict, flatten_dict, generate_time_id
 
 log = get_logger(__name__)
 
@@ -27,8 +26,7 @@ def prepare_config(config: NestedDict):
     model_id = config.at("hfhub.model_id")
     model_id += "-peft"
     if "debug" not in model_id:
-        timestamp = int(time())
-        model_id += f"-{timestamp}"
+        model_id += f"-{generate_time_id()}"
     config.set("hfhub.model_id", model_id)
 
     return config

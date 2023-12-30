@@ -28,6 +28,7 @@ stages:
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
+      --model-type llama2-sft
       --out data/generated/musique-kg-llm/train/knowledge-graphs/
     deps:
       - pipelines/musique-kg-llm/construct_knowledge_graphs.py
@@ -63,3 +64,17 @@ stages:
     outs:
       - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
       - data/generated/musique-kg-llm/train/answer-eval/scores.json
+
+  prepare_erx_reward_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-kg-llm/prepare_erx_reward_dataset.py
+      --knowledge-graph-directory data/generated/musique-kg-llm/train/knowledge-graphs/
+      --answer-comparisons-file data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
+      --out data/generated/musique-kg-llm/train/erx-reward-dataset.jsonl
+    deps:
+      - pipelines/musique-kg-llm/prepare_erx_reward_dataset.py
+      - data/generated/musique-kg-llm/train/knowledge-graphs/
+      - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
+    outs:
+      - data/generated/musique-kg-llm/train/erx-reward-dataset.jsonl
