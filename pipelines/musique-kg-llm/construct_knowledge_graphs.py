@@ -22,7 +22,7 @@ from phoenix.trace.schemas import Span
 from pyvis.network import Network
 from rich.console import Console
 
-from bellek.kuzu import KuzuGraphStore
+from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.ml.llm.obs import TraceRecorder
 from bellek.utils import set_seed
 
@@ -39,7 +39,7 @@ def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[L
     llm_type = llm_config["type"]
     llm_params = llm_config["params"]
     if llm_type == "llama2-sft":
-        from bellek.ml.llama_index import HuggingFaceTextGenInferenceLLM
+        from bellek.llama_index.llms import HuggingFaceTextGenInferenceLLM
 
         llm = HuggingFaceTextGenInferenceLLM(inference_server_url="http://localhost:8080/", **llm_params)
     elif llm_type == "llama2-base":
