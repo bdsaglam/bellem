@@ -140,13 +140,13 @@ stages:
     deps:
     - path: data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
       hash: md5
-      md5: 6cfa5477c2e7c2c5dda029428e368065
-      size: 2238
+      md5: 4537d67c9be85fb39e3645cf7c56c3e9
+      size: 22575
     - path: data/generated/musique-kg-llm/train/knowledge-graphs/
       hash: md5
-      md5: 33062158a8c6b866b38ea6e3a86f6d42.dir
-      size: 253169991
-      nfiles: 236
+      md5: c5d221c379d51b620e6998e3ff523d49.dir
+      size: 1584285857
+      nfiles: 1501
     - path: pipelines/musique-kg-llm/prepare_erx_reward_dataset.py
       hash: md5
       md5: 2610d7cb5c79f04ac852d3332994e77d
@@ -154,5 +154,5 @@ stages:
     outs:
     - path: data/generated/musique-kg-llm/train/erx-reward-dataset.jsonl
       hash: md5
-      md5: 3a74016facc27bbe0a3396eddde9552e
-      size: 131055
+      md5: 001ecaf129251994763297f83319c5dc
+      size: 1348151
