@@ -62,6 +62,7 @@ def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[L
     return ServiceContext.from_defaults(
         llm=llm,
         embed_model=embed_model,
+        # transformations=[],
         callback_manager=callback_manager,
     )
 
@@ -114,7 +115,11 @@ def make_docs(example, only_supporting=False):
         body = p["paragraph_text"]
         is_supporting = p["is_supporting"]
         text = f"# {title}\n{body}"
-        yield Document(text=text, metadata=dict(parent_id=example["id"], idx=idx, is_supporting=is_supporting))
+        yield Document(
+            text=text,
+            metadata={"parent_id": example["id"], "idx": idx, "is_supporting": is_supporting},
+            excluded_llm_metadata_keys=["parent_id", "idx", "is_supporting"],
+        )
 
 
 def visualize_knowledge_graph(index, out: Path):
@@ -145,7 +150,7 @@ def construct_knowledge_graph(
     err(f"Created {len(documents)} documents for sample {id}")
 
     if "llama2" in llm_config["type"]:
-        from bellek.ml.kg.cons import parse_triplets
+        from bellek.jerx.utils import parse_triplets
 
         def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
             return parse_triplets(response.strip())

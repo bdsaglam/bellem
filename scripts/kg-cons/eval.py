@@ -17,7 +17,7 @@ def load_ds(dataset_config):
 
 
 def run(config):
-    from bellek.ml.kg.cons import evaluate_model_jer
+    from bellek.jerx.eval import evaluate_model_jer
     from bellek.ml.transformers import load_tokenizer_model
 
     # Load validation dataset
