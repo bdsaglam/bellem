@@ -28,7 +28,7 @@ stages:
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
-      --model-type llama2-sft
+      --llm-config-file data/raw/musique-kg-llm/train/erx-llm-configs/llama2-sft.json
       --out data/generated/musique-kg-llm/train/knowledge-graphs/
     deps:
       - pipelines/musique-kg-llm/construct_knowledge_graphs.py

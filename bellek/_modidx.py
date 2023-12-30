@@ -235,5 +235,6 @@ d = { 'settings': { 'branch': 'master',
                               'bellek.utils.flatten_dict': ('utils.html#flatten_dict', 'bellek/utils.py'),
                               'bellek.utils.generate_time_id': ('utils.html#generate_time_id', 'bellek/utils.py'),
                               'bellek.utils.most_common': ('utils.html#most_common', 'bellek/utils.py'),
+                              'bellek.utils.set_seed': ('utils.html#set_seed', 'bellek/utils.py'),
                               'bellek.utils.split_camel_case': ('utils.html#split_camel_case', 'bellek/utils.py'),
                               'bellek.utils.unflatten_dict': ('utils.html#unflatten_dict', 'bellek/utils.py')}}}

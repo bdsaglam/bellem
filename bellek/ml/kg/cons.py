@@ -126,7 +126,7 @@ class ERX2AlpacaFormatter:
             return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
 
 # %% ../../../nbs/ml.kg.cons.ipynb 16
-DEFAULT_SYSTEM_PROMPT_TEMPLATE2 = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE2 = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line. The entities in a triplet must be different.
 {relation_set_prompt}
 """.strip()
 

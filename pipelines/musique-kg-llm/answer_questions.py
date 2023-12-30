@@ -12,11 +12,13 @@ from llama_index.llms import OpenAI
 from rich.console import Console
 
 from bellek.ml.llm.obs import make_phoenix_trace_callback_handler
-from bellek.utils import generate_time_id
+from bellek.utils import generate_time_id, set_seed
 
 err = Console(stderr=True).print
 
 load_dotenv()
+
+set_seed(42)
 
 set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
