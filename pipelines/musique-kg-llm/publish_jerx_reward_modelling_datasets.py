@@ -57,17 +57,17 @@ def publish_datasets(reward_df: pd.DataFrame):
 
     # reward dataset
     reward_ds = Dataset.from_pandas(reward_df)
-    reward_ds_name = f"{prefix}-{timestamp}"
+    reward_ds_name = f"{prefix}"
     reward_ds.push_to_hub(reward_ds_name)
 
     # reward dataset - openai chat format
-    openai_ds = reward_ds.map(make_conversations, remove_columns=["id", "reward"])
-    openai_ds_name = f"{prefix}-openai-{timestamp}"
+    openai_ds = reward_ds.map(make_conversations, remove_columns=["text", "reward"])
+    openai_ds_name = f"{prefix}-openai"
     openai_ds.push_to_hub(openai_ds_name)
 
     # reward dataset - llama2 format
     llama2_ds = openai_ds.map(format_for_llama2, remove_columns=["conversations"])
-    llama2_ds_name = f"{prefix}-llama2-{timestamp}"
+    llama2_ds_name = f"{prefix}-llama2"
     llama2_ds.push_to_hub(llama2_ds_name)
 
     return [reward_ds_name, openai_ds_name, llama2_ds_name]

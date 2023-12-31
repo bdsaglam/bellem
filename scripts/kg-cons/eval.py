@@ -19,14 +19,16 @@ def load_ds(dataset_config):
 def run(config):
     from bellek.jerx.eval import evaluate_model_jer
     from bellek.ml.transformers import load_tokenizer_model
+    from bellek.ml.transformers import preprocess_config as tpc
+
+    # Setup config related to transformers library
+    config = tpc(config)
 
     # Load validation dataset
     val_ds_config = config.at("dataset.validation")
     if val_ds_config is None:
         return
     val_ds = load_ds(val_ds_config)
-
-    response_template = config.at("trainer.response_template")
 
     # Determine model class
     model_id = config.at("hfhub.model_id")
@@ -50,6 +52,8 @@ def run(config):
         from bellek.lang.llama import prepare_llama2_for_inference
 
         prepare_llama2_for_inference(tokenizer, model)
+
+    response_template = config.at("trainer.response_template")
 
     return evaluate_model_jer(
         val_ds,
