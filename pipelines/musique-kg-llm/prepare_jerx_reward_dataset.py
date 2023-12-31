@@ -3,11 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 import typer
-from datasets import Dataset
 from dotenv import load_dotenv
 from rich.console import Console
-
-from bellek.utils import generate_time_id
 
 err = Console(stderr=True).print
 
@@ -47,10 +44,6 @@ def main(
     reward_df.drop(columns=["fuzzy_match"], inplace=True)
 
     reward_df.to_json(out, orient="records", lines=True)
-
-    # Push to HF Hub
-    dataset_name = f"bdsaglam/musique-answerable-2hop-subset-erx-reward-{generate_time_id()}"
-    Dataset.from_pandas(reward_df, split="train").push_to_hub(dataset_name)
 
 
 if __name__ == "__main__":
