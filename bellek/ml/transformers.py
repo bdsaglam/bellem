@@ -51,7 +51,7 @@ def load_tokenizer_model(
     **model_kwargs,
 ):
     if auto_model_cls is None:
-        if "-peft" in model_id:
+        if "-peft" in model_name_or_path:
             from peft import AutoPeftModelForCausalLM
             auto_model_cls = AutoPeftModelForCausalLM
         else:
