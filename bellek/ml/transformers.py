@@ -6,7 +6,7 @@ __all__ = ['log', 'merge_adapters_and_publish', 'load_tokenizer_model', 'preproc
 # %% ../../nbs/ml.transformers.ipynb 3
 from copy import deepcopy
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForCausalLM
 from ..utils import NestedDict
 from ..logging import get_logger
 
@@ -55,7 +55,6 @@ def load_tokenizer_model(
             from peft import AutoPeftModelForCausalLM
             auto_model_cls = AutoPeftModelForCausalLM
         else:
-            from transformers import AutoModelForCausalLM
             auto_model_cls = AutoModelForCausalLM
 
     # Setup quantization config
