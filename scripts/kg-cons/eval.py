@@ -30,22 +30,11 @@ def run(config):
         return
     val_ds = load_ds(val_ds_config)
 
-    # Determine model class
-    model_id = config.at("hfhub.model_id")
-    if "-peft" in model_id:
-        from peft import AutoPeftModelForCausalLM
-
-        auto_model_cls = AutoPeftModelForCausalLM
-    else:
-        from transformers import AutoModelForCausalLM
-
-        auto_model_cls = AutoModelForCausalLM
-
     # Load model
+    model_id = config.at("hfhub.model_id")
     quantization_config = config.at("pretrained_model.quantization_config")
     tokenizer, model = load_tokenizer_model(
         model_id,
-        auto_model_cls=auto_model_cls,
         quantization_config=quantization_config,
     )
     if "llama" in model_id:

@@ -6,7 +6,7 @@ __all__ = ['log', 'merge_adapters_and_publish', 'load_tokenizer_model', 'preproc
 # %% ../../nbs/ml.transformers.ipynb 3
 from copy import deepcopy
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoTokenizer
 from ..utils import NestedDict
 from ..logging import get_logger
 
@@ -46,10 +46,18 @@ def merge_adapters_and_publish(
 def load_tokenizer_model(
     model_name_or_path: str,
     *,
-    auto_model_cls=AutoModelForCausalLM,
+    auto_model_cls=None,
     device_map={"": 0},
     **model_kwargs,
 ):
+    if auto_model_cls is None:
+        if "-peft" in model_id:
+            from peft import AutoPeftModelForCausalLM
+            auto_model_cls = AutoPeftModelForCausalLM
+        else:
+            from transformers import AutoModelForCausalLM
+            auto_model_cls = AutoModelForCausalLM
+
     # Setup quantization config
     if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         from transformers import BitsAndBytesConfig
