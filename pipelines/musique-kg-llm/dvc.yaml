@@ -53,7 +53,6 @@ stages:
       - data/generated/musique-kg-llm/train/answers.jsonl
 
   evaluate_answers:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/evaluate_answers.py

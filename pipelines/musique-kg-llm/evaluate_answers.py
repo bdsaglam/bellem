@@ -17,8 +17,7 @@ def similarity(a, b):
 
 
 def fuzzy_match(a, b, threshold=0.7):
-    return similarity(a, b) >= threshold
-
+    return (a in b) or (similarity(a, b) >= threshold)
 
 def main(
     dataset_file: Path = typer.Option(...),
