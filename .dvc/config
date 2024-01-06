@@ -1,4 +1,6 @@
 [core]
-    remote = localfs
+    remote = s3-remote
 ['remote "localfs"']
     url = /tmp/dvcstore
+['remote "s3-remote"']
+    url = s3://bds-dvc/bellek/
