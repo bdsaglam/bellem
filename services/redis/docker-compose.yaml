@@ -1,10 +1,10 @@
-version: '3'
+version: '3.4'
 
 services:
   redis-stack:
     image: redis/redis-stack:latest
     environment:
-      - REDIS_ARGS="--save 10 1 --appendonly yes"
+      - 'REDIS_ARGS=--save 10 1 --appendonly yes'
     volumes:
       - /tmp/redis-data:/data
     ports:
