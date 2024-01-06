@@ -149,3 +149,4 @@ checklink/cookies.txt
 
 # Misc
 .experiments
+dev_nbs/**/wandb/
