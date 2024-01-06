@@ -1,0 +1,25 @@
+version: "3.4"
+
+services:
+  redis:
+    image: redis/redis-stack:latest
+    environment:
+      - "REDIS_ARGS=--save 10 1 --appendonly yes"
+    volumes:
+      - /tmp/litellm/redis-data:/data
+    ports:
+      - "6379:6379"
+      - "13001:8001"
+  litellm-proxy:
+    depends_on:
+      - redis
+    image: ghcr.io/berriai/litellm:main-latest
+    ports:
+      - "11000:11000"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    command: [ "--config", "/app/config.yaml", "--port", "11000", "--num_workers", "1" ]
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - "OPENAI_API_KEY=${OPENAI_API_KEY}"
