@@ -3,7 +3,7 @@
   "dataset": {
     "train": {
       "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
-      "split": "train"
+      "split": "train[:20%]"
     },
     "validation": {
       "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
@@ -59,6 +59,6 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-2-7b-chat-hf-kg-cons-multi"
+    "model_id": "bdsaglam/llama-2-7b-chat-jerx-mt-ss"
   }
 }
