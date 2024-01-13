@@ -9,7 +9,6 @@ from typing import Any, Callable, List
 import kuzu
 import typer
 from dotenv import load_dotenv
-from langchain.cache import SQLiteCache
 from llama_index import Document, KnowledgeGraphIndex, ServiceContext
 from llama_index.callbacks import CallbackManager
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
