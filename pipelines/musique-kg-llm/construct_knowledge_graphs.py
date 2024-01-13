@@ -10,7 +10,6 @@ import kuzu
 import typer
 from dotenv import load_dotenv
 from langchain.cache import SQLiteCache
-from langchain.globals import set_llm_cache
 from llama_index import Document, KnowledgeGraphIndex, ServiceContext
 from llama_index.callbacks import CallbackManager
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -31,8 +30,6 @@ err = Console(stderr=True).print
 load_dotenv()
 
 set_seed(42)
-
-set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
 
 def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[List[Span]], None]):
@@ -154,7 +151,7 @@ def construct_knowledge_graph(
 
         def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
             triplets = parse_triplets(response.strip())
-            return [(e1, rel, e2) if e1!=e2 else (e1, rel, e2 + "(obj)") for e1,rel,e2 in triplets]
+            return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
 
         KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
 

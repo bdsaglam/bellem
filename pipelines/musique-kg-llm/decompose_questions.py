@@ -3,14 +3,10 @@ from pathlib import Path
 
 import typer
 from dotenv import load_dotenv
-from langchain.cache import SQLiteCache
-from langchain.globals import set_llm_cache
 
 from bellek.lang.qdecomp import make_question_decomposer
 
 load_dotenv()
-
-set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
 
 def main(dataset_file: Path = typer.Option(...), out: Path = typer.Option(...)):

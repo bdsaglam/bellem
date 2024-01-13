@@ -3,8 +3,6 @@ from pathlib import Path
 
 import typer
 from dotenv import load_dotenv
-from langchain.cache import SQLiteCache
-from langchain.globals import set_llm_cache
 from llama_index import ServiceContext, StorageContext, load_index_from_storage
 from llama_index.callbacks import CallbackManager
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -20,7 +18,6 @@ load_dotenv()
 
 set_seed(42)
 
-set_llm_cache(SQLiteCache(database_path="/tmp/langchain-cache.db"))
 
 # model to generate embeddings for triplets
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")

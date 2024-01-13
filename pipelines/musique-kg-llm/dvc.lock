@@ -6,17 +6,17 @@ stages:
     deps:
     - path: data/raw/musique-kg-llm/train/dataset-config.json
       hash: md5
-      md5: 0eaf9f6611834fe83cceb24edadee723
-      size: 85
+      md5: f3e74a4953be23217b8c177757e4b5f5
+      size: 78
     - path: pipelines/musique-kg-llm/create_mhqa_dataset.py
       hash: md5
-      md5: 7f6014b3b9469645ef98dcd11d46f032
-      size: 347
+      md5: 91e626b37bb2f2be176b746fbefbad3e
+      size: 414
     outs:
     - path: data/generated/musique-kg-llm/train/dataset.jsonl
       hash: md5
-      md5: 3a70cd32504219e94f9b62e909263734
-      size: 1085757
+      md5: b5557a8667e8a2d6833282bb62d1b7d4
+      size: 645997
   filter_supporting_paragraphs:
     cmd: python pipelines/musique-kg-llm/filter_supporting_paragraphs.py --dataset-file
       data/generated/musique-kg-llm/train-dataset.jsonl --out data/generated/musique-kg-llm/train-dataset-supporting.jsonl
@@ -57,17 +57,17 @@ stages:
     deps:
     - path: data/generated/musique-kg-llm/train/dataset.jsonl
       hash: md5
-      md5: 3a70cd32504219e94f9b62e909263734
-      size: 1085757
+      md5: b5557a8667e8a2d6833282bb62d1b7d4
+      size: 645997
     - path: pipelines/musique-kg-llm/decompose_questions.py
       hash: md5
-      md5: f930a342bf4ad499c8afe83ad32b58c7
-      size: 1028
+      md5: 2f07273e75a8a4477516738d8acc398b
+      size: 875
     outs:
     - path: data/generated/musique-kg-llm/train/question-decomposition.jsonl
       hash: md5
-      md5: d7c0fa1ec9a42d9e52433aef6600b8fa
-      size: 25939
+      md5: 3a07e64b7d10010c833483bd08e71ac6
+      size: 26046
   construct_knowledge_graphs:
     cmd: python pipelines/musique-kg-llm/construct_knowledge_graphs.py --dataset-file
       data/generated/musique-kg-llm/train/dataset.jsonl --llm-config-file data/raw/musique-kg-llm/train/erx-llm-configs/llama2-sft.json
@@ -118,20 +118,20 @@ stages:
       size: 31887
     - path: data/generated/musique-kg-llm/train/dataset.jsonl
       hash: md5
-      md5: 3a70cd32504219e94f9b62e909263734
-      size: 1085757
+      md5: b5557a8667e8a2d6833282bb62d1b7d4
+      size: 645997
     - path: pipelines/musique-kg-llm/evaluate_answers.py
       hash: md5
-      md5: 8150bda9d38058fac61e0d59abb38717
-      size: 1508
+      md5: 10263072efa05b1c59bccf9feb12bfb6
+      size: 1521
     outs:
     - path: data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
       hash: md5
-      md5: 4537d67c9be85fb39e3645cf7c56c3e9
-      size: 22575
+      md5: e2ebe16f507dbe0798c01fc675c712d5
+      size: 22573
     - path: data/generated/musique-kg-llm/train/answer-eval/scores.json
       hash: md5
-      md5: c8218b813dd3a2bdf79ac14b9a34cc6a
+      md5: fc0b89d4dc5da587dbd910815315ce04
       size: 47
   prepare_erx_reward_dataset:
     cmd: python pipelines/musique-kg-llm/prepare_erx_reward_dataset.py --knowledge-graph-directory
@@ -163,8 +163,8 @@ stages:
     deps:
     - path: data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
       hash: md5
-      md5: 4537d67c9be85fb39e3645cf7c56c3e9
-      size: 22575
+      md5: e2ebe16f507dbe0798c01fc675c712d5
+      size: 22573
     - path: data/generated/musique-kg-llm/train/knowledge-graphs/
       hash: md5
       md5: c5d221c379d51b620e6998e3ff523d49.dir
@@ -177,7 +177,7 @@ stages:
     outs:
     - path: data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
       hash: md5
-      md5: 001ecaf129251994763297f83319c5dc
+      md5: 31a85eb0b004ca29b740108ae7a4b72e
       size: 1348151
   publish_jerx_reward_modelling_datasets:
     cmd: python pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
@@ -186,7 +186,7 @@ stages:
     deps:
     - path: data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
       hash: md5
-      md5: 001ecaf129251994763297f83319c5dc
+      md5: 31a85eb0b004ca29b740108ae7a4b72e
       size: 1348151
     - path: pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
       hash: md5

@@ -3,6 +3,9 @@ from pathlib import Path
 
 import typer
 from datasets import load_dataset
+from rich.console import Console
+
+err = Console(stderr=True).print
 
 
 def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
