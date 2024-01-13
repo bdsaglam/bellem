@@ -23,7 +23,7 @@ set_seed(42)
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # language model to use for triplet extraction
-llm = OpenAI(temperature=0, model="gpt-3.5-turbo")
+llm = OpenAI(temperature=0, model="gpt-3.5-turbo-1106")
 
 # Setup LLM observability
 LLM_TRACES_FILEPATH = Path(f"/tmp/phoenix/thesis-kg-llm/qna/traces-{generate_time_id()}.jsonl")

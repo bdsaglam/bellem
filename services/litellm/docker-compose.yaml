@@ -15,10 +15,10 @@ services:
       - redis
     image: ghcr.io/berriai/litellm:main-latest
     ports:
-      - "11000:11000"
+      - "8111:8111"
     volumes:
       - ./config.yaml:/app/config.yaml
-    command: [ "--config", "/app/config.yaml", "--port", "11000", "--num_workers", "1" ]
+    command: [ "--config", "/app/config.yaml", "--port", "8111", "--num_workers", "1" ]
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
