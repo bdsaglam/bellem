@@ -8,9 +8,7 @@ log = get_logger(__name__)
 
 def run_experiment(wandb_run):
     config = preprocess_config(NestedDict.from_flat_dict(wandb_run.config))
-
     wandb_run.config.update(flatten_dict(config), allow_val_change=True)
-
     trainer = fine_tune(config)
 
 
