@@ -6,7 +6,7 @@ __all__ = ['log', 'preprocess_config', 'fine_tune']
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
 import torch
-from ...utils import NestedDict
+from ...utils import NestedDict, generate_time_id
 from ...logging import get_logger
 from .utils import load_tokenizer_model
 
@@ -32,6 +32,14 @@ def preprocess_config(config: NestedDict):
     if config.at("trainer.training_args.bf16") or config.at("trainer.training_args.fp16"):
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
+    
+    # Generate unique model id
+    model_id = config.at("hfhub.model_id")
+    if config.at("trainer.lora") and "-peft" not in model_id:
+        model_id += "-peft"
+    if "debug" not in model_id:
+        model_id += f"-{generate_time_id()}"
+    config.set("hfhub.model_id", model_id)
 
     return config
 
