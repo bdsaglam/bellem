@@ -129,7 +129,7 @@ def make_io_dataset(dataset: Dataset, response_template: str) -> Dataset:
         input += response_template
         return {"input": input, "output": output}
 
-    return dataset.map(extract_input_output, remove_columns=dataset.columns)
+    return dataset.map(extract_input_output)
 
 
 def _load_tokenizer_model(config: NestedDict):
