@@ -6,9 +6,13 @@ import typer
 from dotenv import load_dotenv
 from rich.console import Console
 
+from bellek.utils import set_seed
+
 err = Console(stderr=True).print
 
 load_dotenv()
+
+set_seed(42)
 
 
 def read_llm_traces(filepath: Path | str) -> pd.DataFrame:
@@ -43,7 +47,7 @@ def main(
     reward_df["reward"] = reward_df["fuzzy_match"].astype(int)
     reward_df.drop(columns=["fuzzy_match"], inplace=True)
 
-    reward_df.to_json(out, orient="records", lines=True)
+    reward_df.sample(frac=1).to_json(out, orient="records", lines=True)
 
 
 if __name__ == "__main__":

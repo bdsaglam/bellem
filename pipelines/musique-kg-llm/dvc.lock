@@ -172,12 +172,12 @@ stages:
       nfiles: 1501
     - path: pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
       hash: md5
-      md5: 774d82271b43dd6415668c850a33450f
-      size: 1578
+      md5: 990304cc067be7c32c708bb187864ba2
+      size: 1642
     outs:
     - path: data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
       hash: md5
-      md5: d494b264163c22c0f6b8c0412d1e255d
+      md5: ef3b2cd042b2ba6b6cb544bf1aeb8600
       size: 1325866
   publish_jerx_reward_modelling_datasets:
     cmd: python pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
@@ -186,7 +186,7 @@ stages:
     deps:
     - path: data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
       hash: md5
-      md5: d494b264163c22c0f6b8c0412d1e255d
+      md5: ef3b2cd042b2ba6b6cb544bf1aeb8600
       size: 1325866
     - path: pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
       hash: md5
