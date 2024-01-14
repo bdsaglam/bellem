@@ -8,14 +8,6 @@ from bellek.utils import NestedDict
 log = get_logger(__name__)
 
 
-def load_ds(dataset_config):
-    return load_dataset(
-        dataset_config["path"],
-        dataset_config.get("name"),
-        split=dataset_config.get("split"),
-    )
-
-
 def run(config):
     from bellek.jerx.eval import evaluate_model_jer
     from bellek.ml.transformers import load_tokenizer_model
@@ -28,7 +20,7 @@ def run(config):
     val_ds_config = config.at("dataset.validation")
     if val_ds_config is None:
         return
-    val_ds = load_ds(val_ds_config)
+    val_ds = load_dataset(**val_ds_config)
 
     # Load model
     model_id = config.at("hfhub.model_id")

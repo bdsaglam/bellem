@@ -52,14 +52,6 @@ def before_experiment(wandb_run):
         json.dump(config, f, indent=2)
 
 
-def load_ds(dataset_config):
-    return load_dataset(
-        dataset_config["path"],
-        dataset_config.get("name"),
-        split=dataset_config.get("split"),
-    )
-
-
 def train(wandb_run, config: NestedDict):
     # Base model
     pretrained_model_config = config["pretrained_model"]
@@ -69,7 +61,7 @@ def train(wandb_run, config: NestedDict):
     prepare_llama2_for_training(tokenizer, base_model)
 
     # Train dataset
-    train_ds = load_ds(config.at("dataset.train"))
+    train_ds = load_dataset(**config.at("dataset.train"))
     log.info(f"Loaded training dataset with {len(train_ds)} samples.")
 
     # Inspect token counts
