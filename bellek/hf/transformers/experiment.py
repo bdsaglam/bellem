@@ -6,6 +6,7 @@ __all__ = ['log', 'preprocess_config', 'fine_tune', 'make_io_dataset', 'make_pip
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
+from math import ceil
 from typing import Any, Callable
 
 import torch
@@ -52,7 +53,6 @@ def preprocess_config(config: NestedDict):
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 5
 def fine_tune(config: NestedDict):
-    from math import ceil
     from datasets import load_dataset
     from peft import LoraConfig
     from transformers import TrainingArguments
@@ -219,6 +219,13 @@ def evalu8(
     # Prepare text generation pipeline
     if tokenizer is None or model is None:
         tokenizer, model = _load_tokenizer_model(config)
+    
+    if config.at("evaluation.pipeline.max_new_tokens") is None:
+        tokenized_outputs = ds.map(lambda examples: tokenizer(examples["output"]), batched=True)
+        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
+        config.set("evaluation.pipeline.max_new_tokens", ceil(max(token_counts) / 8) * 8)
+        
+    log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
     pipe = make_pipeline(config, tokenizer, model)
 
     # Load evaluation metric

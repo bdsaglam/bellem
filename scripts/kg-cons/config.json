@@ -51,7 +51,6 @@
   },
   "evaluation": {
     "pipeline": {
-      "max_new_tokens": 200,
       "batch_size": 8,
       "return_full_text": false
     },
