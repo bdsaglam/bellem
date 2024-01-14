@@ -9,7 +9,7 @@ log = get_logger(__name__)
 
 
 def run(config):
-    from bellek.jerx.eval import evaluate_model_jer
+    from bellek.jerx.eval import evaluate_model_jerx
     from bellek.hf.transformers.utils import load_tokenizer_model
 
     # Load validation dataset
@@ -32,7 +32,7 @@ def run(config):
 
     response_template = config.at("trainer.response_template")
 
-    return evaluate_model_jer(
+    return evaluate_model_jerx(
         val_ds,
         response_template=response_template,
         tokenizer=tokenizer,
