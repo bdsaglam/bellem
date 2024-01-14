@@ -1,7 +1,8 @@
 import typer
-from datasets import load_dataset
 
 import wandb
+from bellek.hf.transformers.experiment import evalu8
+from bellek.jerx.eval import parse_triplet_strings
 from bellek.logging import get_logger
 from bellek.utils import NestedDict
 
@@ -9,35 +10,9 @@ log = get_logger(__name__)
 
 
 def run(config):
-    from bellek.jerx.eval import evaluate_model_jerx
-    from bellek.hf.transformers.utils import load_tokenizer_model
-
-    # Load validation dataset
-    val_ds_config = config.at("dataset.validation")
-    if val_ds_config is None:
-        return
-    val_ds = load_dataset(**val_ds_config)
-
-    # Load model
-    model_id = config.at("hfhub.model_id")
-    quantization_config = config.at("pretrained_model.quantization_config")
-    tokenizer, model = load_tokenizer_model(
-        model_id,
-        quantization_config=quantization_config,
-    )
-    if "llama" in model_id:
-        from bellek.hf.transformers.llama import prepare_llama2_for_inference
-
-        prepare_llama2_for_inference(tokenizer, model)
-
-    response_template = config.at("trainer.response_template")
-
-    return evaluate_model_jerx(
-        val_ds,
-        response_template=response_template,
-        tokenizer=tokenizer,
-        model=model,
-        **config.at("evaluation", {}),
+    return evalu8(
+        config,
+        output_parse_fn=parse_triplet_strings,
     )
 
 
