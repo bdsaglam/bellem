@@ -210,7 +210,8 @@ def evalu8(
     assert len(ds) > 0, "Dataset is empty!"
 
     # Ensure the dataset has input/output columns
-    if "input" not in ds.columns or "output" not in ds.columns:
+    cols = ds[0].keys()
+    if "input" not in cols or "output" not in cols:
         response_template = config.at("trainer.response_template")
         assert response_template
         ds = make_io_dataset(ds, response_template)
