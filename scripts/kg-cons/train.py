@@ -1,4 +1,4 @@
-from bellek.hf.transformers.experiment import preprocess_config, train
+from bellek.hf.transformers.experiment import preprocess_config, fine_tune
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.utils import NestedDict, flatten_dict, generate_time_id
@@ -19,7 +19,7 @@ def run_experiment(wandb_run):
 
     wandb_run.config.update(flatten_dict(config), allow_val_change=True)
 
-    trainer = train(config)
+    trainer = fine_tune(config)
 
 
 if __name__ == "__main__":
