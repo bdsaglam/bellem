@@ -8,6 +8,7 @@ from copy import deepcopy
 import torch
 from ...utils import NestedDict, generate_time_id
 from ...logging import get_logger
+from .utils import load_tokenizer_model
 
 log = get_logger(__name__)
 
