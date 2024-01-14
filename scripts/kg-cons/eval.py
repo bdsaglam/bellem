@@ -10,11 +10,7 @@ log = get_logger(__name__)
 
 def run(config):
     from bellek.jerx.eval import evaluate_model_jer
-    from bellek.ml.transformers import load_tokenizer_model
-    from bellek.ml.transformers import preprocess_config as tpc
-
-    # Setup config related to transformers library
-    config = tpc(config)
+    from bellek.hf.transformers.utils import load_tokenizer_model
 
     # Load validation dataset
     val_ds_config = config.at("dataset.validation")
@@ -30,7 +26,7 @@ def run(config):
         quantization_config=quantization_config,
     )
     if "llama" in model_id:
-        from bellek.lang.llama import prepare_llama2_for_inference
+        from bellek.hf.transformers.llama import prepare_llama2_for_inference
 
         prepare_llama2_for_inference(tokenizer, model)
 
