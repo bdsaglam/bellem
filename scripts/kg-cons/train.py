@@ -7,49 +7,14 @@ from peft import LoraConfig
 from transformers import TrainingArguments
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
+from bellek.hf.transformers.experiment import preprocess_config
+from bellek.lang.llama import prepare_llama2_for_training
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
-from bellek.lang.llama import prepare_llama2_for_training
 from bellek.ml.transformers import load_tokenizer_model
-from bellek.utils import NestedDict, flatten_dict, generate_time_id
+from bellek.utils import NestedDict, flatten_dict
 
 log = get_logger(__name__)
-
-
-def prepare_config(config: NestedDict):
-    from bellek.ml.transformers import preprocess_config as tpc
-
-    # Setup config related to transformers library
-    config = tpc(config)
-
-    # Generate unique model id
-    model_id = config.at("hfhub.model_id")
-    model_id += "-peft"
-    if "debug" not in model_id:
-        model_id += f"-{generate_time_id()}"
-    config.set("hfhub.model_id", model_id)
-
-    return config
-
-
-def before_experiment(wandb_run):
-    config = prepare_config(NestedDict.from_flat_dict(wandb_run.config))
-    config.set("wandb.run_id", wandb_run.id)
-    wandb_run.config.update(flatten_dict(config), allow_val_change=True)
-
-    # Wandb env variables
-    os.environ["WANDB_PROJECT"] = wandb_run.project
-    os.environ["WANDB_LOG_MODEL"] = "end"
-
-    # Set random seed
-    if seed := config.get("seed"):
-        from fastai.torch_core import set_seed
-
-        set_seed(seed)
-
-    # Save preprocessed config
-    with open("./config.proc.json", "w") as f:
-        json.dump(config, f, indent=2)
 
 
 def train(wandb_run, config: NestedDict):
@@ -108,16 +73,10 @@ def train(wandb_run, config: NestedDict):
     return trainer
 
 
-def after_experiment(wandb_run, config):
-    with open("./config.after.json", "w") as f:
-        json.dump(config, f, indent=2)
-
-
 def run_experiment(wandb_run):
-    before_experiment(wandb_run)
-    config = NestedDict.from_flat_dict(wandb_run.config)
+    config = preprocess_config(NestedDict.from_flat_dict(wandb_run.config))
+    wandb_run.config.update(flatten_dict(config), allow_val_change=True)
     train(wandb_run, config)
-    after_experiment(wandb_run, config)
 
 
 if __name__ == "__main__":
@@ -127,11 +86,4 @@ if __name__ == "__main__":
     parser.add_argument("--cfg", default="./config.json")
     args, _ = parser.parse_known_args()
 
-    prepare_config_kwargs = {
-        "exclude_resolving_paths": [
-            "pretrained_model.model_name_or_path",
-            "dataset.train.path",
-            "dataset.validation.path",
-        ]
-    }
-    main(run_experiment, args, prepare_config_kwargs)
+    main(run_experiment, args)

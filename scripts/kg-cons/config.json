@@ -3,7 +3,7 @@
   "dataset": {
     "train": {
       "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
-      "split": "train[:20%]"
+      "split": "train"
     },
     "validation": {
       "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
@@ -60,5 +60,10 @@
   },
   "hfhub": {
     "model_id": "bdsaglam/llama-2-7b-chat-jerx-mt-ss"
+  },
+  "metaconfig": {
+    "preprocessing": {
+      "resolve_paths": false
+    }
   }
 }
