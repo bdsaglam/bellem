@@ -4,15 +4,17 @@
 __all__ = ['log', 'evaluate_jerx_single', 'evaluate_jerx', 'evaluate_pipe_jerx', 'evaluate_model_jerx']
 
 # %% ../../nbs/jerx.eval.ipynb 3
+from operator import eq
 from typing import Iterable, Callable, Any, Generator
 import numpy as np
 from .utils import Triplet, parse_triplet_strings
+from ..utils import is_in
 from ..logging import get_logger
 
 log = get_logger(__name__)
 
 # %% ../../nbs/jerx.eval.ipynb 4
-def evaluate_jerx_single(*, reference: Iterable[Triplet], prediction: Iterable[Triplet]):
+def evaluate_jerx_single(*, reference: Iterable[Triplet], prediction: Iterable[Triplet], eq_fn=eq):
     """
     Example: [(('John', 'PERSON'), 'works_at', ('Google', 'ORG'))]
     """
@@ -21,13 +23,13 @@ def evaluate_jerx_single(*, reference: Iterable[Triplet], prediction: Iterable[T
     prediction_set = set(prediction)
     assert len(reference) == len(reference_set), "Duplicates found in references"
 
-    TP = len(reference_set & prediction_set)
-    FP = len(prediction_set - reference_set)
-    FN = len(reference_set - prediction_set)
+    tp = sum(int(is_in(item, prediction, eq_fn=eq_fn)) for item in reference)
+    fp = len(prediction_set) - tp
+    fn = len(reference_set) - tp
     
     # Calculate metrics
-    precision = TP / (TP + FP) if TP + FP > 0 else 0
-    recall = TP / (TP + FN) if TP + FN > 0 else 0
+    precision = tp / (tp + fp) if tp + fp > 0 else 0
+    recall = tp / (tp + fn) if tp + fn > 0 else 0
     f1_score = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
     
     return {
@@ -43,7 +45,7 @@ def evaluate_jerx(*, references: Iterable[Iterable[Triplet]], predictions: Itera
     ]
     return {('mean_' + key): np.mean([scores[key] for scores in score_dicts]) for key in score_dicts[0].keys()}
 
-# %% ../../nbs/jerx.eval.ipynb 7
+# %% ../../nbs/jerx.eval.ipynb 8
 def evaluate_pipe_jerx(dataset, pipe):
     import evaluate
 

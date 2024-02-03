@@ -183,6 +183,7 @@ def evaluate_pipeline(
     pipe,
     *,
     metric,
+    metric_kwargs: dict | None = None,
     output_parse_fn: Callable[[str], Any] | None = None,
 ):
     eos_token = pipe.tokenizer.special_tokens_map["eos_token"]
@@ -202,8 +203,9 @@ def evaluate_pipeline(
     dataf["generation"] = generations
     dataf["prediction"] = predictions
     dataf["reference"] = references
-
-    scores = metric.compute(predictions=predictions, references=references)
+    
+    metric_kwargs = metric_kwargs or {}
+    scores = metric.compute(predictions=predictions, references=references, **metric_kwargs)
 
     return scores, dataf
 
@@ -213,6 +215,7 @@ def evalu8(
     *,
     tokenizer=None,
     model=None,
+    metric_kwargs: dict | None = None,
     output_parse_fn: Callable[[str], Any] | None = None,
 ):
     import evaluate
@@ -249,6 +252,7 @@ def evalu8(
         ds,
         pipe,
         metric=metric,
+        metric_kwargs=metric_kwargs,
         output_parse_fn=output_parse_fn,
     )
 

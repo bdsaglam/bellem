@@ -3,6 +3,7 @@ from bellek.hf.transformers.experiment import evalu8, fine_tune, preprocess_conf
 from bellek.jerx.eval import parse_triplet_strings
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
+from bellek.text.utils import fuzzy_match
 from bellek.utils import NestedDict, flatten_dict
 
 log = get_logger(__name__)
@@ -22,6 +23,7 @@ def run_experiment(wandb_run):
         config,
         tokenizer=trainer.tokenizer,
         model=trainer.model,
+        metric_kwargs={"eq_fn": lambda a, b: fuzzy_match(a, b, threshold=0.8)},
         output_parse_fn=parse_triplet_strings,
     )
     wandb_run.log(
