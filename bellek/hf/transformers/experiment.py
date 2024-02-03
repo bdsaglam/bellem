@@ -57,7 +57,7 @@ def make_datacollator(tokenizer, response_template: str | None, response_templat
     if not response_template:
         return None
 
-    if not response_template_context:
+    if response_template_context is None:
         log.info(f"Creating completion-only data collator with response template '{response_template}'")
         data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
     else:
