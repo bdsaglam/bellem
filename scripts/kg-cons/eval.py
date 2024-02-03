@@ -4,6 +4,7 @@ import wandb
 from bellek.hf.transformers.experiment import evalu8
 from bellek.jerx.eval import parse_triplet_strings
 from bellek.logging import get_logger
+from bellek.text.utils import fuzzy_match
 from bellek.utils import NestedDict
 
 log = get_logger(__name__)
@@ -12,6 +13,7 @@ log = get_logger(__name__)
 def run(config):
     return evalu8(
         config,
+        metric_kwargs={"eq_fn": lambda a, b: fuzzy_match(a, b, threshold=0.8)},
         output_parse_fn=parse_triplet_strings,
     )
 
