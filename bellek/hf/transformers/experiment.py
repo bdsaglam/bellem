@@ -11,7 +11,8 @@ from typing import Any, Callable
 
 import torch
 from datasets import Dataset, load_dataset
-from transformers import pipeline
+from transformers import TrainingArguments, pipeline
+from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from .utils import load_tokenizer_model
 from ...logging import get_logger
@@ -51,12 +52,9 @@ def preprocess_config(config: NestedDict):
     return config
 
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 5
+# %% ../../../nbs/hf.transformers.experiment.ipynb 6
 def fine_tune(config: NestedDict):
-    from datasets import load_dataset
     from peft import LoraConfig
-    from transformers import TrainingArguments
-    from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
     # Base model
     pretrained_model_config = config["pretrained_model"]
@@ -87,11 +85,11 @@ def fine_tune(config: NestedDict):
 
     packing = config.at("trainer.packing", False)
 
-    if response_template := config.at("trainer.response_template"):
-        log.info(f"Using completion-only data collator with response template '{response_template}'")
-        data_collator = DataCollatorForCompletionOnlyLM(response_template, tokenizer=tokenizer)
-    else:
-        data_collator = None
+    data_collator=make_datacollator(
+        tokenizer, 
+        config.at("trainer.response_template"), 
+        config.at("trainer.response_template_context")
+    )
     
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
     training_args = TrainingArguments(
@@ -122,7 +120,7 @@ def fine_tune(config: NestedDict):
     return trainer
 
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 6
+# %% ../../../nbs/hf.transformers.experiment.ipynb 7
 def make_io_dataset(dataset: Dataset, response_template: str) -> Dataset:
     def extract_input_output(example):
         input, output = example["text"].rsplit(response_template, 1)
