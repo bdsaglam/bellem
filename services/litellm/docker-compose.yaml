@@ -6,7 +6,7 @@ services:
     environment:
       - "REDIS_ARGS=--save 10 1 --appendonly yes"
     volumes:
-      - /tmp/litellm/redis-data:/data
+      - $HOME/.cache/litellm/redis-data:/data
     ports:
       - "6379:6379"
       - "13001:8001"
