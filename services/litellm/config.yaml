@@ -19,11 +19,11 @@ model_list:
     litellm_params:
       model: text-embedding-ada-002
       api_key: os.environ/OPENAI_API_KEY
-  - model_name: llama-2-7b-chat-jerx-mt-ss
+  - model_name: llama-2-7b-chat-jerx
     litellm_params:
       model: "huggingface/meta-llama/Llama-2-7b"
       api_base: "http://host.docker.internal:8080"
-      max_tokens: 512
+      max_tokens: 2048
 
 litellm_settings:
   set_verbose: True
