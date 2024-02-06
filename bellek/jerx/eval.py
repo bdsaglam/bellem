@@ -21,7 +21,8 @@ def evaluate_jerx_single(*, reference: Iterable[Triplet], prediction: Iterable[T
 
     reference_set = set(reference)
     prediction_set = set(prediction)
-    assert len(reference) == len(reference_set), "Duplicates found in references"
+    if len(reference) != len(reference_set):
+        log.warning("Duplicates found in references.")
 
     tp = sum(int(is_in(item, prediction, eq_fn=eq_fn)) for item in reference)
     fp = len(prediction_set) - tp
