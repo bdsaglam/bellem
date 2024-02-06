@@ -30,6 +30,7 @@ load_dotenv()
 
 set_seed(42)
 
+version = 1
 
 def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[List[Span]], None]):
     llm_type = llm_config["type"]
