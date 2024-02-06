@@ -30,7 +30,7 @@ load_dotenv()
 
 set_seed(42)
 
-version = 1
+# model_id='bdsaglam/llama-2-7b-chat-jerx-mt-ss-peft-2024-02-04T00-14-15'
 
 def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[List[Span]], None]):
     llm_type = llm_config["type"]
