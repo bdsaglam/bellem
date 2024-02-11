@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import kuzu
 import typer
 from dotenv import load_dotenv
 from llama_index import ServiceContext, StorageContext, load_index_from_storage
@@ -9,8 +10,9 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms import OpenAI
 from rich.console import Console
 
+from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
-from bellek.utils import generate_time_id, set_seed
+from bellek.utils import set_seed
 
 err = Console(stderr=True).print
 
@@ -25,19 +27,26 @@ embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 # language model to use for triplet extraction
 llm = OpenAI(temperature=0, model="gpt-3.5-turbo-1106")
 
-# Setup LLM observability
-LLM_TRACES_FILEPATH = Path(f"/tmp/phoenix/thesis-kg-llm/qna/traces-{generate_time_id()}.jsonl")
-callback_manager = CallbackManager(handlers=[make_phoenix_trace_callback_handler(LLM_TRACES_FILEPATH)])
 
-service_context = ServiceContext.from_defaults(
-    llm=llm,
-    embed_model=embed_model,
-    callback_manager=callback_manager,
-)
+def make_service_context(directory: Path, example_id: str):
+    example_dir = directory / example_id
+    example_dir.mkdir(exist_ok=True, parents=True)
+
+    traces_filepath = example_dir / "traces.jsonl"
+    traces_filepath.unlink(missing_ok=True)
+    trace_callback_handler = make_phoenix_trace_callback_handler(traces_filepath)
+    callback_manager = CallbackManager(handlers=[trace_callback_handler])
+    return ServiceContext.from_defaults(
+        llm=llm,
+        embed_model=embed_model,
+        callback_manager=callback_manager,
+    )
 
 
-def load_index(directory: Path):
-    storage_context = StorageContext.from_defaults(persist_dir=directory / "index")
+def load_index(directory: Path, service_context: ServiceContext):
+    db = kuzu.Database(str(directory / "kuzu"))
+    graph_store = KuzuGraphStore(db)
+    storage_context = StorageContext.from_defaults(persist_dir=directory / "index", graph_store=graph_store)
     return load_index_from_storage(
         storage_context,
         service_context=service_context,
@@ -83,14 +92,21 @@ def main(
     knowledge_graph_directory: Path = typer.Option(...),
     out: Path = typer.Option(...),
 ):
+    intermediate_directory = dataset_file.parent / "question-answering"
+    intermediate_directory.mkdir(exist_ok=True, parents=True)
+
     with open(dataset_file) as src:
         with open(out, "w") as dst:
             for line in src:
                 example = json.loads(line)
-                id = example["id"]
+                example_id = example["id"]
 
-                err(f"Answering the question in the sample {id}")
-                query_engine = make_query_engine(load_index(knowledge_graph_directory / id))
+                err(f"Setting up query engine for {example_id}")
+                service_context = make_service_context(intermediate_directory, example_id)
+                index = load_index(knowledge_graph_directory / example_id, service_context)
+                query_engine = make_query_engine(index)
+
+                err(f"Answering the question in the sample {example_id}")
                 example_answered = answer_questions(query_engine, example)
 
                 dst.write(json.dumps(example_answered, ensure_ascii=False))
