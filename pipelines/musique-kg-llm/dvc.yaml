@@ -27,6 +27,7 @@ stages:
 
   construct_knowledge_graphs:
     wdir: ../..
+    frozen: true
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
