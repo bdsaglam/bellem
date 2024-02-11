@@ -59,7 +59,7 @@ def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[L
     return ServiceContext.from_defaults(
         llm=llm,
         embed_model=embed_model,
-        # transformations=[],
+        transformations=[],
         callback_manager=callback_manager,
     )
 
