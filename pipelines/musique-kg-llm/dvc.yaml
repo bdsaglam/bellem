@@ -1,7 +1,7 @@
 stages:
   create_mhqa_dataset:
-    wdir: ../..
     frozen: true
+    wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/create_mhqa_dataset.py
       --config-file data/raw/musique-kg-llm/train/dataset-config.json
@@ -13,8 +13,8 @@ stages:
       - data/generated/musique-kg-llm/train/dataset.jsonl
 
   decompose_questions:
-    wdir: ../..
     frozen: true
+    wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/decompose_questions.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
@@ -26,8 +26,8 @@ stages:
       - data/generated/musique-kg-llm/train/question-decomposition.jsonl
 
   construct_knowledge_graphs:
-    wdir: ../..
     frozen: true
+    wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
