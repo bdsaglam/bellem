@@ -59,7 +59,7 @@ class KuzuGraphStore(GraphStore):
         prepared_statement = self.connection.prepare(
             query % (self.node_table_name, self.rel_table_name, self.node_table_name)
         )
-        query_result = self.connection.execute(prepared_statement, [("subj", subj)])
+        query_result = self.connection.execute(prepared_statement, dict([("subj", subj)]))
         retval = []
         while query_result.has_next():
             row = query_result.get_next()
