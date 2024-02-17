@@ -82,10 +82,10 @@ Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
 DEFAULT_KG_TRIPLET_EXTRACT_TMPL = """
 Some text is provided below. Given the text, extract up to {max_knowledge_triplets}  knowledge triplets in the form of (subject, predicate, object) that might be relevant to the following question. The subject and object must be different.
 Prioritize triplets that:
-1. Offer temporal information like 'founded in,' 'created on,' 'abolished in,' etc.
-2. Provide spatial details such as 'located in,' 'borders,' 'from,' etc.
-3. Show ownership or affiliation via terms like 'owned by,' 'affiliated with,' 'publisher of,' etc.
-4. Offer identification or categorization like 'is,' 'are,' 'was,' etc.
+1. Offer temporal information like 'founded in', 'created on', 'abolished in', etc.
+2. Provide spatial details such as 'located in', 'borders', 'from', etc.
+3. Show ownership or affiliation via terms like 'owned by', 'affiliated with', 'publisher of', etc.
+4. Offer identification or categorization like 'is', 'are', 'was', etc.
 Avoid stopwords.
 ---------------------
 Example:

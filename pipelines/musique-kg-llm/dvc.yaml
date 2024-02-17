@@ -26,6 +26,7 @@ stages:
       - data/generated/musique-kg-llm/train/question-decomposition.jsonl
 
   construct_knowledge_graphs:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py

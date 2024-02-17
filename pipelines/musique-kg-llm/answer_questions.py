@@ -7,10 +7,13 @@ from dotenv import load_dotenv
 from llama_index import ServiceContext, StorageContext, load_index_from_storage
 from llama_index.callbacks import CallbackManager
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.indices.base import BaseIndex
 from llama_index.llms import OpenAI
 from rich.console import Console
 
+from bellek.llama_index.data_structs.data_structs import patch_kg_data_struct
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
+from bellek.llama_index.indices.knowledge_graph.base import patch_knowledge_graph_index
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
 
@@ -19,6 +22,10 @@ err = Console(stderr=True).print
 load_dotenv()
 
 set_seed(42)
+
+
+patch_kg_data_struct()
+patch_knowledge_graph_index()
 
 
 # model to generate embeddings for triplets
@@ -63,7 +70,7 @@ Query: {query_str}
 Answer in 2-4 words: """
 
 
-def make_query_engine(index):
+def make_query_engine(index: BaseIndex):
     query_engine = index.as_query_engine(
         include_text=False,
         embedding_mode="hybrid",
