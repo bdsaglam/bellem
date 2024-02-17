@@ -5,7 +5,7 @@ __all__ = ['QUESTION_DECOMPOSITION_SYSTEM_PROMPT_TEMPLATE', 'make_chat_prompt_te
            'make_question_decomposer']
 
 # %% ../../nbs/lang.qdecomp.ipynb 3
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts.chat import (
     ChatPromptTemplate,
