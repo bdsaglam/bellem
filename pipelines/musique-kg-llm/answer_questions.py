@@ -65,7 +65,7 @@ Answer in 2-4 words: """
 
 def make_query_engine(index):
     query_engine = index.as_query_engine(
-        include_text=True,
+        include_text=False,
         embedding_mode="hybrid",
         response_mode="simple_summarize",
         verbose=True,
