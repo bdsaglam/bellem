@@ -4,24 +4,23 @@ import random
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, List
+from typing import Any
 
 import kuzu
 import typer
 from dotenv import load_dotenv
 from llama_index import Document, KnowledgeGraphIndex, ServiceContext
 from llama_index.callbacks import CallbackManager
+from llama_index.callbacks.base_handler import BaseCallbackHandler
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.prompts.base import Prompt
 from llama_index.prompts.prompt_type import PromptType
 from llama_index.storage.storage_context import StorageContext
-from phoenix.trace.llama_index import OpenInferenceTraceCallbackHandler
-from phoenix.trace.schemas import Span
 from pyvis.network import Network
 from rich.console import Console
 
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
-from bellek.llama_index.obs import TraceRecorder
+from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
 
 err = Console(stderr=True).print
@@ -32,7 +31,16 @@ set_seed(42)
 
 # model_id='bdsaglam/llama-2-7b-chat-jerx-mt-ss-peft-2024-02-04T00-14-15'
 
-def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[List[Span]], None]):
+version = 3
+
+
+def make_trace_callback_handler(example_dir: Path):
+    traces_filepath = example_dir / "traces.jsonl"
+    traces_filepath.unlink(missing_ok=True)
+    return make_phoenix_trace_callback_handler(traces_filepath)
+
+
+def make_service_context(llm_config: dict[str, Any], trace_callback_handler: BaseCallbackHandler):
     llm_type = llm_config["type"]
     llm_params = llm_config["params"]
     if llm_type == "llama2-sft":
@@ -54,7 +62,7 @@ def make_service_context(llm_config: dict[str, Any], trace_callback: Callable[[L
     embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
     # Setup LLM observability
-    callback_manager = CallbackManager(handlers=[OpenInferenceTraceCallbackHandler(trace_callback)])
+    callback_manager = CallbackManager(handlers=[trace_callback_handler])
 
     return ServiceContext.from_defaults(
         llm=llm,
@@ -133,7 +141,7 @@ def construct_knowledge_graph(
     max_triplets_per_chunk: int,
     include_embeddings: bool,
     llm_config: dict[str, Any],
-    trace_callback: Callable[[List[Span]], None],
+    service_context: ServiceContext,
     out_dir: Path,
 ):
     id = example["id"]
@@ -161,7 +169,7 @@ def construct_knowledge_graph(
         documents=documents,
         max_triplets_per_chunk=max_triplets_per_chunk,
         storage_context=storage_context,
-        service_context=make_service_context(llm_config, trace_callback),
+        service_context=service_context,
         include_embeddings=include_embeddings,
         kg_triple_extract_template=make_erx_prompt(llm_config["type"]),
     )
@@ -184,26 +192,27 @@ def main(
     with open(dataset_file) as f:
         for line in f:
             example = json.loads(line)
-            id = example["id"]
+            example_id = example["id"]
 
-            example_out_dir = out / id
+            example_out_dir = out / example_id
             shutil.rmtree(example_out_dir, ignore_errors=True)
             example_out_dir.mkdir(exist_ok=True, parents=True)
 
             try:
-                err(f"Constructing the knowledge graph for the sample {id}")
-                trace_callback = TraceRecorder((example_out_dir / "traces.jsonl").open("w"))
+                err(f"Constructing the knowledge graph for the sample {example_id}")
+                trace_callback_handler = make_trace_callback_handler(example_out_dir)
+                service_context = make_service_context(llm_config, trace_callback_handler)
                 max_triplets_per_chunk = random.randint(4, 8)
                 construct_knowledge_graph(
                     example,
                     max_triplets_per_chunk=max_triplets_per_chunk,
                     include_embeddings=False,
                     llm_config=llm_config,
-                    trace_callback=trace_callback,
+                    service_context=service_context,
                     out_dir=example_out_dir,
                 )
             except Exception as exc:
-                err(f"Failed to construct the knowledge graph for sample {id}.\n{exc}")
+                err(f"Failed to construct the knowledge graph for sample {example_id}.\n{exc}")
                 if not ignore_errors:
                     raise exc
 
