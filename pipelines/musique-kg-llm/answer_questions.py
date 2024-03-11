@@ -8,6 +8,7 @@ from llama_index import ServiceContext, StorageContext, load_index_from_storage
 from llama_index.callbacks import CallbackManager
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.indices.base import BaseIndex
+from llama_index.indices.knowledge_graph.retrievers import KGRetrieverMode
 from llama_index.llms import OpenAI
 from rich.console import Console
 
@@ -74,6 +75,7 @@ def make_query_engine(index: BaseIndex):
     query_engine = index.as_query_engine(
         include_text=False,
         embedding_mode="hybrid",
+        retriever_mode=KGRetrieverMode.HYBRID,
         response_mode="simple_summarize",
         verbose=True,
     )
