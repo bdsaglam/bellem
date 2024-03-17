@@ -19,6 +19,7 @@ from llama_index.storage.storage_context import StorageContext
 from pyvis.network import Network
 from rich.console import Console
 
+from bellek.jerx.utils import parse_triplets
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
@@ -28,6 +29,7 @@ err = Console(stderr=True).print
 load_dotenv()
 
 set_seed(42)
+
 
 # model_id='bdsaglam/llama-2-7b-chat-jerx-mt-ss-peft-2024-02-04T00-14-15'
 
@@ -115,6 +117,17 @@ Triplets:
 """.strip()
 
 
+# Patch KnowledgeGraphIndex to handle the response from JERX prompt
+
+
+def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
+    triplets = parse_triplets(response.strip())
+    return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
+
+
+KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
+
+
 def make_erx_prompt(model_type: str):
     prompt_str = LLAMA2_KG_TRIPLET_EXTRACT_TMPL if "llama2" in model_type else DEFAULT_KG_TRIPLET_EXTRACT_TMPL
     return Prompt(
@@ -166,15 +179,6 @@ def construct_knowledge_graph(
     # Create documents to index into knowledge graph
     documents = list(make_docs(example, only_supporting=True))
     err(f"Created {len(documents)} documents for sample {id}")
-
-    if "llama2" in llm_config["type"]:
-        from bellek.jerx.utils import parse_triplets
-
-        def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
-            triplets = parse_triplets(response.strip())
-            return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
-
-        KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
 
     # Create knowledge graph index
     err(f"Creating the knowledge graph index for sample {id}")
