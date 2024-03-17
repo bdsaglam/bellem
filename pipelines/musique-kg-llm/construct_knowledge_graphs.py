@@ -84,6 +84,11 @@ Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
 DEFAULT_KG_TRIPLET_EXTRACT_TMPL = """
 Your task is to perform detailed entity-relation extraction from a document, creating a network of entities and their interrelations that enables answering complex, multi-hop questions. This requires careful analysis to identify and categorize entities (such as individuals, locations, organizations) and the specific, nuanced relationships between them.
 
+Extract up to {max_knowledge_triplets} entity-relation-entity triplets from the given text.
+
+# Guidelines
+The goal is to build a detailed and accurate map of entities and their interrelations, enabling a comprehensive understanding of the document's content and supporting the answering of detailed, multi-hop questions derived from or related to the document. Prepare to adapt your extraction techniques to the nuances and specifics presented by the document, recognizing the diversity in structures and styles across documents.
+
 # Core Objectives:
 - **Comprehensive Entity and Relation Identification**: Systematically identify all relevant entities and their relationships within the document. Each entity and relation must be captured with precision, reflecting the document's depth of information.
 
@@ -95,25 +100,38 @@ Your task is to perform detailed entity-relation extraction from a document, cre
 
 - **Consistency and Cross-Validation**: Maintain consistency in entity references throughout the document and cross-validate entities and relations for accuracy. This includes harmonizing multiple references to the same entity and ensuring the entity-relation map is free from contradictions.
 
-- **Detail-Oriented Relation Extraction**: Pay attention to the details within relations, capturing temporal and quantitative aspects where relevant. This adds depth to the understanding of each relationship, enhancing the capability to answer nuanced questions.
+- **Detail-Oriented Relation Extraction**: Pay attention to the details within relations, capturing temporal and quantitative aspects where relevant. This adds depth to the understanding of each relationship, enhancing the capability to answer nuanced questions. Capture date and time relations with full detail as much as possible.
 
 # Disambiguation and Unique Identification:
 - **Explicit Disambiguation of Identical Names**: When encountering entities with identical names, explicitly disambiguate them by adding context-specific qualifiers in parentheses. These qualifiers should reflect the nature or category of the entity to prevent confusion and ensure clear differentiation. For example, differentiate geographical locations from non-geographical entities, people from non-person entities, and temporal from non-temporal entities with appropriate qualifiers.
 
 # Formatting
-- Extract up to {max_knowledge_triplets} entity-relation-entity triplets from the given text.
 - Avoid stopwords.
-- Employ the format: `entity1 | relation | entity2` for each extracted relation, ensuring clarity and precision in representation. Each triplet should be in a new line. For example:
-"Havana" (Song) | title of | 1997 Single
-Kenny G (Musician) | performed | "Havana" (Song)
-Kenny G (Musician) | released on | "The Moment" (Album)
-"The Moment" (Album) | released by | Arista Records
+- Encode dates in the format: January 1, 1990
+- Employ the format: `entity1 | relation | entity2` for each extracted relation, ensuring clarity and precision in representation. Each triplet should be in a new line.
 
-# Guidelines
-The goal is to build a detailed and accurate map of entities and their interrelations, enabling a comprehensive understanding of the document's content and supporting the answering of detailed, multi-hop questions derived from or related to the document. Prepare to adapt your extraction techniques to the nuances and specifics presented by the document, recognizing the diversity in structures and styles across documents.
+# Example
+Text: 
+Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World
+Champion in middleweight.
 
-Text: {text}
+The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
+was elected on March 5, 2011.
+
 Triplets:
+Glenhis Hernández (Athlete) | born on | October 7, 1990
+Glenhis Hernández (Athlete) | born in | Havana
+Glenhis Hernández (Athlete) | specializes in | taekwondo
+Glenhis Hernández (Athlete) | won | 2013 World Champion title (Middleweight)
+Marta Hernández Romero (Politician) | serves as | mayor of Havana
+Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
+Marta Hernández Romero (Politician) | elected | on March 5, 2011.
+
+Text: 
+{text}
+
+Triplets:
+
 """.strip()
 
 
@@ -219,7 +237,7 @@ def main(
                 err(f"Constructing the knowledge graph for the sample {example_id}")
                 trace_callback_handler = make_trace_callback_handler(example_out_dir)
                 service_context = make_service_context(llm_config, trace_callback_handler)
-                max_triplets_per_chunk = random.randint(4, 8)
+                max_triplets_per_chunk = random.randint(15, 20)
                 construct_knowledge_graph(
                     example,
                     max_triplets_per_chunk=max_triplets_per_chunk,
