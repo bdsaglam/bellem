@@ -80,23 +80,36 @@ Alaa Abdul-Zahra|club|Al Kharaitiyat SC
 Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
 
 DEFAULT_KG_TRIPLET_EXTRACT_TMPL = """
-Some text is provided below. Given the text, extract up to {max_knowledge_triplets}  knowledge triplets in the form of (subject, predicate, object) that might be relevant to the following question. The subject and object must be different.
-Prioritize triplets that:
-1. Offer temporal information like 'founded in', 'created on', 'abolished in', etc.
-2. Provide spatial details such as 'located in', 'borders', 'from', etc.
-3. Show ownership or affiliation via terms like 'owned by', 'affiliated with', 'publisher of', etc.
-4. Offer identification or categorization like 'is', 'are', 'was', etc.
-Avoid stopwords.
----------------------
-Example:
-Question: When was the institute that owned The Collegian founded?
-Text: The Collegian is the bi-weekly official student publication of Houston Baptist University in Houston, Texas.
-Triplets:
-(The Collegian, is, bi-weekly official student publication)
-(The Collegian, owned by, Houston Baptist University)
-(Houston Baptist University, in, Houston)
-(Houston, in, Texas)
----------------------
+Your task is to perform detailed entity-relation extraction from a document, creating a network of entities and their interrelations that enables answering complex, multi-hop questions. This requires careful analysis to identify and categorize entities (such as individuals, locations, organizations) and the specific, nuanced relationships between them.
+
+# Core Objectives:
+- **Comprehensive Entity and Relation Identification**: Systematically identify all relevant entities and their relationships within the document. Each entity and relation must be captured with precision, reflecting the document's depth of information.
+
+- **Entity Differentiation and Categorization**: Distinguish between different types of entities, avoiding the amalgamation of distinct entities into a single category. For instance, separate individuals from their professions or titles and define their relationship clearly.
+
+- **Clarification of Relationships and Avoidance of Redundancy**: Ensure each relationship is clearly defined, avoiding duplicate information. Relations should form a coherent, logical network, mapping connections between entities accurately, especially in hierarchical or geographic contexts.
+
+- **Inference of Implicit Relations**: Infer and articulate relations that are implied but not explicitly stated within the document. This nuanced understanding allows for a richer, more interconnected entity-relation map.
+
+- **Consistency and Cross-Validation**: Maintain consistency in entity references throughout the document and cross-validate entities and relations for accuracy. This includes harmonizing multiple references to the same entity and ensuring the entity-relation map is free from contradictions.
+
+- **Detail-Oriented Relation Extraction**: Pay attention to the details within relations, capturing temporal and quantitative aspects where relevant. This adds depth to the understanding of each relationship, enhancing the capability to answer nuanced questions.
+
+# Disambiguation and Unique Identification:
+- **Explicit Disambiguation of Identical Names**: When encountering entities with identical names, explicitly disambiguate them by adding context-specific qualifiers in parentheses. These qualifiers should reflect the nature or category of the entity to prevent confusion and ensure clear differentiation. For example, differentiate geographical locations from non-geographical entities, people from non-person entities, and temporal from non-temporal entities with appropriate qualifiers.
+
+# Formatting
+- Extract up to {max_knowledge_triplets} entity-relation-entity triplets from the given text.
+- Avoid stopwords.
+- Employ the format: `entity1 | relation | entity2` for each extracted relation, ensuring clarity and precision in representation. Each triplet should be in a new line. For example:
+"Havana" (Song) | title of | 1997 Single
+Kenny G (Musician) | performed | "Havana" (Song)
+Kenny G (Musician) | released on | "The Moment" (Album)
+"The Moment" (Album) | released by | Arista Records
+
+# Guidelines
+The goal is to build a detailed and accurate map of entities and their interrelations, enabling a comprehensive understanding of the document's content and supporting the answering of detailed, multi-hop questions derived from or related to the document. Prepare to adapt your extraction techniques to the nuances and specifics presented by the document, recognizing the diversity in structures and styles across documents.
+
 Text: {text}
 Triplets:
 """.strip()
