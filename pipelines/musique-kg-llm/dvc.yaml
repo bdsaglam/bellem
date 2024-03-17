@@ -1,6 +1,5 @@
 stages:
   create_mhqa_dataset:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/create_mhqa_dataset.py

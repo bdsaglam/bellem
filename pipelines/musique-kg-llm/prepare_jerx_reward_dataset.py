@@ -43,7 +43,7 @@ def main(
     comparison_df = pd.read_json(answer_comparisons_file, orient="records", lines=True)
     llm_erx_df = load_llm_erx_generations(knowledge_graph_directory, comparison_df["id"].tolist())
 
-    reward_df = pd.merge(llm_erx_df, comparison_df[["id", "fuzzy_match"]], on="id")
+    reward_df = pd.merge(llm_erx_df, comparison_df[["id", "question", "reference_answer", "fuzzy_match"]], on="id")
     reward_df["reward"] = reward_df["fuzzy_match"].astype(int)
     reward_df.drop(columns=["fuzzy_match"], inplace=True)
 
