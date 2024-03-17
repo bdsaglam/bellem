@@ -26,23 +26,19 @@ class JERXChatFormatter:
     system_prompt_template: str = DEFAULT_SYSTEM_PROMPT_TEMPLATE
     relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
     relation_set: set|None = None
-    few_shot_examples: list[dict]|None = None
-    n_few_shot_examples: int = 3
+    max_triplets_margin: int = 0
 
     def __post_init__(self):
         if self.relation_set:
             self.relation_set = sorted(self.relation_set)
-        if self.few_shot_examples is not None:
-            self.few_shot_examples = list(self.few_shot_examples)
 
-    def format(self, example: dict):
-        few_shot_examples = self._choose_few_shot_examples()
-        max_triplets = max(*[len(example['triplets']) for example in few_shot_examples], len(example['triplets'])) + 2
+    def format(self, batch: list[dict]):
+        max_triplets = max([len(example['triplets']) for example in batch]) + self.max_triplets_margin
         messages = [
-            {"role": "system", "content": self.make_system_message(max_triplets=max_triplets)},
-            *list(self.make_messages(*few_shot_examples, example)),
+            {"role": "system", "content": self.make_system_message(max_triplets)},
+            *list(self.make_messages(*batch)),
         ]
-        return {'conversations': messages}
+        return {'chat': messages}
 
     def make_system_message(self, max_triplets: int = 5) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
@@ -52,12 +48,6 @@ class JERXChatFormatter:
         for example in examples:
             yield {"role": "user", "content": example["text"]}
             yield {"role": "assistant", "content": self._format_triplets(example["triplets"])}
-
-    def _choose_few_shot_examples(self) -> list[dict]:
-        if len(self.few_shot_examples) <= self.n_few_shot_examples:
-            return self.few_shot_examples
-        else:
-            return random.sample(self.few_shot_examples, k=self.n_few_shot_examples)
 
     def _format_triplets(self, triplets: Iterable[str]) -> str:
         return '\n'.join(sorted(triplets))
