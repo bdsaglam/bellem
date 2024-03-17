@@ -20,4 +20,4 @@ def parse_triplet_strings(text: str, delimiter: str="|") -> list[str]:
     return [line for line in text.splitlines() if line and line.count(delimiter) == 2]
 
 def parse_triplets(text: str, delimiter: str="|") -> list[Triplet]:
-    return [tuple(triplet_string.split(delimiter)) for triplet_string in parse_triplet_strings(text, delimiter=delimiter)]
+    return [tuple([s.strip() for s in triplet_string.split(delimiter)]) for triplet_string in parse_triplet_strings(text, delimiter=delimiter)]
