@@ -32,21 +32,28 @@ class JERXChatFormatter:
         if self.relation_set:
             self.relation_set = sorted(self.relation_set)
 
-    def format(self, batch: list[dict]):
-        max_triplets = max([len(example['triplets']) for example in batch]) + self.max_triplets_margin
+    def format(self, batch: list[dict], max_triplets: int | None = None):
+        if "triplets" not in batch[0]:
+            assert len(batch) == 1, "Only one example is allowed when 'triplets' is not present"
+        if max_triplets is None:
+            if "triplets" in batch[0]:
+                max_triplets = max([len(example['triplets']) for example in batch]) + self.max_triplets_margin
+            else:
+                max_triplets = random.randint(15, 20)
         messages = [
-            {"role": "system", "content": self.make_system_message(max_triplets)},
-            *list(self.make_messages(*batch)),
+            self.make_system_message(max_triplets),
+            *[message for example in batch for message in self.make_messages(example)],
         ]
         return {'chat': messages}
 
-    def make_system_message(self, max_triplets: int = 5) -> str:
+    def make_system_message(self, max_triplets: int) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
-        return self.system_prompt_template.format(max_triplets=max_triplets, relation_set_prompt=rsp)
+        content = self.system_prompt_template.format(max_triplets=max_triplets, relation_set_prompt=rsp)
+        return {"role": "system", "content": content}
 
-    def make_messages(self, *examples) -> Generator[dict, None, None]:
-        for example in examples:
-            yield {"role": "user", "content": example["text"]}
+    def make_messages(self, example: dict) -> Generator[dict, None, None]:
+        yield {"role": "user", "content": example["text"]}
+        if "triplets" in example:
             yield {"role": "assistant", "content": self._format_triplets(example["triplets"])}
 
     def _format_triplets(self, triplets: Iterable[str]) -> str:

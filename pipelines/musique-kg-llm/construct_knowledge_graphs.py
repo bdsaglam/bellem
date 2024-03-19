@@ -75,7 +75,7 @@ def make_service_context(llm_config: dict[str, Any], trace_callback_handler: Bas
 
 
 LLAMA2_KG_TRIPLET_EXTRACT_TMPL = """<s>[INST] <<SYS>>
-You are a helpful assistant that extracts up to {max_knowledge_triplets}  entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line. The entities in a triplet must be different.
+You are a helpful assistant that extracts up to {max_knowledge_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line. The entities in a triplet must be different.
 <</SYS>>
 Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC|ground|Al Khor
 Alaa Abdul-Zahra|club|Al Kharaitiyat SC
