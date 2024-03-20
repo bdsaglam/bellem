@@ -51,7 +51,7 @@ def make_question_answer_func(llm: ChatOpenAI | None = None):
         return chain.invoke(dict(context=context, question=question))
     return func
 
-# %% ../../../nbs/jerx.reward.gpt.ipynb 7
+# %% ../../../nbs/jerx.reward.gpt.ipynb 6
 def make_reward_func(llm: ChatOpenAI | None = None, answer_comparator=fuzzy_match):
     qa = make_question_answer_func(llm)
 
