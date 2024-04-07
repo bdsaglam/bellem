@@ -12,6 +12,7 @@ stages:
       - data/generated/musique-kg-llm/train/dataset.jsonl
 
   decompose_questions:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/decompose_questions.py
@@ -24,19 +25,22 @@ stages:
       - data/generated/musique-kg-llm/train/question-decomposition.jsonl
 
   construct_knowledge_graphs:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
-      --llm-config-file data/raw/musique-kg-llm/train/erx-llm-configs/llama2-sft.json
+      --llm-config-file data/raw/musique-kg-llm/train/erx-llm-configs/openai.json
       --out data/generated/musique-kg-llm/train/knowledge-graphs/
     deps:
       - pipelines/musique-kg-llm/construct_knowledge_graphs.py
+      - data/raw/musique-kg-llm/train/erx-llm-configs/openai.json
       - data/generated/musique-kg-llm/train/dataset.jsonl
     outs:
       - data/generated/musique-kg-llm/train/knowledge-graphs/timestamp.txt
 
   answer_questions:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/answer_questions.py
@@ -66,7 +70,6 @@ stages:
       - data/generated/musique-kg-llm/train/answer-eval/scores.json
 
   prepare_jerx_reward_dataset:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
@@ -81,7 +84,6 @@ stages:
       - data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
 
   publish_jerx_reward_modelling_datasets:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
