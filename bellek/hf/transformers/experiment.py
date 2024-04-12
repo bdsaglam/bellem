@@ -88,6 +88,14 @@ def fine_tune(config: NestedDict):
     train_ds = load_dataset(**config.at("dataset.train"))
     log.info(f"Loaded training dataset with {len(train_ds)} samples.")
 
+    # Convert chat to text
+    if "text" not in train_ds.column_names:
+        if "chat" not in train_ds.column_names:
+            raise ValueError("Dataset does not have 'text' or 'chat' columns.")
+        train_ds = train_ds.map(
+            lambda example: {"text": tokenizer.apply_chat_template(example["chat"], tokenize=False, add_generation_prompt=False)}
+        )
+
     # Inspect token counts
     tokenized_train_ds = train_ds.map(lambda examples: tokenizer(examples["text"]), batched=True)
     token_counts = [len(input_ids) for input_ids in tokenized_train_ds["input_ids"]]
@@ -101,12 +109,12 @@ def fine_tune(config: NestedDict):
 
     packing = config.at("trainer.packing", False)
 
-    data_collator=make_datacollator(
-        tokenizer, 
-        config.at("trainer.response_template"), 
-        config.at("trainer.response_template_context")
+    data_collator = make_datacollator(
+        tokenizer,
+        config.at("trainer.response_template"),
+        config.at("trainer.response_template_context"),
     )
-    
+
     peft_config = LoraConfig(**config.at("trainer.lora", {}))
     training_args = TrainingArguments(
         output_dir="./results",
@@ -225,6 +233,18 @@ def evalu8(
     assert ds_config
     ds = load_dataset(**ds_config)
     assert len(ds) > 0, "Dataset is empty!"
+    
+    # Prepare text generation pipeline
+    if tokenizer is None or model is None:
+        tokenizer, model = _load_tokenizer_model(config)
+
+    # Convert chat to text
+    if "text" not in ds.column_names:
+        if "chat" not in ds.column_names:
+            raise ValueError("Dataset does not have 'text' or 'chat' columns.")
+        ds = ds.map(
+            lambda example: {"text": tokenizer.apply_chat_template(example["chat"], tokenize=False, add_generation_prompt=False)}
+        )
 
     # Ensure the dataset has input/output columns
     cols = ds[0].keys()
@@ -233,10 +253,6 @@ def evalu8(
         assert response_template
         ds = make_io_dataset(ds, response_template)
 
-    # Prepare text generation pipeline
-    if tokenizer is None or model is None:
-        tokenizer, model = _load_tokenizer_model(config)
-    
     if config.at("evaluation.pipeline.max_new_tokens") is None:
         tokenized_outputs = ds.map(lambda examples: tokenizer(examples["output"]), batched=True)
         token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
