@@ -2,11 +2,11 @@
   "seed": 42,
   "dataset": {
     "train": {
-      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
+      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-openai",
       "split": "train"
     },
     "validation": {
-      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-llama2",
+      "path": "bdsaglam/web_nlg-erx-sft-multi-turn-openai",
       "split": "dev[:256]"
     }
   },
