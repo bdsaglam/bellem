@@ -12,7 +12,7 @@ def prepare_llama2_for_training(tokenizer, model):
 
 def prepare_llama2_for_inference(tokenizer, model):
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
+    tokenizer.padding_side = "left"  # Fix weird overflow issue with fp16 training
     model.config.use_cache = True
 
 # %% ../../../nbs/hf.transformers.llama.ipynb 4
