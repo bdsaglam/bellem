@@ -2,11 +2,11 @@
   "seed": 42,
   "dataset": {
     "train": {
-      "path": "bdsaglam/webnlg-jerx-sft-multi-turn-openai",
+      "path": "bdsaglam/webnlg-musique-jerx-sft-multi-turn-multi-sentence-openai",
       "split": "train"
     },
     "validation": {
-      "path": "bdsaglam/webnlg-jerx-sft-multi-turn-openai",
+      "path": "bdsaglam/webnlg-musique-jerx-sft-multi-turn-multi-sentence-openai",
       "split": "dev[:256]"
     }
   },
