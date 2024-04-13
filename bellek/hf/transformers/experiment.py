@@ -46,7 +46,10 @@ def preprocess_config(config: NestedDict):
     if config.at("trainer.lora") and "-peft" not in model_id:
         model_id += "-peft"
     if "debug" not in model_id:
-        model_id += f"-{generate_time_id()}"
+        if wandb_run_id := config.at("wandb.run_id"):
+            model_id += f"-{wandb_run_id}"
+        else:
+            model_id += f"-{generate_time_id()}"
     config.set("hfhub.model_id", model_id)
 
     return config
