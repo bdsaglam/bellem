@@ -78,7 +78,7 @@ def fine_tune(config: NestedDict):
     tokenizer, base_model = load_tokenizer_model(model_id, **pretrained_model_config)
     log.info(f"Loaded base model {model_id}")
 
-    if "llama" in model_id:
+    if "llama" in model_id.lower():
         from bellek.hf.transformers.llama import prepare_llama2_for_training
 
         log.info("Base model is a LLAMA model, preparing it for training.")
