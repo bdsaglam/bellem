@@ -54,7 +54,6 @@ def prepare_config_for_fp(config: NestedDict):
     
     return config
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 5
 def preprocess_config(config: NestedDict):
     config = deepcopy(config)
 
@@ -73,7 +72,7 @@ def preprocess_config(config: NestedDict):
     return config
 
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 7
+# %% ../../../nbs/hf.transformers.experiment.ipynb 6
 def make_datacollator(tokenizer, response_template: str | None, response_template_context: str | None = None):
     if not response_template:
         return None
@@ -89,7 +88,7 @@ def make_datacollator(tokenizer, response_template: str | None, response_templat
     
     return data_collator
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 8
+# %% ../../../nbs/hf.transformers.experiment.ipynb 7
 def fine_tune(config: NestedDict):
     from peft import LoraConfig
 
@@ -165,7 +164,7 @@ def fine_tune(config: NestedDict):
     return trainer
 
 
-# %% ../../../nbs/hf.transformers.experiment.ipynb 9
+# %% ../../../nbs/hf.transformers.experiment.ipynb 8
 def make_io_dataset(dataset: Dataset, response_template: str) -> Dataset:
     def extract_input_output(example):
         input, output = example["text"].rsplit(response_template, 1)
