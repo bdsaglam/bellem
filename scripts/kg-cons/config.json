@@ -67,7 +67,8 @@
   },
   "metaconfig": {
     "preprocessing": {
-      "resolve_paths": false
+      "resolve_paths": false,
+      "unique_hfhub_model_id": true
     }
   }
 }
