@@ -63,7 +63,7 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-2-7b-chat-jerx-mt-ss"
+    "model_id": "bdsaglam/llama-2-7b-chat-jerx"
   },
   "metaconfig": {
     "preprocessing": {
