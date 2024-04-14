@@ -176,11 +176,9 @@ def make_io_dataset(dataset: Dataset, response_template: str) -> Dataset:
 
 def _load_tokenizer_model(config: NestedDict):
     model_id = config.at("hfhub.model_id")
-    quantization_config = config.at("pretrained_model.quantization_config")
-    return load_tokenizer_model(
-        model_id,
-        quantization_config=quantization_config,
-    )
+    kwargs = deepcopy(config["pretrained_model"])
+    kwargs.pop("model_name_or_path")
+    return load_tokenizer_model(model_id, **kwargs)
 
 def make_pipeline(config, tokenizer, model):
     model_id = config.at("hfhub.model_id")
