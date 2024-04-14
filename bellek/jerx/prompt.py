@@ -44,7 +44,7 @@ class JERXChatFormatter:
             self.make_system_message(max_triplets),
             *[message for example in batch for message in self.make_messages(example)],
         ]
-        return {'chat': messages}
+        return {'messages': messages}
 
     def make_system_message(self, max_triplets: int) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""

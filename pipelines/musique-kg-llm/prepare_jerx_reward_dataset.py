@@ -50,9 +50,9 @@ def make_input_output(row):
 
 def load_llm_erx_generations(knowledge_graph_directory: Path, example_ids: list[str]) -> pd.DataFrame:
     df = pd.concat([read_llm_traces(knowledge_graph_directory / id / "traces.jsonl") for id in example_ids])
-    df["chat"] = df.apply(make_chat, axis=1)
-    df["jerx.input"] = df.apply(lambda row: row["chat"][-2]["content"], axis=1)
-    df["jerx.output"] = df.apply(lambda row: row["chat"][-1]["content"], axis=1)
+    df["messages"] = df.apply(make_chat, axis=1)
+    df["jerx.input"] = df.apply(lambda row: row["messages"][-2]["content"], axis=1)
+    df["jerx.output"] = df.apply(lambda row: row["messages"][-1]["content"], axis=1)
     return df[["id", "jerx.input", "jerx.output"]]
 
 

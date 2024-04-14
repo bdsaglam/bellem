@@ -11,7 +11,7 @@ def alpaca2sharegpt(example):
         messages.append({"from": "system", "value": example["instruction"]})
     messages.append({"from": "human", "value": example["input"]})
     messages.append({"from": "gpt", "value": example["output"]})
-    return {"chat": messages}
+    return {"messages": messages}
 
 
 def alpaca2openai(example):
@@ -20,7 +20,7 @@ def alpaca2openai(example):
         messages.append({"role": "system", "content": example["instruction"]})
     messages.append({"role": "user", "content": example["input"]})
     messages.append({"role": "assistant", "content": example["output"]})
-    return {"chat": messages}
+    return {"messages": messages}
 
 
 def sharegpt2openai_message(message):
@@ -35,11 +35,11 @@ def openai2sharegpt_message(message):
 
 def sharegpt2openai(example):
     return {
-        "chat": [sharegpt2openai_message(message) for message in example["chat"]],
+        "messages": [sharegpt2openai_message(message) for message in example["messages"]],
     }
 
 
 def openai2sharegpt(example):
     return {
-        "chat": [openai2sharegpt_message(message) for message in example["chat"]],
+        "messages": [openai2sharegpt_message(message) for message in example["messages"]],
     }

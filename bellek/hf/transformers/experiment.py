@@ -110,10 +110,10 @@ def fine_tune(config: NestedDict):
 
     # Convert chat to text
     if "text" not in train_ds.column_names:
-        if "chat" not in train_ds.column_names:
-            raise ValueError("Dataset does not have 'text' or 'chat' columns.")
+        if "messages" not in train_ds.column_names:
+            raise ValueError("Dataset does not have 'text' or 'messages' columns.")
         train_ds = train_ds.map(
-            lambda example: {"text": tokenizer.apply_chat_template(example["chat"], tokenize=False, add_generation_prompt=False)}
+            lambda example: {"text": tokenizer.apply_chat_template(example["messages"], tokenize=False, add_generation_prompt=False)}
         )
 
     # Inspect token counts
@@ -260,10 +260,10 @@ def evalu8(
 
     # Convert chat to text
     if "text" not in ds.column_names:
-        if "chat" not in ds.column_names:
-            raise ValueError("Dataset does not have 'text' or 'chat' columns.")
+        if "messages" not in ds.column_names:
+            raise ValueError("Dataset does not have 'text' or 'messages' columns.")
         ds = ds.map(
-            lambda example: {"text": tokenizer.apply_chat_template(example["chat"], tokenize=False, add_generation_prompt=False)}
+            lambda example: {"text": tokenizer.apply_chat_template(example["messages"], tokenize=False, add_generation_prompt=False)}
         )
 
     # Ensure the dataset has input/output columns

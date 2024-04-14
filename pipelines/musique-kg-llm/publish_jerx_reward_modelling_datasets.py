@@ -28,7 +28,7 @@ def format_reward(example):
 
 def make_reward_modelling_chat(example):
     return {
-        "chat": [
+        "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": format_jerx_task(example)},
             {"role": "assistant", "content": format_reward(example)},
@@ -43,7 +43,7 @@ llama2_tokenizer.padding_side = "right"
 
 
 def format_for_llama2(example):
-    text = llama2_tokenizer.apply_chat_template(example["chat"], tokenize=False)
+    text = llama2_tokenizer.apply_chat_template(example["messages"], tokenize=False)
     return {"text": text}
 
 
@@ -61,7 +61,7 @@ def publish_datasets(reward_df: pd.DataFrame):
     openai_ds.push_to_hub(openai_ds_name)
 
     # reward dataset - llama2 format
-    llama2_ds = openai_ds.map(format_for_llama2, remove_columns=["chat"])
+    llama2_ds = openai_ds.map(format_for_llama2, remove_columns=["messages"])
     llama2_ds_name = f"{prefix}-llama2"
     llama2_ds.push_to_hub(llama2_ds_name)
 

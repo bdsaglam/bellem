@@ -6,17 +6,17 @@ __all__ = ['prepare_llama2_for_training', 'prepare_llama2_for_inference', 'chat2
 # %% ../../../nbs/hf.transformers.llama.ipynb 3
 def prepare_llama2_for_training(tokenizer, model):
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "right"  # Fix weird overflow issue with fp16 training
+    tokenizer.padding_side = "right"
     model.config.pretraining_tp = 1
     model.config.use_cache = False
 
 def prepare_llama2_for_inference(tokenizer, model):
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = "left"  # Fix weird overflow issue with fp16 training
+    tokenizer.padding_side = "left"
     model.config.use_cache = True
 
 # %% ../../../nbs/hf.transformers.llama.ipynb 4
-def chat2text(example, key="chat", tokenizer=None):
+def chat2text(example, key="messages", tokenizer=None):
     if tokenizer is None:
         from transformers import AutoTokenizer
 
@@ -56,4 +56,4 @@ def _split_into_interactions(prompt):
 
 def text2chat(text: str):
     messages = [message for conv in _split_into_interactions(text) for message in _extract_messages_from_conv(conv)]
-    return {"chat": messages}
+    return {"messages": messages}
