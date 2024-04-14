@@ -6,8 +6,8 @@
       "split": "train"
     },
     "validation": {
-      "path": "bdsaglam/webnlg-jerx-sft-multi-turn-multi-sentence-openai",
-      "split": "dev[:256]"
+      "path": "bdsaglam/musique-jerx-sft-openai",
+      "split": "train"
     }
   },
   "pretrained_model": {
