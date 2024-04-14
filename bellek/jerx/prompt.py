@@ -57,4 +57,4 @@ class JERXChatFormatter:
             yield {"role": "assistant", "content": self._format_triplets(example["triplets"])}
 
     def _format_triplets(self, triplets: Iterable[str]) -> str:
-        return '\n'.join(sorted(triplets))
+        return '\n'.join(triplets)
