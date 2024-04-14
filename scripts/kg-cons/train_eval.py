@@ -1,5 +1,5 @@
 import wandb
-from bellek.hf.transformers.experiment import evalu8, fine_tune, preprocess_config
+from bellek.hf.transformers.experiment import evaluate_, fine_tune, preprocess_config
 from bellek.jerx.eval import parse_triplet_strings
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
@@ -19,7 +19,7 @@ def run_experiment(wandb_run):
 
     # evaluation
     config = NestedDict.from_flat_dict(wandb_run.config)
-    scores, eval_df = evalu8(
+    scores, eval_df = evaluate_(
         config,
         tokenizer=trainer.tokenizer,
         model=trainer.model,

@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['log', 'prepare_config_for_fp', 'preprocess_config', 'make_datacollator', 'fine_tune', 'make_io_dataset',
-           'make_pipeline', 'flat_pipeline', 'evaluate_pipeline', 'evalu8']
+           'make_pipeline', 'flat_pipeline', 'evaluate_pipeline', 'evaluate_']
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
@@ -238,7 +238,7 @@ def evaluate_pipeline(
     return scores, dataf
 
 
-def evalu8(
+def evaluate_(
     config,
     *,
     tokenizer=None,
@@ -291,4 +291,5 @@ def evalu8(
         metric_kwargs=metric_kwargs,
         output_parse_fn=output_parse_fn,
     )
+
 
