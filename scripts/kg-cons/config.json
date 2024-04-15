@@ -53,7 +53,11 @@
   "evaluation": {
     "pipeline": {
       "batch_size": 8,
-      "return_full_text": false
+      "return_full_text": false,
+      "min_length": -1,
+      "do_sample": true,
+      "top_k": 0,
+      "top_p": 1.0
     },
     "metric": "bdsaglam/jer"
   },
