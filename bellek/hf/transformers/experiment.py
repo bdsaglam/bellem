@@ -10,11 +10,12 @@ from math import ceil
 from typing import Any, Callable
 
 import torch
-from datasets import Dataset, load_dataset
+from datasets import Dataset, load_dataset, concatenate_datasets
 from transformers import TrainingArguments, pipeline
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from .utils import load_tokenizer_model
+from ..datasets.utils import load_datasets
 from ...logging import get_logger
 from ...utils import NestedDict, generate_time_id
 
@@ -56,6 +57,11 @@ def prepare_config_for_fp(config: NestedDict):
 
 def preprocess_config(config: NestedDict):
     config = deepcopy(config)
+
+    if isinstance(config.at("dataset.train"), dict):
+        config.set("dataset.train", [config.at("dataset.train")])
+    if isinstance(config.at("dataset.validation"), dict):
+        config.set("dataset.validation", [config.at("dataset.validation")])
 
     config = prepare_config_for_fp(config)
     
@@ -105,7 +111,7 @@ def fine_tune(config: NestedDict):
         prepare_llama2_for_training(tokenizer, base_model)
 
     # Train dataset
-    train_ds = load_dataset(**config.at("dataset.train"))
+    train_ds = load_datasets(config.at("dataset.train"))
     log.info(f"Loaded training dataset with {len(train_ds)} samples.")
 
     # Convert chat to text
@@ -249,7 +255,7 @@ def evaluate_(
     # Load validation dataset
     ds_config = config.at("dataset.validation")
     assert ds_config
-    ds = load_dataset(**ds_config)
+    ds = load_datasets(ds_config)
     assert len(ds) > 0, "Dataset is empty!"
     
     # Prepare text generation pipeline

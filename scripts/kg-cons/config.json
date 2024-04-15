@@ -1,13 +1,19 @@
 {
   "seed": 42,
   "dataset": {
-    "train": {
-      "path": "bdsaglam/webnlg-jerx-sft-st-ms-openai",
-      "split": "train"
-    },
+    "train": [
+      {
+        "path": "bdsaglam/webnlg-jerx-sft-st-ms-openai",
+        "split": "train"
+      },
+      {
+        "path": "bdsaglam/musique-jerx-sft-st-ss-openai",
+        "split": "train[:100]"
+      }
+    ],
     "validation": {
       "path": "bdsaglam/musique-jerx-sft-st-ss-openai",
-      "split": "train"
+      "split": "train[100:]"
     }
   },
   "pretrained_model": {
