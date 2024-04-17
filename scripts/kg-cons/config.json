@@ -8,8 +8,8 @@
       }
     ],
     "validation": {
-      "path": "bdsaglam/musique-jerx-sft-mt-ss-openai",
-      "split": "train"
+      "path": "bdsaglam/webnlg-jerx-sft-mt-ms-openai",
+      "split": "dev"
     }
   },
   "pretrained_model": {
