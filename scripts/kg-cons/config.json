@@ -9,7 +9,7 @@
     ],
     "validation": {
       "path": "bdsaglam/webnlg-jerx-sft-mt-ms-openai",
-      "split": "dev"
+      "split": "dev[:256]"
     }
   },
   "pretrained_model": {
