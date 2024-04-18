@@ -15,6 +15,14 @@ model_list:
     litellm_params:
       model: gpt-4-0613
       api_key: os.environ/OPENAI_API_KEY
+  - model_name: gpt-4-1106-preview
+    litellm_params:
+      model: gpt-4-1106-preview
+      api_key: os.environ/OPENAI_API_KEY
+  - model_name: gpt-4-turbo
+    litellm_params:
+      model: gpt-4-turbo
+      api_key: os.environ/OPENAI_API_KEY
   - model_name: text-embedding-ada-002
     litellm_params:
       model: text-embedding-ada-002
