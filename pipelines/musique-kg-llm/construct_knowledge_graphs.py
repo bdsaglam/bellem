@@ -19,6 +19,7 @@ from llama_index.storage.storage_context import StorageContext
 from pyvis.network import Network
 from rich.console import Console
 
+from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE
 from bellek.jerx.utils import parse_triplets
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
@@ -75,69 +76,14 @@ def make_service_context(llm_config: dict[str, Any], trace_callback_handler: Bas
 
 
 LLAMA2_KG_TRIPLET_EXTRACT_TMPL = """<s>[INST] <<SYS>>
-You are a helpful assistant that extracts up to {max_knowledge_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line. The entities in a triplet must be different.
+You are a helpful assistant that extracts up to {max_knowledge_triplets} entity-relation-entity triplets from given text. Use ' | ' as delimiter and provide one triplet per line. The entities in a triplet must be different.
 <</SYS>>
-Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC|ground|Al Khor
-Alaa Abdul-Zahra|club|Al Kharaitiyat SC
-Alaa Abdul-Zahra|club|Al Shorta SC </s><s>[INST] {text} [/INST] """
-
-DEFAULT_KG_TRIPLET_EXTRACT_TMPL = """
-Your task is to perform detailed entity-relation extraction from a document, creating a network of entities and their interrelations that enables answering complex, multi-hop questions. This requires careful analysis to identify and categorize entities (such as individuals, locations, organizations) and the specific, nuanced relationships between them.
-
-Extract up to {max_knowledge_triplets} entity-relation-entity triplets from the given text.
-
-# Guidelines
-The goal is to build a detailed and accurate map of entities and their interrelations, enabling a comprehensive understanding of the document's content and supporting the answering of detailed, multi-hop questions derived from or related to the document. Prepare to adapt your extraction techniques to the nuances and specifics presented by the document, recognizing the diversity in structures and styles across documents.
-
-# Core Objectives:
-- **Comprehensive Entity and Relation Identification**: Systematically identify all relevant entities and their relationships within the document. Each entity and relation must be captured with precision, reflecting the document's depth of information.
-
-- **Entity Differentiation and Categorization**: Distinguish between different types of entities, avoiding the amalgamation of distinct entities into a single category. For instance, separate individuals from their professions or titles and define their relationship clearly.
-
-- **Clarification of Relationships and Avoidance of Redundancy**: Ensure each relationship is clearly defined, avoiding duplicate information. Relations should form a coherent, logical network, mapping connections between entities accurately, especially in hierarchical or geographic contexts.
-
-- **Inference of Implicit Relations**: Infer and articulate relations that are implied but not explicitly stated within the document. This nuanced understanding allows for a richer, more interconnected entity-relation map.
-
-- **Consistency and Cross-Validation**: Maintain consistency in entity references throughout the document and cross-validate entities and relations for accuracy. This includes harmonizing multiple references to the same entity and ensuring the entity-relation map is free from contradictions.
-
-- **Detail-Oriented Relation Extraction**: Pay attention to the details within relations, capturing temporal and quantitative aspects where relevant. This adds depth to the understanding of each relationship, enhancing the capability to answer nuanced questions. Capture date and time relations with full detail as much as possible.
-
-# Disambiguation and Unique Identification:
-- **Explicit Disambiguation of Identical Names**: When encountering entities with identical names, explicitly disambiguate them by adding context-specific qualifiers in parentheses. These qualifiers should reflect the nature or category of the entity to prevent confusion and ensure clear differentiation. For example, differentiate geographical locations from non-geographical entities, people from non-person entities, and temporal from non-temporal entities with appropriate qualifiers.
-
-# Formatting
-- Avoid stopwords.
-- Encode dates in the format: January 1, 1990
-- Employ the format: `entity1 | relation | entity2` for each extracted relation, ensuring clarity and precision in representation. Each triplet should be in a new line.
-
-# Example
-Text: 
-Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World
-Champion in middleweight.
-
-The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
-was elected on March 5, 2011.
-
-Triplets:
-Glenhis Hernández (Athlete) | born on | October 7, 1990
-Glenhis Hernández (Athlete) | born in | Havana
-Glenhis Hernández (Athlete) | specializes in | taekwondo
-Glenhis Hernández (Athlete) | won | 2013 World Champion title (Middleweight)
-Marta Hernández Romero (Politician) | serves as | mayor of Havana
-Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
-Marta Hernández Romero (Politician) | elected | on March 5, 2011.
-
-Text: 
-{text}
-
-Triplets:
-
-""".strip()
+Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC | ground | Al Khor
+Alaa Abdul-Zahra | club | Al Kharaitiyat SC
+Alaa Abdul-Zahra | club | Al Shorta SC </s><s>[INST] {text} [/INST] """
 
 
 # Patch KnowledgeGraphIndex to handle the response from JERX prompt
-
-
 def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
     triplets = parse_triplets(response.strip())
     return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
@@ -147,7 +93,7 @@ KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_respon
 
 
 def make_erx_prompt(model_type: str):
-    prompt_str = LLAMA2_KG_TRIPLET_EXTRACT_TMPL if "llama2" in model_type else DEFAULT_KG_TRIPLET_EXTRACT_TMPL
+    prompt_str = LLAMA2_KG_TRIPLET_EXTRACT_TMPL if "llama2" in model_type else DEFAULT_JERX_CHAT_TEMPLATE
     return Prompt(
         prompt_str,
         prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,

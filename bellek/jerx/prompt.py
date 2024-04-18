@@ -13,7 +13,7 @@ from ..logging import get_logger
 log = get_logger(__name__)
 
 # %% ../../nbs/jerx.prompt.ipynb 6
-DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text. Use '|' as delimiter and provide one triplet per line. The entities in a triplet must be different.
+DEFAULT_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts up to {max_triplets} entity-relation-entity triplets from given text. Use '{delimiter}' as delimiter and provide one triplet per line. The entities in a triplet must be different.
 {relation_set_prompt}
 """.strip()
 
@@ -27,6 +27,7 @@ class JERXChatFormatter:
     relation_set_prompt_template: str = DEFAULT_RELATION_SET_PROMPT_TEMPLATE
     relation_set: set|None = None
     max_triplets_margin: int = 0
+    delimiter: str = " | "
 
     def __post_init__(self):
         if self.relation_set:
@@ -48,7 +49,7 @@ class JERXChatFormatter:
 
     def make_system_message(self, max_triplets: int) -> str:
         rsp = self.relation_set_prompt_template.format(relation_set=','.join(self.relation_set)) if self.relation_set else ""
-        content = self.system_prompt_template.format(max_triplets=max_triplets, relation_set_prompt=rsp)
+        content = self.system_prompt_template.format(max_triplets=max_triplets, delimiter=self.delimiter, relation_set_prompt=rsp)
         return {"role": "system", "content": content}
 
     def make_messages(self, example: dict) -> Generator[dict, None, None]:
