@@ -25,32 +25,32 @@ def read_llm_traces(filepath: Path | str) -> pd.DataFrame:
     return df
 
 
-def make_chat(row):
+def make_chat_messages(row):
     if "attributes.llm.input_messages" in row:  # openai trace
-        chat = [
+        messages = [
             {"role": msg["message.role"], "content": msg["message.content"]}
             for msg in row["attributes.llm.input_messages"] + row["attributes.llm.output_messages"]
         ]
-        for msg in chat:
+        for msg in messages:
             if msg["role"] == "user":
                 msg["content"] = msg["content"].rsplit("Text: \n", 1)[-1].replace("\nTriplets:", "").strip()
     elif "attributes.llm.prompts" in row:  # llama trace
         llm_input = row["attributes.llm.prompts"][0]
         llm_output = row["attributes.output.value"]
-        chat = text2chat(llm_input + llm_output)
+        messages = text2chat(llm_input + llm_output)
     else:
         raise ValueError("Unknown LLM trace format.")
-    return chat
+    return messages
 
 
 def make_input_output(row):
-    chat = make_chat(row)[-2:]
+    chat = make_chat_messages(row)[-2:]
     return {"jerx.input": chat[0]["content"], "jerx.output": chat[1]["content"]}
 
 
 def load_llm_erx_generations(knowledge_graph_directory: Path, example_ids: list[str]) -> pd.DataFrame:
     df = pd.concat([read_llm_traces(knowledge_graph_directory / id / "traces.jsonl") for id in example_ids])
-    df["messages"] = df.apply(make_chat, axis=1)
+    df["messages"] = df.apply(make_chat_messages, axis=1)
     df["jerx.input"] = df.apply(lambda row: row["messages"][-2]["content"], axis=1)
     df["jerx.output"] = df.apply(lambda row: row["messages"][-1]["content"], axis=1)
     return df[["id", "jerx.input", "jerx.output"]]
