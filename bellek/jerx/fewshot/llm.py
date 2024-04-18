@@ -2,11 +2,12 @@
 
 # %% auto 0
 __all__ = ['log', 'DEFAULT_JERX_SYSTEM_MESSAGE_TEMPLATE', 'DEFAULT_JERX_USER_MESSAGE_TEMPLATE',
-           'DEFAULT_JERX_ASSISTANT_MESSAGE_TEMPLATE', 'DEFAULT_JERX_CHAT_TEMPLATE']
+           'DEFAULT_JERX_ASSISTANT_MESSAGE_TEMPLATE', 'DEFAULT_JERX_CHAT_TEMPLATE', 'make_kg_triplet_extract_fn']
 
 # %% ../../../nbs/jerx.fewshot.llm.ipynb 3
 from llama_index.prompts import ChatPromptTemplate
-from llama_index.core.llms.types import ChatMessage
+from llama_index.llms import ChatMessage, OpenAI, LLM
+from ..utils import parse_triplets
 from ...logging import get_logger
 
 log = get_logger(__name__)
@@ -68,3 +69,19 @@ DEFAULT_JERX_CHAT_TEMPLATE = ChatPromptTemplate(
         ChatMessage(role='user', content="{text}"),
     ]
 )
+
+# %% ../../../nbs/jerx.fewshot.llm.ipynb 6
+def make_kg_triplet_extract_fn(
+    *,
+    max_knowledge_triplets: int = 10,
+    llm: LLM | None = None,
+):
+    if llm is None:
+        llm = OpenAI(model="gpt-3.5-turbo")
+
+    def extract_kg_triplets(text: str) -> list[tuple[str, str, str]]:
+        messages = DEFAULT_JERX_CHAT_TEMPLATE.format_messages(max_knowledge_triplets=max_knowledge_triplets, text=text)
+        response = llm.chat(messages)
+        return parse_triplets(response.message.content)
+
+    return extract_kg_triplets

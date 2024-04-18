@@ -19,7 +19,7 @@ from llama_index.storage.storage_context import StorageContext
 from pyvis.network import Network
 from rich.console import Console
 
-from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE
+from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE, make_kg_triplet_extract_fn
 from bellek.jerx.utils import parse_triplets
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
@@ -89,15 +89,21 @@ def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[
     return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
 
 
-KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
-
-
-def make_erx_prompt(model_type: str):
-    prompt_str = LLAMA2_KG_TRIPLET_EXTRACT_TMPL if "llama2" in model_type else DEFAULT_JERX_CHAT_TEMPLATE
-    return Prompt(
-        prompt_str,
-        prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,
-    )
+def make_kwargs(service_context: ServiceContext, model_type: str, max_triplets_per_chunk: int):
+    kwargs = dict(max_triplets_per_chunk=max_triplets_per_chunk)
+    if "llama2" in model_type:
+        kwargs["kg_triple_extract_template"] = Prompt(
+            LLAMA2_KG_TRIPLET_EXTRACT_TMPL,
+            prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,
+        )
+        KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
+    else:
+        kg_triplet_extract_fn = make_kg_triplet_extract_fn(
+            llm=service_context.llm,
+            max_knowledge_triplets=max_triplets_per_chunk,
+        )
+        kwargs["kg_triplet_extract_fn"] = kg_triplet_extract_fn
+    return kwargs
 
 
 def make_docs(example, only_supporting=False):
@@ -146,13 +152,13 @@ def construct_knowledge_graph(
 
     # Create knowledge graph index
     err(f"Creating the knowledge graph index for sample {id}")
+    kwargs = make_kwargs(service_context, llm_config["type"], max_triplets_per_chunk)
     index = KnowledgeGraphIndex.from_documents(
         documents=documents,
-        max_triplets_per_chunk=max_triplets_per_chunk,
         storage_context=storage_context,
         service_context=service_context,
         include_embeddings=include_embeddings,
-        kg_triple_extract_template=make_erx_prompt(llm_config["type"]),
+        **kwargs,
     )
 
     err(f"Persisting the knowledge graph index for sample {id}")
