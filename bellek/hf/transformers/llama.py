@@ -6,12 +6,14 @@ __all__ = ['prepare_llama2_for_training', 'prepare_llama2_for_inference', 'chat2
 # %% ../../../nbs/hf.transformers.llama.ipynb 3
 def prepare_llama2_for_training(tokenizer, model):
     tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token_id = tokenizer.eos_token_id
     tokenizer.padding_side = "right" # Fix weird overflow issue with fp16 training
     model.config.pretraining_tp = 1
     model.config.use_cache = False
 
 def prepare_llama2_for_inference(tokenizer, model):
     tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token_id = tokenizer.eos_token_id
     tokenizer.padding_side = "left"
     model.config.use_cache = True
 
