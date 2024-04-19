@@ -62,7 +62,7 @@ class JERXChatFormatter:
         return '\n'.join(triplets)
 
 # %% ../../nbs/jerx.prompt.ipynb 9
-DEFAULT_SIMPLE_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts entity-relation-entity triplets from given text. Use '{delimiter}' as delimiter and provide one triplet per line. The entities in a triplet must be different.
+DEFAULT_SIMPLE_SYSTEM_PROMPT_TEMPLATE = """You are a helpful assistant that extracts entityA-relation-entityB triplets from given text. Use '{delimiter}' as delimiter and provide one triplet per line.
 """.strip()
 
 @dataclass
