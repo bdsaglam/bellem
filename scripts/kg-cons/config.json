@@ -3,12 +3,12 @@
   "dataset": {
     "train": [
       {
-        "path": "bdsaglam/webnlg-jerx-sft-mt-ms-openai",
+        "path": "bdsaglam/webnlg-jerx-sft-simple-mt-ms-openai",
         "split": "train"
       }
     ],
     "validation": {
-      "path": "bdsaglam/webnlg-jerx-sft-mt-ms-openai",
+      "path": "bdsaglam/webnlg-jerx-sft-simple-mt-ms-openai",
       "split": "dev[:256]"
     }
   },
