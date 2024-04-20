@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['log', 'prepare_config_for_fp', 'preprocess_config', 'make_datacollator', 'prepare_model_for_training',
-           'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_io_dataset', 'make_pipeline',
-           'flat_pipeline', 'evaluate_pipeline', 'evaluate_']
+           'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_pipeline', 'flat_pipeline',
+           'predict', 'evaluate_']
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
@@ -102,17 +102,17 @@ def prepare_model_for_training(tokenizer, model):
     if "llama-2" in model_id:
         from bellek.hf.transformers.llama2 import prepare_llama2_for_training
 
-        log.info("Base model is a LLAMA-2 model, preparing it for training.")
+        log.info("Base model is a llama-2 model, preparing it for training.")
         prepare_llama2_for_training(tokenizer, model)
     
     elif "llama-3" in model_id:
         from bellek.hf.transformers.llama3 import prepare_llama3_for_training
 
-        log.info("Base model is a LLAMA-3 model, preparing it for training.")
+        log.info("Base model is a llama-3 model, preparing it for training.")
         prepare_llama3_for_training(tokenizer, model)
     
     else:
-        log.warning(f"Base model '{model_id}' is not a LLAMA-2 or LLAMA-3 model, no special preparation is done.")
+        log.warning(f"Base model '{model_id}' is not a llama-2 or llama-3 model, no special preparation is done.")
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 8
 def calculate_token_counts(tokenizer, dataset: Dataset, dataset_text_field: str | None):
@@ -205,38 +205,28 @@ def prepare_model_for_inference(tokenizer, model):
     if "llama-2" in model_id:
         from bellek.hf.transformers.llama2 import prepare_llama2_for_inference
 
-        log.info("Base model is a LLAMA-2 model, preparing it for inference.")
+        log.info("Base model is a llama-2 model, preparing it for inference.")
         prepare_llama2_for_inference(tokenizer, model)
     
     elif "llama-3" in model_id:
         from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
 
-        log.info("Base model is a LLAMA-3 model, preparing it for inference.")
+        log.info("Base model is a llama-3 model, preparing it for inference.")
         prepare_llama3_for_inference(tokenizer, model)
     
     else:
-        log.warning(f"Base model '{model_id}' is not a LLAMA-2 or LLAMA-3 model, no special preparation is done.")
+        log.warning(f"Base model '{model_id}' is not a llama-2 or llama-3 model, no special preparation is done.")
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 11
-def make_io_dataset(dataset: Dataset, response_template: str) -> Dataset:
-    def extract_input_output(example):
-        input, output = example["text"].rsplit(response_template, 1)
-        input += response_template
-        return {"input": input, "output": output}
-
-    return dataset.map(extract_input_output)
-
-
 def _load_tokenizer_model(config: NestedDict):
     model_id = config.at("hfhub.model_id")
     kwargs = deepcopy(config.get("pretrained_model", {}))
     kwargs.pop("model_name_or_path", None)
     return load_tokenizer_model(model_id, **kwargs)
 
+
 def make_pipeline(config, tokenizer, model):
     prepare_model_for_inference(tokenizer, model)
-
-    # Create pipeline
     return pipeline(
         task="text-generation",
         model=model,
@@ -246,43 +236,56 @@ def make_pipeline(config, tokenizer, model):
 
 
 def flat_pipeline(pipe):
-    def func(inputs) -> list[str]:
-        results = pipe(inputs)
+    def func(inputs, **kwargs) -> list[str]:
+        results = pipe(inputs, **kwargs)
         return [result[0]["generated_text"] for result in results]
 
     return func
 
 
-def evaluate_pipeline(
-    dataset,
+def predict(
     pipe,
+    dataset,
     *,
-    metric,
-    metric_kwargs: dict | None = None,
     output_parse_fn: Callable[[str], Any] | None = None,
+    **generation_kwargs,
 ):
-    eos_token = pipe.tokenizer.special_tokens_map["eos_token"]
-    def parse_output(text):
-        text = text.replace(eos_token, "").strip()
-        if output_parse_fn:
-            text = output_parse_fn(text)
-        return text
-
     log.info(f"Running pipeline on dataset with {len(dataset)} samples...")
-    generations = flat_pipeline(pipe)(dataset["input"])
 
-    predictions = [parse_output(text) for text in generations]
-    references = [parse_output(text) for text in dataset["output"]]
+    # Setup generation parameters
+    generation_kwargs["return_full_text"] = False
 
+    if "max_new_tokens" not in generation_kwargs:
+        tokenized_outputs = dataset.map(lambda examples: pipe.tokenizer(examples["output"]), batched=True)
+        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
+        log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
+        generation_kwargs["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
+    
+    terminators = generation_kwargs.pop("terminators", [])
+    eos_token_ids = [pipe.tokenizer.eos_token_id]
+    for terminator in terminators:
+        if isinstance(terminator, int):
+            eos_token_ids.append(terminator)
+        elif isinstance(terminator, str):
+            eos_token_ids.append(pipe.tokenizer.convert_tokens_to_ids(terminator))
+        else:
+            raise ValueError(f"Invalid terminator token {terminator}.")
+    generation_kwargs["eos_token_id"] = sorted(set(eos_token_ids))
+
+    # Generate text
+    generations = flat_pipeline(pipe)(dataset["input"], **generation_kwargs)
+
+    # Parse outputs
+    predictions = [output_parse_fn(text) for text in generations]
+    references = [output_parse_fn(text) for text in dataset["output"]]
+
+    # Create dataframe
     dataf = dataset.to_pandas()
     dataf["generation"] = generations
     dataf["prediction"] = predictions
     dataf["reference"] = references
-    
-    metric_kwargs = metric_kwargs or {}
-    scores = metric.compute(predictions=predictions, references=references, **metric_kwargs)
 
-    return scores, dataf
+    return dataf
 
 
 def evaluate_(
@@ -296,46 +299,36 @@ def evaluate_(
     import evaluate
 
     # Load validation dataset
-    ds_config = config.at("dataset.validation")
-    assert ds_config
-    ds = load_datasets(ds_config)
-    assert len(ds) > 0, "Dataset is empty!"
-    
+    dataset_config = config.at("dataset.validation")
+    assert dataset_config, "Validation dataset is not provided!"
+    dataset = load_datasets(dataset_config)
+    assert len(dataset) > 0, "Validation dataset is empty!"
+
     # Prepare text generation pipeline
     if tokenizer is None or model is None:
         tokenizer, model = _load_tokenizer_model(config)
 
-    # Convert chat to text
-    if "text" not in ds.column_names:
-        if "messages" not in ds.column_names:
-            raise ValueError("Dataset does not have 'text' or 'messages' columns.")
-        ds = ds.map(
-            lambda example: {"text": tokenizer.apply_chat_template(example["messages"], tokenize=False, add_generation_prompt=False)}
-        )
-
     # Ensure the dataset has input/output columns
-    cols = ds[0].keys()
+    cols = dataset[0].keys()
     if "input" not in cols or "output" not in cols:
-        response_template = config.at("trainer.response_template")
-        assert response_template
-        ds = make_io_dataset(ds, response_template)
+        if "messages" not in dataset.column_names:
+            raise ValueError("Dataset must have 'messages' column if 'input' and 'output' columns are not provided.")
+        dataset["input"] = dataset.map(lambda x: x["messages"][:-1])
+        dataset["output"] = dataset.map(lambda x: x["messages"][-1]["content"])
+        dataset = dataset.remove_columns("messages")
 
-    if config.at("evaluation.pipeline.max_new_tokens") is None:
-        tokenized_outputs = ds.map(lambda examples: tokenizer(examples["output"]), batched=True)
-        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
-        config.set("evaluation.pipeline.max_new_tokens", ceil(max(token_counts) / 8) * 8)
-        
-    log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
     pipe = make_pipeline(config, tokenizer, model)
 
-    # Load evaluation metric
-    metric = evaluate.load(config.at("evaluation.metric"))
-
-    return evaluate_pipeline(
-        ds,
+    dataf = predict(
         pipe,
-        metric=metric,
-        metric_kwargs=metric_kwargs,
+        dataset,
         output_parse_fn=output_parse_fn,
+        **config.at("evaluation.generation_params", {}),
     )
 
+    # Compute metrics
+    metric = evaluate.load(config.at("evaluation.metric"))
+    metric_kwargs = metric_kwargs or {}
+    scores = metric.compute(predictions=dataf["prediction"], references=dataf["reference"], **metric_kwargs)
+
+    return scores, dataf

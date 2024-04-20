@@ -13,7 +13,7 @@
     }
   },
   "pretrained_model": {
-    "model_name_or_path": "NousResearch/Llama-2-7b-chat-hf",
+    "model_name_or_path": "NousResearch/Meta-Llama-3-8B-Instruct",
     "torch_dtype": "bfloat16",
     "quantization_config": {
       "load_in_8bit": false,
@@ -30,7 +30,7 @@
       "bias": "none",
       "task_type": "CAUSAL_LM"
     },
-    "response_template": "[/INST]",
+    "response_template": "<|start_header_id|>assistant<|end_header_id|>",
     "response_template_context": " ",
     "training_args": {
       "bf16": true,
@@ -56,12 +56,14 @@
     "pipeline": {
       "batch_size": 8
     },
-    "generation_params":{
+    "generation_params": {
       "min_length": -1,
       "do_sample": true,
       "top_k": 0,
       "top_p": 1.0,
-      "return_full_text": false
+      "eos_token_id": [
+        "<|eot_id|>"
+      ]
     },
     "metric": "bdsaglam/jer"
   },
@@ -71,7 +73,7 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-2-7b-chat-jerx"
+    "model_id": "bdsaglam/llama-3-8b-inst-jerx"
   },
   "metaconfig": {
     "preprocessing": {
