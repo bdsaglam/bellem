@@ -60,7 +60,7 @@
       "do_sample": true,
       "top_k": 0,
       "top_p": 1.0,
-      "eos_token_id": [
+      "terminators": [
         "<|eot_id|>"
       ]
     },
