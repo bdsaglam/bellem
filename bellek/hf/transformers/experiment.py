@@ -146,7 +146,7 @@ def fine_tune(config: NestedDict):
     prepare_model_for_training(tokenizer, base_model)
 
     # Train dataset
-    train_ds = load_datasets(config.at("dataset.train"))
+    train_ds = load_datasets(config.at("dataset.train")).shuffle(seed=config.at("seed"))
     log.info(f"Loaded training dataset with {len(train_ds)} samples.")
 
     # Inspect token counts
@@ -303,11 +303,7 @@ def evaluate_(
     assert dataset_config, "Validation dataset is not provided!"
     dataset = load_datasets(dataset_config)
     assert len(dataset) > 0, "Validation dataset is empty!"
-
-    # Prepare text generation pipeline
-    if tokenizer is None or model is None:
-        tokenizer, model = _load_tokenizer_model(config)
-
+    
     # Ensure the dataset has input/output columns
     cols = dataset[0].keys()
     if "input" not in cols or "output" not in cols:
@@ -316,6 +312,10 @@ def evaluate_(
         dataset = dataset.map(
             lambda x: {"input": x["messages"][:-1], "output": x["messages"][-1]["content"]}
         ).remove_columns("messages")
+
+    # Prepare text generation pipeline
+    if tokenizer is None or model is None:
+        tokenizer, model = _load_tokenizer_model(config)
 
     pipe = make_pipeline(config, tokenizer, model)
 
