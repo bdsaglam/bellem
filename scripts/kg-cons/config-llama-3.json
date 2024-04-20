@@ -73,7 +73,7 @@
     "project": "thesis-kgcons"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-3-8b-inst-jerx"
+    "model_id": "bdsaglam/llama-3-8b-jerx"
   },
   "metaconfig": {
     "preprocessing": {
