@@ -32,7 +32,6 @@
       "task_type": "CAUSAL_LM"
     },
     "response_template": "<|start_header_id|>assistant<|end_header_id|>",
-    "response_template_context": " ",
     "training_args": {
       "bf16": true,
       "fp16": false,
