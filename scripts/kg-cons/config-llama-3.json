@@ -7,10 +7,12 @@
         "split": "train"
       }
     ],
-    "validation": {
-      "path": "bdsaglam/webnlg-jerx-sft-simple-mt-ms-openai",
-      "split": "dev[:256]"
-    }
+    "validation": [
+      {
+        "path": "bdsaglam/webnlg-jerx-sft-simple-mt-ms-openai",
+        "split": "dev[:256]"
+      }
+    ]
   },
   "pretrained_model": {
     "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
