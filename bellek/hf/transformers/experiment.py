@@ -11,7 +11,7 @@ from math import ceil
 from typing import Any, Callable
 
 import torch
-import tqdm
+from tqdm import tqdm
 from datasets import Dataset
 from transformers import TrainingArguments, pipeline
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
@@ -238,7 +238,7 @@ def make_pipeline(config, tokenizer, model):
 
 def flat_pipeline(pipe):
     def func(inputs, **kwargs) -> list[str]:
-        return [result[0]["generated_text"] for result in pipe(inputs, **kwargs)]
+        return [result[0]["generated_text"] for result in tqdm(pipe(inputs, **kwargs))]
 
     return func
 
