@@ -329,6 +329,6 @@ def evaluate_(
     # Compute metrics
     metric = evaluate.load(config.at("evaluation.metric"))
     metric_kwargs = metric_kwargs or {}
-    scores = metric.compute(predictions=dataf["prediction"], references=dataf["reference"], **metric_kwargs)
+    scores = metric.compute(predictions=dataf["prediction"].values, references=dataf["reference"].values, **metric_kwargs)
 
     return scores, dataf
