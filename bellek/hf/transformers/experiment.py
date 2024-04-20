@@ -262,15 +262,15 @@ def predict(
         generation_kwargs["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
 
     terminators = generation_kwargs.pop("terminators", [])
-    eos_token_ids = [pipe.tokenizer.eos_token_id]
+    eos_token_ids = {pipe.tokenizer.eos_token_id}
     for terminator in terminators:
         if isinstance(terminator, int):
-            eos_token_ids.append(terminator)
+            eos_token_ids.add(terminator)
         elif isinstance(terminator, str):
-            eos_token_ids.append(pipe.tokenizer.convert_tokens_to_ids(terminator))
+            eos_token_ids.add(pipe.tokenizer.convert_tokens_to_ids(terminator))
         else:
             raise ValueError(f"Invalid terminator token {terminator}.")
-    generation_kwargs["eos_token_id"] = sorted(set(eos_token_ids))
+    generation_kwargs["eos_token_id"] = sorted(eos_token_ids)
 
     # Generate text
     generations = flat_pipeline(pipe)(dataset["input"], **generation_kwargs)
