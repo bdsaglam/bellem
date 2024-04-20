@@ -260,7 +260,7 @@ def predict(
         token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
         log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
         generation_kwargs["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
-    
+
     terminators = generation_kwargs.pop("terminators", [])
     eos_token_ids = [pipe.tokenizer.eos_token_id]
     for terminator in terminators:
@@ -313,9 +313,9 @@ def evaluate_(
     if "input" not in cols or "output" not in cols:
         if "messages" not in dataset.column_names:
             raise ValueError("Dataset must have 'messages' column if 'input' and 'output' columns are not provided.")
-        dataset["input"] = dataset.map(lambda x: x["messages"][:-1])
-        dataset["output"] = dataset.map(lambda x: x["messages"][-1]["content"])
-        dataset = dataset.remove_columns("messages")
+        dataset = dataset.map(
+            lambda x: {"input": x["messages"][:-1], "output": x["messages"][-1]["content"]}
+        ).remove_columns("messages")
 
     pipe = make_pipeline(config, tokenizer, model)
 
