@@ -37,7 +37,7 @@ def make_reward_modelling_chat(example):
 
 
 # LLAMA2 prompt format
-llama2_tokenizer = AutoTokenizer.from_pretrained("NousResearch/Llama-2-7b-hf", trust_remote_code=True)
+llama2_tokenizer = AutoTokenizer.from_pretrained("meta-llama/llama-2-7b-chat-hf", trust_remote_code=True)
 llama2_tokenizer.pad_token = llama2_tokenizer.eos_token
 llama2_tokenizer.padding_side = "right"
 

@@ -25,7 +25,7 @@ from modal import Image, Secret, Stub, gpu, method
 # Any model supported by TGI can be chosen here.
 
 GPU_CONFIG = gpu.T4(count=1)
-MODEL_ID = "NousResearch/Llama-2-7b-chat-hf"
+MODEL_ID = "meta-llama/llama-2-7b-chat-hf"
 LAUNCH_FLAGS = [
     "--model-id",
     MODEL_ID,

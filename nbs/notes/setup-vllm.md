@@ -16,7 +16,7 @@ pip install torch --upgrade --index-url https://download.pytorch.org/whl/cu118
 
 # Start OpenAI API compatible inference server
 
-python -m vllm.entrypoints.openai.api_server --trust-remote-code --model NousResearch/Llama-2-7b-chat-hf
+python -m vllm.entrypoints.openai.api_server --trust-remote-code --model meta-llama/llama-2-7b-chat-hf
 
 # Resources
 https://docs.vllm.ai/en/latest/getting_started/installation.html

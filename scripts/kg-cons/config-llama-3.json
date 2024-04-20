@@ -13,7 +13,7 @@
     }
   },
   "pretrained_model": {
-    "model_name_or_path": "NousResearch/Meta-Llama-3-8B-Instruct",
+    "model_name_or_path": "meta-llama/llama-2-7b-chat-hf",
     "torch_dtype": "bfloat16",
     "quantization_config": {
       "load_in_4bit": true,
