@@ -36,8 +36,8 @@
       "bf16": true,
       "fp16": false,
       "group_by_length": false,
-      "per_device_train_batch_size": 4,
-      "gradient_accumulation_steps": 2,
+      "per_device_train_batch_size": 2,
+      "gradient_accumulation_steps": 4,
       "gradient_checkpointing": true,
       "max_grad_norm": 0.3,
       "weight_decay": 0.001,
@@ -54,7 +54,7 @@
   },
   "evaluation": {
     "pipeline": {
-      "batch_size": 8
+      "batch_size": 4
     },
     "generation_params": {
       "min_length": -1,
