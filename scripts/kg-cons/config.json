@@ -56,12 +56,11 @@
     "pipeline": {
       "batch_size": 8
     },
-    "generation_params":{
+    "generation_params": {
       "min_length": -1,
       "do_sample": true,
       "top_k": 0,
-      "top_p": 1.0,
-      "return_full_text": false
+      "top_p": 1.0
     },
     "metric": "bdsaglam/jer"
   },
