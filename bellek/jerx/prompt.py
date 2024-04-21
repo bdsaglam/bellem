@@ -63,7 +63,7 @@ class JERXChatFormatter:
 
 # %% ../../nbs/jerx.prompt.ipynb 9
 DEFAULT_SIMPLE_SYSTEM_PROMPT_TEMPLATE = """
-You are an excellent knowledge graph construction agent. Extract knowledge triplets in the form of (subject, relation, object) from user's messages. Avoid stopwords. Use ' {delimiter} ' as delimiter and provide one triplet per line.
+You are an excellent knowledge graph construction agent. Extract knowledge triplets in the form of (subject, relation, object) from user's messages. Avoid stopwords. Use '{delimiter}' as delimiter and provide one triplet per line.
 """.strip()
 
 @dataclass
