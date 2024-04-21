@@ -1,5 +1,4 @@
 import json
-import os
 import random
 import shutil
 from datetime import datetime
@@ -13,14 +12,12 @@ from llama_index import Document, KnowledgeGraphIndex, ServiceContext
 from llama_index.callbacks import CallbackManager
 from llama_index.callbacks.base_handler import BaseCallbackHandler
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.prompts.base import Prompt
-from llama_index.prompts.prompt_type import PromptType
+from llama_index.llms import OpenAI
 from llama_index.storage.storage_context import StorageContext
 from pyvis.network import Network
 from rich.console import Console
 
-from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE, make_kg_triplet_extract_fn
-from bellek.jerx.utils import parse_triplets
+from bellek.jerx.fewshot.llm import make_kg_triplet_extract_fn
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
@@ -44,22 +41,7 @@ def make_trace_callback_handler(example_dir: Path):
 
 
 def make_service_context(llm_config: dict[str, Any], trace_callback_handler: BaseCallbackHandler):
-    llm_type = llm_config["type"]
-    llm_params = llm_config["params"]
-    if llm_type == "llama2-sft":
-        from bellek.llama_index.llms import HuggingFaceTextGenInferenceLLM
-
-        llm = HuggingFaceTextGenInferenceLLM(inference_server_url="http://localhost:8080/", **llm_params)
-    elif llm_type == "llama2-base":
-        from llama_index.llms import Anyscale
-
-        llm = Anyscale(api_key=os.getenv("ANYSCALE_API_KEY"), **llm_params)
-    elif llm_type == "openai":
-        from llama_index.llms import OpenAI
-
-        llm = OpenAI(**llm_params)
-    else:
-        raise ValueError(f"Unknown LLM type: {llm_type}")
+    llm = OpenAI(model=llm_config["model"], **llm_config["params"])
 
     # model to generate embeddings for triplets
     embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
@@ -73,37 +55,6 @@ def make_service_context(llm_config: dict[str, Any], trace_callback_handler: Bas
         transformations=[],
         callback_manager=callback_manager,
     )
-
-
-LLAMA2_KG_TRIPLET_EXTRACT_TMPL = """<s>[INST] <<SYS>>
-You are a helpful assistant that extracts up to {max_knowledge_triplets} entity-relation-entity triplets from given text. Use ' | ' as delimiter and provide one triplet per line. The entities in a triplet must be different.
-<</SYS>>
-Alaa Abdul Zahra plays for Al Shorta SC. His club is AL Kharaitiyat SC, which has its ground at, Al Khor. [/INST] Al Kharaitiyat SC | ground | Al Khor
-Alaa Abdul-Zahra | club | Al Kharaitiyat SC
-Alaa Abdul-Zahra | club | Al Shorta SC </s><s>[INST] {text} [/INST] """
-
-
-# Patch KnowledgeGraphIndex to handle the response from JERX prompt
-def _parse_triplet_response(response: str, max_length: int = 128) -> list[tuple[str, str, str]]:
-    triplets = parse_triplets(response.strip())
-    return [(e1, rel, e2) if e1 != e2 else (e1, rel, e2 + "(obj)") for e1, rel, e2 in triplets]
-
-
-def make_kwargs(service_context: ServiceContext, model_type: str, max_triplets_per_chunk: int):
-    kwargs = dict(max_triplets_per_chunk=max_triplets_per_chunk)
-    if "llama2" in model_type:
-        kwargs["kg_triple_extract_template"] = Prompt(
-            LLAMA2_KG_TRIPLET_EXTRACT_TMPL,
-            prompt_type=PromptType.KNOWLEDGE_TRIPLET_EXTRACT,
-        )
-        KnowledgeGraphIndex._parse_triplet_response = staticmethod(_parse_triplet_response)
-    else:
-        kg_triplet_extract_fn = make_kg_triplet_extract_fn(
-            llm=service_context.llm,
-            max_knowledge_triplets=max_triplets_per_chunk,
-        )
-        kwargs["kg_triplet_extract_fn"] = kg_triplet_extract_fn
-    return kwargs
 
 
 def make_docs(example, only_supporting=False):
@@ -152,13 +103,13 @@ def construct_knowledge_graph(
 
     # Create knowledge graph index
     err(f"Creating the knowledge graph index for sample {id}")
-    kwargs = make_kwargs(service_context, llm_config["type"], max_triplets_per_chunk)
     index = KnowledgeGraphIndex.from_documents(
         documents=documents,
         storage_context=storage_context,
         service_context=service_context,
         include_embeddings=include_embeddings,
-        **kwargs,
+        kg_triplet_extract_fn=make_kg_triplet_extract_fn(llm=service_context.llm),
+        max_triplets_per_chunk=max_triplets_per_chunk,
     )
 
     err(f"Persisting the knowledge graph index for sample {id}")
