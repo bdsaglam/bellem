@@ -250,7 +250,7 @@ def predict(
     output_parse_fn: Callable[[str], Any] | None = None,
     **generation_kwargs,
 ):
-    log.info(f"Running pipeline on dataset with {len(dataset)} samples...")
+    output_parse_fn = output_parse_fn or (lambda x: x)
 
     # Setup generation parameters
     generation_kwargs["return_full_text"] = False
@@ -273,6 +273,7 @@ def predict(
     generation_kwargs["eos_token_id"] = sorted(eos_token_ids)
 
     # Generate text
+    log.info(f"Running pipeline on dataset with {len(dataset)} samples...")
     generations = flat_pipeline(pipe)(dataset["input"], **generation_kwargs)
 
     # Parse outputs
