@@ -8,6 +8,7 @@ from ..utils import split_camel_case
 
 # %% ../../nbs/jerx.dataset.ipynb 4
 def _transform_relation(relation: str):
+    relation = relation.replace("''", "")
     return " ".join([word.lower() for word in split_camel_case(relation)]).strip()
 
 
