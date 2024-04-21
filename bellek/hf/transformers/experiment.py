@@ -71,7 +71,7 @@ def preprocess_config(config: NestedDict):
     if (out_model_id := config.at("hfhub.model_id")) and config.at("metaconfig.preprocessing.unique_hfhub_model_id"):
         if "-peft" not in out_model_id and config.at("trainer.lora"):
             out_model_id += "-peft"
-        if wandb_run_id := config.at("wandb.run_id"):
+        if wandb_run_id := config.at("wandb.id"):
             out_model_id += f"-{wandb_run_id}"
         else:
             out_model_id += f"-{generate_time_id()}"

@@ -70,7 +70,8 @@
   "wandb": {
     "mode": "online",
     "entity": "bdsaglam",
-    "project": "thesis-kgcons"
+    "project": "thesis-kgcons",
+    "resume": "allow"
   },
   "hfhub": {
     "model_id": "bdsaglam/llama-3-8b-jerx"

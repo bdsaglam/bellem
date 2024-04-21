@@ -24,7 +24,7 @@ def before_experiment(wandb_run):
     config = NestedDict.from_flat_dict(wandb_run.config)
 
     # W&B variables
-    config.set("wandb.run_id", wandb_run.id)
+    config.set("wandb.id", wandb_run.id)
     os.environ["WANDB_PROJECT"] = wandb_run.project
     os.environ["WANDB_LOG_MODEL"] = "end"
 
@@ -84,8 +84,8 @@ def main(run_experiment, args):
         sweep_config = {}
 
     run_experiment_sweep = make_run_experiment_sweep(run_experiment, config)
-    wandb_params = config["wandb"]
     if is_sweep:
+        wandb_params = config["wandb"]
         count = sweep_config.pop("count") if "count" in sweep_config else None
         sweep_id = wandb.sweep(
             sweep_config,
