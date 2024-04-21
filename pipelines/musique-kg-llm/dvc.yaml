@@ -67,28 +67,28 @@ stages:
       - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
       - data/generated/musique-kg-llm/train/answer-eval/scores.json
 
-  prepare_jerx_reward_dataset:
-    wdir: ../..
-    cmd: >-
-      python pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
-      --knowledge-graph-directory data/generated/musique-kg-llm/train/knowledge-graphs/
-      --answer-comparisons-file data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
-      --out data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
-    deps:
-      - pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
-      - data/generated/musique-kg-llm/train/knowledge-graphs/
-      - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
-    outs:
-      - data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
+  # prepare_jerx_reward_dataset:
+  #   wdir: ../..
+  #   cmd: >-
+  #     python pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
+  #     --knowledge-graph-directory data/generated/musique-kg-llm/train/knowledge-graphs/
+  #     --answer-comparisons-file data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
+  #     --out data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
+  #   deps:
+  #     - pipelines/musique-kg-llm/prepare_jerx_reward_dataset.py
+  #     - data/generated/musique-kg-llm/train/knowledge-graphs/
+  #     - data/generated/musique-kg-llm/train/answer-eval/comparisons.jsonl
+  #   outs:
+  #     - data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
 
-  publish_jerx_reward_modelling_datasets:
-    wdir: ../..
-    cmd: >-
-      python pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
-      --reward-dataset-path data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
-      --out data/generated/musique-kg-llm/train/jerx-reward-datasets-info.txt
-    deps:
-      - pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
-      - data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
-    outs:
-      - data/generated/musique-kg-llm/train/jerx-reward-datasets-info.txt
+  # publish_jerx_reward_modelling_datasets:
+  #   wdir: ../..
+  #   cmd: >-
+  #     python pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
+  #     --reward-dataset-path data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
+  #     --out data/generated/musique-kg-llm/train/jerx-reward-datasets-info.txt
+  #   deps:
+  #     - pipelines/musique-kg-llm/publish_jerx_reward_modelling_datasets.py
+  #     - data/generated/musique-kg-llm/train/jerx-reward-dataset.jsonl
+  #   outs:
+  #     - data/generated/musique-kg-llm/train/jerx-reward-datasets-info.txt
