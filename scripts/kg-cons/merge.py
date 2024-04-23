@@ -1,6 +1,6 @@
 import json
 
-from bellek.ml.transformers import merge_adapters_and_publish
+from bellek.hf.transformers.utils import merge_adapters_and_publish
 from bellek.utils import NestedDict
 
 
