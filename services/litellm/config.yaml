@@ -12,11 +12,12 @@ model_list:
       model: "huggingface/meta-llama/Llama-2-7b"
       api_base: "http://host.docker.internal:8080"
       max_tokens: 2048
-  - model_name: llama-3-8b-jerx
-    litellm_params:
-      model: "huggingface/meta-llama/Meta-Llama-3-8B-Instruct"
-      api_base: "http://host.docker.internal:8080"
-      max_tokens: 4096
+  # LiteLLM doesn't support llama-3 chat template yet
+  # - model_name: llama-3-8b-jerx
+  #   litellm_params:
+  #     model: "huggingface/meta-llama/Meta-Llama-3-8B-Instruct"
+  #     api_base: "http://host.docker.internal:8080"
+  #     max_tokens: 4096
 
 litellm_settings:
   set_verbose: True

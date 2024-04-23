@@ -23,3 +23,4 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - "OPENAI_API_KEY=${OPENAI_API_KEY}"
+      - "HF_TOKEN=${HF_TOKEN}"
