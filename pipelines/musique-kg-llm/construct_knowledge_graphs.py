@@ -1,9 +1,8 @@
 import json
-import random
 import shutil
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import kuzu
 import typer
@@ -17,7 +16,6 @@ from llama_index.storage.storage_context import StorageContext
 from pyvis.network import Network
 from rich.console import Console
 
-from bellek.jerx.fewshot.llm import make_kg_triplet_extract_fn
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
@@ -29,8 +27,6 @@ load_dotenv()
 set_seed(42)
 
 
-# model_id='bdsaglam/llama-2-7b-chat-jerx-mt-ss-peft-2024-02-04T00-14-15'
-
 version = 0
 
 
@@ -40,9 +36,7 @@ def make_trace_callback_handler(example_dir: Path):
     return make_phoenix_trace_callback_handler(traces_filepath)
 
 
-def make_service_context(llm_config: dict[str, Any], trace_callback_handler: BaseCallbackHandler):
-    llm = OpenAI(model=llm_config["model"], **llm_config["params"])
-
+def make_service_context(trace_callback_handler: BaseCallbackHandler):
     # model to generate embeddings for triplets
     embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
@@ -50,7 +44,6 @@ def make_service_context(llm_config: dict[str, Any], trace_callback_handler: Bas
     callback_manager = CallbackManager(handlers=[trace_callback_handler])
 
     return ServiceContext.from_defaults(
-        llm=llm,
         embed_model=embed_model,
         transformations=[],
         callback_manager=callback_manager,
@@ -74,6 +67,20 @@ def make_docs(example, only_supporting=False):
         )
 
 
+def make_kg_triplet_extract_fn_from_config(llm_config: dict[str, Any]):
+    if llm_config["type"] == "offline":
+        from bellek.jerx.offline.llm import make_kg_triplet_extract_fn
+
+        return make_kg_triplet_extract_fn(llm_config["params"]["filepath"])
+    elif llm_config["type"] == "online":
+        from bellek.jerx.fewshot.llm import make_kg_triplet_extract_fn
+
+        llm = OpenAI(model=llm_config["model"], **llm_config["params"])
+        return make_kg_triplet_extract_fn(llm=llm)
+    else:
+        raise ValueError(f"Unsupported LLM type: {llm_config['type']}")
+
+
 def visualize_knowledge_graph(index, out: Path):
     g = index.get_networkx_graph()
     net = Network(notebook=False, cdn_resources="in_line", directed=True)
@@ -85,9 +92,8 @@ def visualize_knowledge_graph(index, out: Path):
 def construct_knowledge_graph(
     example,
     *,
-    max_triplets_per_chunk: int,
     include_embeddings: bool,
-    llm_config: dict[str, Any],
+    kg_triplet_extract_fn: Callable,
     service_context: ServiceContext,
     out_dir: Path,
 ):
@@ -108,8 +114,7 @@ def construct_knowledge_graph(
         storage_context=storage_context,
         service_context=service_context,
         include_embeddings=include_embeddings,
-        kg_triplet_extract_fn=make_kg_triplet_extract_fn(llm=service_context.llm),
-        max_triplets_per_chunk=max_triplets_per_chunk,
+        kg_triplet_extract_fn=kg_triplet_extract_fn,
     )
 
     err(f"Persisting the knowledge graph index for sample {id}")
@@ -126,6 +131,7 @@ def main(
     ignore_errors: bool = typer.Option(False),
 ):
     llm_config = json.loads(llm_config_file.read_text())
+    kg_triplet_extract_fn = make_kg_triplet_extract_fn_from_config(llm_config)
 
     with open(dataset_file) as f:
         for line in f:
@@ -139,13 +145,11 @@ def main(
             try:
                 err(f"Constructing the knowledge graph for the sample {example_id}")
                 trace_callback_handler = make_trace_callback_handler(example_out_dir)
-                service_context = make_service_context(llm_config, trace_callback_handler)
-                max_triplets_per_chunk = random.randint(15, 20)
+                service_context = make_service_context(trace_callback_handler)
                 construct_knowledge_graph(
                     example,
-                    max_triplets_per_chunk=max_triplets_per_chunk,
                     include_embeddings=False,
-                    llm_config=llm_config,
+                    kg_triplet_extract_fn=kg_triplet_extract_fn,
                     service_context=service_context,
                     out_dir=example_out_dir,
                 )
