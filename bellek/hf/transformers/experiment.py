@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['log', 'prepare_config_for_fp', 'preprocess_config', 'make_datacollator', 'prepare_model_for_training',
            'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_pipeline', 'flat_pipeline',
-           'predict', 'evaluate_']
+           'generate', 'evaluate_']
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
@@ -243,23 +243,13 @@ def flat_pipeline(pipe):
     return func
 
 
-def predict(
+def generate(
     pipe,
     dataset,
-    *,
-    output_parse_fn: Callable[[str], Any] | None = None,
     **generation_kwargs,
 ):
-    output_parse_fn = output_parse_fn or (lambda x: x)
-
     # Setup generation parameters
     generation_kwargs["return_full_text"] = False
-
-    if "max_new_tokens" not in generation_kwargs:
-        tokenized_outputs = dataset.map(lambda examples: pipe.tokenizer(examples["output"]), batched=True)
-        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
-        log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
-        generation_kwargs["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
 
     terminators = generation_kwargs.pop("terminators", [])
     eos_token_ids = {pipe.tokenizer.eos_token_id}
@@ -276,15 +266,9 @@ def predict(
     log.info(f"Running pipeline on dataset with {len(dataset)} samples...")
     generations = flat_pipeline(pipe)(dataset["input"], **generation_kwargs)
 
-    # Parse outputs
-    predictions = [output_parse_fn(text) for text in generations]
-    references = [output_parse_fn(text) for text in dataset["output"]]
-
     # Create dataframe
     dataf = dataset.to_pandas()
     dataf["generation"] = generations
-    dataf["prediction"] = predictions
-    dataf["reference"] = references
 
     return dataf
 
@@ -304,7 +288,7 @@ def evaluate_(
     assert dataset_config, "Validation dataset is not provided!"
     dataset = load_datasets(dataset_config)
     assert len(dataset) > 0, "Validation dataset is empty!"
-    
+
     # Ensure the dataset has input/output columns
     cols = dataset[0].keys()
     if "input" not in cols or "output" not in cols:
@@ -318,18 +302,36 @@ def evaluate_(
     if tokenizer is None or model is None:
         tokenizer, model = _load_tokenizer_model(config)
 
+    # Set up pipeline
+    generation_params = config.at("evaluation.generation_params", {})
+    if "max_new_tokens" not in generation_params:
+        tokenized_outputs = dataset.map(lambda examples: tokenizer(examples["output"]), batched=True)
+        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
+        log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
+        generation_params["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
+
     pipe = make_pipeline(config, tokenizer, model)
 
-    dataf = predict(
+    # Generate
+    dataf = generate(
         pipe,
         dataset,
-        output_parse_fn=output_parse_fn,
-        **config.at("evaluation.generation_params", {}),
+        **generation_params,
     )
 
-    # Compute metrics
+    # Parse outputs
+    assert set(dataf.columns).issuperset({"input", "output", "generation"}), "Dataframe is missing columns."
+    output_parse_fn = output_parse_fn or (lambda x: x)
+    dataf["prediction"] = dataf["generation"].map(output_parse_fn)
+    dataf["reference"] = dataf["output"].map(output_parse_fn)
+
+    # Compute scores
     metric = evaluate.load(config.at("evaluation.metric"))
     metric_kwargs = metric_kwargs or {}
-    scores = metric.compute(predictions=dataf["prediction"].values, references=dataf["reference"].values, **metric_kwargs)
+    scores = metric.compute(
+        predictions=dataf["prediction"].values,
+        references=dataf["reference"].values,
+        **metric_kwargs,
+    )
 
     return scores, dataf
