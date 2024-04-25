@@ -245,9 +245,9 @@ def flat_pipeline(pipe):
 
 def generate(
     pipe,
-    dataset,
+    inputs,
     **generation_kwargs,
-):
+) -> list[str]:
     # Setup generation parameters
     generation_kwargs["return_full_text"] = False
 
@@ -263,15 +263,8 @@ def generate(
     generation_kwargs["eos_token_id"] = sorted(eos_token_ids)
 
     # Generate text
-    log.info(f"Running pipeline on dataset with {len(dataset)} samples...")
-    generations = flat_pipeline(pipe)(dataset["input"], **generation_kwargs)
-
-    # Create dataframe
-    dataf = dataset.to_pandas()
-    dataf["generation"] = generations
-
-    return dataf
-
+    log.info(f"Running pipeline on {len(inputs)} samples...")
+    return flat_pipeline(pipe)(inputs, **generation_kwargs)
 
 def evaluate_(
     config,
@@ -282,6 +275,8 @@ def evaluate_(
     output_parse_fn: Callable[[str], Any] | None = None,
 ):
     import evaluate
+
+    output_parse_fn = output_parse_fn or (lambda x: x)
 
     # Load validation dataset
     dataset_config = config.at("dataset.validation")
@@ -313,15 +308,15 @@ def evaluate_(
     pipe = make_pipeline(config, tokenizer, model)
 
     # Generate
-    dataf = generate(
+    generations = generate(
         pipe,
         dataset,
         **generation_params,
     )
 
-    # Parse outputs
-    assert set(dataf.columns).issuperset({"input", "output", "generation"}), "Dataframe is missing columns."
-    output_parse_fn = output_parse_fn or (lambda x: x)
+    # Create dataframe 
+    dataf = dataset.to_pandas()[['input', 'output']].copy()
+    dataf["generation"] = generations
     dataf["prediction"] = dataf["generation"].map(output_parse_fn)
     dataf["reference"] = dataf["output"].map(output_parse_fn)
 
