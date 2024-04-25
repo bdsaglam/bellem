@@ -198,7 +198,6 @@ def fine_tune(config: NestedDict):
 
     return trainer
 
-
 # %% ../../../nbs/hf.transformers.experiment.ipynb 10
 def prepare_model_for_inference(tokenizer, model):
     model_id = model.name_or_path.lower()
@@ -310,7 +309,7 @@ def evaluate_(
     # Generate
     generations = generate(
         pipe,
-        dataset,
+        dataset['input'],
         **generation_params,
     )
 
