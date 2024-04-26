@@ -117,18 +117,31 @@ def prepare_model_for_training(tokenizer, model):
         log.warning(f"Base model '{model_id}' is not a llama-2 or llama-3 model, no special preparation is done.")
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 8
-def calculate_token_counts(tokenizer, dataset: Dataset, dataset_text_field: str | None):
-    if dataset_text_field is None:
-        if "messages" not in dataset.column_names:
-            raise ValueError("Dataset must have 'messages' columns if `dataset_text_field` is not specified.")
-        
-        dataset_text_field = "text"
+def calculate_token_counts(
+    tokenizer,
+    dataset: Dataset,
+    text_field: str | None,
+    messages_field: str = "messages",
+):
+    if text_field is None:
+        if messages_field not in dataset.column_names:
+            raise ValueError(
+                f"Dataset must have `{messages_field}` columns if `text_field` is not specified."
+            )
+
+        text_field = "text"
         dataset = dataset.map(
-            lambda example: {dataset_text_field: tokenizer.apply_chat_template(example["messages"], tokenize=False, add_generation_prompt=False)}
+            lambda example: {
+                text_field: tokenizer.apply_chat_template(
+                    example[messages_field],
+                    tokenize=False,
+                    add_generation_prompt=False,
+                )
+            }
         )
-    
+
     # Inspect token counts
-    tokenized_train_ds = dataset.map(lambda examples: tokenizer(examples[dataset_text_field]), batched=True)
+    tokenized_train_ds = dataset.map(lambda examples: tokenizer(examples[text_field]), batched=True)
     token_counts = [len(input_ids) for input_ids in tokenized_train_ds["input_ids"]]
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
     return token_counts
@@ -280,9 +293,9 @@ def predict(
 
     # Ensure the dataset has input/output columns
     cols = dataset[0].keys()
-    if "input" not in cols or "output" not in cols:
+    if "input" not in cols:
         if "messages" not in dataset.column_names:
-            raise ValueError("Dataset must have 'messages' column if 'input' and 'output' columns are not provided.")
+            raise ValueError("Dataset must have `messages` column if `input` column are not provided.")
         dataset = dataset.map(partition_input_output_messages).remove_columns("messages")
 
     # Prepare text generation pipeline
@@ -292,10 +305,12 @@ def predict(
     # Set up pipeline
     generation_params = config.at("evaluation.generation_params", {})
     if "max_new_tokens" not in generation_params:
-        tokenized_outputs = dataset.map(lambda examples: tokenizer(examples["output"]), batched=True)
-        token_counts = [len(input_ids) for input_ids in tokenized_outputs["input_ids"]]
-        log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
-        generation_params["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
+        if "output" in dataset.column_names:
+            token_counts = calculate_token_counts(tokenizer, dataset, dataset_messages_field = "output")
+            log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
+            generation_params["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
+        else:
+            log.info("max_new_tokens is not set.")
 
     pipe = make_pipeline(config, tokenizer, model)
 
