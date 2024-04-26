@@ -244,7 +244,7 @@ def make_pipeline(config, tokenizer, model):
         task="text-generation",
         model=model,
         tokenizer=tokenizer,
-        **config.at("evaluation.pipeline", {}),
+        **config.at("inference.pipeline", {}),
     )
 
 
@@ -302,7 +302,7 @@ def predict(
         tokenizer, model = _load_tokenizer_model(config)
 
     # Set up pipeline
-    generation_params = config.at("evaluation.generation_params", {})
+    generation_params = config.at("inference.generation_params", {})
     if "max_new_tokens" not in generation_params:
         if "output" in dataset.column_names:
             token_counts = calculate_token_counts(tokenizer, dataset, messages_field = "output")
