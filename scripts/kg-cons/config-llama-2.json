@@ -15,7 +15,7 @@
     ]
   },
   "pretrained_model": {
-    "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "model_name_or_path": "meta-llama/llama-2-7b-chat-hf",
     "torch_dtype": "bfloat16",
     "quantization_config": {
       "load_in_4bit": true,
@@ -31,13 +31,14 @@
       "bias": "none",
       "task_type": "CAUSAL_LM"
     },
-    "response_template": "<|start_header_id|>assistant<|end_header_id|>",
+    "response_template": "[/INST]",
+    "response_template_context": " ",
     "training_args": {
       "bf16": true,
       "fp16": false,
       "group_by_length": false,
-      "per_device_train_batch_size": 2,
-      "gradient_accumulation_steps": 4,
+      "per_device_train_batch_size": 4,
+      "gradient_accumulation_steps": 2,
       "gradient_checkpointing": true,
       "max_grad_norm": 0.3,
       "weight_decay": 0.001,
@@ -54,16 +55,13 @@
   },
   "inference": {
     "pipeline": {
-      "batch_size": 8
+      "batch_size": 4
     },
     "generation_params": {
       "min_length": -1,
       "do_sample": true,
       "top_k": 0,
-      "top_p": 1.0,
-      "terminators": [
-        "<|eot_id|>"
-      ]
+      "top_p": 1.0
     }
   },
   "evaluation": {
@@ -76,7 +74,7 @@
     "resume": "allow"
   },
   "hfhub": {
-    "model_id": "bdsaglam/llama-3-8b-jerx"
+    "model_id": "bdsaglam/llama-2-7b-chat-jerx"
   },
   "metaconfig": {
     "preprocessing": {
