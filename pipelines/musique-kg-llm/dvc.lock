@@ -10,8 +10,8 @@ stages:
       size: 78
     - path: pipelines/musique-kg-llm/create_mhqa_dataset.py
       hash: md5
-      md5: b96cc420ce2d27babc91349172e5b4d6
-      size: 875
+      md5: dfb17f6797aab0b6cbd7e678732e877f
+      size: 2359
     outs:
     - path: data/generated/musique-kg-llm/train/dataset.jsonl
       hash: md5

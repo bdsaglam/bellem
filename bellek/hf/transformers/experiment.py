@@ -307,7 +307,7 @@ def predict(
     )
 
     # Create dataframe 
-    dataf = dataset.to_pandas()[['input', 'output']].copy()
+    dataf = dataset.to_pandas()
     dataf["generation"] = generations
     return dataf
 
