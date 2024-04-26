@@ -121,25 +121,23 @@ def calculate_token_counts(
     tokenizer,
     dataset: Dataset,
     *,
-    text_field: str | None,
     messages_field: str = "messages",
 ):
-    if text_field is None:
-        if messages_field not in dataset.column_names:
-            raise ValueError(
-                f"Dataset must have `{messages_field}` columns if `text_field` is not specified."
-            )
-
-        text_field = "text"
-        dataset = dataset.map(
-            lambda example: {
-                text_field: tokenizer.apply_chat_template(
-                    example[messages_field],
-                    tokenize=False,
-                    add_generation_prompt=False,
-                )
-            }
+    if messages_field not in dataset.column_names:
+        raise ValueError(
+            f"Dataset must have `{messages_field}` columns if `text_field` is not specified."
         )
+
+    text_field = "text"
+    dataset = dataset.map(
+        lambda example: {
+            text_field: tokenizer.apply_chat_template(
+                example[messages_field],
+                tokenize=False,
+                add_generation_prompt=False,
+            )
+        }
+    )
 
     # Inspect token counts
     tokenized_train_ds = dataset.map(lambda examples: tokenizer(examples[text_field]), batched=True)
@@ -166,7 +164,7 @@ def fine_tune(config: NestedDict):
 
     # Inspect token counts
     dataset_text_field = config.at("trainer.dataset_text_field")
-    token_counts = calculate_token_counts(tokenizer, train_ds, text_field=dataset_text_field)
+    token_counts = calculate_token_counts(tokenizer, train_ds)
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
     # Supervised fine-tuning
