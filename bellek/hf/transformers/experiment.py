@@ -120,6 +120,7 @@ def prepare_model_for_training(tokenizer, model):
 def calculate_token_counts(
     tokenizer,
     dataset: Dataset,
+    *,
     text_field: str | None,
     messages_field: str = "messages",
 ):
@@ -165,7 +166,7 @@ def fine_tune(config: NestedDict):
 
     # Inspect token counts
     dataset_text_field = config.at("trainer.dataset_text_field")
-    token_counts = calculate_token_counts(tokenizer, train_ds, dataset_text_field)
+    token_counts = calculate_token_counts(tokenizer, train_ds, text_field=dataset_text_field)
     log.info(f"Input token counts: min={min(token_counts)}, max={max(token_counts)}")
 
     # Supervised fine-tuning
@@ -306,7 +307,7 @@ def predict(
     generation_params = config.at("evaluation.generation_params", {})
     if "max_new_tokens" not in generation_params:
         if "output" in dataset.column_names:
-            token_counts = calculate_token_counts(tokenizer, dataset, dataset_messages_field = "output")
+            token_counts = calculate_token_counts(tokenizer, dataset, messages_field = "output")
             log.info(f"Output token counts: min={min(token_counts)}, max={max(token_counts)}")
             generation_params["max_new_tokens"] = ceil(max(token_counts) / 8) * 8
         else:
