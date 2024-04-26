@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['alpaca2sharegpt', 'alpaca2openai', 'sharegpt2openai_message', 'openai2sharegpt_message', 'sharegpt2openai',
-           'openai2sharegpt']
+           'openai2sharegpt', 'partition_input_output_messages']
 
 # %% ../../nbs/lang.dataset.ipynb 3
 def alpaca2sharegpt(example):
@@ -43,3 +43,16 @@ def openai2sharegpt(example):
     return {
         "messages": [openai2sharegpt_message(message) for message in example["messages"]],
     }
+
+# %% ../../nbs/lang.dataset.ipynb 9
+def partition_input_output_messages(example: dict) -> dict:
+    result = {}
+    last_message = example["messages"][-1]
+    if last_message['role'] == 'assistant':
+        result["input"] = example["messages"][:-1]
+        result["output"] = example["messages"][-1:]
+    else:
+        result["input"] = example["messages"]
+        result["output"] = []
+    return result
+    

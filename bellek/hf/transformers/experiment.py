@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['log', 'prepare_config_for_fp', 'preprocess_config', 'make_datacollator', 'prepare_model_for_training',
            'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_pipeline', 'flat_pipeline',
-           'generate', 'evaluate_']
+           'generate', 'predict', 'evaluate_']
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
@@ -18,6 +18,7 @@ from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from .utils import load_tokenizer_model
 from ..datasets.utils import load_datasets
+from ...lang.dataset import partition_input_output_messages
 from ...logging import get_logger
 from ...utils import NestedDict, generate_time_id
 
@@ -265,18 +266,12 @@ def generate(
     log.info(f"Running pipeline on {len(inputs)} samples...")
     return flat_pipeline(pipe)(inputs, **generation_kwargs)
 
-def evaluate_(
+def predict(
     config,
     *,
     tokenizer=None,
     model=None,
-    metric_kwargs: dict | None = None,
-    output_parse_fn: Callable[[str], Any] | None = None,
 ):
-    import evaluate
-
-    output_parse_fn = output_parse_fn or (lambda x: x)
-
     # Load validation dataset
     dataset_config = config.at("dataset.validation")
     assert dataset_config, "Validation dataset is not provided!"
@@ -288,9 +283,7 @@ def evaluate_(
     if "input" not in cols or "output" not in cols:
         if "messages" not in dataset.column_names:
             raise ValueError("Dataset must have 'messages' column if 'input' and 'output' columns are not provided.")
-        dataset = dataset.map(
-            lambda x: {"input": x["messages"][:-1], "output": x["messages"][-1]["content"]}
-        ).remove_columns("messages")
+        dataset = dataset.map(partition_input_output_messages).remove_columns("messages")
 
     # Prepare text generation pipeline
     if tokenizer is None or model is None:
@@ -316,8 +309,26 @@ def evaluate_(
     # Create dataframe 
     dataf = dataset.to_pandas()[['input', 'output']].copy()
     dataf["generation"] = generations
+    return dataf
+
+
+def evaluate_(
+    config,
+    *,
+    tokenizer=None,
+    model=None,
+    metric_kwargs: dict | None = None,
+    output_parse_fn: Callable[[str], Any] | None = None,
+):
+    import evaluate
+
+    output_parse_fn = output_parse_fn or (lambda x: x)
+
+    dataf = predict(config, tokenizer=tokenizer, model=model)
+
+    # Parse texts
     dataf["prediction"] = dataf["generation"].map(output_parse_fn)
-    dataf["reference"] = dataf["output"].map(output_parse_fn)
+    dataf["reference"] = dataf["output"].map(lambda x: x['content']).map(output_parse_fn)
 
     # Compute scores
     metric = evaluate.load(config.at("evaluation.metric"))
