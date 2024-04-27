@@ -18,6 +18,10 @@ def is_about_record_label(example):
     return any(keyword in question.lower() or keyword in document for keyword in keywords)
 
 
+def is_eligible(example):
+    return example["id"] not in {"2hop__145162_126070"} and not is_about_record_label(example)
+
+
 def flatten_paragraphs(example):
     return [
         {
@@ -57,7 +61,7 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(config_file) as f:
         dataset_config = json.load(f)
     ds = load_dataset(**dataset_config)
-    ds = ds.filter(lambda example: not is_about_record_label(example))
+    ds = ds.filter(lambda example: is_eligible(example))
     ds.to_json(out)
 
     user_name = "bdsaglam"

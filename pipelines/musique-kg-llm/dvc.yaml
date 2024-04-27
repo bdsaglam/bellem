@@ -29,11 +29,11 @@ stages:
     cmd: >-
       python pipelines/musique-kg-llm/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-kg-llm/train/dataset.jsonl
-      --llm-config-file data/raw/musique-kg-llm/train/jerx-llm-configs/openai.json
+      --llm-config-file data/raw/musique-kg-llm/train/jerx-llm-configs/llama3-base-offline.json
       --out data/generated/musique-kg-llm/train/knowledge-graphs/
     deps:
       - pipelines/musique-kg-llm/construct_knowledge_graphs.py
-      - data/raw/musique-kg-llm/train/jerx-llm-configs/openai.json
+      - data/raw/musique-kg-llm/train/jerx-llm-configs/llama3-base-offline.json
       - data/generated/musique-kg-llm/train/dataset.jsonl
     outs:
       - data/generated/musique-kg-llm/train/knowledge-graphs/timestamp.txt
