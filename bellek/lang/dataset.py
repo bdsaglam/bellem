@@ -53,6 +53,5 @@ def partition_input_output_messages(example: dict) -> dict:
         result["output"] = example["messages"][-1:]
     else:
         result["input"] = example["messages"]
-        result["output"] = []
     return result
     
