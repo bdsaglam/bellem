@@ -1,0 +1,48 @@
+{
+  "seed": 42,
+  "dataset": {
+    "validation": [
+      {
+        "path": "bdsaglam/musique-answerable-2hop-subset-paragraph-jerx-chat", 
+        "split": "train"
+      }
+    ]
+  },
+  "pretrained_model": {
+    "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "torch_dtype": "bfloat16",
+    "quantization_config": {
+      "load_in_4bit": true,
+      "bnb_4bit_quant_type": "nf4"
+    }
+  },
+  "inference": {
+    "pipeline": {
+      "batch_size": 8
+    },
+    "generation_params": {
+      "min_length": -1,
+      "max_new_tokens": 1024,
+      "do_sample": true,
+      "top_k": 0,
+      "top_p": 1.0,
+      "terminators": [
+        "<|eot_id|>"
+      ]
+    }
+  },
+  "wandb": {
+    "mode": "online",
+    "entity": "bdsaglam",
+    "project": "thesis-kgcons"
+  },
+  "hfhub": {
+    "model_id": "bdsaglam/llama-3-8b-jerx-peft-aw7ihmbc"
+  },
+  "metaconfig": {
+    "preprocessing": {
+      "resolve_paths": false,
+      "unique_hfhub_model_id": false
+    }
+  },
+}
