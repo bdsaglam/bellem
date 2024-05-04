@@ -1,8 +1,8 @@
 import json
 from difflib import SequenceMatcher
-from operator import eq
 from pathlib import Path
 
+import evaluate
 import pandas as pd
 import typer
 from dotenv import load_dotenv
@@ -25,7 +25,18 @@ def is_correct(match):
     def func(row):
         answers = [row["reference_answer"], *row["answer_aliases"]]
         return any(match(answer, row["predicted_answer"]) for answer in answers)
+
     return func
+
+
+def calculate_musique_scores(dataf: pd.DataFrame) -> dict:
+    metric = evaluate.load("bdsaglam/musique")
+    predictions = dataf["predicted_answer"].tolist()
+    references = [
+        [ref, *aliases] for ref, aliases in zip(dataf["reference_answer"].tolist(), dataf["answer_aliases"].tolist())
+    ]
+    scores = metric.compute(predictions=predictions, references=references)
+    return scores
 
 
 def main(
@@ -44,9 +55,8 @@ def main(
             "predicted_answer": answer_df["question_decomposition"].map(lambda x: x[-1]["answer"]).values,
         }
     )
-    comp_df["exact_match"] = comp_df.apply(lambda row: is_correct(eq)(row), axis=1)
-    comp_df["fuzzy_match"] = comp_df.apply(lambda row: is_correct(fuzzy_match)(row), axis=1)
-    scores = dict(comp_df[["exact_match", "fuzzy_match"]].mean())
+    scores = calculate_musique_scores(comp_df)
+    scores["fuzzy_match"] = comp_df.apply(lambda row: is_correct(fuzzy_match)(row), axis=1).mean()
 
     out.mkdir(exist_ok=True, parents=True)
     comp_df.to_json(out / "comparisons.jsonl", orient="records", lines=True)
