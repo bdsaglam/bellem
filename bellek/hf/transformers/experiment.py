@@ -342,7 +342,7 @@ def evaluate_(
 
     # Parse texts
     dataf["prediction"] = dataf["generation"].map(output_parse_fn)
-    dataf["reference"] = dataf["output"].map(lambda x: x['content']).map(output_parse_fn)
+    dataf["reference"] = dataf["output"].map(lambda x: x[0]['content']).map(output_parse_fn)
 
     # Compute scores
     metric = evaluate.load(config.at("evaluation.metric"))
