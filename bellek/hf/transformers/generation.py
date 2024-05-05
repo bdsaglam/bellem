@@ -15,7 +15,7 @@ log = get_logger(__name__)
 # %% ../../../nbs/hf.transformers.generation.ipynb 4
 def flat_pipeline(pipe):
     def func(inputs, **kwargs) -> list[str]:
-        return [result[0]["generated_text"] for result in pipe(tqdm(inputs), **kwargs)]
+        return [result[0]["generated_text"] for result in tqdm(pipe(inputs, **kwargs))]
 
     return func
 
