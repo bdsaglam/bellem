@@ -2,8 +2,8 @@
 
 # %% auto 0
 __all__ = ['log', 'prepare_config_for_fp', 'preprocess_config', 'make_datacollator', 'prepare_model_for_training',
-           'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_pipeline', 'flat_pipeline',
-           'generate', 'predict', 'evaluate_']
+           'calculate_token_counts', 'fine_tune', 'prepare_model_for_inference', 'make_pipeline', 'predict',
+           'evaluate_']
 
 # %% ../../../nbs/hf.transformers.experiment.ipynb 3
 from copy import deepcopy
@@ -11,11 +11,11 @@ from math import ceil
 from typing import Any, Callable
 
 import torch
-from tqdm import tqdm
 from datasets import Dataset
 from transformers import TrainingArguments, pipeline
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
+from .generation import generate
 from .utils import load_tokenizer_model
 from ..datasets.utils import load_datasets
 from ...lang.dataset import partition_input_output_messages
@@ -247,37 +247,6 @@ def make_pipeline(config, tokenizer, model):
         **config.at("inference.pipeline", {}),
     )
 
-
-def flat_pipeline(pipe):
-    def func(inputs, **kwargs) -> list[str]:
-        return [result[0]["generated_text"] for result in tqdm(pipe(inputs, **kwargs))]
-
-    return func
-
-
-def generate(
-    pipe,
-    inputs,
-    **generation_kwargs,
-) -> list[str]:
-    # Setup generation parameters
-    generation_kwargs["return_full_text"] = False
-
-    terminators = generation_kwargs.pop("terminators", [])
-    eos_token_ids = {pipe.tokenizer.eos_token_id}
-    for terminator in terminators:
-        if isinstance(terminator, int):
-            eos_token_ids.add(terminator)
-        elif isinstance(terminator, str):
-            eos_token_ids.add(pipe.tokenizer.convert_tokens_to_ids(terminator))
-        else:
-            raise ValueError(f"Invalid terminator token {terminator}.")
-    generation_kwargs["eos_token_id"] = sorted(eos_token_ids)
-
-    # Generate text
-    log.info(f"Running pipeline on {len(inputs)} samples...")
-    return flat_pipeline(pipe)(inputs, **generation_kwargs)
-
 def predict(
     config,
     *,
@@ -325,7 +294,7 @@ def predict(
     dataf["generation"] = generations
     return dataf
 
-
+# %% ../../../nbs/hf.transformers.experiment.ipynb 12
 def evaluate_(
     config,
     *,
