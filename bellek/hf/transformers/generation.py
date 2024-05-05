@@ -34,6 +34,8 @@ def preprocess_generation_params(tokenizer, generation_params: dict) -> dict:
             raise ValueError(f"Invalid terminator token {terminator}.")
     generation_params["eos_token_id"] = sorted(eos_token_ids)
 
+    generation_params["pad_token_id"] = tokenizer.eos_token_id
+
     return generation_params
 
 
