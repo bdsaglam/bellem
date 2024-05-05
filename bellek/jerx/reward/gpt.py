@@ -58,6 +58,6 @@ def make_reward_func(llm: ChatOpenAI | None = None, answer_comparator=fuzzy_matc
     def reward(context: str, question: str, answers: list[str]) -> float:
         result = qa(context, question)
         correct = any(answer_comparator(result.answer, answer) for answer in answers)
-        return int(correct)
+        return 1.0 if correct else 0.0
 
     return reward
