@@ -59,6 +59,7 @@
     },
     "generation_params": {
       "min_length": -1,
+      "max_new_tokens": 1024,
       "do_sample": true,
       "top_k": 0,
       "top_p": 1.0,
