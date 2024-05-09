@@ -34,7 +34,10 @@
   "wandb": {
     "mode": "online",
     "entity": "bdsaglam",
-    "project": "thesis-kgcons"
+    "project": "jerx-inference",
+    "name": null,
+    "tags": ["jerx"],
+    "notes": ""
   },
   "hfhub": {
     "model_id": "bdsaglam/llama-3-8b-jerx-peft-aw7ihmbc"
