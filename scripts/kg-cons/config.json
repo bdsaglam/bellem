@@ -73,9 +73,10 @@
     "mode": "online",
     "entity": "bdsaglam",
     "project": "thesis-kgcons",
+    "resume": "allow",
+    "name": null,
     "tags": ["jerx", "llama"],
-    "notes": "",
-    "resume": "allow"
+    "notes": ""
   },
   "hfhub": {
     "model_id": "bdsaglam/llama-3-8b-jerx"
