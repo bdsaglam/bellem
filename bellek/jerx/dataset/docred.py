@@ -23,7 +23,7 @@ def extract_triplets(example):
     for head, rel, tail in zip(example['labels']['head'], example['labels']['relation_text'], example['labels']['tail']):
         yield [example['vertexSet'][head][0]['name'], rel, example['vertexSet'][tail][0]['name']]
 
-def transform_docred(example, delimiter="|"):
+def transform_docred(example, delimiter=" | "):
     triplets = [delimiter.join(triplet) for triplet in extract_triplets(example)]
     text = extract_text(example)
     return {'text': text, 'triplets': triplets}
