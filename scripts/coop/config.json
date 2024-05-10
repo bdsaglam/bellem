@@ -1,5 +1,5 @@
 {
-  "seed": 42,
+  "seed": 89,
   "data": {
     "imagenet": {
       "path": "/mnt/vol_b/datasets/imagenet/",
