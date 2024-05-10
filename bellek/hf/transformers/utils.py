@@ -47,7 +47,6 @@ def load_tokenizer_model(
     model_name_or_path: str,
     *,
     auto_model_cls=None,
-    device_map={"": 0},
     **model_kwargs,
 ):
     if auto_model_cls is None:
@@ -67,7 +66,6 @@ def load_tokenizer_model(
     # Load model
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
-        device_map=device_map,
         **model_kwargs,
     )
     # Load tokenizer
