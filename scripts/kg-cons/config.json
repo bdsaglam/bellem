@@ -21,7 +21,8 @@
       "load_in_4bit": true,
       "bnb_4bit_quant_type": "nf4"
     },
-    "attn_implementation": "flash_attention_2"
+    "attn_implementation": "flash_attention_2",
+    "device_map": {"": 0}
   },
   "trainer": {
     "packing": false,
@@ -40,12 +41,13 @@
       "per_device_train_batch_size": 4,
       "gradient_accumulation_steps": 2,
       "gradient_checkpointing": true,
+      "gradient_checkpointing_kwargs": {"use_reentrant": false},
       "max_grad_norm": 0.3,
       "weight_decay": 0.001,
       "learning_rate": 0.0002,
       "lr_scheduler_type": "cosine",
       "warmup_ratio": 0.03,
-      "optim": "adamw_bnb_8bit",
+      "optim": "paged_adamw_32bit",
       "max_steps": -1,
       "num_train_epochs": 1,
       "logging_steps": 25,
