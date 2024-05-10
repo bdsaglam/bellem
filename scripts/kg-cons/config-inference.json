@@ -3,18 +3,23 @@
   "dataset": {
     "validation": [
       {
-        "path": "bdsaglam/musique-answerable-2hop-subset-paragraph-jerx-chat", 
+        "path": "bdsaglam/musique-answerable-2hop-subset-paragraph-jerx-chat",
         "split": "train"
       }
     ]
   },
   "pretrained_model": {
+    "device_map": "auto",
     "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
     "torch_dtype": "bfloat16",
     "quantization_config": {
       "load_in_4bit": true,
       "bnb_4bit_quant_type": "nf4"
-    }
+    },
+    "attn_implementation": "flash_attention_2"
+  },
+  "hfhub": {
+    "model_id": "bdsaglam/llama-3-8b-jerx-peft-aw7ihmbc"
   },
   "inference": {
     "pipeline": {
@@ -36,11 +41,10 @@
     "entity": "bdsaglam",
     "project": "jerx-inference",
     "name": null,
-    "tags": ["jerx"],
-    "notes": ""
-  },
-  "hfhub": {
-    "model_id": "bdsaglam/llama-3-8b-jerx-peft-aw7ihmbc"
+    "notes": "",
+    "tags": [
+      "jerx"
+    ]
   },
   "metaconfig": {
     "preprocessing": {

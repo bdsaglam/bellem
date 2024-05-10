@@ -1,0 +1,95 @@
+{
+    "seed": 42,
+    "dataset": {
+        "train": [
+            {
+                "path": "bdsaglam/webnlg-jerx-sft-simple-mt-ms-openai",
+                "split": "train"
+            }
+        ],
+        "validation": [
+            {
+                "path": "bdsaglam/webnlg-jerx-eval-fs-openai",
+                "split": "validation"
+            }
+        ]
+    },
+    "pretrained_model": {
+        "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "torch_dtype": "float16",
+        "quantization_config": {
+            "load_in_4bit": true,
+            "bnb_4bit_quant_type": "nf4"
+        },
+        "attn_implementation": "flash_attention_2"
+    },
+    "distributed_training": true,
+    "trainer": {
+        "packing": false,
+        "lora": {
+            "lora_alpha": 16,
+            "lora_dropout": 0.1,
+            "r": 64,
+            "bias": "none",
+            "task_type": "CAUSAL_LM"
+        },
+        "response_template": "<|start_header_id|>assistant<|end_header_id|>",
+        "training_args": {
+            "bf16": false,
+            "fp16": true,
+            "group_by_length": false,
+            "per_device_train_batch_size": 6,
+            "gradient_accumulation_steps": 1,
+            "max_grad_norm": 0.3,
+            "weight_decay": 0.001,
+            "learning_rate": 0.0002,
+            "lr_scheduler_type": "cosine",
+            "warmup_ratio": 0.03,
+            "optim": "adamw_bnb_8bit",
+            "max_steps": -1,
+            "num_train_epochs": 1,
+            "logging_steps": 25,
+            "save_steps": 0,
+            "report_to": "wandb"
+        }
+    },
+    "inference": {
+        "pipeline": {
+            "batch_size": 8
+        },
+        "generation_params": {
+            "min_length": -1,
+            "max_new_tokens": 1024,
+            "do_sample": true,
+            "top_k": 0,
+            "top_p": 1.0,
+            "terminators": [
+                "<|eot_id|>"
+            ]
+        }
+    },
+    "evaluation": {
+        "metric": "bdsaglam/jer"
+    },
+    "wandb": {
+        "mode": "online",
+        "entity": "bdsaglam",
+        "project": "thesis-kgcons",
+        "resume": "allow",
+        "name": null,
+        "notes": "",
+        "tags": [
+            "jerx",
+            "llama"
+        ]
+    },
+    "hfhub": {
+        "model_id": "bdsaglam/llama-3-8b-jerx"
+    },
+    "metaconfig": {
+        "preprocessing": {
+            "resolve_paths": false,
+            "unique_hfhub_model_id": true
+        }
+    }
+}
