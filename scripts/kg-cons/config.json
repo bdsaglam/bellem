@@ -15,9 +15,11 @@
     ]
   },
   "pretrained_model": {
-    "device_map": {"": 0},
+    "device_map": {
+      "": 0
+    },
     "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
-    "torch_dtype": "bfloat16",
+    "torch_dtype": "float16",
     "quantization_config": {
       "load_in_4bit": true,
       "bnb_4bit_quant_type": "nf4"
@@ -36,19 +38,21 @@
     },
     "response_template": "<|start_header_id|>assistant<|end_header_id|>",
     "training_args": {
-      "bf16": true,
-      "fp16": false,
+      "bf16": false,
+      "fp16": true,
       "group_by_length": false,
       "per_device_train_batch_size": 4,
       "gradient_accumulation_steps": 2,
       "gradient_checkpointing": true,
-      "gradient_checkpointing_kwargs": {"use_reentrant": false},
+      "gradient_checkpointing_kwargs": {
+        "use_reentrant": false
+      },
       "max_grad_norm": 0.3,
       "weight_decay": 0.001,
       "learning_rate": 0.0002,
       "lr_scheduler_type": "cosine",
       "warmup_ratio": 0.03,
-      "optim": "paged_adamw_32bit",
+      "optim": "adamw_bnb_8bit",
       "max_steps": -1,
       "num_train_epochs": 1,
       "logging_steps": 25,
@@ -81,7 +85,10 @@
     "resume": "allow",
     "name": null,
     "notes": "",
-    "tags": ["jerx", "llama"]
+    "tags": [
+      "jerx",
+      "llama"
+    ]
   },
   "hfhub": {
     "model_id": "bdsaglam/llama-3-8b-jerx"

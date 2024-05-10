@@ -11,7 +11,7 @@
   "pretrained_model": {
     "device_map": "auto",
     "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
-    "torch_dtype": "bfloat16",
+    "torch_dtype": "float16",
     "quantization_config": {
       "load_in_4bit": true,
       "bnb_4bit_quant_type": "nf4"
