@@ -52,6 +52,7 @@ def load_tokenizer_model(
     if auto_model_cls is None:
         if "-peft" in model_name_or_path:
             from peft import AutoPeftModelForCausalLM
+
             auto_model_cls = AutoPeftModelForCausalLM
         else:
             auto_model_cls = AutoModelForCausalLM
@@ -59,10 +60,15 @@ def load_tokenizer_model(
     # Setup quantization config
     if (quantization_config := model_kwargs.get("quantization_config")) and isinstance(quantization_config, dict):
         from transformers import BitsAndBytesConfig
+
         model_kwargs["quantization_config"] = BitsAndBytesConfig(**quantization_config)
     # Setup torch dtype
     if (torch_dtype := model_kwargs.get("torch_dtype")) and (torch_dtype != "auto"):
         model_kwargs["torch_dtype"] = getattr(torch, torch_dtype)
+
+    if "device_map" not in model_kwargs:
+        model_kwargs["device_map"] = {"": torch.cuda.current_device()}
+
     # Load model
     model = auto_model_cls.from_pretrained(
         model_name_or_path,
@@ -73,6 +79,7 @@ def load_tokenizer_model(
         tokenizer_id = model_name_or_path
     else:
         from peft import AutoPeftModelForCausalLM
+
         if auto_model_cls == AutoPeftModelForCausalLM:
             tokenizer_id = model.active_peft_config.base_model_name_or_path
         else:
