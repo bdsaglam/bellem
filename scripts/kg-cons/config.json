@@ -24,6 +24,7 @@
     "attn_implementation": "flash_attention_2",
     "device_map": {"": 0}
   },
+  "distributed_training": true,
   "trainer": {
     "packing": false,
     "lora": {

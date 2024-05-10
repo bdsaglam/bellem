@@ -55,7 +55,6 @@ def prepare_config_for_fp(config: NestedDict):
     if config.at("trainer.training_args.bf16") or config.at("trainer.training_args.fp16"):
         config.set("trainer.training_args.bf16", bf16)
         config.set("trainer.training_args.fp16", fp16)
-    
     return config
 
 def preprocess_config(config: NestedDict):
@@ -65,6 +64,10 @@ def preprocess_config(config: NestedDict):
         config.set("dataset.train", [config.at("dataset.train")])
     if isinstance(config.at("dataset.validation"), dict):
         config.set("dataset.validation", [config.at("dataset.validation")])
+    
+    if config.at("distributed_training"):
+        from accelerate import PartialState
+        config.set("pretrained_model.device_map", {"": PartialState().process_index})
 
     config = prepare_config_for_fp(config)
     
