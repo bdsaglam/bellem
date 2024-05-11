@@ -1,5 +1,8 @@
 {
   "seed": 89,
+  "hfhub": {
+    "model_id": "bdsaglam/llama-3-8b-jerx"
+  },
   "dataset": {
     "train": [
       {
@@ -89,9 +92,6 @@
       "jerx",
       "llama"
     ]
-  },
-  "hfhub": {
-    "model_id": "bdsaglam/llama-3-8b-jerx"
   },
   "metaconfig": {
     "preprocessing": {
