@@ -8,7 +8,6 @@ from ...utils import split_camel_case
 
 # %% ../../../nbs/jerx.dataset.webnlg.ipynb 4
 def _transform_relation(relation: str):
-    relation = relation.replace("''", "")
     return " ".join([word.lower() for word in split_camel_case(relation)]).strip()
 
 
@@ -18,7 +17,8 @@ def _transform_entity(entity: str):
 
 def _transform_triplet(triplet_string: str):
     delimiter = " | "
-    entity1, relation, entity2 = triplet_string.replace('"', "").split(delimiter)
+    triplet_string = triplet_string.replace('"', "").replace("''", "")
+    entity1, relation, entity2 = triplet_string.split(delimiter)
     relation = _transform_relation(relation)
     entity1 = _transform_entity(entity1)
     entity2 = _transform_entity(entity2)
