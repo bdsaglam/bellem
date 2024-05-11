@@ -90,4 +90,4 @@ class JERXSimpleChatFormatter:
             yield {"role": "assistant", "content": self._format_triplets(example["triplets"])}
 
     def _format_triplets(self, triplets: Iterable[str]) -> str:
-        return '\n'.join(triplets)
+        return '\n'.join(set(triplets))
