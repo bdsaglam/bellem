@@ -13,6 +13,7 @@ from typing import Any, Callable
 import torch
 from datasets import Dataset
 from transformers import TrainingArguments, pipeline
+from transformers.pipelines.text_generation import Chat
 from trl import DataCollatorForCompletionOnlyLM, SFTTrainer
 
 from .generation import generate
@@ -21,6 +22,7 @@ from ..datasets.utils import load_datasets
 from ...lang.dataset import partition_input_output_messages
 from ...logging import get_logger
 from ...utils import NestedDict, generate_time_id
+from ...torch.dataset.utils import ListDataset
 
 log = get_logger(__name__)
 
@@ -286,9 +288,11 @@ def predict(
     pipe = make_pipeline(config, tokenizer, model)
 
     # Generate
+    # Create chats so that transformers library doesn't override our ListDataset
+    chats = ListDataset([Chat(messages) for messages in dataset['input']])
     generations = generate(
         pipe,
-        dataset['input'],
+        chats,
         **generation_params,
     )
 

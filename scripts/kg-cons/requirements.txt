@@ -1,7 +1,7 @@
 accelerate==0.29.2
-transformers==4.39.3
+transformers==4.41.1
 peft==0.10.0
 bitsandbytes==0.42.0
-trl==0.8.3
+trl==0.8.6
 kuzu==0.2.1
  
