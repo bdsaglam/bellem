@@ -1,0 +1,79 @@
+{
+    "seed": 42,
+    "dataset": {
+        "train": [
+            {
+                "path": "bdsaglam/musique-jerx-rltf-openai",
+                "split": "train[:16]"
+            }
+        ]
+    },
+    "pretrained_model": {
+        "model_name_or_path": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "torch_dtype": "bfloat16",
+        "quantization_config": {
+            "load_in_4bit": true,
+            "bnb_4bit_quant_type": "nf4"
+        }
+    },
+    "trainer": {
+        "lora": {
+            "lora_alpha": 16,
+            "lora_dropout": 0.1,
+            "r": 64,
+            "bias": "none",
+            "task_type": "CAUSAL_LM"
+        },
+        "response_template": "<|start_header_id|>assistant<|end_header_id|>",
+        "config": {
+            "remove_unused_columns": false,
+            "batch_size": 4,
+            "mini_batch_size": 1,
+            "gradient_accumulation_steps": 4,
+            "learning_rate": 0.0002,
+            "target_kl": 6.0,
+            "kl_penalty": "kl",
+            "use_score_scaling": false,
+            "use_score_norm": false,
+            "early_stopping": false,
+            "log_with": "wandb"
+        }
+    },
+    "inference": {
+        "pipeline": {
+            "batch_size": 8
+        },
+        "generation_params": {
+            "min_length": -1,
+            "max_new_tokens": 1024,
+            "do_sample": true,
+            "top_k": 0,
+            "top_p": 1.0,
+            "terminators": [
+                "<|eot_id|>"
+            ]
+        }
+    },
+    "wandb": {
+        "mode": "online",
+        "entity": "bdsaglam",
+        "project": "jerx-rltf",
+        "resume": "allow",
+        "name": null,
+        "notes": "",
+        "tags": [
+            "jerx",
+            "rltf",
+            "llama"
+        ]
+    },
+    "hfhub": {
+        "model_id": "bdsaglam/llama-3-8b-jerx-rltf"
+    },
+    "metaconfig": {
+        "preprocessing": {
+            "resolve_paths": false,
+            "unique_hfhub_model_id": true
+        }
+    }
+}
