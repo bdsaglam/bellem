@@ -19,6 +19,7 @@ def run_experiment(wandb_run):
             "prediction-dataframe": wandb.Table(dataframe=pred_df.reset_index()),
         }
     )
+    pred_df.to_json('jerx-inferences.jsonl', lines=True, orient='records')
 
 
 if __name__ == "__main__":
