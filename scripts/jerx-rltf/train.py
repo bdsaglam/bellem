@@ -12,6 +12,7 @@ from bellek.hf.transformers.generation import preprocess_generation_params
 from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
 from bellek.jerx.reward.gpt import make_reward_func
 from bellek.logging import get_logger
+from bellek.ml.experiment import main
 from bellek.utils import NestedDict, flatten_dict, set_seed
 
 load_dotenv()
@@ -194,3 +195,13 @@ def run_experiment(wandb_run):
     df = reward_tracker.report()
     df.to_json("jerx-rltf-rewards.jsonl", lines=True, orient="records")
     df.describe()
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--cfg", default="./config.json")
+    args, _ = parser.parse_known_args()
+
+    main(run_experiment, args)
