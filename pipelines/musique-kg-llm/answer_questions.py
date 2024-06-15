@@ -32,8 +32,8 @@ patch_knowledge_graph_index()
 # model to generate embeddings for triplets
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
-# language model to use for triplet extraction
-llm = OpenAI(temperature=0, model="gpt-3.5-turbo")
+# language model to answer questions
+llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
 
 
 def make_service_context(directory: Path, example_id: str):
