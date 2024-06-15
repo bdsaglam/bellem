@@ -52,7 +52,7 @@ def parse_sub_questions(output: str):
 
 def make_question_decomposer(llm=None):
     if llm is None:
-        llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo-1106")
+        llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
     
     chain = make_chat_prompt_template() | llm | StrOutputParser()
     

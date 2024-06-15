@@ -44,7 +44,7 @@ class QuestionAnsweringResult(BaseModel):
 
 def make_question_answer_func(llm: ChatOpenAI | None = None):
     if llm is None:
-        llm = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0)
+        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
     chain = create_structured_output_runnable(QuestionAnsweringResult, llm=llm, prompt=DEFAULT_PROMPT_MESSAGES)
     def func(context: str, question: str) -> QuestionAnsweringResult:
