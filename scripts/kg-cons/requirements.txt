@@ -4,4 +4,5 @@ peft==0.10.0
 bitsandbytes==0.42.0
 trl==0.8.6
 kuzu==0.2.1
+pyvis==0.3.2
  

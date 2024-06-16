@@ -27,7 +27,7 @@ load_dotenv()
 set_seed(42)
 
 
-version = 0
+version = 1
 
 
 def make_trace_callback_handler(example_dir: Path):
