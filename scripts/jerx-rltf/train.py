@@ -10,7 +10,7 @@ from bellek.hf.datasets.utils import load_datasets
 from bellek.hf.transformers.experiment import preprocess_config
 from bellek.hf.transformers.generation import preprocess_generation_params
 from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
-from bellek.jerx.reward.gpt import make_reward_func
+from bellek.jerx.reward.llm import make_reward_func
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.utils import NestedDict, flatten_dict, set_seed
