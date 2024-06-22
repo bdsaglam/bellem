@@ -8,7 +8,7 @@ __all__ = ['log', 'DEFAULT_SYSTEM_PROMPT', 'USER_PROMPT', 'QuestionAnsweringResu
 import os
 import instructor
 from pydantic import BaseModel, Field
-from openai import OpenAI
+from openai import OpenAI, BadRequestError
 
 from ...text.utils import fuzzy_match
 from ...logging import get_logger
@@ -69,7 +69,11 @@ def make_reward_func(model_name: str = "gpt-3.5-turbo", answer_comparator=fuzzy_
     qa = make_question_answer_func(model_name)
 
     def reward(context: str, question: str, answers: list[str]) -> RewardAssessment:
-        qa_result = qa(context, question)
+        try:
+            qa_result = qa(context, question)
+        except BadRequestError as e:
+            log.warning(f"Failed to assess generation: {e}")
+            return RewardAssessment(answer="", reasoning=str(e), reward=0.0)
         correct = any(answer_comparator(qa_result.answer, answer) for answer in answers)
         reward = 1.0 if correct else 0.0
         return RewardAssessment(**qa_result.dict(), reward=reward)
