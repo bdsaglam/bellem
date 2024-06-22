@@ -22,6 +22,10 @@ load_dotenv()
 log = get_logger(__name__)
 
 
+def collator(data):
+    return {key: [d[key] for d in data] for key in data[0]}
+
+
 class RewardTracker:
     def __init__(self):
         self.records = []
@@ -78,12 +82,12 @@ def run_experiment(wandb_run):
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     prepare_llama3_for_inference(tokenizer, model)
 
+    # Dataset
     def preprocess_example(example):
         query = tokenizer.apply_chat_template(example["messages"], tokenize=False, add_generation_prompt=True)
         answers = ";".join(example["answers"])
         return {"query": query, "answers": answers}
 
-    # Dataset
     train_ds = load_datasets(config.at("dataset.train")).map(preprocess_example)
 
     def tokenize(example):
@@ -108,6 +112,7 @@ def run_experiment(wandb_run):
         config=ppo_config,
         dataset=tokenized_train_ds,
         tokenizer=tokenizer,
+        data_collator=collator,
     )
 
     generation_params = preprocess_generation_params(
