@@ -94,6 +94,7 @@ def run_experiment(wandb_run):
         return tokenizer(example["query"])
 
     tokenized_train_ds = train_ds.map(tokenize, batched=False)
+    tokenized_train_ds.set_format(type="torch")
 
     token_counts = pd.Series([len(example["input_ids"]) for example in tokenized_train_ds])
     print(token_counts.describe())
