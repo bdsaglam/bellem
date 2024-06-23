@@ -27,9 +27,9 @@ def collator(data):
 
 
 class RewardTracker:
-    def __init__(self):
+    def __init__(self, model_name: str = "gpt-3.5-turbo"):
         self.records = []
-        self.qa_reward_func = make_reward_func()
+        self.qa_reward_func = make_reward_func(model_name)
 
     def compute_rewards(self, batch: list[dict]) -> list[float]:
         rewards = []
@@ -99,7 +99,7 @@ def run_experiment(wandb_run):
     print(token_counts.describe())
 
     # Trainer
-    reward_tracker = RewardTracker()
+    reward_tracker = RewardTracker(config.at("reward.model_name", "gpt-3.5-turbo"))
 
     ppo_config = PPOConfig(
         seed=config["seed"],

@@ -40,6 +40,9 @@
             "log_with": "wandb"
         }
     },
+    "reward": {
+        "model_name": "gpt-4o"
+    },
     "inference": {
         "pipeline": {
             "batch_size": 8
