@@ -1,0 +1,36 @@
+schema: '2.0'
+stages:
+  create_mhqa_dataset:
+    cmd: python pipelines/musique-evaluation/create_mhqa_dataset.py --config-file
+      data/raw/musique-evaluation/dataset-config.json --out data/generated/musique-evaluation/dataset.jsonl
+    deps:
+    - path: data/raw/musique-evaluation/dataset-config.json
+      hash: md5
+      md5: 41cce409e518935d2c47140e2f94cd9e
+      size: 77
+    - path: pipelines/musique-evaluation/create_mhqa_dataset.py
+      hash: md5
+      md5: 9aa8ea664818f6e3f374d92b79927c19
+      size: 2313
+    outs:
+    - path: data/generated/musique-evaluation/dataset.jsonl
+      hash: md5
+      md5: c4a8a0582fd0f5f436b556503d889d5f
+      size: 14908982
+  decompose_questions:
+    cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
+      data/generated/musique-evaluation/dataset.jsonl --out data/generated/musique-evaluation/question-decomposition.jsonl
+    deps:
+    - path: data/generated/musique-evaluation/dataset.jsonl
+      hash: md5
+      md5: c4a8a0582fd0f5f436b556503d889d5f
+      size: 14908982
+    - path: pipelines/musique-evaluation/decompose_questions.py
+      hash: md5
+      md5: 2f07273e75a8a4477516738d8acc398b
+      size: 875
+    outs:
+    - path: data/generated/musique-evaluation/question-decomposition.jsonl
+      hash: md5
+      md5: 4132d63468bdeca64d4411c3ceb9bbfa
+      size: 353039

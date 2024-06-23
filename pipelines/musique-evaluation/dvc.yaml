@@ -1,0 +1,67 @@
+stages:
+  create_mhqa_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-evaluation/create_mhqa_dataset.py
+      --config-file data/raw/musique-evaluation/dataset-config.json
+      --out data/generated/musique-evaluation/dataset.jsonl
+    deps:
+      - pipelines/musique-evaluation/create_mhqa_dataset.py
+      - data/raw/musique-evaluation/dataset-config.json
+    outs:
+      - data/generated/musique-evaluation/dataset.jsonl
+
+  decompose_questions:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-evaluation/decompose_questions.py
+      --dataset-file data/generated/musique-evaluation/dataset.jsonl
+      --out data/generated/musique-evaluation/question-decomposition.jsonl
+    deps:
+      - pipelines/musique-evaluation/decompose_questions.py
+      - data/generated/musique-evaluation/dataset.jsonl
+    outs:
+      - data/generated/musique-evaluation/question-decomposition.jsonl
+
+  construct_knowledge_graphs:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-evaluation/construct_knowledge_graphs.py
+      --dataset-file data/generated/musique-evaluation/dataset.jsonl
+      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
+      --out data/generated/musique-evaluation/knowledge-graphs/
+    deps:
+      - pipelines/musique-evaluation/construct_knowledge_graphs.py
+      - data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
+      - data/generated/musique-evaluation/dataset.jsonl
+    outs:
+      - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
+
+  answer_questions:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-evaluation/answer_questions.py
+      --dataset-file data/generated/musique-evaluation/question-decomposition.jsonl
+      --knowledge-graph-directory data/generated/musique-evaluation/knowledge-graphs/ 
+      --out data/generated/musique-evaluation/answers.jsonl
+    deps:
+      - pipelines/musique-evaluation/answer_questions.py
+      - data/generated/musique-evaluation/question-decomposition.jsonl
+      - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
+    outs:
+      - data/generated/musique-evaluation/answers.jsonl
+
+  evaluate_answers:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-evaluation/evaluate_answers.py
+      --dataset-file data/generated/musique-evaluation/dataset.jsonl
+      --answers-file data/generated/musique-evaluation/answers.jsonl
+      --out data/generated/musique-evaluation/answer-eval/
+    deps:
+      - pipelines/musique-evaluation/evaluate_answers.py
+      - data/generated/musique-evaluation/dataset.jsonl
+      - data/generated/musique-evaluation/answers.jsonl
+    outs:
+      - data/generated/musique-evaluation/answer-eval/comparisons.jsonl
+      - data/generated/musique-evaluation/answer-eval/scores.json

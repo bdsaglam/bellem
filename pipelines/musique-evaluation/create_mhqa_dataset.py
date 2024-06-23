@@ -18,10 +18,6 @@ def is_about_record_label(example):
     return any(keyword in question.lower() or keyword in document for keyword in keywords)
 
 
-def is_eligible(example):
-    return example["id"] not in {"2hop__145162_126070"} and not is_about_record_label(example)
-
-
 def flatten_paragraphs(example):
     return [
         {
@@ -61,18 +57,17 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(config_file) as f:
         dataset_config = json.load(f)
     ds = load_dataset(**dataset_config)
-    ds = ds.filter(lambda example: is_eligible(example))
     ds.to_json(out)
 
     user_name = "bdsaglam"
-    ds_name = "musique-answerable-2hop-subset"
-    ds.push_to_hub(f"{user_name}/{ds_name}", split="train")
+    ds_name = "musique-answerable-2hop"
+    ds.push_to_hub(f"{user_name}/{ds_name}", split=dataset_config["split"])
 
     jerx_chat_ds = make_jerx_chat_dataset(ds)
     suffix = "-paragraph-jerx-chat"
     jerx_chat_ds_name = ds_name + suffix
     jerx_chat_ds.to_json(out.with_stem(out.stem + suffix))
-    jerx_chat_ds.push_to_hub(f"{user_name}/{jerx_chat_ds_name}", split="train")
+    jerx_chat_ds.push_to_hub(f"{user_name}/{jerx_chat_ds_name}", split=dataset_config["split"])
 
 
 if __name__ == "__main__":
