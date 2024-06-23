@@ -37,7 +37,7 @@ class QuestionAnsweringResult(BaseModel):
     reasoning: str = Field(description="Multi-hop reasoning for the answer.")
 
 
-def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI = None):
+def make_question_answer_func(model_name: str = "gpt-4-turbo", client: OpenAI = None):
     if client is None:
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPENAI_API_BASE"))
     client = instructor.from_openai(client)
@@ -65,7 +65,7 @@ def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI 
 class RewardAssessment(QuestionAnsweringResult):
     reward: float = Field(description="The reward value for the answer.")
 
-def make_reward_func(model_name: str = "gpt-3.5-turbo", answer_comparator=fuzzy_match):
+def make_reward_func(model_name: str = "gpt-4-turbo", answer_comparator=fuzzy_match):
     qa = make_question_answer_func(model_name)
 
     def reward(context: str, question: str, answers: list[str]) -> RewardAssessment:
