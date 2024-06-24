@@ -15,8 +15,8 @@ stages:
     outs:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: c4a8a0582fd0f5f436b556503d889d5f
-      size: 14908982
+      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
+      size: 1678753
   decompose_questions:
     cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
       data/generated/musique-evaluation/dataset.jsonl --out data/generated/musique-evaluation/question-decomposition.jsonl
@@ -41,8 +41,8 @@ stages:
     deps:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: c4a8a0582fd0f5f436b556503d889d5f
-      size: 14908982
+      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
+      size: 1678753
     - path: data/raw/musique-evaluation/jerx-llm-configs/openai.json
       hash: md5
       md5: d6c563e33f151a24366e7d1a8f0bc9d0
@@ -54,8 +54,8 @@ stages:
     outs:
     - path: data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
+      md5: 8264337c93c0aaccefc054addd385f83
+      size: 23
   answer_questions:
     cmd: python pipelines/musique-evaluation/answer_questions.py --dataset-file data/generated/musique-evaluation/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-evaluation/knowledge-graphs/  --out
@@ -88,8 +88,8 @@ stages:
       size: 425112
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: c4a8a0582fd0f5f436b556503d889d5f
-      size: 14908982
+      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
+      size: 1678753
     - path: pipelines/musique-evaluation/evaluate_answers.py
       hash: md5
       md5: dc79b2d961df921489199a8cbcc4affd
@@ -97,9 +97,9 @@ stages:
     outs:
     - path: data/generated/musique-evaluation/answer-eval/comparisons.jsonl
       hash: md5
-      md5: 03aebc9cd12d9842756cb4f0dfc981d5
-      size: 14922346
+      md5: f6945ec89b6cd518499d1fafba96b5e9
+      size: 1686609
     - path: data/generated/musique-evaluation/answer-eval/scores.json
       hash: md5
-      md5: 9fe146f2ea226e1365c6b72a8799869d
-      size: 104
+      md5: 687dbf10aeb93e4fc9a778fbbbb98feb
+      size: 78
