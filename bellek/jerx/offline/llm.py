@@ -18,7 +18,7 @@ def parse_triplet_response(response: str, *args, **kwargs) -> list[tuple[str, st
 
 
 def make_kg_triplet_extract_fn(inference_cache_filepath: Path):
-    df = pd.read_json(inference_cache_filepath, lines=True)
+    df = pd.read_json(inference_cache_filepath, orient='records', lines=True)
     mapping = {text: generation for text, generation in zip(df["text"], df["generation"])}
     del df
 
