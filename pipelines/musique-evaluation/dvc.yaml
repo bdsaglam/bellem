@@ -46,6 +46,7 @@ stages:
       --dataset-file data/generated/musique-evaluation/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-evaluation/knowledge-graphs/ 
       --out data/generated/musique-evaluation/answers.jsonl
+      --ignore-errors
     deps:
       - pipelines/musique-evaluation/answer_questions.py
       - data/generated/musique-evaluation/question-decomposition.jsonl
