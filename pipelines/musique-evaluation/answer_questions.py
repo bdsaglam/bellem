@@ -22,7 +22,7 @@ err = Console(stderr=True).print
 
 load_dotenv()
 
-set_seed(42)
+set_seed(89)
 
 
 patch_kg_data_struct()
