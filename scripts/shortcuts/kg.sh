@@ -1,3 +1,3 @@
 #!/bin/bash
 
-open "./data/generated/musique-kg-llm/train/knowledge-graphs/${1}/kuzu-network.html"
+open "./data/generated/musique-evaluation/knowledge-graphs/${1}/kuzu-network.html"
