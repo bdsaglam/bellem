@@ -129,6 +129,7 @@ def main(
     llm_config_file: Path = typer.Option(...),
     out: Path = typer.Option(...),
     ignore_errors: bool = typer.Option(False),
+    resume: bool = typer.Option(False),
 ):
     llm_config = json.loads(llm_config_file.read_text())
     kg_triplet_extract_fn = make_kg_triplet_extract_fn_from_config(llm_config)
@@ -139,6 +140,10 @@ def main(
             example_id = example["id"]
 
             example_out_dir = out / example_id
+            if resume and (example_out_dir / "kuzu-network.html").exists():
+                err(f"Skipping the sample {example_id} as it already exists")
+                continue
+            
             shutil.rmtree(example_out_dir, ignore_errors=True)
             example_out_dir.mkdir(exist_ok=True, parents=True)
 

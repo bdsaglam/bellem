@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 
 import kuzu
@@ -102,6 +101,7 @@ def main(
     dataset_file: Path = typer.Option(...),
     knowledge_graph_directory: Path = typer.Option(...),
     out: Path = typer.Option(...),
+    ignore_errors: bool = typer.Option(False),
 ):
     intermediate_directory = dataset_file.parent / "question-answering"
     intermediate_directory.mkdir(exist_ok=True, parents=True)
@@ -114,7 +114,14 @@ def main(
 
                 err(f"Setting up query engine for {example_id}")
                 service_context = make_service_context(intermediate_directory, example_id)
-                index = load_index(knowledge_graph_directory / example_id, service_context)
+                try:
+                    index = load_index(knowledge_graph_directory / example_id, service_context)
+                except Exception as exc:
+                    err(f"Failed to load the knowledge graph for sample {example_id}.\n{exc}")
+                    if ignore_errors:
+                        continue
+                    raise exc
+
                 query_engine = make_query_engine(index)
 
                 err(f"Answering the question in the sample {example_id}")

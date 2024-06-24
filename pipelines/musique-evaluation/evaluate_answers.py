@@ -23,7 +23,7 @@ def fuzzy_match(a, b, threshold=0.8):
 
 def is_correct(match):
     def func(row):
-        answers = [row["reference_answer"], *row["answer_aliases"]]
+        answers = [row["answer"], *row["answer_aliases"]]
         return any(match(answer, row["predicted_answer"]) for answer in answers)
 
     return func
@@ -32,9 +32,7 @@ def is_correct(match):
 def calculate_musique_scores(dataf: pd.DataFrame) -> dict:
     metric = evaluate.load("bdsaglam/musique")
     predictions = dataf["predicted_answer"].tolist()
-    references = [
-        [ref, *aliases] for ref, aliases in zip(dataf["reference_answer"].tolist(), dataf["answer_aliases"].tolist())
-    ]
+    references = dataf.apply(lambda row: [row["answer"], *row["answer_aliases"]], axis=1).tolist()
     scores = metric.compute(predictions=predictions, references=references)
     return scores
 
@@ -45,16 +43,12 @@ def main(
     out: Path = typer.Option(...),
 ):
     df = pd.read_json(dataset_file, orient="records", lines=True)
+
     answer_df = pd.read_json(answers_file, orient="records", lines=True)
-    comp_df = pd.DataFrame(
-        {
-            "id": df["id"],
-            "question": df["question"].values,
-            "reference_answer": df["answer"].values,
-            "answer_aliases": df["answer_aliases"].values,
-            "predicted_answer": answer_df["question_decomposition"].map(lambda x: x[-1]["answer"]).values,
-        }
-    )
+    answer_df["predicted_answer"] = answer_df["question_decomposition"].map(lambda x: x[-1]["answer"])
+
+    comp_df = pd.merge(df, answer_df[["id", "predicted_answer"]], on="id", how="inner")
+
     scores = calculate_musique_scores(comp_df)
     scores["fuzzy_match"] = comp_df.apply(lambda row: is_correct(fuzzy_match)(row), axis=1).mean()
 
