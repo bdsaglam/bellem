@@ -6,12 +6,12 @@ __all__ = ['log', 'DEFAULT_SYSTEM_PROMPT', 'USER_PROMPT', 'QuestionAnsweringResu
 
 # %% ../../../nbs/jerx.reward.llm.ipynb 3
 import os
-import instructor
-from pydantic import BaseModel, Field
-from openai import OpenAI, BadRequestError
 
-from ...text.utils import fuzzy_match
+from openai import BadRequestError, OpenAI
+from pydantic import BaseModel, Field
+
 from ...logging import get_logger
+from ...text.utils import fuzzy_match
 
 log = get_logger(__name__)
 
@@ -28,6 +28,10 @@ USER_PROMPT = """The context information below is provided as a set of entity-re
 ---------------------
 Given the context information and not prior knowledge, answer the question.
 {question}
+
+Response Format:
+Reasoning: Provide multi-hop reasoning for the answer.
+Answer: Provide the answer in 2-4 words.
 """
 
 class QuestionAnsweringResult(BaseModel):
@@ -39,8 +43,7 @@ class QuestionAnsweringResult(BaseModel):
 
 def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI = None):
     if client is None:
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPENAI_API_BASE"))
-    client = instructor.from_openai(client)
+        client = OpenAI()
 
     def func(context: str, question: str) -> QuestionAnsweringResult:
         messages = [
@@ -53,11 +56,19 @@ def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI 
                 "content": USER_PROMPT.format(context=context, question=question),
             },
         ]
-        return client.chat.completions.create(
+        chat_completion = client.chat.completions.create(
             model=model_name,
-            response_model=QuestionAnsweringResult,
             messages=messages,
         )
+        text = chat_completion.choices[0].message.content
+        reasoning = ""
+        answer = "N/A"
+        for line in text.splitlines():
+            if line.lower().startswith("reasoning:"):
+                reasoning = line.split(":", 1)[1].strip()
+            elif line.lower().startswith("answer:"):
+                answer = line.split(":", 1)[1].strip()
+        return QuestionAnsweringResult(answer=answer, reasoning=reasoning)
 
     return func
 
