@@ -11,24 +11,15 @@ from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE_FOR_LLAMA
 err = Console(stderr=True).print
 
 
-def is_about_record_label(example):
-    document = " ".join([p["paragraph_text"] for p in example["paragraphs"] if p["is_supporting"]])
-    question = example["question"]
-    keywords = ["record label"]
-    return any(keyword in question.lower() or keyword in document for keyword in keywords)
-
-
 def flatten_paragraphs(example):
-    return [
-        {
+    for paragraph in example["paragraphs"]:
+        yield {
             "id": example["id"],
             "paragraph_idx": paragraph["idx"],
             "paragraph_text": paragraph["paragraph_text"],
             "paragraph_title": paragraph["title"],
             "is_supporting": paragraph["is_supporting"],
         }
-        for paragraph in example["paragraphs"]
-    ]
 
 
 def make_doc(row):
@@ -43,12 +34,8 @@ def make_messages(text):
 
 
 def make_jerx_chat_dataset(dataset):
-    df = pd.DataFrame(
-        [record for example in dataset for record in flatten_paragraphs(example) if record["is_supporting"]]
-    )
+    df = pd.DataFrame([record for example in dataset for record in flatten_paragraphs(example)])
     df["text"] = df.apply(make_doc, axis=1)
-    df.drop(columns=["paragraph_title", "paragraph_text"], inplace=True)
-    df.drop_duplicates(inplace=True, subset=["text"])
     df["messages"] = df["text"].apply(make_messages)
     return Dataset.from_pandas(df)
 
@@ -58,7 +45,6 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
         dataset_config = json.load(f)
     ds = load_dataset(**dataset_config)
     ds = ds.map(lambda example: {"answer_aliases": list(set([example["answer"], *example["answer_aliases"]]))})
-    ds.filter(lambda example: example["id"] not in {"2hop__389778_78303", "2hop__613779_55984", "2hop__590631_110882"})
     ds.to_json(out)
 
     user_name = "bdsaglam"

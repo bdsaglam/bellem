@@ -10,12 +10,12 @@ stages:
       size: 77
     - path: pipelines/musique-evaluation/create_mhqa_dataset.py
       hash: md5
-      md5: c28feaa3e44b47a1381a41db644313f4
-      size: 2486
+      md5: 482c83e1862b591ed9becc9983bbed12
+      size: 1886
     outs:
     - path: data/generated/musique-evaluation/dataset-full.jsonl
       hash: md5
-      md5: 68e4aec46196b214ae1f0af09d7ea1ff
+      md5: e5a3b77a693f450f09ddcbda0269760b
       size: 14933699
   decompose_questions:
     cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
