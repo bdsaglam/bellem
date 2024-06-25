@@ -26,3 +26,5 @@ services:
       - "OPENAI_API_KEY=${OPENAI_API_KEY}"
       - "GROQ_API_KEY=${GROQ_API_KEY}"
       - "TOGETHERAI_API_KEY=${TOGETHERAI_API_KEY}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
