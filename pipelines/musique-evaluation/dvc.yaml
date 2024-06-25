@@ -1,14 +1,22 @@
 stages:
   create_mhqa_dataset:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-evaluation/create_mhqa_dataset.py
       --config-file data/raw/musique-evaluation/dataset-config.json
-      --out data/generated/musique-evaluation/dataset.jsonl
+      --out data/generated/musique-evaluation/dataset-full.jsonl
     deps:
       - pipelines/musique-evaluation/create_mhqa_dataset.py
       - data/raw/musique-evaluation/dataset-config.json
+    outs:
+      - data/generated/musique-evaluation/dataset-full.jsonl
+
+  create_mini_dataset:
+    wdir: ../..
+    cmd: >-
+      head -n 200 data/generated/musique-evaluation/dataset-full.jsonl > data/generated/musique-evaluation/dataset.jsonl
+    deps:
+      - data/generated/musique-evaluation/dataset-full.jsonl
     outs:
       - data/generated/musique-evaluation/dataset.jsonl
 
@@ -26,6 +34,7 @@ stages:
       - data/generated/musique-evaluation/question-decomposition.jsonl
 
   construct_knowledge_graphs:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-evaluation/construct_knowledge_graphs.py
@@ -40,6 +49,7 @@ stages:
       - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
 
   answer_questions:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-evaluation/answer_questions.py

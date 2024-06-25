@@ -57,6 +57,7 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(config_file) as f:
         dataset_config = json.load(f)
     ds = load_dataset(**dataset_config)
+    ds = ds.map(lambda example: {"answer_aliases": list(set([example["answer"], *example["answer_aliases"]]))})
     ds.filter(lambda example: example["id"] not in {"2hop__389778_78303", "2hop__613779_55984", "2hop__590631_110882"})
     ds.to_json(out)
 

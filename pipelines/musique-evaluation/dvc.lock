@@ -2,7 +2,7 @@ schema: '2.0'
 stages:
   create_mhqa_dataset:
     cmd: python pipelines/musique-evaluation/create_mhqa_dataset.py --config-file
-      data/raw/musique-evaluation/dataset-config.json --out data/generated/musique-evaluation/dataset.jsonl
+      data/raw/musique-evaluation/dataset-config.json --out data/generated/musique-evaluation/dataset-full.jsonl
     deps:
     - path: data/raw/musique-evaluation/dataset-config.json
       hash: md5
@@ -10,13 +10,13 @@ stages:
       size: 77
     - path: pipelines/musique-evaluation/create_mhqa_dataset.py
       hash: md5
-      md5: 35651a63965487bb5a10a5afeadbf6d9
-      size: 2433
+      md5: 338e31eccd6bed8968d847eee589dc5a
+      size: 2545
     outs:
-    - path: data/generated/musique-evaluation/dataset.jsonl
+    - path: data/generated/musique-evaluation/dataset-full.jsonl
       hash: md5
-      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
-      size: 1678753
+      md5: 329d38e3231a97f3dac6d0fbd14fcf81
+      size: 14933699
   decompose_questions:
     cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
       data/generated/musique-evaluation/dataset.jsonl --out data/generated/musique-evaluation/question-decomposition.jsonl
@@ -88,18 +88,30 @@ stages:
       size: 64824
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
-      size: 1678753
+      md5: 3da06ce04ecefec48d33bc3f8362b0bb
+      size: 1682892
     - path: pipelines/musique-evaluation/evaluate_answers.py
       hash: md5
-      md5: dc79b2d961df921489199a8cbcc4affd
-      size: 1848
+      md5: 8c56f8a2cbde0759bde67c790a4dbe9b
+      size: 1135
     outs:
     - path: data/generated/musique-evaluation/answer-eval/comparisons.jsonl
       hash: md5
-      md5: c8f0a053c0f0be9a1fa08c9395aed2f9
-      size: 1686465
+      md5: 0195441edf2bcb79a5938d81ec614624
+      size: 1698402
     - path: data/generated/musique-evaluation/answer-eval/scores.json
       hash: md5
-      md5: 3173aff2e750b624addb588f55367b62
-      size: 77
+      md5: ae2caabf97fdee370e28b79ab945a6c2
+      size: 76
+  create_mini_dataset:
+    cmd: head -n 200 data/generated/musique-evaluation/dataset-full.jsonl > data/generated/musique-evaluation/dataset.jsonl
+    deps:
+    - path: data/generated/musique-evaluation/dataset-full.jsonl
+      hash: md5
+      md5: 329d38e3231a97f3dac6d0fbd14fcf81
+      size: 14933699
+    outs:
+    - path: data/generated/musique-evaluation/dataset.jsonl
+      hash: md5
+      md5: 3da06ce04ecefec48d33bc3f8362b0bb
+      size: 1682892
