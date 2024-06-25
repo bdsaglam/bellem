@@ -68,7 +68,6 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     jerx_chat_ds = make_jerx_chat_dataset(ds)
     suffix = "-paragraph-jerx-chat"
     jerx_chat_ds_name = ds_name + suffix
-    jerx_chat_ds.to_json(out.with_stem(out.stem + suffix))
     jerx_chat_ds.push_to_hub(f"{user_name}/{jerx_chat_ds_name}", split=dataset_config["split"])
 
 

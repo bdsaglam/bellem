@@ -1,4 +1,6 @@
+from datetime import datetime
 import json
+import shutil
 from pathlib import Path
 
 import kuzu
@@ -11,6 +13,7 @@ from llama_index.indices.base import BaseIndex
 from llama_index.indices.knowledge_graph.retrievers import KGRetrieverMode
 from llama_index.llms import OpenAI
 from rich.console import Console
+from tqdm import tqdm
 
 from bellek.llama_index.data_structs.data_structs import patch_kg_data_struct
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
@@ -33,8 +36,8 @@ patch_knowledge_graph_index()
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # language model to answer questions
-llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
-# llm = OpenAI(temperature=0.0, model="gpt-4")  # actually, llama3-70b
+# llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
+llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo", api_base="http://localhost:8080/v1", api_key="_")
 
 
 def make_service_context(directory: Path, example_id: str):
@@ -102,34 +105,48 @@ def main(
     knowledge_graph_directory: Path = typer.Option(...),
     out: Path = typer.Option(...),
     ignore_errors: bool = typer.Option(False),
+    resume: bool = typer.Option(False),
 ):
-    intermediate_directory = dataset_file.parent / "question-answering"
-    intermediate_directory.mkdir(exist_ok=True, parents=True)
+    out.mkdir(exist_ok=True, parents=True)
 
     with open(dataset_file) as src:
-        with open(out, "w") as dst:
-            for line in src:
-                example = json.loads(line)
-                example_id = example["id"]
+        lines = src.readlines()
+    
+    for line in tqdm(lines):
+        example = json.loads(line)
+        example_id = example["id"]
 
-                err(f"Setting up query engine for {example_id}")
-                service_context = make_service_context(intermediate_directory, example_id)
-                try:
-                    index = load_index(knowledge_graph_directory / example_id, service_context)
-                except Exception as exc:
-                    err(f"Failed to load the knowledge graph for sample {example_id}.\n{exc}")
-                    if ignore_errors:
-                        continue
-                    raise exc
+        example_out_dir = out / example_id
+        if resume and (example_out_dir / "answer.json").exists():
+            err(f"Skipping the sample {example_id} because it already exists.")
+            continue
 
-                query_engine = make_query_engine(index)
+        shutil.rmtree(example_out_dir, ignore_errors=True)
 
-                err(f"Answering the question in the sample {example_id}")
-                example_answered = answer_questions(query_engine, example)
+        err(f"Setting up query engine for {example_id}")
+        service_context = make_service_context(out, example_id)
+        try:
+            index = load_index(knowledge_graph_directory / example_id, service_context)
+        except Exception as exc:
+            err(f"Failed to load the knowledge graph for sample {example_id}.\n{exc}")
+            if ignore_errors:
+                continue
+            raise exc
 
-                dst.write(json.dumps(example_answered, ensure_ascii=False))
-                dst.write("\n")
+        try:
+            query_engine = make_query_engine(index)
+            err(f"Answering the question in the sample {example_id}")
+            example_answered = answer_questions(query_engine, example)
+            with open(example_out_dir / "answer.json", "w") as dst:
+                dst.write(json.dumps(example_answered, ensure_ascii=False, indent=2))
+        except Exception as exc:
+            err(f"Failed to answer the question for sample {example_id}.\n{exc}")
+            if ignore_errors:
+                continue
+            raise exc
 
+    with open(out / "timestamp.txt", "w") as f:
+        f.write(datetime.now().isoformat())
 
 if __name__ == "__main__":
     typer.run(main)

@@ -10,12 +10,12 @@ stages:
       size: 77
     - path: pipelines/musique-evaluation/create_mhqa_dataset.py
       hash: md5
-      md5: 338e31eccd6bed8968d847eee589dc5a
-      size: 2545
+      md5: c28feaa3e44b47a1381a41db644313f4
+      size: 2486
     outs:
     - path: data/generated/musique-evaluation/dataset-full.jsonl
       hash: md5
-      md5: 329d38e3231a97f3dac6d0fbd14fcf81
+      md5: 68e4aec46196b214ae1f0af09d7ea1ff
       size: 14933699
   decompose_questions:
     cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
@@ -23,8 +23,8 @@ stages:
     deps:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: c4a8a0582fd0f5f436b556503d889d5f
-      size: 14908982
+      md5: ebe12e4c3cb6ab966831930f731943cd
+      size: 1682892
     - path: pipelines/musique-evaluation/decompose_questions.py
       hash: md5
       md5: 2f07273e75a8a4477516738d8acc398b
@@ -32,86 +32,87 @@ stages:
     outs:
     - path: data/generated/musique-evaluation/question-decomposition.jsonl
       hash: md5
-      md5: 4132d63468bdeca64d4411c3ceb9bbfa
-      size: 353039
+      md5: f312809bcdb76f32d5374ad1628eab2d
+      size: 53031
   construct_knowledge_graphs:
     cmd: python pipelines/musique-evaluation/construct_knowledge_graphs.py --dataset-file
-      data/generated/musique-evaluation/dataset.jsonl --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-sft-offline.json
+      data/generated/musique-evaluation/dataset.jsonl --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       --out data/generated/musique-evaluation/knowledge-graphs/
     deps:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: da186a12dee9ca8408c3bf9ebb8cc9aa
-      size: 1678753
-    - path: data/raw/musique-evaluation/jerx-llm-configs/llama3-sft-offline.json
+      md5: ebe12e4c3cb6ab966831930f731943cd
+      size: 1682892
+    - path: data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       hash: md5
-      md5: 0edc5206f015725c59b8603e0a60427f
-      size: 190
+      md5: 2d826316f60ed13ef00600932ea08f2c
+      size: 184
     - path: pipelines/musique-evaluation/construct_knowledge_graphs.py
       hash: md5
-      md5: 6912a06627eec241073ac913c9d0292b
-      size: 5829
+      md5: 48bb7825ae29da2c4c4c26e45af0f727
+      size: 5815
     outs:
     - path: data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: e0a2114db4f8d5a8b2c0e97e90ad78a6
+      md5: 9a980b42dd5a0f2c9916ab5c25473531
       size: 23
   answer_questions:
     cmd: python pipelines/musique-evaluation/answer_questions.py --dataset-file data/generated/musique-evaluation/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-evaluation/knowledge-graphs/  --out
-      data/generated/musique-evaluation/answers.jsonl --ignore-errors
+      data/generated/musique-evaluation/question-answering --resume
     deps:
     - path: data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: e0a2114db4f8d5a8b2c0e97e90ad78a6
+      md5: 9a980b42dd5a0f2c9916ab5c25473531
       size: 23
     - path: data/generated/musique-evaluation/question-decomposition.jsonl
       hash: md5
-      md5: 4132d63468bdeca64d4411c3ceb9bbfa
-      size: 353039
+      md5: f312809bcdb76f32d5374ad1628eab2d
+      size: 53031
     - path: pipelines/musique-evaluation/answer_questions.py
       hash: md5
-      md5: e73f13344c5e40b9b6c725c106add01c
-      size: 4910
+      md5: 365c9526cec2feaab0f45b2e867f73b2
+      size: 5453
     outs:
-    - path: data/generated/musique-evaluation/answers.jsonl
+    - path: data/generated/musique-evaluation/question-answering/timestamp.txt
       hash: md5
-      md5: 00a40337e4c73ddecc3cacb3067b6181
-      size: 64824
+      md5: a0c4daf6b080209305b0c19cf4d4926e
+      size: 26
   evaluate_answers:
     cmd: python pipelines/musique-evaluation/evaluate_answers.py --dataset-file data/generated/musique-evaluation/dataset.jsonl
-      --answers-file data/generated/musique-evaluation/answers.jsonl --out data/generated/musique-evaluation/answer-eval/
+      --answers-dir data/generated/musique-evaluation/question-answering/ --out data/generated/musique-evaluation/answer-eval/
     deps:
-    - path: data/generated/musique-evaluation/answers.jsonl
-      hash: md5
-      md5: 00a40337e4c73ddecc3cacb3067b6181
-      size: 64824
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: 3da06ce04ecefec48d33bc3f8362b0bb
+      md5: ebe12e4c3cb6ab966831930f731943cd
       size: 1682892
+    - path: data/generated/musique-evaluation/question-answering/
+      hash: md5
+      md5: 710ce24daa6c93fef3646f5718578145.dir
+      size: 2429609
+      nfiles: 401
     - path: pipelines/musique-evaluation/evaluate_answers.py
       hash: md5
-      md5: 8c56f8a2cbde0759bde67c790a4dbe9b
-      size: 1135
+      md5: 2d030ec456fd08a0dd9e63fdb05fb754
+      size: 1509
     outs:
     - path: data/generated/musique-evaluation/answer-eval/comparisons.jsonl
       hash: md5
-      md5: 0195441edf2bcb79a5938d81ec614624
-      size: 1698402
+      md5: bc9671edbe1769ce094d78bb64698cb0
+      size: 1698691
     - path: data/generated/musique-evaluation/answer-eval/scores.json
       hash: md5
-      md5: ae2caabf97fdee370e28b79ab945a6c2
-      size: 76
+      md5: 4616e8736c206322e5d257d034aa5345
+      size: 77
   create_mini_dataset:
     cmd: head -n 200 data/generated/musique-evaluation/dataset-full.jsonl > data/generated/musique-evaluation/dataset.jsonl
     deps:
     - path: data/generated/musique-evaluation/dataset-full.jsonl
       hash: md5
-      md5: 329d38e3231a97f3dac6d0fbd14fcf81
+      md5: 68e4aec46196b214ae1f0af09d7ea1ff
       size: 14933699
     outs:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: 3da06ce04ecefec48d33bc3f8362b0bb
+      md5: ebe12e4c3cb6ab966831930f731943cd
       size: 1682892
