@@ -56,6 +56,11 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     jerx_chat_ds_name = ds_name + suffix
     jerx_chat_ds.push_to_hub(f"{user_name}/{jerx_chat_ds_name}", split=dataset_config["split"])
 
+    jerx_chat_ds.filter(lambda example: example["is_supporting"]).push_to_hub(
+        f"{user_name}/{jerx_chat_ds_name}-supporting",
+        split=dataset_config["split"],
+    )
+
 
 if __name__ == "__main__":
     typer.run(main)
