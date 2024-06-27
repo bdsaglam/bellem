@@ -13,6 +13,7 @@ from llama_index.callbacks.base_handler import BaseCallbackHandler
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms import OpenAI
 from llama_index.storage.storage_context import StorageContext
+from more_itertools import partition
 from pyvis.network import Network
 from rich.console import Console
 
@@ -25,7 +26,6 @@ err = Console(stderr=True).print
 load_dotenv()
 
 set_seed(89)
-
 
 
 def make_trace_callback_handler(example_dir: Path):
@@ -49,10 +49,9 @@ def make_service_context(trace_callback_handler: BaseCallbackHandler):
 
 
 def make_docs(example, only_supporting=False):
-    ps = example["paragraphs"]
+    supporting_ps, non_supporting_ps = partition(lambda p: p["is_supporting"], example["paragraphs"])
+    ps = list(supporting_ps) if only_supporting else list(supporting_ps) + list(non_supporting_ps)
     for p in ps:
-        if only_supporting and not p["is_supporting"]:
-            continue
         idx = p["idx"]
         title = p["title"]
         body = p["paragraph_text"]
@@ -102,7 +101,7 @@ def construct_knowledge_graph(
     storage_context = StorageContext.from_defaults(graph_store=graph_store)
 
     # Create documents to index into knowledge graph
-    documents = list(make_docs(example, only_supporting=True))
+    documents = list(make_docs(example, only_supporting=False))
     err(f"Created {len(documents)} documents for sample {id}")
 
     # Create knowledge graph index
@@ -141,7 +140,7 @@ def main(
             if resume and (example_out_dir / "kuzu-network.html").exists():
                 err(f"Skipping the sample {example_id} as it already exists")
                 continue
-            
+
             shutil.rmtree(example_out_dir, ignore_errors=True)
             example_out_dir.mkdir(exist_ok=True, parents=True)
 
