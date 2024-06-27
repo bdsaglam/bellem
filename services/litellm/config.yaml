@@ -11,6 +11,10 @@ model_list:
     litellm_params:
       model: gpt-4-turbo-2024-04-09
       api_key: os.environ/OPENAI_API_KEY
+  - model_name: gpt-4o
+    litellm_params:
+      model: gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
   - model_name: llama3-70b-groq
     litellm_params:
       model: groq/llama3-70b-8192

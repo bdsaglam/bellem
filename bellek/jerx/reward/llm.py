@@ -18,15 +18,15 @@ log = get_logger(__name__)
 # %% ../../../nbs/jerx.reward.llm.ipynb 5
 import json
 
-
 DEFAULT_SYSTEM_PROMPT = """You are an excellent Q&A system that is trusted around the world. You are given a question that requires multi-hop reasoning. Always answer the question using the provided context information, and not prior knowledge.
 
 Some rules to follow:
 1. Never directly reference the given context in your answer.
 2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
 
-Response Format:
-JSON: {"reasoning": "Provide multi-hop reasoning for the answer.", "answer": "Provide the answer in 2-4 words."}
+Output format:
+Your output must be a single line in JSON such as:
+{"reasoning": "Provide step by step multi-hop reasoning for the answer.", "answer": "Provide the final answer in 2-4 words."}
 """
 
 USER_PROMPT = """The context information below is provided as a set of entity-relation-entity triplets from knowledge graph.
@@ -37,6 +37,7 @@ Given the context information and not prior knowledge, answer the question.
 {question}
 """
 
+
 class QuestionAnsweringResult(BaseModel):
     """Data model for answering the question."""
 
@@ -45,9 +46,16 @@ class QuestionAnsweringResult(BaseModel):
     raw_output: str = Field(description="The raw output from the model.")
 
 
-def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI = None):
+def make_question_answer_func(
+    model_name: str = "gpt-3.5-turbo",
+    client: OpenAI = None,
+    completion_kwargs: dict | None = None,
+):
     if client is None:
         client = OpenAI()
+
+    if completion_kwargs is None:
+        completion_kwargs = {}
 
     def func(context: str, question: str) -> QuestionAnsweringResult:
         messages = [
@@ -63,10 +71,11 @@ def make_question_answer_func(model_name: str = "gpt-3.5-turbo", client: OpenAI 
         chat_completion = client.chat.completions.create(
             model=model_name,
             messages=messages,
+            **completion_kwargs,
         )
         text = chat_completion.choices[0].message.content
-        output = json.loads(text.replace("JSON:", "").strip())
-        return QuestionAnsweringResult(answer=output['answer'], reasoning=output['reasoning'], raw_output=text)
+        output = json.loads(text)
+        return QuestionAnsweringResult(answer=output["answer"], reasoning=output["reasoning"], raw_output=text)
 
     return func
 
