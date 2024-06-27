@@ -4,8 +4,8 @@
 __all__ = ['log', 'parse_triplet_response', 'make_kg_triplet_extract_fn']
 
 # %% ../../../nbs/jerx.offline.llm.ipynb 3
+import json
 from pathlib import Path
-import pandas as pd
 from ..utils import parse_triplets
 from ...logging import get_logger
 
@@ -18,9 +18,11 @@ def parse_triplet_response(response: str, *args, **kwargs) -> list[tuple[str, st
 
 
 def make_kg_triplet_extract_fn(inference_cache_filepath: Path):
-    df = pd.read_json(inference_cache_filepath, orient='records', lines=True)
-    mapping = {text: generation for text, generation in zip(df["text"], df["generation"])}
-    del df
+    mapping = {}
+    with open(inference_cache_filepath, "r") as f:
+        for i, line in enumerate(f):
+            record = json.loads(line.strip())
+            mapping[record["text"]] = record["generation"]
 
     def extract_kg_triplets(text: str) -> list[tuple[str, str, str]]:
         return parse_triplet_response(mapping[text])
