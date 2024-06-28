@@ -5,9 +5,14 @@ __all__ = ['make_docs', 'format_question', 'BaselineMHQA', 'benchmark']
 
 # %% ../../nbs/musique.baseline.ipynb 3
 from typing import Callable
+
 import pandas as pd
-from ..jerx.reward.llm import make_question_answer_func, QuestionAnsweringResult
+from tqdm.auto import tqdm
+
+from ..jerx.reward.llm import QuestionAnsweringResult
 from .eval import calculate_metrics, compare_answers
+
+tqdm.pandas()
 
 # %% ../../nbs/musique.baseline.ipynb 4
 def make_docs(example, only_supporting=False):
@@ -63,7 +68,7 @@ def benchmark(dataf: pd.DataFrame, qa_func: Callable, only_supporting: bool = Tr
         example['raw_llm_output'] = output
         return example
     
-    dataf = dataf.apply(process, axis=1)
+    dataf = dataf.progress_apply(process, axis=1)
     dataf = compare_answers(dataf)
     scores = calculate_metrics(dataf)
     scores['fuzzy_match'] = dataf['fuzzy_match'].mean()

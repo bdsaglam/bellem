@@ -1,5 +1,6 @@
 stages:
   create_mhqa_dataset:
+    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-evaluation/create_mhqa_dataset.py
@@ -38,11 +39,11 @@ stages:
     cmd: >-
       python pipelines/musique-evaluation/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-evaluation/dataset.jsonl
-      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-sft-offline.json
+      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       --out data/generated/musique-evaluation/knowledge-graphs/
     deps:
       - pipelines/musique-evaluation/construct_knowledge_graphs.py
-      - data/raw/musique-evaluation/jerx-llm-configs/llama3-sft-offline.json
+      - data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       - data/generated/musique-evaluation/dataset.jsonl
     outs:
       - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt
