@@ -49,7 +49,7 @@ def make_service_context(trace_callback_handler: BaseCallbackHandler):
 
 
 def make_docs(example, only_supporting=False):
-    supporting_ps, non_supporting_ps = partition(lambda p: p["is_supporting"], example["paragraphs"])
+    non_supporting_ps, supporting_ps = partition(lambda p: p["is_supporting"], example["paragraphs"])
     ps = list(supporting_ps) if only_supporting else list(supporting_ps) + list(non_supporting_ps)
     for p in ps:
         idx = p["idx"]
@@ -101,7 +101,7 @@ def construct_knowledge_graph(
     storage_context = StorageContext.from_defaults(graph_store=graph_store)
 
     # Create documents to index into knowledge graph
-    documents = list(make_docs(example, only_supporting=False))
+    documents = list(make_docs(example, only_supporting=True))
     err(f"Created {len(documents)} documents for sample {id}")
 
     # Create knowledge graph index
