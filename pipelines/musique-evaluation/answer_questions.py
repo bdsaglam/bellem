@@ -19,6 +19,7 @@ from bellek.llama_index.data_structs.data_structs import patch_kg_data_struct
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.indices.knowledge_graph.base import patch_knowledge_graph_index
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
+from bellek.musique.constants import SKIPPED_RECORD_IDS
 from bellek.utils import set_seed
 
 err = Console(stderr=True).print
@@ -115,6 +116,9 @@ def main(
     for line in tqdm(lines):
         example = json.loads(line)
         example_id = example["id"]
+        
+        if example_id in SKIPPED_RECORD_IDS:
+            continue
 
         example_out_dir = out / example_id
         if resume and (example_out_dir / "answer.json").exists():

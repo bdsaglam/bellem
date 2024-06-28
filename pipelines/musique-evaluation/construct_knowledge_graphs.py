@@ -20,6 +20,7 @@ from rich.console import Console
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
 from bellek.utils import set_seed
+from bellek.musique.constants import SKIPPED_RECORD_IDS
 
 err = Console(stderr=True).print
 
@@ -135,6 +136,9 @@ def main(
         for line in f:
             example = json.loads(line)
             example_id = example["id"]
+
+            if example_id in SKIPPED_RECORD_IDS:
+                continue
 
             example_out_dir = out / example_id
             if resume and (example_out_dir / "kuzu-network.html").exists():
