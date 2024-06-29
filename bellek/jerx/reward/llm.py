@@ -83,8 +83,8 @@ def make_question_answer_func(
 class RewardAssessment(QuestionAnsweringResult):
     reward: float = Field(description="The reward value for the answer.")
 
-def make_reward_func(model_name: str = "gpt-3.5-turbo", answer_comparator=fuzzy_match):
-    qa = make_question_answer_func(model_name)
+def make_reward_func(model_name: str = "gpt-3.5-turbo", answer_comparator=fuzzy_match, completion_kwargs: dict | None = None):
+    qa = make_question_answer_func(model_name, completion_kwargs=completion_kwargs)
 
     def reward(context: str, question: str, answers: list[str]) -> RewardAssessment:
         try:
