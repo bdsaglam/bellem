@@ -71,13 +71,14 @@ class RewardTracker:
         return pd.DataFrame.from_records(self.records)
 
     def preprocess_generation(self, generation: str) -> str:
-        valid_lines = []
+        valid_lines = set()
         for line in generation.splitlines():
-            if line.strip() == "":
+            line = line.strip()
+            if not line:
                 continue
             if line.count("|") != 2:
                 continue
-            valid_lines.append(line)
+            valid_lines.add(line)
         return "\n".join(valid_lines)
 
 
