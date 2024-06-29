@@ -45,7 +45,11 @@ class RewardTracker:
         return rewards
 
     def compute_reward(self, *, generation: str, question: str, answers: list[str], id: str | None = None) -> float:
-        qa_asmt = self.qa_reward_func(context=generation, question=question, answers=answers)
+        qa_asmt = self.qa_reward_func(
+            context=self.preprocess_generation(generation),
+            question=question,
+            answers=answers,
+        )
         qa_reward = qa_asmt.reward
         heuristic_reward = compute_heuristic_reward(generation)
         reward = min(0.8 * qa_reward + 0.2 * heuristic_reward, 1.0)
@@ -65,6 +69,16 @@ class RewardTracker:
 
     def as_dataframe(self):
         return pd.DataFrame.from_records(self.records)
+
+    def preprocess_generation(self, generation: str) -> str:
+        valid_lines = []
+        for line in generation.splitlines():
+            if line.strip() == "":
+                continue
+            if line.count("|") != 2:
+                continue
+            valid_lines.append(line)
+        return "\n".join(valid_lines)
 
 
 def run_experiment(wandb_run):
