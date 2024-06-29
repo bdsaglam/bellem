@@ -29,7 +29,7 @@ def collator(data):
 class RewardTracker:
     def __init__(self, model_name: str = "gpt-3.5-turbo"):
         self.records = []
-        self.qa_reward_func = make_reward_func(model_name)
+        self.qa_reward_func = make_reward_func(model_name, completion_kwargs=dict(max_tokens=2048))
 
     def compute_rewards(self, batch: list[dict]) -> list[float]:
         rewards = []
