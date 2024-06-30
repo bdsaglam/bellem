@@ -51,12 +51,12 @@ stages:
   evaluate_answers:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-evaluation/evaluate_answers.py
+      python pipelines/musique-common/evaluate_answers.py
       --dataset-file data/generated/musique-evaluation/dataset.jsonl
       --answers-dir data/generated/musique-evaluation/question-answering/
       --out data/generated/musique-evaluation/answer-eval/
     deps:
-      - pipelines/musique-evaluation/evaluate_answers.py
+      - pipelines/musique-common/evaluate_answers.py
       - data/generated/musique-evaluation/dataset.jsonl
       - data/generated/musique-evaluation/question-answering/
     outs:

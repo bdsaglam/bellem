@@ -1,5 +1,6 @@
 import json
 import shutil
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable
@@ -15,6 +16,7 @@ from llama_index.storage.storage_context import StorageContext
 from more_itertools import partition
 from pyvis.network import Network
 from rich.console import Console
+from tqdm import tqdm
 
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
@@ -26,6 +28,7 @@ err = Console(stderr=True).print
 load_dotenv()
 
 set_seed(89)
+
 
 def make_trace_callback_handler(example_dir: Path):
     traces_filepath = example_dir / "traces.jsonl"
@@ -129,6 +132,45 @@ def construct_knowledge_graph(
     visualize_knowledge_graph(index, out_dir / "kuzu-network.html")
 
 
+def process_example(
+    example: dict,
+    llm_config: dict,
+    out: Path,
+    ignore_errors: bool,
+    resume: bool,
+):
+    example_id = example["id"]
+    example_out_dir = out / example_id
+
+    if example_id in SKIPPED_RECORD_IDS:
+        return
+
+    if resume and (example_out_dir / "kuzu-network.html").exists():
+        err(f"Skipping the sample {example_id} as it already exists")
+        return
+
+    shutil.rmtree(example_out_dir, ignore_errors=True)
+    example_out_dir.mkdir(exist_ok=True, parents=True)
+
+    kg_triplet_extract_fn = make_kg_triplet_extract_fn_from_config(llm_config)
+
+    try:
+        err(f"Constructing the knowledge graph for the sample {example_id}")
+        trace_callback_handler = make_trace_callback_handler(example_out_dir)
+        service_context = make_service_context(trace_callback_handler)
+        construct_knowledge_graph(
+            example,
+            include_embeddings=False,
+            kg_triplet_extract_fn=kg_triplet_extract_fn,
+            service_context=service_context,
+            out_dir=example_out_dir,
+        )
+    except Exception as exc:
+        err(f"Failed to construct the knowledge graph for sample {example_id}.\n{exc}")
+        if not ignore_errors:
+            raise exc
+
+
 def main(
     dataset_file: Path = typer.Option(...),
     llm_config_file: Path = typer.Option(...),
@@ -137,39 +179,24 @@ def main(
     resume: bool = typer.Option(False),
 ):
     llm_config = json.loads(llm_config_file.read_text())
-    kg_triplet_extract_fn = make_kg_triplet_extract_fn_from_config(llm_config)
 
     with open(dataset_file) as f:
-        for line in f:
-            example = json.loads(line)
-            example_id = example["id"]
+        examples = [json.loads(line) for line in f]
 
-            if example_id in SKIPPED_RECORD_IDS:
-                continue
-
-            example_out_dir = out / example_id
-            if resume and (example_out_dir / "kuzu-network.html").exists():
-                err(f"Skipping the sample {example_id} as it already exists")
-                continue
-
-            shutil.rmtree(example_out_dir, ignore_errors=True)
-            example_out_dir.mkdir(exist_ok=True, parents=True)
-
-            try:
-                err(f"Constructing the knowledge graph for the sample {example_id}")
-                trace_callback_handler = make_trace_callback_handler(example_out_dir)
-                service_context = make_service_context(trace_callback_handler)
-                construct_knowledge_graph(
-                    example,
-                    include_embeddings=False,
-                    kg_triplet_extract_fn=kg_triplet_extract_fn,
-                    service_context=service_context,
-                    out_dir=example_out_dir,
-                )
-            except Exception as exc:
-                err(f"Failed to construct the knowledge graph for sample {example_id}.\n{exc}")
-                if not ignore_errors:
-                    raise exc
+    with ProcessPoolExecutor(max_workers=8) as executor:
+        futures = [
+            executor.submit(
+                process_example,
+                example,
+                llm_config=llm_config,
+                out=out,
+                ignore_errors=ignore_errors,
+                resume=resume,
+            )
+            for example in examples
+        ]
+        for future in tqdm(as_completed(futures), total=len(examples), desc="Constructing knowledge graphs"):
+            future.result()
 
     (out / "timestamp.txt").write_text(str(datetime.now().isoformat(timespec="milliseconds")))
 

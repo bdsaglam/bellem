@@ -1,5 +1,5 @@
 import json
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from functools import cache
 from pathlib import Path
 
@@ -28,29 +28,19 @@ def process_line(line):
 
 
 def process_lines(lines):
-    total_lines = len(lines)  # Get the total number of lines
-    progress_bar = tqdm(total=total_lines, desc="Processing lines")
-
-    results = []
     with ProcessPoolExecutor(max_workers=8) as executor:
-        for line in lines:
-            future = executor.submit(process_line, line)
-            future.add_done_callback(lambda p: progress_bar.update())
-            results.append(future)
-
-    progress_bar.close()
-    return results
+        futures = [executor.submit(process_line, line) for line in lines]
+        for future in tqdm(as_completed(futures), total=len(lines), desc="Decomposing questions"):
+            yield future.result()
 
 
 def main(dataset_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(dataset_file) as f:
-        lines = f.readlines()  # Read all lines from the source file
-
-    results = process_lines(lines)
+        lines = f.readlines()
 
     with open(out, "w") as dst:
-        for future in results:
-            dst.write(json.dumps(future.result()), ensure_ascii=False)
+        for result in process_lines(lines):
+            dst.write(json.dumps(result, ensure_ascii=False))
             dst.write("\n")
 
 

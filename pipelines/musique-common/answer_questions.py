@@ -1,6 +1,7 @@
-from datetime import datetime
 import json
 import shutil
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime
 from pathlib import Path
 
 import kuzu
@@ -101,6 +102,48 @@ def answer_questions(query_engine, example):
     return example
 
 
+def process_example(
+    example: dict,
+    knowledge_graph_directory: Path,
+    out: Path,
+    ignore_errors: bool,
+    resume: bool,
+):
+    example_id = example["id"]
+
+    if example_id in SKIPPED_RECORD_IDS:
+        return
+
+    example_out_dir = out / example_id
+    if resume and (example_out_dir / "answer.json").exists():
+        err(f"Skipping the sample {example_id} because it already exists.")
+        return
+
+    shutil.rmtree(example_out_dir, ignore_errors=True)
+
+    err(f"Setting up query engine for {example_id}")
+    service_context = make_service_context(out, example_id)
+    try:
+        index = load_index(knowledge_graph_directory / example_id, service_context)
+    except Exception as exc:
+        err(f"Failed to load the knowledge graph for sample {example_id}.\n{exc}")
+        if ignore_errors:
+            return
+        raise exc
+
+    try:
+        query_engine = make_query_engine(index)
+        err(f"Answering the question in the sample {example_id}")
+        example_answered = answer_questions(query_engine, example)
+        with open(example_out_dir / "answer.json", "w") as dst:
+            dst.write(json.dumps(example_answered, ensure_ascii=False, indent=2))
+    except Exception as exc:
+        err(f"Failed to answer the question for sample {example_id}.\n{exc}")
+        if ignore_errors:
+            return
+        raise exc
+
+
 def main(
     dataset_file: Path = typer.Option(...),
     knowledge_graph_directory: Path = typer.Option(...),
@@ -110,47 +153,28 @@ def main(
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    with open(dataset_file) as src:
-        lines = src.readlines()
-    
-    for line in tqdm(lines):
-        example = json.loads(line)
-        example_id = example["id"]
-        
-        if example_id in SKIPPED_RECORD_IDS:
-            continue
+    with open(dataset_file) as f:
+        examples = [json.loads(line) for line in f]
 
-        example_out_dir = out / example_id
-        if resume and (example_out_dir / "answer.json").exists():
-            err(f"Skipping the sample {example_id} because it already exists.")
-            continue
+    with ProcessPoolExecutor(max_workers=8) as executor:
+        futures = [
+            executor.submit(
+                process_example,
+                example=example,
+                knowledge_graph_directory=knowledge_graph_directory,
+                out=out,
+                ignore_errors=ignore_errors,
+                resume=resume,
+            )
+            for example in examples
+        ]
 
-        shutil.rmtree(example_out_dir, ignore_errors=True)
-
-        err(f"Setting up query engine for {example_id}")
-        service_context = make_service_context(out, example_id)
-        try:
-            index = load_index(knowledge_graph_directory / example_id, service_context)
-        except Exception as exc:
-            err(f"Failed to load the knowledge graph for sample {example_id}.\n{exc}")
-            if ignore_errors:
-                continue
-            raise exc
-
-        try:
-            query_engine = make_query_engine(index)
-            err(f"Answering the question in the sample {example_id}")
-            example_answered = answer_questions(query_engine, example)
-            with open(example_out_dir / "answer.json", "w") as dst:
-                dst.write(json.dumps(example_answered, ensure_ascii=False, indent=2))
-        except Exception as exc:
-            err(f"Failed to answer the question for sample {example_id}.\n{exc}")
-            if ignore_errors:
-                continue
-            raise exc
+        for future in tqdm(as_completed(futures), total=len(examples), desc="Answering questions"):
+            future.result()
 
     with open(out / "timestamp.txt", "w") as f:
         f.write(datetime.now().isoformat())
+
 
 if __name__ == "__main__":
     typer.run(main)

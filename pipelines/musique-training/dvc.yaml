@@ -2,7 +2,7 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 200 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+      head -n 4096 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
     deps:
       - data/generated/musique-common/base-dataset-train.jsonl
     outs:
@@ -19,7 +19,7 @@ stages:
       - data/generated/musique-training/dataset.jsonl
     outs:
       - data/generated/musique-training/question-decomposition.jsonl
-    
+
   construct_knowledge_graphs:
     wdir: ../..
     cmd: >-
@@ -27,7 +27,6 @@ stages:
       --dataset-file data/generated/musique-training/dataset.jsonl
       --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
       --out data/generated/musique-training/knowledge-graphs/
-      --resume
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-training/jerx-llm-configs/llama3.json
@@ -38,13 +37,12 @@ stages:
   answer_questions:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-training/answer_questions.py
+      python pipelines/musique-common/answer_questions.py
       --dataset-file data/generated/musique-training/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-training/knowledge-graphs/ 
       --out data/generated/musique-training/question-answering
-      --resume
     deps:
-      - pipelines/musique-training/answer_questions.py
+      - pipelines/musique-common/answer_questions.py
       - data/generated/musique-training/question-decomposition.jsonl
       - data/generated/musique-training/knowledge-graphs/timestamp.txt
     outs:
@@ -53,14 +51,28 @@ stages:
   evaluate_answers:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-training/evaluate_answers.py
+      python pipelines/musique-common/evaluate_answers.py
       --dataset-file data/generated/musique-training/dataset.jsonl
       --answers-dir data/generated/musique-training/question-answering/
       --out data/generated/musique-training/answer-eval/
     deps:
-      - pipelines/musique-training/evaluate_answers.py
+      - pipelines/musique-common/evaluate_answers.py
       - data/generated/musique-training/dataset.jsonl
       - data/generated/musique-training/question-answering/
     outs:
       - data/generated/musique-training/answer-eval/comparisons.jsonl
       - data/generated/musique-training/answer-eval/scores.json
+
+  create_jerx_sft_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-training/create_jerx_sft_datasetv.py
+      --dataset-file data/generated/musique-training/dataset.jsonl
+      --answer-comparison-file data/generated/musique-training/answer-eval/comparisons.jsonl
+      --out data/generated/musique-training/jerx/
+    deps:
+      - pipelines/musique-common/evaluate_answers.py
+      - data/generated/musique-training/dataset.jsonl
+      - data/generated/musique-training/answer-eval/comparisons.jsonl
+    outs:
+      - data/generated/musique-training/jerx/jerx-chat.jsonl
