@@ -41,9 +41,7 @@
             "tracker_project_name": "mhqa-rltf"
         }
     },
-    "reward": {
-        "model_name": "gpt-4o"
-    },
+    "reward": {},
     "inference": {
         "pipeline": {
             "batch_size": 8

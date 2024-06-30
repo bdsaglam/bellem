@@ -28,7 +28,7 @@ def collator(data):
 
 
 class RewardTracker:
-    def __init__(self, model_name: str = "gpt-3.5-turbo"):
+    def __init__(self):
         self.records = []
 
     def compute_rewards(self, batch: list[dict]) -> list[float]:
@@ -42,6 +42,15 @@ class RewardTracker:
             answers = [answer.strip() for answer in answers.split(";")]
             reward = self.compute_reward(generation=generation, question=question, answers=answers, id=id)
             rewards.append(reward)
+            self.records.append(
+                {
+                    "id": id,
+                    "generation": generation,
+                    "reward": reward,
+                    "question": question,
+                    "answers": answers,
+                }
+            )
         return rewards
 
     def compute_reward(self, *, generation: str, question: str, answers: list[str], id: str | None = None) -> float:
@@ -94,7 +103,7 @@ def run_experiment(wandb_run):
     print(token_counts.describe())
 
     # Trainer
-    reward_tracker = RewardTracker(config.at("reward.model_name", "gpt-3.5-turbo"))
+    reward_tracker = RewardTracker()
 
     ppo_config = PPOConfig(
         seed=config["seed"],
@@ -126,7 +135,7 @@ def run_experiment(wandb_run):
         batch["response"] = [tokenizer.decode(t) for t in response_tensors]
 
         #### Compute reward score
-        batch["generation"] = batch["response"]
+        batch["generation"] = [tokenizer.decode(t, skip_special_tokens=True) for t in response_tensors]
         rewards = reward_tracker.compute_rewards(batch)
 
         #### Run PPO step
