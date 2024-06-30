@@ -9,7 +9,6 @@ stages:
       - data/generated/musique-evaluation/dataset.jsonl
 
   decompose_questions:
-    frozen: true
     wdir: ../..
     cmd: >-
       python pipelines/musique-common/decompose_questions.py

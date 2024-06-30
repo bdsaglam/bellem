@@ -18,17 +18,17 @@ stages:
       md5: f570e09a7590b3de019babcd1bc92498
       size: 14933699
   decompose_questions:
-    cmd: python pipelines/musique-evaluation/decompose_questions.py --dataset-file
-      data/generated/musique-evaluation/dataset.jsonl --out data/generated/musique-evaluation/question-decomposition.jsonl
+    cmd: python pipelines/musique-common/decompose_questions.py --dataset-file data/generated/musique-evaluation/dataset.jsonl
+      --out data/generated/musique-evaluation/question-decomposition.jsonl
     deps:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: 26648287d3cf5cb7e23c774df013d162
-      size: 1682892
-    - path: pipelines/musique-evaluation/decompose_questions.py
+      md5: b3467da3493f57709599d42da35c7f87
+      size: 1690892
+    - path: pipelines/musique-common/decompose_questions.py
       hash: md5
-      md5: 2f07273e75a8a4477516738d8acc398b
-      size: 875
+      md5: a4b799dce9580d76d5f3bc1fd2e8b1ed
+      size: 1539
     outs:
     - path: data/generated/musique-evaluation/question-decomposition.jsonl
       hash: md5
@@ -105,15 +105,15 @@ stages:
       md5: 355bf9e7775528249e5fe11693c87922
       size: 105
   create_mini_dataset:
-    cmd: head -n 200 data/generated/musique-common/mhqa-dataset-validation.jsonl >
+    cmd: head -n 200 data/generated/musique-common/base-dataset-validation.jsonl >
       data/generated/musique-evaluation/dataset.jsonl
     deps:
-    - path: data/generated/musique-common/mhqa-dataset-validation.jsonl
+    - path: data/generated/musique-common/base-dataset-validation.jsonl
       hash: md5
-      md5: f570e09a7590b3de019babcd1bc92498
-      size: 14933699
+      md5: a2f049d70d39f2fb3758df65fb316c83
+      size: 14982567
     outs:
     - path: data/generated/musique-evaluation/dataset.jsonl
       hash: md5
-      md5: 26648287d3cf5cb7e23c774df013d162
-      size: 1682892
+      md5: b3467da3493f57709599d42da35c7f87
+      size: 1690892
