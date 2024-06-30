@@ -27,7 +27,6 @@ load_dotenv()
 
 set_seed(89)
 
-
 def make_trace_callback_handler(example_dir: Path):
     traces_filepath = example_dir / "traces.jsonl"
     traces_filepath.unlink(missing_ok=True)

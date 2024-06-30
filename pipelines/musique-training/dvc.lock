@@ -44,26 +44,26 @@ stages:
       size: 223
     - path: pipelines/musique-common/construct_knowledge_graphs.py
       hash: md5
-      md5: d667f79e7870b5823f4af450935e7fcf
-      size: 6343
+      md5: 81b713d4fcbd1d0aac7f8bc092ab57f6
+      size: 6342
     outs:
     - path: data/generated/musique-training/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: 87422a53c72b4c0cb00f9228f3a39dff
+      md5: 470022589224d70ea9cb5e16f4acd82e
       size: 23
   answer_questions:
     cmd: python pipelines/musique-training/answer_questions.py --dataset-file data/generated/musique-training/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-training/knowledge-graphs/  --out
-      data/generated/musique-training/question-answering
+      data/generated/musique-training/question-answering --resume
     deps:
     - path: data/generated/musique-training/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: 87422a53c72b4c0cb00f9228f3a39dff
+      md5: 470022589224d70ea9cb5e16f4acd82e
       size: 23
     - path: data/generated/musique-training/question-decomposition.jsonl
       hash: md5
-      md5: 6f7a09bea0d2078e265adfe65b8fc49e
-      size: 52451
+      md5: e7b57ad58b23ffd04a0ac964755d1ca2
+      size: 52425
     - path: pipelines/musique-training/answer_questions.py
       hash: md5
       md5: f88e73af4bc777962430e38a6cec9810
@@ -71,7 +71,7 @@ stages:
     outs:
     - path: data/generated/musique-training/question-answering/timestamp.txt
       hash: md5
-      md5: 7d237274ed3657baa26ee1e98f541e3c
+      md5: b3d5d95801bca364714a5bf3ac2daade
       size: 26
   evaluate_answers:
     cmd: python pipelines/musique-training/evaluate_answers.py --dataset-file data/generated/musique-training/dataset.jsonl
@@ -83,8 +83,8 @@ stages:
       size: 1373409
     - path: data/generated/musique-training/question-answering/
       hash: md5
-      md5: 9a220037efaa1909ec760868e41a16eb.dir
-      size: 2348868
+      md5: 8c4a1ec6934ef203317cc3b0596cbf10.dir
+      size: 2348721
       nfiles: 387
     - path: pipelines/musique-training/evaluate_answers.py
       hash: md5
@@ -93,11 +93,11 @@ stages:
     outs:
     - path: data/generated/musique-training/answer-eval/comparisons.jsonl
       hash: md5
-      md5: cb33972b68e8b072031758d8ffe0e76b
-      size: 1344031
+      md5: f39790dcdc1833915026a2bdd5969d46
+      size: 1344020
     - path: data/generated/musique-training/answer-eval/scores.json
       hash: md5
-      md5: 741d7f0d49500f5a515db166c95aec3d
+      md5: f3d57aeddec7b235ce2fa13ffa2af831
       size: 105
   decompose_questions:
     cmd: python pipelines/musique-common/decompose_questions.py --dataset-file data/generated/musique-training/dataset.jsonl
