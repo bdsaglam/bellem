@@ -2,21 +2,22 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 200 data/generated/musique-common/mhqa-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+      head -n 200 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
     deps:
-      - data/generated/musique-common/mhqa-dataset-train.jsonl
+      - data/generated/musique-common/base-dataset-train.jsonl
     outs:
       - data/generated/musique-training/dataset.jsonl
 
   construct_knowledge_graphs:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-training/construct_knowledge_graphs.py
+      python pipelines/musique-common/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-training/dataset.jsonl
       --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
       --out data/generated/musique-training/knowledge-graphs/
+      --resume
     deps:
-      - pipelines/musique-training/construct_knowledge_graphs.py
+      - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-training/jerx-llm-configs/llama3.json
       - data/generated/musique-training/dataset.jsonl
     outs:

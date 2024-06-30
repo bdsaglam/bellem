@@ -6,7 +6,7 @@ import typer
 from datasets import Dataset, DatasetDict, load_dataset
 from rich.console import Console
 
-from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE_FOR_LLAMA
+from bellek.jerx.fewshot.llm import DEFAULT_FEW_SHOT_EXAMPLE_MESSAGES, DEFAULT_JERX_SYSTEM_MESSAGE_FOR_LLAMA
 
 err = Console(stderr=True).print
 
@@ -30,8 +30,9 @@ def make_doc(row):
 
 def make_messages(text):
     return [
-        {"role": msg.role.value, "content": msg.content}
-        for msg in DEFAULT_JERX_CHAT_TEMPLATE_FOR_LLAMA.format_messages(text=text)
+        dict(role="system", content=DEFAULT_JERX_SYSTEM_MESSAGE_FOR_LLAMA),
+        *DEFAULT_FEW_SHOT_EXAMPLE_MESSAGES,
+        dict(role="user", content=text),
     ]
 
 
@@ -46,22 +47,19 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(config_file) as f:
         dataset_config = json.load(f)
 
-    # MHQA dataset
-    mhqa_dsd = load_dataset(**dataset_config)
-    for split, ds in mhqa_dsd.items():
-        ds.to_json(out / f"mhqa-dataset-{split}.jsonl")
+    dsd = load_dataset(**dataset_config)
 
-    # JERX chat dataset
-    ds_name = "musique-answerable-2hop-paragraph-jerx-chat"
+    ds_name = dataset_config["path"].split("/", 1)[-1]
+    jerx_ds_name = f"{ds_name}-paragraph-jerx-chat"
 
-    jerx_chat_dsd = DatasetDict({split: make_jerx_chat_dataset(ds) for split, ds in mhqa_dsd.items()})
+    jerx_chat_dsd = DatasetDict({split: make_jerx_chat_dataset(ds) for split, ds in dsd.items()})
     for split, ds in jerx_chat_dsd.items():
         ds.to_json(out / f"jerx-dataset-{split}.jsonl")
 
-    jerx_chat_dsd.push_to_hub(f"{HF_HUB_USER_NAME}/{ds_name}")
+    jerx_chat_dsd.push_to_hub(f"{HF_HUB_USER_NAME}/{jerx_ds_name}")
 
     jerx_chat_dsd.filter(lambda example: example["is_supporting"]).push_to_hub(
-        f"{HF_HUB_USER_NAME}/{ds_name}-supporting"
+        f"{HF_HUB_USER_NAME}/{jerx_ds_name}-supporting"
     )
 
 

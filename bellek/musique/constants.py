@@ -4,4 +4,13 @@
 __all__ = ['SKIPPED_RECORD_IDS']
 
 # %% ../../nbs/musique.constants.ipynb 3
-SKIPPED_RECORD_IDS = {"2hop__235471_565925"}
+SKIPPED_RECORD_IDS = {
+    "2hop__235471_565925",
+    "2hop__837090_278127",
+    "2hop__477348_278127",
+    "2hop__667079_278127",
+    "2hop__232500_278127",
+    "2hop__326799_278127",
+    "2hop__618322_278127",
+    "2hop__620104_278127",
+}

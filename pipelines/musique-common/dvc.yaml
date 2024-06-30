@@ -1,15 +1,39 @@
 stages:
-  create_jerx_dataset:
+  create_base_dataset:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-common/create_datasets.py
+      python pipelines/musique-common/create_base_dataset.py
       --config-file data/raw/musique-common/dataset-config.json
       --out data/generated/musique-common/
     deps:
-      - pipelines/musique-common/create_datasets.py
+      - pipelines/musique-common/create_base_dataset.py
       - data/raw/musique-common/dataset-config.json
     outs:
-      - data/generated/musique-common/mhqa-dataset-train.jsonl
-      - data/generated/musique-common/mhqa-dataset-validation.jsonl
+      - data/generated/musique-common/base-dataset-train.jsonl
+      - data/generated/musique-common/base-dataset-validation.jsonl
+
+  create_jerx_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-common/create_jerx_dataset.py
+      --config-file data/raw/musique-common/dataset-config.json
+      --out data/generated/musique-common/
+    deps:
+      - pipelines/musique-common/create_jerx_dataset.py
+      - data/raw/musique-common/dataset-config.json
+    outs:
       - data/generated/musique-common/jerx-dataset-train.jsonl
       - data/generated/musique-common/jerx-dataset-validation.jsonl
+
+  create_mhqa_chat_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-common/create_mhqa_chat_dataset.py
+      --config-file data/raw/musique-common/dataset-config.json
+      --out data/generated/musique-common/
+    deps:
+      - pipelines/musique-common/create_mhqa_chat_dataset.py
+      - data/raw/musique-common/dataset-config.json
+    outs:
+      - data/generated/musique-common/mhqa-chat-dataset-train.jsonl
+      - data/generated/musique-common/mhqa-chat-dataset-validation.jsonl

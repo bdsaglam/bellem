@@ -13,18 +13,18 @@ from ..text.utils import fuzzy_match
 def calculate_metrics(dataf: pd.DataFrame) -> dict:
     metric = evaluate.load("bdsaglam/musique")
     predictions = dataf["predicted_answer"].tolist()
-    references = dataf["answer_aliases"].tolist()
+    references = dataf["answers"].tolist()
     scores = metric.compute(predictions=predictions, references=references)
     return scores
 
 # %% ../../nbs/musique.eval.ipynb 5
 def _exact_match(example):
     pred = example['predicted_answer']
-    return pred is not None and any(pred == ref for ref in example['answer_aliases'])
+    return pred is not None and any(pred == ref for ref in example['answers'])
 
 def _fuzzy_match(example):
     pred = example['predicted_answer']
-    return pred is not None and any((pred in ref) or (ref in pred) or fuzzy_match(pred, ref) for ref in example['answer_aliases'])
+    return pred is not None and any((pred in ref) or (ref in pred) or fuzzy_match(pred, ref) for ref in example['answers'])
 
 
 def compare_answers(dataf: pd.DataFrame) -> pd.DataFrame:

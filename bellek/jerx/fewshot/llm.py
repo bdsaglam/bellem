@@ -104,32 +104,36 @@ def parse_triplet_response(response: str, *args, **kwargs) -> list[tuple[str, st
 
 def make_kg_triplet_extract_fn(
     *,
-    model_name: str = "gpt-3.5-turbo",
+    model: str = "gpt-3.5-turbo",
     prefix_messages: list[dict] | None = None,
     client: OpenAI = None,
+    completion_params: dict | None = None,
 ):
     if client is None:
         client = OpenAI()
-    
+
     if prefix_messages is None:
-        if "gpt" in model_name:
+        if "gpt" in model:
             system_message = DEFAULT_JERX_SYSTEM_MESSAGE_FOR_GPT
-        elif "llama" in model_name:
+        elif "llama" in model:
             system_message = DEFAULT_JERX_SYSTEM_MESSAGE_FOR_LLAMA
         else:
-            raise ValueError(f"Unsupported model name: {model_name}")
+            raise ValueError(f"Unsupported model name: {model}")
 
         prefix_messages = [
             dict(role="system", content=system_message),
             *DEFAULT_FEW_SHOT_EXAMPLE_MESSAGES,
         ]
 
-    def extract_kg_triplets(text: str, **completion_kwargs) -> list[tuple[str, str, str]]:
+    if completion_params is None:
+        completion_params = {}
+    
+    def extract_kg_triplets(text: str) -> list[tuple[str, str, str]]:
         messages = [*prefix_messages, dict(role="user", content=text)]
         chat_completion = client.chat.completions.create(
-            model=model_name,
+            model=model,
             messages=messages,
-            **completion_kwargs,
+            **completion_params,
         )
         text = chat_completion.choices[0].message.content
         return parse_triplet_response(text)

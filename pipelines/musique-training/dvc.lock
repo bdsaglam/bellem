@@ -18,14 +18,36 @@ stages:
       md5: 6e28b2ffda29b98758f2f3ba0d5814f4
       size: 167494155
   create_mini_dataset:
-    cmd: head -n 200 data/generated/musique-common/mhqa-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+    cmd: head -n 200 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
     deps:
-    - path: data/generated/musique-common/mhqa-dataset-train.jsonl
+    - path: data/generated/musique-common/base-dataset-train.jsonl
       hash: md5
-      md5: 6e28b2ffda29b98758f2f3ba0d5814f4
-      size: 167494155
+      md5: 19f134f113563558541de1b9af25881d
+      size: 167998718
     outs:
     - path: data/generated/musique-training/dataset.jsonl
       hash: md5
-      md5: 4d116165f09a1ab46b15eb6cfb57b991
-      size: 1366341
+      md5: e25eb5a59ec6fd456d6ff0c81e7e9eaf
+      size: 1373409
+  construct_knowledge_graphs:
+    cmd: python pipelines/musique-common/construct_knowledge_graphs.py --dataset-file
+      data/generated/musique-training/dataset.jsonl --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
+      --out data/generated/musique-training/knowledge-graphs/ --resume
+    deps:
+    - path: data/generated/musique-training/dataset.jsonl
+      hash: md5
+      md5: e25eb5a59ec6fd456d6ff0c81e7e9eaf
+      size: 1373409
+    - path: data/raw/musique-training/jerx-llm-configs/llama3.json
+      hash: md5
+      md5: 7441d506dc706902e28dfe410485aca5
+      size: 223
+    - path: pipelines/musique-common/construct_knowledge_graphs.py
+      hash: md5
+      md5: d667f79e7870b5823f4af450935e7fcf
+      size: 6343
+    outs:
+    - path: data/generated/musique-training/knowledge-graphs/timestamp.txt
+      hash: md5
+      md5: 87422a53c72b4c0cb00f9228f3a39dff
+      size: 23

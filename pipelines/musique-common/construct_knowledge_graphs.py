@@ -11,7 +11,6 @@ from llama_index import Document, KnowledgeGraphIndex, ServiceContext
 from llama_index.callbacks import CallbackManager
 from llama_index.callbacks.base_handler import BaseCallbackHandler
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.llms import OpenAI
 from llama_index.storage.storage_context import StorageContext
 from more_itertools import partition
 from pyvis.network import Network
@@ -19,8 +18,8 @@ from rich.console import Console
 
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
-from bellek.utils import set_seed
 from bellek.musique.constants import SKIPPED_RECORD_IDS
+from bellek.utils import set_seed
 
 err = Console(stderr=True).print
 
@@ -73,8 +72,10 @@ def make_kg_triplet_extract_fn_from_config(llm_config: dict[str, Any]):
     elif llm_config["type"] == "online":
         from bellek.jerx.fewshot.llm import make_kg_triplet_extract_fn
 
-        llm = OpenAI(model=llm_config["model"], **llm_config["params"])
-        return make_kg_triplet_extract_fn(llm=llm)
+        return make_kg_triplet_extract_fn(
+            model=llm_config["model"],
+            completion_params=llm_config.get("completion_params"),
+        )
     else:
         raise ValueError(f"Unsupported LLM type: {llm_config['type']}")
 
@@ -104,6 +105,13 @@ def construct_knowledge_graph(
     # Create documents to index into knowledge graph
     documents = list(make_docs(example, only_supporting=True))
     err(f"Created {len(documents)} documents for sample {id}")
+
+    with open(out_dir / "documents.jsonl", "w") as f:
+        for document in documents:
+            triplets = kg_triplet_extract_fn(document.text)
+            payload = document.dict()
+            payload["triplets"] = triplets
+            f.write(json.dumps(payload) + "\n")
 
     # Create knowledge graph index
     err(f"Creating the knowledge graph index for sample {id}")
