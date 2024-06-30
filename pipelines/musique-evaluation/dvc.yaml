@@ -12,11 +12,11 @@ stages:
     frozen: true
     wdir: ../..
     cmd: >-
-      python pipelines/musique-evaluation/decompose_questions.py
+      python pipelines/musique-common/decompose_questions.py
       --dataset-file data/generated/musique-evaluation/dataset.jsonl
       --out data/generated/musique-evaluation/question-decomposition.jsonl
     deps:
-      - pipelines/musique-evaluation/decompose_questions.py
+      - pipelines/musique-common/decompose_questions.py
       - data/generated/musique-evaluation/dataset.jsonl
     outs:
       - data/generated/musique-evaluation/question-decomposition.jsonl

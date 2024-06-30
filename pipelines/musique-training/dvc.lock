@@ -51,3 +51,68 @@ stages:
       hash: md5
       md5: 87422a53c72b4c0cb00f9228f3a39dff
       size: 23
+  answer_questions:
+    cmd: python pipelines/musique-training/answer_questions.py --dataset-file data/generated/musique-training/question-decomposition.jsonl
+      --knowledge-graph-directory data/generated/musique-training/knowledge-graphs/  --out
+      data/generated/musique-training/question-answering
+    deps:
+    - path: data/generated/musique-training/knowledge-graphs/timestamp.txt
+      hash: md5
+      md5: 87422a53c72b4c0cb00f9228f3a39dff
+      size: 23
+    - path: data/generated/musique-training/question-decomposition.jsonl
+      hash: md5
+      md5: 6f7a09bea0d2078e265adfe65b8fc49e
+      size: 52451
+    - path: pipelines/musique-training/answer_questions.py
+      hash: md5
+      md5: f88e73af4bc777962430e38a6cec9810
+      size: 5584
+    outs:
+    - path: data/generated/musique-training/question-answering/timestamp.txt
+      hash: md5
+      md5: 7d237274ed3657baa26ee1e98f541e3c
+      size: 26
+  evaluate_answers:
+    cmd: python pipelines/musique-training/evaluate_answers.py --dataset-file data/generated/musique-training/dataset.jsonl
+      --answers-dir data/generated/musique-training/question-answering/ --out data/generated/musique-training/answer-eval/
+    deps:
+    - path: data/generated/musique-training/dataset.jsonl
+      hash: md5
+      md5: e25eb5a59ec6fd456d6ff0c81e7e9eaf
+      size: 1373409
+    - path: data/generated/musique-training/question-answering/
+      hash: md5
+      md5: 9a220037efaa1909ec760868e41a16eb.dir
+      size: 2348868
+      nfiles: 387
+    - path: pipelines/musique-training/evaluate_answers.py
+      hash: md5
+      md5: 2d030ec456fd08a0dd9e63fdb05fb754
+      size: 1509
+    outs:
+    - path: data/generated/musique-training/answer-eval/comparisons.jsonl
+      hash: md5
+      md5: cb33972b68e8b072031758d8ffe0e76b
+      size: 1344031
+    - path: data/generated/musique-training/answer-eval/scores.json
+      hash: md5
+      md5: 741d7f0d49500f5a515db166c95aec3d
+      size: 105
+  decompose_questions:
+    cmd: python pipelines/musique-common/decompose_questions.py --dataset-file data/generated/musique-training/dataset.jsonl
+      --out data/generated/musique-training/question-decomposition.jsonl
+    deps:
+    - path: data/generated/musique-training/dataset.jsonl
+      hash: md5
+      md5: e25eb5a59ec6fd456d6ff0c81e7e9eaf
+      size: 1373409
+    - path: pipelines/musique-common/decompose_questions.py
+      hash: md5
+      md5: a4b799dce9580d76d5f3bc1fd2e8b1ed
+      size: 1539
+    outs:
+    - path: data/generated/musique-training/question-decomposition.jsonl
+      hash: md5
+      md5: e7b57ad58b23ffd04a0ac964755d1ca2
+      size: 52425

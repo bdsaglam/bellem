@@ -8,6 +8,18 @@ stages:
     outs:
       - data/generated/musique-training/dataset.jsonl
 
+  decompose_questions:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-common/decompose_questions.py
+      --dataset-file data/generated/musique-training/dataset.jsonl
+      --out data/generated/musique-training/question-decomposition.jsonl
+    deps:
+      - pipelines/musique-common/decompose_questions.py
+      - data/generated/musique-training/dataset.jsonl
+    outs:
+      - data/generated/musique-training/question-decomposition.jsonl
+    
   construct_knowledge_graphs:
     wdir: ../..
     cmd: >-
@@ -27,12 +39,13 @@ stages:
     wdir: ../..
     cmd: >-
       python pipelines/musique-training/answer_questions.py
-      --dataset-file data/generated/musique-training/dataset.jsonl
+      --dataset-file data/generated/musique-training/question-decomposition.jsonl
       --knowledge-graph-directory data/generated/musique-training/knowledge-graphs/ 
       --out data/generated/musique-training/question-answering
+      --resume
     deps:
       - pipelines/musique-training/answer_questions.py
-      - data/generated/musique-training/dataset.jsonl
+      - data/generated/musique-training/question-decomposition.jsonl
       - data/generated/musique-training/knowledge-graphs/timestamp.txt
     outs:
       - data/generated/musique-training/question-answering/timestamp.txt
