@@ -105,9 +105,10 @@ stages:
       md5: 355bf9e7775528249e5fe11693c87922
       size: 105
   create_mini_dataset:
-    cmd: head -n 200 data/generated/musique-evaluation/dataset-full.jsonl > data/generated/musique-evaluation/dataset.jsonl
+    cmd: head -n 200 data/generated/musique-common/mhqa-dataset-validation.jsonl >
+      data/generated/musique-evaluation/dataset.jsonl
     deps:
-    - path: data/generated/musique-evaluation/dataset-full.jsonl
+    - path: data/generated/musique-common/mhqa-dataset-validation.jsonl
       hash: md5
       md5: f570e09a7590b3de019babcd1bc92498
       size: 14933699

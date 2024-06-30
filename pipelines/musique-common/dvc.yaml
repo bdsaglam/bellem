@@ -1,0 +1,15 @@
+stages:
+  create_jerx_dataset:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-common/create_datasets.py
+      --config-file data/raw/musique-common/dataset-config.json
+      --out data/generated/musique-common/
+    deps:
+      - pipelines/musique-common/create_datasets.py
+      - data/raw/musique-common/dataset-config.json
+    outs:
+      - data/generated/musique-common/mhqa-dataset-train.jsonl
+      - data/generated/musique-common/mhqa-dataset-validation.jsonl
+      - data/generated/musique-common/jerx-dataset-train.jsonl
+      - data/generated/musique-common/jerx-dataset-validation.jsonl

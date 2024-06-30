@@ -1,0 +1,31 @@
+schema: '2.0'
+stages:
+  create_mhqa_dataset:
+    cmd: python pipelines/musique-training/create_mhqa_dataset.py --config-file data/raw/musique-training/dataset-config.json
+      --out data/generated/musique-training/dataset-full.jsonl
+    deps:
+    - path: data/raw/musique-training/dataset-config.json
+      hash: md5
+      md5: 07abe9fcbc403832c8318c4c7009c33b
+      size: 72
+    - path: pipelines/musique-training/create_mhqa_dataset.py
+      hash: md5
+      md5: 5f2bec09cef4f9b9cb9ce44aa5ae28cd
+      size: 2066
+    outs:
+    - path: data/generated/musique-training/dataset-full.jsonl
+      hash: md5
+      md5: 6e28b2ffda29b98758f2f3ba0d5814f4
+      size: 167494155
+  create_mini_dataset:
+    cmd: head -n 200 data/generated/musique-common/mhqa-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+    deps:
+    - path: data/generated/musique-common/mhqa-dataset-train.jsonl
+      hash: md5
+      md5: 6e28b2ffda29b98758f2f3ba0d5814f4
+      size: 167494155
+    outs:
+    - path: data/generated/musique-training/dataset.jsonl
+      hash: md5
+      md5: 4d116165f09a1ab46b15eb6cfb57b991
+      size: 1366341

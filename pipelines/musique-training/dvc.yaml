@@ -1,0 +1,52 @@
+stages:
+  create_mini_dataset:
+    wdir: ../..
+    cmd: >-
+      head -n 200 data/generated/musique-common/mhqa-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+    deps:
+      - data/generated/musique-common/mhqa-dataset-train.jsonl
+    outs:
+      - data/generated/musique-training/dataset.jsonl
+
+  construct_knowledge_graphs:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-training/construct_knowledge_graphs.py
+      --dataset-file data/generated/musique-training/dataset.jsonl
+      --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
+      --out data/generated/musique-training/knowledge-graphs/
+    deps:
+      - pipelines/musique-training/construct_knowledge_graphs.py
+      - data/raw/musique-training/jerx-llm-configs/llama3.json
+      - data/generated/musique-training/dataset.jsonl
+    outs:
+      - data/generated/musique-training/knowledge-graphs/timestamp.txt
+
+  answer_questions:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-training/answer_questions.py
+      --dataset-file data/generated/musique-training/dataset.jsonl
+      --knowledge-graph-directory data/generated/musique-training/knowledge-graphs/ 
+      --out data/generated/musique-training/question-answering
+    deps:
+      - pipelines/musique-training/answer_questions.py
+      - data/generated/musique-training/dataset.jsonl
+      - data/generated/musique-training/knowledge-graphs/timestamp.txt
+    outs:
+      - data/generated/musique-training/question-answering/timestamp.txt
+
+  evaluate_answers:
+    wdir: ../..
+    cmd: >-
+      python pipelines/musique-training/evaluate_answers.py
+      --dataset-file data/generated/musique-training/dataset.jsonl
+      --answers-dir data/generated/musique-training/question-answering/
+      --out data/generated/musique-training/answer-eval/
+    deps:
+      - pipelines/musique-training/evaluate_answers.py
+      - data/generated/musique-training/dataset.jsonl
+      - data/generated/musique-training/question-answering/
+    outs:
+      - data/generated/musique-training/answer-eval/comparisons.jsonl
+      - data/generated/musique-training/answer-eval/scores.json

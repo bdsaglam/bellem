@@ -3,12 +3,14 @@ from pathlib import Path
 
 import pandas as pd
 import typer
-from datasets import Dataset, load_dataset
+from datasets import Dataset, DatasetDict, load_dataset
 from rich.console import Console
 
 from bellek.jerx.fewshot.llm import DEFAULT_JERX_CHAT_TEMPLATE_FOR_LLAMA
 
 err = Console(stderr=True).print
+
+HF_HUB_USER_NAME = "bdsaglam"
 
 
 def flatten_paragraphs(example):
@@ -43,22 +45,23 @@ def make_jerx_chat_dataset(dataset):
 def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
     with open(config_file) as f:
         dataset_config = json.load(f)
-    ds = load_dataset(**dataset_config)
-    ds = ds.map(lambda example: {"answer_aliases": list(set([example["answer"], *example["answer_aliases"]]))})
-    ds.to_json(out)
 
-    user_name = "bdsaglam"
-    ds_name = "musique-answerable-2hop"
-    ds.push_to_hub(f"{user_name}/{ds_name}", split=dataset_config["split"])
+    # MHQA dataset
+    mhqa_dsd = load_dataset(**dataset_config)
+    for split, ds in mhqa_dsd.items():
+        ds.to_json(out / f"mhqa-dataset-{split}.jsonl")
 
-    jerx_chat_ds = make_jerx_chat_dataset(ds)
-    suffix = "-paragraph-jerx-chat"
-    jerx_chat_ds_name = ds_name + suffix
-    jerx_chat_ds.push_to_hub(f"{user_name}/{jerx_chat_ds_name}", split=dataset_config["split"])
+    # JERX chat dataset
+    ds_name = "musique-answerable-2hop-paragraph-jerx-chat"
 
-    jerx_chat_ds.filter(lambda example: example["is_supporting"]).push_to_hub(
-        f"{user_name}/{jerx_chat_ds_name}-supporting",
-        split=dataset_config["split"],
+    jerx_chat_dsd = DatasetDict({split: make_jerx_chat_dataset(ds) for split, ds in mhqa_dsd.items()})
+    for split, ds in jerx_chat_dsd.items():
+        ds.to_json(out / f"jerx-dataset-{split}.jsonl")
+
+    jerx_chat_dsd.push_to_hub(f"{HF_HUB_USER_NAME}/{ds_name}")
+
+    jerx_chat_dsd.filter(lambda example: example["is_supporting"]).push_to_hub(
+        f"{HF_HUB_USER_NAME}/{ds_name}-supporting"
     )
 
 

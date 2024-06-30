@@ -1,23 +1,10 @@
 stages:
-  create_mhqa_dataset:
-    frozen: true
-    wdir: ../..
-    cmd: >-
-      python pipelines/musique-evaluation/create_mhqa_dataset.py
-      --config-file data/raw/musique-evaluation/dataset-config.json
-      --out data/generated/musique-evaluation/dataset-full.jsonl
-    deps:
-      - pipelines/musique-evaluation/create_mhqa_dataset.py
-      - data/raw/musique-evaluation/dataset-config.json
-    outs:
-      - data/generated/musique-evaluation/dataset-full.jsonl
-
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 200 data/generated/musique-evaluation/dataset-full.jsonl > data/generated/musique-evaluation/dataset.jsonl
+      head -n 200 data/generated/musique-common/mhqa-dataset-validation.jsonl > data/generated/musique-evaluation/dataset.jsonl
     deps:
-      - data/generated/musique-evaluation/dataset-full.jsonl
+      - data/generated/musique-common/mhqa-dataset-validation.jsonl
     outs:
       - data/generated/musique-evaluation/dataset.jsonl
 
