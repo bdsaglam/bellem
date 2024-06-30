@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 import torch
 from dotenv import load_dotenv
@@ -12,6 +14,7 @@ from bellek.hf.transformers.generation import preprocess_generation_params
 from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
 from bellek.hf.transformers.utils import prepare_model_kwargs
 from bellek.logging import get_logger
+from bellek.mhqa.llm import parse_llm_generation
 from bellek.ml.experiment import main
 from bellek.utils import NestedDict, flatten_dict
 
@@ -42,14 +45,16 @@ class RewardTracker:
         return rewards
 
     def compute_reward(self, *, generation: str, question: str, answers: list[str], id: str | None = None) -> float:
+        try:
+            result = parse_llm_generation(generation)
+        except json.JSONDecodeError:
+            return -1.0
+
         reward = 0.0
-        for line in generation.splitlines():
-            if line.lower().startswith("answer:"):
-                answer = line.split(":", 1)[1].strip()
-                if answer in answers:
-                    reward += 0.9
-            if line.lower().startswith("reasoning:"):
-                reward += 0.1
+        if result.get("answer") in answers:
+            reward += 0.9
+        if result.get("reasoning"):
+            reward += 0.1
         return reward
 
     def as_dataframe(self):

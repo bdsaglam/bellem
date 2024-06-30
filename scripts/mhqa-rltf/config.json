@@ -1,10 +1,10 @@
 {
-    "seed": 42,
+    "seed": 89,
     "dataset": {
         "train": [
             {
-                "path": "bdsaglam/musique-jerx-rltf-openai",
-                "split": "train[:16]"
+                "path": "bdsaglam/musique-answerable-2hop-mhqa-chat",
+                "split": "train[:1024]"
             }
         ]
     },
@@ -37,7 +37,8 @@
             "use_score_scaling": false,
             "use_score_norm": false,
             "early_stopping": false,
-            "log_with": "wandb"
+            "log_with": "wandb",
+            "tracker_project_name": "mhqa-rltf"
         }
     },
     "reward": {
@@ -59,20 +60,20 @@
         }
     },
     "wandb": {
-        "mode": "online",
+        "mode": "offline",
         "entity": "bdsaglam",
-        "project": "jerx-rltf",
+        "project": "mhqa-rltf",
         "resume": "allow",
         "name": null,
         "notes": "",
         "tags": [
-            "jerx",
+            "mhqa",
             "rltf",
             "llama"
         ]
     },
     "hfhub": {
-        "model_id": "bdsaglam/llama-3-8b-jerx-rltf"
+        "model_id": "bdsaglam/llama-3-8b-mhqa-rltf"
     },
     "metaconfig": {
         "preprocessing": {
