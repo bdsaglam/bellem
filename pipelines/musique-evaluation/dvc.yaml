@@ -2,7 +2,7 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 200 data/generated/musique-common/base-dataset-validation.jsonl > data/generated/musique-evaluation/dataset.jsonl
+      cat data/generated/musique-common/base-dataset-validation.jsonl > data/generated/musique-evaluation/dataset.jsonl
     deps:
       - data/generated/musique-common/base-dataset-validation.jsonl
     outs:
@@ -25,11 +25,12 @@ stages:
     cmd: >-
       python pipelines/musique-common/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-evaluation/dataset.jsonl
-      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
+      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3.json
       --out data/generated/musique-evaluation/knowledge-graphs/
+      --resume
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
-      - data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
+      - data/raw/musique-evaluation/jerx-llm-configs/llama3.json
       - data/generated/musique-evaluation/dataset.jsonl
     outs:
       - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt

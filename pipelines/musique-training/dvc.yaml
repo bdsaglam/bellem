@@ -27,6 +27,7 @@ stages:
       --dataset-file data/generated/musique-training/dataset.jsonl
       --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
       --out data/generated/musique-training/knowledge-graphs/
+      --resume
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-training/jerx-llm-configs/llama3.json
