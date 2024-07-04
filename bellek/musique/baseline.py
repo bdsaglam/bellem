@@ -59,17 +59,22 @@ class BaselineMHQA:
         return output
 
 # %% ../../nbs/musique.baseline.ipynb 6
-def benchmark(dataf: pd.DataFrame, qa_func: Callable, only_supporting: bool = True) -> tuple[pd.DataFrame, dict]:
-    mhqa = BaselineMHQA(qa_func, only_supporting = only_supporting)
+def benchmark(
+    dataf: pd.DataFrame,
+    qa_func: Callable,
+    only_supporting: bool = True,
+    ignore_errors: bool = False,
+) -> tuple[pd.DataFrame, dict]:
+    mhqa = BaselineMHQA(qa_func, only_supporting=only_supporting)
 
     def process(example):
-        output = mhqa.answer(example)
-        example['predicted_answer'] = output.answer
-        example['raw_llm_output'] = output
+        output = mhqa.answer(example, ignore_errors=ignore_errors)
+        example["predicted_answer"] = output.answer
+        example["raw_llm_output"] = output
         return example
-    
+
     dataf = dataf.progress_apply(process, axis=1)
     dataf = compare_answers(dataf)
     scores = calculate_metrics(dataf)
-    scores['fuzzy_match'] = dataf['fuzzy_match'].mean()
+    scores["fuzzy_match"] = dataf["fuzzy_match"].mean()
     return dataf, scores
