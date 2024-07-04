@@ -38,8 +38,8 @@ patch_knowledge_graph_index()
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # language model to answer questions
-# llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
-llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo", api_base="http://localhost:8080/v1", api_key="_")
+llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
+# llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo", api_base="http://localhost:8080/v1", api_key="_")
 
 
 def make_service_context(directory: Path, example_id: str):

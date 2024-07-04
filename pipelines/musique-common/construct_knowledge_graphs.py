@@ -50,9 +50,9 @@ def make_service_context(trace_callback_handler: BaseCallbackHandler):
     )
 
 
-def make_docs(example, only_supporting=False):
+def make_docs(example, include_non_supporting=False):
     non_supporting_ps, supporting_ps = partition(lambda p: p["is_supporting"], example["paragraphs"])
-    ps = list(supporting_ps) if only_supporting else list(supporting_ps) + list(non_supporting_ps)
+    ps = list(supporting_ps) + list(non_supporting_ps) if include_non_supporting else list(supporting_ps)
     for p in ps:
         idx = p["idx"]
         title = p["title"]
@@ -94,6 +94,7 @@ def construct_knowledge_graph(
     example,
     *,
     include_embeddings: bool,
+    include_non_supporting: bool,
     kg_triplet_extract_fn: Callable,
     service_context: ServiceContext,
     out_dir: Path,
@@ -105,7 +106,7 @@ def construct_knowledge_graph(
     storage_context = StorageContext.from_defaults(graph_store=graph_store)
 
     # Create documents to index into knowledge graph
-    documents = list(make_docs(example, only_supporting=True))
+    documents = list(make_docs(example, include_non_supporting=include_non_supporting))
     err(f"Created {len(documents)} documents for sample {id}")
 
     with open(out_dir / "documents.jsonl", "w") as f:
@@ -136,6 +137,7 @@ def process_example(
     example: dict,
     llm_config: dict,
     out: Path,
+    include_non_supporting: bool,
     ignore_errors: bool,
     resume: bool,
 ):
@@ -161,6 +163,7 @@ def process_example(
         construct_knowledge_graph(
             example,
             include_embeddings=False,
+            include_non_supporting=include_non_supporting,
             kg_triplet_extract_fn=kg_triplet_extract_fn,
             service_context=service_context,
             out_dir=example_out_dir,
@@ -175,6 +178,7 @@ def main(
     dataset_file: Path = typer.Option(...),
     llm_config_file: Path = typer.Option(...),
     out: Path = typer.Option(...),
+    include_non_supporting: bool = typer.Option(False),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
 ):
@@ -190,6 +194,7 @@ def main(
                 example,
                 llm_config=llm_config,
                 out=out,
+                include_non_supporting=include_non_supporting,
                 ignore_errors=ignore_errors,
                 resume=resume,
             )
