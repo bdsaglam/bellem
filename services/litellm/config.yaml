@@ -25,9 +25,14 @@ model_list:
       model: together_ai/meta-llama/Llama-3-70b-chat-hf
       api_base: https://api.together.xyz/v1
       api_key: os.environ/TOGETHERAI_API_KEY
-  - model_name: llama-3-70b-tgi
+  - model_name: llama-3-8b-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-8B-Instruct
+        api_base: http://host.docker.internal:8081/v1
+        api_key: "_"
+  - model_name: llama-3-70b-tgi
+    litellm_params:
+        model: openai/meta-llama/Meta-Llama-3-70B-Instruct
         api_base: http://host.docker.internal:8080/v1
         api_key: "_"
 
