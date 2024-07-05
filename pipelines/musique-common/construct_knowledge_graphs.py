@@ -203,7 +203,7 @@ def main(
         for future in tqdm(as_completed(futures), total=len(examples), desc="Constructing knowledge graphs"):
             future.result()
 
-    (out / "timestamp.txt").write_text(str(datetime.now().isoformat(timespec="milliseconds")))
+    (out / "timestamp.txt").write_text(str(datetime.now().isoformat()))
 
 
 if __name__ == "__main__":
