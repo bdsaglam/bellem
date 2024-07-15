@@ -13,10 +13,10 @@ The second subquestion must refer to the answer of the first question by `#1` as
 
 Avoid statements like 'Here are the decomposed sub-question, ...' or 'Sure! Here are..' or anything along those lines. Just provide sub-questions as illustrated in the examples below.
 
-Question: What year saw the creation of the region where the county of Hertfordshire is located?
+Question: Who founded the journal that published The Review of Communication?
 Sub-questions:
-1. In which state is Hertfordshire located?
-2. When was #1 birthed?
+1. Who published The Review of Communication?
+2. Who founded #1?
 
 Question: When was the institute that owned The Collegian founded?
 Sub-questions:
