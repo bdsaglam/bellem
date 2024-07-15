@@ -44,12 +44,12 @@ stages:
       size: 229
     - path: pipelines/musique-common/construct_knowledge_graphs.py
       hash: md5
-      md5: bb4c17b5dee017b8474956bedbdff801
-      size: 7413
+      md5: b4631828af168953e81783916116adfb
+      size: 7568
     outs:
     - path: data/generated/musique-training/knowledge-graphs/timestamp.txt
       hash: md5
-      md5: 03f6850395af4f948b204527e290bdd3
+      md5: 48cb85e9d367cf459000cdd400050a54
       size: 26
   answer_questions:
     cmd: python pipelines/musique-common/answer_questions.py --dataset-file data/generated/musique-training/question-decomposition.jsonl
