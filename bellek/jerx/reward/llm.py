@@ -74,7 +74,11 @@ def make_question_answer_func(
             **completion_kwargs,
         )
         text = chat_completion.choices[0].message.content
-        output = json.loads(text)
+        try:
+            output = json.loads(text)
+        except json.JSONDecodeError:
+            log.error("Failed to decode the JSON output: %s", text)
+            output = {}
         return QuestionAnsweringResult(
             answer=output.get("answer", "N/A"),
             reasoning=output.get("reasoning", ""),
