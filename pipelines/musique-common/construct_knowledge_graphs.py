@@ -16,7 +16,7 @@ from llama_index.storage.storage_context import StorageContext
 from more_itertools import partition
 from pyvis.network import Network
 from rich.console import Console
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from bellek.llama_index.graph_stores.kuzu import KuzuGraphStore
 from bellek.llama_index.obs import make_phoenix_trace_callback_handler
@@ -181,16 +181,16 @@ def main(
     include_non_supporting: bool = typer.Option(False),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
+    n_workers: int = typer.Option(4),
 ):
     llm_config = json.loads(llm_config_file.read_text())
 
     with open(dataset_file) as f:
         examples = [json.loads(line) for line in f]
 
-    with ProcessPoolExecutor(max_workers=4) as executor:
-        futures = [
-            executor.submit(
-                process_example,
+    if n_workers < 2:
+        for example in tqdm(examples):
+            process_example(
                 example,
                 llm_config=llm_config,
                 out=out,
@@ -198,10 +198,22 @@ def main(
                 ignore_errors=ignore_errors,
                 resume=resume,
             )
-            for example in examples
-        ]
-        for future in tqdm(as_completed(futures), total=len(examples), desc="Constructing knowledge graphs"):
-            future.result()
+    else:
+        with ProcessPoolExecutor(max_workers=n_workers) as executor:
+            futures = [
+                executor.submit(
+                    process_example,
+                    example,
+                    llm_config=llm_config,
+                    out=out,
+                    include_non_supporting=include_non_supporting,
+                    ignore_errors=ignore_errors,
+                    resume=resume,
+                )
+                for example in examples
+            ]
+            for future in tqdm(as_completed(futures), total=len(examples), desc="Constructing knowledge graphs"):
+                future.result()
 
     (out / "timestamp.txt").write_text(str(datetime.now().isoformat()))
 

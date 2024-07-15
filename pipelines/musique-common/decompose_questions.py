@@ -23,7 +23,9 @@ def process_line(line):
     return {
         "id": example["id"],
         "question": example["question"],
-        "question_decomposition": [{"question": q} for q in sub_questions],
+        "question_decomposition": [
+            {**qd, "question": pred_q} for qd, pred_q in zip(example["question_decomposition"], sub_questions)
+        ],
     }
 
 

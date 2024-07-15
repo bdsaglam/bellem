@@ -2,7 +2,7 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 4096 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+      head -n 1000 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
     deps:
       - data/generated/musique-common/base-dataset-train.jsonl
     outs:
@@ -27,7 +27,6 @@ stages:
       --dataset-file data/generated/musique-training/dataset.jsonl
       --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
       --out data/generated/musique-training/knowledge-graphs/
-      --resume
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-training/jerx-llm-configs/llama3.json

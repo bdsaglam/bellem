@@ -156,7 +156,7 @@ def main(
     with open(dataset_file) as f:
         examples = [json.loads(line) for line in f]
 
-    with ProcessPoolExecutor(max_workers=4) as executor:
+    with ProcessPoolExecutor(max_workers=2) as executor:
         futures = [
             executor.submit(
                 process_example,

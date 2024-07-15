@@ -2,7 +2,7 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 100 data/generated/musique-common/base-dataset-validation.jsonl > data/generated/musique-evaluation/dataset.jsonl
+      head -n 200 data/generated/musique-common/base-dataset-validation.jsonl > data/generated/musique-evaluation/dataset.jsonl
     deps:
       - data/generated/musique-common/base-dataset-validation.jsonl
     outs:
