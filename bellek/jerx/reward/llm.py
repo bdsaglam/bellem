@@ -75,7 +75,11 @@ def make_question_answer_func(
         )
         text = chat_completion.choices[0].message.content
         output = json.loads(text)
-        return QuestionAnsweringResult(answer=output["answer"], reasoning=output["reasoning"], raw_output=text)
+        return QuestionAnsweringResult(
+            answer=output.get("answer", "N/A"),
+            reasoning=output.get("reasoning", ""),
+            raw_output=text,
+        )
 
     return func
 
