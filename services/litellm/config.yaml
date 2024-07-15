@@ -3,33 +3,46 @@ model_list:
     litellm_params:
       model: text-embedding-3-large
       api_key: os.environ/OPENAI_API_KEY
+  
   - model_name: gpt-3.5-turbo
     litellm_params:
       model: gpt-3.5-turbo-0125
       api_key: os.environ/OPENAI_API_KEY
+  
   - model_name: gpt-4-turbo
     litellm_params:
       model: gpt-4-turbo-2024-04-09
       api_key: os.environ/OPENAI_API_KEY
+  
   - model_name: gpt-4o
     litellm_params:
       model: gpt-4o
       api_key: os.environ/OPENAI_API_KEY
+  
   - model_name: llama3-70b-groq
     litellm_params:
       model: groq/llama3-70b-8192
       api_base: https://api.groq.com/openai/v1
       api_key: os.environ/GROQ_API_KEY
+  
+  - model_name: llama3-8b-togetherai
+    litellm_params:
+      model: together_ai/meta-llama/Llama-3-8b-chat-hf
+      api_base: https://api.together.xyz/v1
+      api_key: os.environ/TOGETHERAI_API_KEY
+  
   - model_name: llama3-70b-togetherai
     litellm_params:
       model: together_ai/meta-llama/Llama-3-70b-chat-hf
       api_base: https://api.together.xyz/v1
       api_key: os.environ/TOGETHERAI_API_KEY
+  
   - model_name: llama-3-8b-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-8B-Instruct
         api_base: http://host.docker.internal:8081/v1
         api_key: "_"
+  
   - model_name: llama-3-70b-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-70B-Instruct
