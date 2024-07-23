@@ -2,7 +2,7 @@ stages:
   create_mini_dataset:
     wdir: ../..
     cmd: >-
-      head -n 1000 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
+      head -n 4000 data/generated/musique-common/base-dataset-train.jsonl > data/generated/musique-training/dataset.jsonl
     deps:
       - data/generated/musique-common/base-dataset-train.jsonl
     outs:
@@ -27,6 +27,7 @@ stages:
       --dataset-file data/generated/musique-training/dataset.jsonl
       --llm-config-file data/raw/musique-training/jerx-llm-configs/llama3.json
       --out data/generated/musique-training/knowledge-graphs/
+      --n-workers 4
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-training/jerx-llm-configs/llama3.json
@@ -66,7 +67,7 @@ stages:
   create_jerx_sft_dataset:
     wdir: ../..
     cmd: >-
-      python pipelines/musique-training/create_jerx_sft_datasetv.py
+      python pipelines/musique-training/create_jerx_sft_dataset.py
       --dataset-file data/generated/musique-training/dataset.jsonl
       --answer-comparison-file data/generated/musique-training/answer-eval/comparisons.jsonl
       --out data/generated/musique-training/jerx/

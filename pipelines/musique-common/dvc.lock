@@ -60,8 +60,8 @@ stages:
       size: 50
     - path: pipelines/musique-common/create_base_dataset.py
       hash: md5
-      md5: 6bae093ed75b8fe67c3a3bd7e0f5d6bc
-      size: 573
+      md5: 57ee946d1668120f21b6897b102239c3
+      size: 635
     outs:
     - path: data/generated/musique-common/base-dataset-train.jsonl
       hash: md5

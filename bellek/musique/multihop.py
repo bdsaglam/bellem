@@ -4,13 +4,11 @@
 __all__ = ['make_docs', 'BaselineMultiHop', 'benchmark']
 
 # %% ../../nbs/musique.multihop.ipynb 3
-import json
 from typing import Callable
 
 import pandas as pd
 from tqdm.auto import tqdm
 
-from ..jerx.reward.llm import QuestionAnsweringResult
 from .eval import calculate_metrics, compare_answers
 
 tqdm.pandas()
@@ -37,7 +35,7 @@ class BaselineMultiHop:
         self.qa_func = qa_func
         self.retrieval_func = retrieval_func
 
-    def _call(self, example) -> QuestionAnsweringResult:
+    def _call(self, example) -> dict:
         docs = list(make_docs(example))
         
         # First question
@@ -51,14 +49,13 @@ class BaselineMultiHop:
             "query" : query1,
             "context": context1,
             "answer": result1.answer,
-            "reasoning": result1.reasoning,
+            "llm_output": result1,
         }
 
         # Second question
         if result1.answer == "N/A":
             return {
                 "answer": "N/A",
-                "reasoning": result1.reasoning,
                 "hops": [hop1],
             }
 
@@ -73,18 +70,19 @@ class BaselineMultiHop:
             "query": query2,
             "context": context2,
             "answer": result2.answer,
-            "reasoning": result2.reasoning,
+            "llm_output": result2,
         }
-        return QuestionAnsweringResult(answer=result2.answer, reasoning=result2.reasoning, raw_output=json.dumps([hop1, hop2]))
 
-    def __call__(self, example, ignore_errors: bool = False) -> QuestionAnsweringResult:
+        return {'answer': result2.answer, 'hops': [hop1, hop2]}
+
+    def __call__(self, example, ignore_errors: bool = False) -> dict:
         try:
             output = self._call(example)
         except Exception as exc:
             if ignore_errors:
-                id = example['id']
+                id = example["id"]
                 print(f"Failed to answer the question {id}\n{exc}")
-                output = QuestionAnsweringResult(reasoning="", answer="N/A", raw_output=str(exc))
+                output = dict(answer="N/A", hops=[{'error': str(exc)}])
             else:
                 raise
         return output
@@ -100,8 +98,8 @@ def benchmark(
 
     def process(example):
         output = pipeline(example, ignore_errors=ignore_errors)
-        example["predicted_answer"] = output.answer
-        example["raw_llm_output"] = output
+        example["predicted_answer"] = output['answer']
+        example["raw_output"] = output
         return example
 
     dataf = dataf.progress_apply(process, axis=1)

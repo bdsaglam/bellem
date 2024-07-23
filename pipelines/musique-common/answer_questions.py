@@ -79,7 +79,7 @@ Answer in 2-4 words: """
 
 def make_query_engine(index: BaseIndex):
     query_engine = index.as_query_engine(
-        include_text=False,
+        include_text=True,
         embedding_mode="hybrid",
         retriever_mode=KGRetrieverMode.HYBRID,
         response_mode="simple_summarize",

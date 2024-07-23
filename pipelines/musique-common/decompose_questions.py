@@ -1,8 +1,9 @@
 import json
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import cache
 from pathlib import Path
 
+import tenacity
 import typer
 from dotenv import load_dotenv
 from tqdm import tqdm
@@ -14,7 +15,10 @@ load_dotenv()
 
 @cache
 def get_qdecomposer():
-    return make_question_decomposer(model="llama-3-70b-tgi")
+    return tenacity.retry(
+        stop=tenacity.stop_after_attempt(2),
+        wait=tenacity.wait_random_exponential(multiplier=1, max=30),
+    )(make_question_decomposer(model="llama3-70b-togetherai"))
 
 
 def process_line(line):
@@ -30,7 +34,7 @@ def process_line(line):
 
 
 def process_lines(lines):
-    with ProcessPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [executor.submit(process_line, line) for line in lines]
         for future in tqdm(as_completed(futures), total=len(lines), desc="Decomposing questions"):
             yield future.result()

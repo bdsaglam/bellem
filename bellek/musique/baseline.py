@@ -5,6 +5,7 @@ __all__ = ['make_docs', 'BaselineSingleHop', 'BaselineMultiHop', 'benchmark']
 
 # %% ../../nbs/musique.baseline.ipynb 3
 import json
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from typing import Callable
 
 import pandas as pd
@@ -118,6 +119,7 @@ def benchmark(
     dataf: pd.DataFrame,
     pipeline: Callable,
     ignore_errors: bool = False,
+    n_workers: int = 8,
 ) -> tuple[pd.DataFrame, dict]:
 
     def process(example):
@@ -126,7 +128,13 @@ def benchmark(
         example["raw_llm_output"] = output
         return example
 
-    dataf = dataf.progress_apply(process, axis=1)
+    rows = [] 
+    with ThreadPoolExecutor(max_workers=n_workers) as executor:
+        futures = [executor.submit(process, row) for _, row in dataf.iterrows()]
+        for future in tqdm(as_completed(futures), total=len(dataf), desc="Processing samples"):
+            rows.append(future.result())
+    
+    dataf = pd.DataFrame(rows)
     dataf = compare_answers(dataf)
     scores = calculate_metrics(dataf)
     scores["fuzzy_match"] = dataf["fuzzy_match"].mean()

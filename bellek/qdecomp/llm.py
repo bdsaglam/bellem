@@ -8,7 +8,7 @@ import re
 from openai import OpenAI
 
 # %% ../../nbs/qdecomp.llm.ipynb 4
-QUESTION_DECOMPOSITION_SYSTEM_PROMPT_TEMPLATE = """Decompose the given question into 2 sub-questions such that when sub-questions are answered, the original question can be answered correctly.
+QUESTION_DECOMPOSITION_SYSTEM_PROMPT_TEMPLATE = """Decompose the given question into n sub-questions such that when sub-questions are answered, the original question can be answered correctly.
 The second subquestion must refer to the answer of the first question by `#1` as in the examples below. Do not create open-ended sub-questions like "Who is ..." or "How is ...".
 
 Avoid statements like 'Here are the decomposed sub-question, ...' or 'Sure! Here are..' or anything along those lines. Just provide sub-questions as illustrated in the examples below.

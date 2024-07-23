@@ -20,8 +20,8 @@ services:
       - ./config.yaml:/app/config.yaml
     command: [ "--config", "/app/config.yaml", "--port", "8111", "--num_workers", "1" ]
     environment:
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
       - "HF_TOKEN=${HF_TOKEN}"
       - "OPENAI_API_KEY=${OPENAI_API_KEY}"
       - "GROQ_API_KEY=${GROQ_API_KEY}"

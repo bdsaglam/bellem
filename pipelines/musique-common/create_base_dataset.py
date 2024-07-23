@@ -18,6 +18,7 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
 
     dsd = load_dataset(**dataset_config)
     for split, ds in dsd.items():
+        ds = ds.filter(lambda example: example['answerable'])
         ds.to_json(out / f"base-dataset-{split}.jsonl")
 
 
