@@ -1,6 +1,6 @@
 import json
 import shutil
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
@@ -38,8 +38,10 @@ patch_knowledge_graph_index()
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # language model to answer questions
-llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
+llm = OpenAI(temperature=0.0, model="gpt-4-turbo")
 # llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo", api_base="http://localhost:8080/v1", api_key="_")
+
+version = 2
 
 
 def make_service_context(directory: Path, example_id: str):
@@ -79,7 +81,7 @@ Answer in 2-4 words: """
 
 def make_query_engine(index: BaseIndex):
     query_engine = index.as_query_engine(
-        include_text=True,
+        include_text=False,
         embedding_mode="hybrid",
         retriever_mode=KGRetrieverMode.HYBRID,
         response_mode="simple_summarize",
@@ -156,7 +158,7 @@ def main(
     with open(dataset_file) as f:
         examples = [json.loads(line) for line in f]
 
-    with ProcessPoolExecutor(max_workers=2) as executor:
+    with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
             executor.submit(
                 process_example,

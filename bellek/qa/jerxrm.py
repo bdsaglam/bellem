@@ -28,10 +28,10 @@ Given the context information and not prior knowledge, answer the question.
 """
 
 # %% ../../nbs/qa.jerxrm.ipynb 7
-SYSTEM_PROMPT = """You are an excellent question-answering system that is trusted around the world. You base your answers solely on the context information provided and not on prior knowledge.
+SYSTEM_PROMPT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
 
-Some rules to follow:
-1. Never directly reference the given context in your answer.
+Guidelines:
+1. Do not explicitly mention or refer to the provided information in your answers.
 2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
 """
 
@@ -52,17 +52,18 @@ def answer_question(
 ) -> QuestionAnsweringResult: ...
 
 # %% ../../nbs/qa.jerxrm.ipynb 8
-SYSTEM_PROMPT_REASONING = """You are an excellent question-answering system that is trusted around the world. You base your answers solely on the context information provided and not on prior knowledge. You must provide correct step by step reasoning for your answers.
+SYSTEM_PROMPT_REASONING = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
 
-Some rules to follow:
-1. Never directly reference the given context in your answer.
+Guidelines:
+1. Do not explicitly mention or refer to the provided information in your answers.
 2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+3. Always provide clear and logical step-by-step reasoning in your answers.
 """
 
 class QuestionAnsweringResultWithReasoning(BaseModel):
     """Data model for answering the question."""
 
-    reasoning: str = Field(description="Step by step reasoning for the answer.")
+    reasoning: str = Field(description="Step-by-step reasoning for the answer.")
     answer: str = Field(description="The answer to the question in 2-4 words.")
 
 
@@ -77,8 +78,15 @@ def answer_question_with_reasoning(
 ) -> QuestionAnsweringResultWithReasoning: ...
 
 # %% ../../nbs/qa.jerxrm.ipynb 9
-SYSTEM_PROMPT_WITH_TRIPLETS = """You are an excellent question-answering system that is trusted around the world. You base your answers solely on the context information provided and not on prior knowledge. You first extract related entity-relation-entity triplets from the context and then answer the question. For instance, 
+SYSTEM_PROMPT_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
 
+Guidelines:
+1. Do not explicitly mention or refer to the provided information in your answers.
+2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+
+Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. For instance, 
+
+# Example
 Context: "Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World
 Champion in middleweight.
 
@@ -95,9 +103,8 @@ Marta Hernández Romero (Politician) | serves as | mayor of Havana
 Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
-Some rules to follow:
-1. Never directly reference the given context in your answer.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+Answer: "Marta Hernández Romero"
+
 """
 
 class _QuestionAnsweringResultWithTriplets(BaseModel):
@@ -127,8 +134,16 @@ def answer_question_with_triplets(
     return QuestionAnsweringResultWithTriplets(triplets=result.triplets, answer=result.answer)
 
 # %% ../../nbs/qa.jerxrm.ipynb 10
-SYSTEM_PROMPT_REASONING_WITH_TRIPLETS = """You are an excellent question-answering system that is trusted around the world. You base your answers solely on the context information provided and not on prior knowledge. You must provide correct step by step reasoning for your answers. You first extract related entity-relation-entity triplets from the context and then answer the question. For instance, 
+SYSTEM_PROMPT_REASONING_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
 
+Guidelines:
+1. Do not explicitly mention or refer to the provided information in your answers.
+2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+3. Always provide clear and logical step-by-step reasoning in your answers.
+
+Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. For instance, 
+
+# Example
 Context: "Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World
 Champion in middleweight.
 
@@ -145,20 +160,16 @@ Marta Hernández Romero (Politician) | serves as | mayor of Havana
 Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
-Reasoning: ...
+Reasoning: There is a triplet "Marta Hernández Romero (Politician) | serves as | mayor of Havana" that can be used for answering the question.
 
-Answer: ...
-
-Some rules to follow:
-1. Never directly reference the given context in your answer.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+Answer: "Marta Hernández Romero"
 """
 
 class QuestionAnsweringResultReasoningWithTriplets(BaseModel):
     """Data model for answering the question."""
 
     triplets: list[str] = Field(description="A list of entity-relation-entity triplets extracted from the context.")
-    reasoning: str = Field(description="Step by step reasoning for the answer.")
+    reasoning: str = Field(description="Step-by-step reasoning for the answer.")
     answer: str = Field(description="The answer to the question in 2-4 words.")
 
 
