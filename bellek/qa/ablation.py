@@ -2,9 +2,9 @@
 
 # %% auto 0
 __all__ = ['log', 'DEFAULT_MODEL', 'USER_PROMPT', 'SYSTEM_PROMPT', 'SYSTEM_PROMPT_REASONING', 'SYSTEM_PROMPT_WITH_TRIPLETS',
-           'SYSTEM_PROMPT_REASONING_WITH_TRIPLETS', 'QuestionAnsweringResult', 'answer_question_standard',
-           'QuestionAnsweringResultWithReasoning', 'answer_question_cot', 'QuestionAnsweringResultWithTriplets',
-           'answer_question_cte', 'QuestionAnsweringResultReasoningWithTriplets', 'answer_question_cte_cot']
+           'SYSTEM_PROMPT_REASONING_WITH_TRIPLETS', 'QuestionAnsweringResultStandard', 'answer_question_standard',
+           'QuestionAnsweringResultCOT', 'answer_question_cot', 'QuestionAnsweringResultCTE', 'answer_question_cte',
+           'QuestionAnsweringResultCTECOT', 'answer_question_cte_cot']
 
 # %% ../../nbs/qa.ablation.ipynb 4
 import magentic
@@ -29,7 +29,7 @@ Given the context information and not prior knowledge, answer the question.
 # %% ../../nbs/qa.ablation.ipynb 7
 SYSTEM_PROMPT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge."""
 
-class QuestionAnsweringResult(BaseModel):
+class QuestionAnsweringResultStandard(BaseModel):
     """Data model for answering the question."""
 
     answer: str = Field(description="The answer to the question in 2-4 words.")
@@ -43,12 +43,12 @@ class QuestionAnsweringResult(BaseModel):
 def answer_question_standard(
     context: str,
     question: str,
-) -> QuestionAnsweringResult: ...
+) -> QuestionAnsweringResultStandard: ...
 
 # %% ../../nbs/qa.ablation.ipynb 8
 SYSTEM_PROMPT_REASONING = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers."""
 
-class QuestionAnsweringResultWithReasoning(BaseModel):
+class QuestionAnsweringResultCOT(BaseModel):
     """Data model for answering the question."""
 
     reasoning: str = Field(description="Step-by-step reasoning for the answer.")
@@ -63,7 +63,7 @@ class QuestionAnsweringResultWithReasoning(BaseModel):
 def answer_question_cot(
     context: str,
     question: str,
-) -> QuestionAnsweringResultWithReasoning: ...
+) -> QuestionAnsweringResultCOT: ...
 
 # %% ../../nbs/qa.ablation.ipynb 9
 SYSTEM_PROMPT_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
@@ -90,13 +90,13 @@ Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 Answer: "Marta Hernández Romero"
 """
 
-class _QuestionAnsweringResultWithTriplets(BaseModel):
+class _QuestionAnsweringResultCTE(BaseModel):
     """Data model for answering the question."""
 
     triplets: list[str] = Field(description="A list of entity-relation-entity triplets extracted from the context.")
     answer: str = Field(description="The answer to the question in 2-4 words.")
 
-class QuestionAnsweringResultWithTriplets(_QuestionAnsweringResultWithTriplets):
+class QuestionAnsweringResultCTE(_QuestionAnsweringResultCTE):
     reasoning: str = ""
 
 @magentic.chatprompt(
@@ -107,14 +107,14 @@ class QuestionAnsweringResultWithTriplets(_QuestionAnsweringResultWithTriplets):
 def _answer_question_cte(
     context: str,
     question: str,
-) -> _QuestionAnsweringResultWithTriplets: ...
+) -> _QuestionAnsweringResultCTE: ...
 
 def answer_question_cte(
     context: str,
     question: str,
-) -> QuestionAnsweringResultWithTriplets: 
+) -> QuestionAnsweringResultCTE: 
     result = _answer_question_cte(context, question)
-    return QuestionAnsweringResultWithTriplets(triplets=result.triplets, answer=result.answer)
+    return QuestionAnsweringResultCTE(triplets=result.triplets, answer=result.answer)
 
 # %% ../../nbs/qa.ablation.ipynb 10
 SYSTEM_PROMPT_REASONING_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on context the information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers.
@@ -149,7 +149,7 @@ From these triplets, we conclude that Marta Hernández Romero is the mayor of Ha
 Answer: "Marta Hernández Romero"
 """
 
-class QuestionAnsweringResultReasoningWithTriplets(BaseModel):
+class QuestionAnsweringResultCTECOT(BaseModel):
     """Data model for answering the question."""
 
     triplets: list[str] = Field(description="A list of entity-relation-entity triplets extracted from the context.")
@@ -165,4 +165,4 @@ class QuestionAnsweringResultReasoningWithTriplets(BaseModel):
 def answer_question_cte_cot(
     context: str,
     question: str,
-) -> QuestionAnsweringResultReasoningWithTriplets: ...
+) -> QuestionAnsweringResultCTECOT: ...
