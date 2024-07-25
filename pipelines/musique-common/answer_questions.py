@@ -70,12 +70,12 @@ def load_index(directory: Path, service_context: ServiceContext):
     )
 
 
-TEXT_QA_PROMPT_USER_MSG_CONTENT = """Context information is below.
+TEXT_QA_PROMPT_USER_MSG_CONTENT = """The context information is provided below.
 ---------------------
 {context_str}
 ---------------------
-Given the context information and not prior knowledge, answer the query.
-Query: {query_str}
+Given the context information and not prior knowledge, answer the question.
+Question: {query_str}
 Answer in 2-4 words: """
 
 
