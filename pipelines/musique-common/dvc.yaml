@@ -21,6 +21,7 @@ stages:
     deps:
       - pipelines/musique-common/create_jerx_dataset.py
       - data/raw/musique-common/dataset-config.json
+      - data/generated/musique-common/base-dataset-validation.jsonl
     outs:
       - data/generated/musique-common/jerx-dataset-train.jsonl
       - data/generated/musique-common/jerx-dataset-validation.jsonl
@@ -34,6 +35,7 @@ stages:
     deps:
       - pipelines/musique-common/create_mhqa_chat_dataset.py
       - data/raw/musique-common/dataset-config.json
+      - data/generated/musique-common/base-dataset-validation.jsonl
     outs:
       - data/generated/musique-common/mhqa-chat-dataset-train.jsonl
       - data/generated/musique-common/mhqa-chat-dataset-validation.jsonl

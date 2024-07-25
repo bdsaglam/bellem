@@ -7,6 +7,7 @@ from datasets import Dataset, DatasetDict, load_dataset
 from rich.console import Console
 
 from bellek.jerx.fewshot.llm import DEFAULT_FEW_SHOT_EXAMPLE_MESSAGES, DEFAULT_JERX_SYSTEM_MESSAGE_FOR_LLAMA
+from bellek.musique.constants import ABLATION_RECORD_IDS
 
 err = Console(stderr=True).print
 
@@ -58,9 +59,8 @@ def main(config_file: Path = typer.Option(...), out: Path = typer.Option(...)):
 
     jerx_chat_dsd.push_to_hub(f"{HF_HUB_USER_NAME}/{jerx_ds_name}")
 
-    jerx_chat_dsd.filter(lambda example: example["is_supporting"]).push_to_hub(
-        f"{HF_HUB_USER_NAME}/{jerx_ds_name}-supporting"
-    )
+    jerx_chat_dsd_supporting = jerx_chat_dsd.filter(lambda example: example["is_supporting"])
+    jerx_chat_dsd_supporting.push_to_hub( f"{HF_HUB_USER_NAME}/{jerx_ds_name}-supporting")
 
 
 if __name__ == "__main__":

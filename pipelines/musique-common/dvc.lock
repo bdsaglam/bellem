@@ -4,14 +4,18 @@ stages:
     cmd: python pipelines/musique-common/create_jerx_dataset.py --config-file data/raw/musique-common/dataset-config.json
       --out data/generated/musique-common/
     deps:
+    - path: data/generated/musique-common/base-dataset-validation.jsonl
+      hash: md5
+      md5: a2f049d70d39f2fb3758df65fb316c83
+      size: 14982567
     - path: data/raw/musique-common/dataset-config.json
       hash: md5
       md5: ca263ab95f1603b22a4c1317b8cba8b9
       size: 50
     - path: pipelines/musique-common/create_jerx_dataset.py
       hash: md5
-      md5: a98dca3a932fdd463e6227a558aef0bb
-      size: 2012
+      md5: fb943b9d19db8355eb24d3d47dc6c448
+      size: 2112
     outs:
     - path: data/generated/musique-common/jerx-dataset-train.jsonl
       hash: md5
@@ -60,8 +64,8 @@ stages:
       size: 50
     - path: pipelines/musique-common/create_base_dataset.py
       hash: md5
-      md5: 57ee946d1668120f21b6897b102239c3
-      size: 635
+      md5: 1afe012b7a82e2480be56291ea16d66d
+      size: 848
     outs:
     - path: data/generated/musique-common/base-dataset-train.jsonl
       hash: md5
@@ -75,6 +79,10 @@ stages:
     cmd: python pipelines/musique-common/create_mhqa_chat_dataset.py --config-file
       data/raw/musique-common/dataset-config.json --out data/generated/musique-common/
     deps:
+    - path: data/generated/musique-common/base-dataset-validation.jsonl
+      hash: md5
+      md5: a2f049d70d39f2fb3758df65fb316c83
+      size: 14982567
     - path: data/raw/musique-common/dataset-config.json
       hash: md5
       md5: ca263ab95f1603b22a4c1317b8cba8b9
