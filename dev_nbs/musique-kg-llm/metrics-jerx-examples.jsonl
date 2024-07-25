@@ -1,0 +1,9 @@
+{"String A": "Apple Inc.", "String B": "Apple Inc.", "EM": "Yes", "FM": "Yes"}
+{"String A": "Microsoft Corporation", "String B": "Microsoft Corporation", "EM": "Yes", "FM": "Yes"}
+{"String A": "Google LLC", "String B": "Google LLC", "EM": "Yes", "FM": "Yes"}
+{"String A": "Barack Obama", "String B": "Barak Obama", "EM": "No", "FM": "Yes"}
+{"String A": "London, United Kingdom", "String B": "London /  United Kingdom", "EM": "No", "FM": "Yes"}
+{"String A": "Center for Disease Control", "String B": "Centre for Disease Control", "EM": "No", "FM": "Yes"}
+{"String A": "University of Cambridge", "String B": "University of Oxford", "EM": "No", "FM": "No"}
+{"String A": "Atlantic Ocean", "String B": "Pacific Ocean", "EM": "No", "FM": "No"}
+{"String A": "1989-11-09", "String B": "1989-09-11", "EM": "No", "FM": "No"}
