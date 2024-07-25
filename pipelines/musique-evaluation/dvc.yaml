@@ -26,12 +26,12 @@ stages:
     cmd: >-
       python pipelines/musique-common/construct_knowledge_graphs.py
       --dataset-file data/generated/musique-evaluation/dataset.jsonl
-      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3.json
+      --llm-config-file data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       --out data/generated/musique-evaluation/knowledge-graphs/
       --include-non-supporting
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
-      - data/raw/musique-evaluation/jerx-llm-configs/llama3.json
+      - data/raw/musique-evaluation/jerx-llm-configs/llama3-base-offline.json
       - data/generated/musique-evaluation/dataset.jsonl
     outs:
       - data/generated/musique-evaluation/knowledge-graphs/timestamp.txt

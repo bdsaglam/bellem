@@ -181,7 +181,7 @@ def main(
     include_non_supporting: bool = typer.Option(False),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
-    n_workers: int = typer.Option(1),
+    n_workers: int = typer.Option(4),
 ):
     llm_config = json.loads(llm_config_file.read_text())
 
