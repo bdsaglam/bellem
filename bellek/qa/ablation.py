@@ -2,10 +2,9 @@
 
 # %% auto 0
 __all__ = ['log', 'DEFAULT_MODEL', 'USER_PROMPT', 'SYSTEM_PROMPT', 'SYSTEM_PROMPT_REASONING', 'SYSTEM_PROMPT_WITH_TRIPLETS',
-           'SYSTEM_PROMPT_REASONING_WITH_TRIPLETS', 'QuestionAnsweringResult', 'answer_question',
-           'QuestionAnsweringResultWithReasoning', 'answer_question_with_reasoning',
-           'QuestionAnsweringResultWithTriplets', 'answer_question_with_triplets',
-           'QuestionAnsweringResultReasoningWithTriplets', 'answer_question_reasoning_with_triplets']
+           'SYSTEM_PROMPT_REASONING_WITH_TRIPLETS', 'QuestionAnsweringResult', 'answer_question_standard',
+           'QuestionAnsweringResultWithReasoning', 'answer_question_cot', 'QuestionAnsweringResultWithTriplets',
+           'answer_question_with_triplets', 'QuestionAnsweringResultReasoningWithTriplets', 'answer_question_cte_cot']
 
 # %% ../../nbs/qa.ablation.ipynb 4
 import magentic
@@ -41,7 +40,7 @@ class QuestionAnsweringResult(BaseModel):
     magentic.UserMessage(USER_PROMPT),
     model=DEFAULT_MODEL,
 )
-def answer_question(
+def answer_question_standard(
     context: str,
     question: str,
 ) -> QuestionAnsweringResult: ...
@@ -61,7 +60,7 @@ class QuestionAnsweringResultWithReasoning(BaseModel):
     magentic.UserMessage(USER_PROMPT),
     model=DEFAULT_MODEL,
 )
-def answer_question_with_reasoning(
+def answer_question_cot(
     context: str,
     question: str,
 ) -> QuestionAnsweringResultWithReasoning: ...
@@ -105,7 +104,7 @@ class QuestionAnsweringResultWithTriplets(_QuestionAnsweringResultWithTriplets):
     magentic.UserMessage(USER_PROMPT),
     model=DEFAULT_MODEL,
 )
-def _answer_question_with_triplets(
+def _answer_question_cte(
     context: str,
     question: str,
 ) -> _QuestionAnsweringResultWithTriplets: ...
@@ -114,7 +113,7 @@ def answer_question_with_triplets(
     context: str,
     question: str,
 ) -> QuestionAnsweringResultWithTriplets: 
-    result = _answer_question_with_triplets(context, question)
+    result = _answer_question_cte(context, question)
     return QuestionAnsweringResultWithTriplets(triplets=result.triplets, answer=result.answer)
 
 # %% ../../nbs/qa.ablation.ipynb 10
@@ -163,7 +162,7 @@ class QuestionAnsweringResultReasoningWithTriplets(BaseModel):
     magentic.UserMessage(USER_PROMPT),
     model=DEFAULT_MODEL,
 )
-def answer_question_reasoning_with_triplets(
+def answer_question_cte_cot(
     context: str,
     question: str,
 ) -> QuestionAnsweringResultReasoningWithTriplets: ...
