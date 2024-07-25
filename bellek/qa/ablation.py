@@ -47,7 +47,7 @@ def answer_question_standard(
 ) -> QuestionAnsweringResultStandard: ...
 
 # %% ../../nbs/qa.ablation.ipynb 8
-SYSTEM_PROMPT_COT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers."""
+SYSTEM_PROMPT_COT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your response."""
 
 class QuestionAnsweringResultCOT(BaseModel):
     """Data model for answering the question."""
@@ -67,7 +67,7 @@ def answer_question_cot(
 ) -> QuestionAnsweringResultCOT: ...
 
 # %% ../../nbs/qa.ablation.ipynb 9
-SYSTEM_PROMPT_COT_FS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers.
+SYSTEM_PROMPT_COT_FS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your response.
 
 # Example
 Context: "Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World
@@ -155,7 +155,7 @@ def answer_question_cte(
     return QuestionAnsweringResultCTE(triplets=result.triplets, answer=result.answer)
 
 # %% ../../nbs/qa.ablation.ipynb 11
-SYSTEM_PROMPT_CTE_COT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on context the information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers.
+SYSTEM_PROMPT_CTE_COT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on context the information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your response.
 
 Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. For instance, 
 

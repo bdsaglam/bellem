@@ -38,10 +38,7 @@ patch_knowledge_graph_index()
 embed_model = HuggingFaceEmbedding("sentence-transformers/all-MiniLM-L6-v2")
 
 # language model to answer questions
-llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo")
-# llm = OpenAI(temperature=0.0, model="gpt-3.5-turbo", api_base="http://localhost:8080/v1", api_key="_")
-
-version = 2
+llm = OpenAI(temperature=0.1, model="gpt-3.5-turbo")
 
 
 def make_service_context(directory: Path, example_id: str):
@@ -81,7 +78,7 @@ Answer in 2-4 words: """
 
 def make_query_engine(index: BaseIndex):
     query_engine = index.as_query_engine(
-        include_text=False,
+        include_text=True,
         embedding_mode="hybrid",
         retriever_mode=KGRetrieverMode.HYBRID,
         response_mode="simple_summarize",
