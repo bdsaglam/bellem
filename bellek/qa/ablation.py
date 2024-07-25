@@ -78,14 +78,14 @@ Champion in middleweight.
 The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
 was elected on March 5, 2011."
 
-Question: "Who is the current mayor of city Glenhis Hernández?"
+Question: "Who is the current mayor of city Glenhis Hernández was born?"
 
 Triplets: "Glenhis Hernández (Athlete) | born on | October 7, 1990
 Glenhis Hernández (Athlete) | birth place | Havana
 Glenhis Hernández (Athlete) | specializes in | taekwondo
 Glenhis Hernández (Athlete) | won | 2013 World Champion title (Middleweight)
 Marta Hernández Romero (Politician) | serves as | mayor of Havana
-Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
+Marta Hernández Romero (Politician) | holds | the position of 'President of the People's Power Provincial Assembly'
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
 Answer: "Marta Hernández Romero"
@@ -129,23 +129,23 @@ Champion in middleweight.
 The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
 was elected on March 5, 2011."
 
-Question: "Who is the current mayor of city Glenhis Hernández?"
+Question: "Who is the current mayor of city Glenhis Hernández was born?"
 
 Triplets: "Glenhis Hernández (Athlete) | born on | October 7, 1990
 Glenhis Hernández (Athlete) | birth place | Havana
 Glenhis Hernández (Athlete) | specializes in | taekwondo
 Glenhis Hernández (Athlete) | won | 2013 World Champion title (Middleweight)
 Marta Hernández Romero (Politician) | serves as | mayor of Havana
-Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
+Marta Hernández Romero (Politician) | holds | the position of 'President of the People's Power Provincial Assembly'
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
-Reasoning: Glenhis Hernández (Athlete) | birth place | Havana
+Reasoning: "Glenhis Hernández (Athlete) | birth place | Havana
 This indicates that Glenhis Hernández was born in Havana.
 
 Marta Hernández Romero (Politician) | serves as | mayor of Havana
 This states that Marta Hernández Romero is the mayor of Havana.
 
-From these triplets, we conclude that Marta Hernández Romero is the mayor of Havana.
+From these triplets, we conclude that Marta Hernández Romero is the mayor of Havana."
 
 Answer: "Marta Hernández Romero"
 """
