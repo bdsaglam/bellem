@@ -117,13 +117,9 @@ was elected on March 5, 2011."
 
 Question: "Who is the current mayor of city Glenhis Hernández was born?"
 
-Triplets: "Glenhis Hernández (Athlete) | born on | October 7, 1990
-Glenhis Hernández (Athlete) | birth place | Havana
-Glenhis Hernández (Athlete) | specializes in | taekwondo
-Glenhis Hernández (Athlete) | won | 2013 World Champion title (Middleweight)
-Marta Hernández Romero (Politician) | serves as | mayor of Havana
-Marta Hernández Romero (Politician) | holds | the position of 'President of the People's Power Provincial Assembly'
-Marta Hernández Romero (Politician) | elected on | March 5, 2011."
+Triplets: 
+Glenhis Hernández | birth place | Havana
+Marta Hernández Romero | serves as | mayor of Havana
 
 Answer: "Marta Hernández Romero"
 """
