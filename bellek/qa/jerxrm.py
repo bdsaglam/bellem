@@ -19,7 +19,7 @@ log = get_logger(__name__)
 DEFAULT_MODEL = magentic.OpenaiChatModel("gpt-3.5-turbo", temperature=0.1)
 
 # %% ../../nbs/qa.jerxrm.ipynb 6
-USER_PROMPT = """The context information below is provided.
+USER_PROMPT = """The context information is provided below.
 ---------------------
 {context}
 ---------------------
@@ -28,12 +28,7 @@ Given the context information and not prior knowledge, answer the question.
 """
 
 # %% ../../nbs/qa.jerxrm.ipynb 7
-SYSTEM_PROMPT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
-
-Guidelines:
-1. Do not explicitly mention or refer to the provided information in your answers.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
-"""
+SYSTEM_PROMPT = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge."""
 
 class QuestionAnsweringResult(BaseModel):
     """Data model for answering the question."""
@@ -52,13 +47,7 @@ def answer_question(
 ) -> QuestionAnsweringResult: ...
 
 # %% ../../nbs/qa.jerxrm.ipynb 8
-SYSTEM_PROMPT_REASONING = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
-
-Guidelines:
-1. Do not explicitly mention or refer to the provided information in your answers.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
-3. Always provide clear and logical step-by-step reasoning in your answers.
-"""
+SYSTEM_PROMPT_REASONING = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers."""
 
 class QuestionAnsweringResultWithReasoning(BaseModel):
     """Data model for answering the question."""
@@ -78,11 +67,7 @@ def answer_question_with_reasoning(
 ) -> QuestionAnsweringResultWithReasoning: ...
 
 # %% ../../nbs/qa.jerxrm.ipynb 9
-SYSTEM_PROMPT_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
-
-Guidelines:
-1. Do not explicitly mention or refer to the provided information in your answers.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
+SYSTEM_PROMPT_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
 
 Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. For instance, 
 
@@ -93,7 +78,7 @@ Champion in middleweight.
 The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
 was elected on March 5, 2011."
 
-Question: "Who is the current mayor of Havana?"
+Question: "Who is the current mayor of city Glenhis Hernández?"
 
 Triplets: "Glenhis Hernández (Athlete) | born on | October 7, 1990
 Glenhis Hernández (Athlete) | birth place | Havana
@@ -104,7 +89,6 @@ Marta Hernández Romero (Politician) | holds | the position of "President of the
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
 Answer: "Marta Hernández Romero"
-
 """
 
 class _QuestionAnsweringResultWithTriplets(BaseModel):
@@ -134,12 +118,7 @@ def answer_question_with_triplets(
     return QuestionAnsweringResultWithTriplets(triplets=result.triplets, answer=result.answer)
 
 # %% ../../nbs/qa.jerxrm.ipynb 10
-SYSTEM_PROMPT_REASONING_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the information given, without drawing on prior knowledge.
-
-Guidelines:
-1. Do not explicitly mention or refer to the provided information in your answers.
-2. Avoid statements like 'Based on the context, ...' or 'The context information ...' or anything along those lines.
-3. Always provide clear and logical step-by-step reasoning in your answers.
+SYSTEM_PROMPT_REASONING_WITH_TRIPLETS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on context the information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your answers.
 
 Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. For instance, 
 
@@ -150,7 +129,7 @@ Champion in middleweight.
 The current mayor of Havana ("President of the People's Power Provincial Assembly") is Marta Hernández Romero, she
 was elected on March 5, 2011."
 
-Question: "Who is the current mayor of Havana?"
+Question: "Who is the current mayor of city Glenhis Hernández?"
 
 Triplets: "Glenhis Hernández (Athlete) | born on | October 7, 1990
 Glenhis Hernández (Athlete) | birth place | Havana
@@ -160,7 +139,13 @@ Marta Hernández Romero (Politician) | serves as | mayor of Havana
 Marta Hernández Romero (Politician) | holds | the position of "President of the People's Power Provincial Assembly"
 Marta Hernández Romero (Politician) | elected on | March 5, 2011."
 
-Reasoning: There is a triplet "Marta Hernández Romero (Politician) | serves as | mayor of Havana" that can be used for answering the question.
+Reasoning: Glenhis Hernández (Athlete) | birth place | Havana
+This indicates that Glenhis Hernández was born in Havana.
+
+Marta Hernández Romero (Politician) | serves as | mayor of Havana
+This states that Marta Hernández Romero is the mayor of Havana.
+
+From these triplets, we conclude that Marta Hernández Romero is the mayor of Havana.
 
 Answer: "Marta Hernández Romero"
 """
