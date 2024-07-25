@@ -4,7 +4,7 @@
 __all__ = ['log', 'DEFAULT_MODEL', 'USER_PROMPT', 'SYSTEM_PROMPT', 'SYSTEM_PROMPT_REASONING', 'SYSTEM_PROMPT_WITH_TRIPLETS',
            'SYSTEM_PROMPT_REASONING_WITH_TRIPLETS', 'QuestionAnsweringResult', 'answer_question_standard',
            'QuestionAnsweringResultWithReasoning', 'answer_question_cot', 'QuestionAnsweringResultWithTriplets',
-           'answer_question_with_triplets', 'QuestionAnsweringResultReasoningWithTriplets', 'answer_question_cte_cot']
+           'answer_question_cte', 'QuestionAnsweringResultReasoningWithTriplets', 'answer_question_cte_cot']
 
 # %% ../../nbs/qa.ablation.ipynb 4
 import magentic
@@ -109,7 +109,7 @@ def _answer_question_cte(
     question: str,
 ) -> _QuestionAnsweringResultWithTriplets: ...
 
-def answer_question_with_triplets(
+def answer_question_cte(
     context: str,
     question: str,
 ) -> QuestionAnsweringResultWithTriplets: 
