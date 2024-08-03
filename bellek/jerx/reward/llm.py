@@ -99,6 +99,7 @@ Score: 0.05
 # Triplets
 {triplets_str}
 """.strip()),
+        model=magentic.OpenaiChatModel("gpt-3.5-turbo", temperature=0.1),
 )
 def assess_triplets(document: str, triplets_str: str) -> Assessment: ...
 

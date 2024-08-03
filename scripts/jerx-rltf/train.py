@@ -12,7 +12,8 @@ from bellek.hf.transformers.generation import preprocess_generation_params
 from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
 from bellek.hf.transformers.utils import prepare_model_kwargs
 from bellek.jerx.reward.heuristic import compute_heuristic_reward
-from bellek.jerx.reward.llm import make_reward_func
+from bellek.jerx.reward.llm import assess_triplets
+from bellek.jerx.reward.qa import make_qa_reward_func
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
 from bellek.utils import NestedDict, flatten_dict
@@ -29,36 +30,46 @@ def collator(data):
 class RewardTracker:
     def __init__(self, model_name: str = "gpt-3.5-turbo"):
         self.records = []
-        self.qa_reward_func = make_reward_func(model_name, completion_kwargs=dict(max_tokens=2048))
+        self.qa_reward_func = make_qa_reward_func(model_name, completion_kwargs=dict(max_tokens=2048))
 
     def compute_rewards(self, batch: list[dict]) -> list[float]:
         rewards = []
-        for generation, question, answers, id in zip(
+        for generation, question, answers, messages, id in zip(
             batch["generation"],
             batch["question"],
             batch["answers"],
+            batch["messages"],
             batch["id"],
         ):
+            document = messages[-1]["content"]
             answers = [answer.strip() for answer in answers.split(";")]
-            reward = self.compute_reward(generation=generation, question=question, answers=answers, id=id)
+            reward = self.compute_reward(
+                generation=generation, document=document, question=question, answers=answers, id=id
+            )
             rewards.append(reward)
         return rewards
 
-    def compute_reward(self, *, generation: str, question: str, answers: list[str], id: str | None = None) -> float:
+    def compute_reward(
+        self, *, generation: str, document: str, question: str, answers: list[str], id: str | None = None
+    ) -> float:
+        triplets_str = self.preprocess_generation(generation)
         qa_asmt = self.qa_reward_func(
-            context=self.preprocess_generation(generation),
+            context=triplets_str,
             question=question,
             answers=answers,
         )
         qa_reward = qa_asmt.reward
         heuristic_reward = compute_heuristic_reward(generation)
-        reward = min(0.8 * qa_reward + 0.2 * heuristic_reward, 1.0)
+        quality_asmt = assess_triplets(document, triplets_str)
+        quality_reward = quality_asmt.reward
+        reward = min(0.3 * quality_reward + 0.5 * qa_reward + 0.2 * heuristic_reward, 1.0)
         result = {
             "id": id,
             "generation": generation,
             "reward": reward,
             "heuristic_reward": heuristic_reward,
             "qa_reward": qa_reward,
+            "quality_reward": quality_reward,
             "question": question,
             "answers": answers,
             "answer": qa_asmt.answer,
