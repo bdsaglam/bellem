@@ -1,3 +1,4 @@
+import magentic
 import pandas as pd
 import torch
 from dotenv import load_dotenv
@@ -31,6 +32,7 @@ class RewardTracker:
     def __init__(self, model_name: str = "gpt-3.5-turbo"):
         self.records = []
         self.qa_reward_func = make_qa_reward_func(model_name, completion_kwargs=dict(max_tokens=2048))
+        self.quality_assesment_model = magentic.OpenaiChatModel(model_name)
 
     def compute_rewards(self, batch: list[dict]) -> list[float]:
         rewards = []
@@ -52,6 +54,23 @@ class RewardTracker:
     def compute_reward(
         self, *, generation: str, document: str, question: str, answers: list[str], id: str | None = None
     ) -> float:
+        # Heuristic reward
+        heuristic_reward = compute_heuristic_reward(generation)
+        if heuristic_reward < 0.2:
+            return {
+                "id": id,
+                "generation": generation,
+                "reward": heuristic_reward,
+                "heuristic_reward": heuristic_reward,
+                "qa_reward": 0,
+                "quality_reward": 0,
+                "question": question,
+                "answers": answers,
+                "answer": "N/A",
+                "reasoning": "N/A",
+            }
+
+        # QA reward
         triplets_str = self.preprocess_generation(generation)
         qa_asmt = self.qa_reward_func(
             context=triplets_str,
@@ -59,10 +78,15 @@ class RewardTracker:
             answers=answers,
         )
         qa_reward = qa_asmt.reward
-        heuristic_reward = compute_heuristic_reward(generation)
-        quality_asmt = assess_triplets(document, triplets_str)
+
+        # Quality assessment reward
+        with self.quality_assesment_model:
+            quality_asmt = assess_triplets(document, triplets_str)
         quality_reward = quality_asmt.reward
+
+        # Combine rewards
         reward = min(0.3 * quality_reward + 0.5 * qa_reward + 0.2 * heuristic_reward, 1.0)
+
         result = {
             "id": id,
             "generation": generation,
