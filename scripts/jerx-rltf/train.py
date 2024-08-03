@@ -57,7 +57,7 @@ class RewardTracker:
         # Heuristic reward
         heuristic_reward = compute_heuristic_reward(generation)
         if heuristic_reward < 0.2:
-            return {
+            result = {
                 "id": id,
                 "generation": generation,
                 "reward": heuristic_reward,
@@ -69,6 +69,8 @@ class RewardTracker:
                 "answer": "N/A",
                 "reasoning": "N/A",
             }
+            self.records.append(result)
+            return heuristic_reward
 
         # QA reward
         triplets_str = self.preprocess_generation(generation)
