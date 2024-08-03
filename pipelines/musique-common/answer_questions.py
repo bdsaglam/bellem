@@ -90,20 +90,28 @@ def make_query_engine(index: BaseIndex):
     return query_engine
 
 
-def answer_questions(query_engine, example):
+def answer_questions_single_hop(query_engine, example):
+    example['answer'] = query_engine.query(example['question']).response
+    return example
+
+def answer_questions_multi_hop(query_engine, example):
     sub_questions = [item["question"] for item in example["question_decomposition"]]
     hop1_question = sub_questions[0]
     hop1_answer = query_engine.query(hop1_question).response
     example["question_decomposition"][0]["answer"] = hop1_answer
+
     hop2_question = sub_questions[1].replace("#1", hop1_answer)
     hop2_answer = query_engine.query(hop2_question).response
     example["question_decomposition"][1]["answer"] = hop2_answer
+
+    example['answer'] = hop2_answer
     return example
 
 
 def process_example(
     example: dict,
     knowledge_graph_directory: Path,
+    decompose_question: bool,
     out: Path,
     ignore_errors: bool,
     resume: bool,
@@ -130,10 +138,12 @@ def process_example(
             return
         raise exc
 
+    answer_question = answer_questions_multi_hop if decompose_question else answer_questions_single_hop
+
     try:
         query_engine = make_query_engine(index)
         err(f"Answering the question in the sample {example_id}")
-        example_answered = answer_questions(query_engine, example)
+        example_answered = answer_question(query_engine, example)
         with open(example_out_dir / "answer.json", "w") as dst:
             dst.write(json.dumps(example_answered, ensure_ascii=False, indent=2))
     except Exception as exc:
@@ -146,6 +156,7 @@ def process_example(
 def main(
     dataset_file: Path = typer.Option(...),
     knowledge_graph_directory: Path = typer.Option(...),
+    decompose_question: bool = typer.Option(False),
     out: Path = typer.Option(...),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
@@ -161,6 +172,7 @@ def main(
                 process_example,
                 example=example,
                 knowledge_graph_directory=knowledge_graph_directory,
+                decompose_question=decompose_question,
                 out=out,
                 ignore_errors=ignore_errors,
                 resume=resume,
