@@ -4,14 +4,10 @@
 __all__ = ['log', 'SYSTEM_PROMPT', 'Assessment', 'assess_triplets']
 
 # %% ../../../nbs/jerx.reward.llm.ipynb 3
-import os
-
 import magentic
-from openai import BadRequestError, OpenAI
 from pydantic import BaseModel, Field
 
 from ...logging import get_logger
-from ...text.utils import fuzzy_match
 
 log = get_logger(__name__)
 
