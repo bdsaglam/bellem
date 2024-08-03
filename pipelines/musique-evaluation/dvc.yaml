@@ -30,6 +30,7 @@ stages:
       --out data/generated/musique-evaluation/knowledge-graphs/
       --include-non-supporting
       --n-workers 1
+      --resume
     deps:
       - pipelines/musique-common/construct_knowledge_graphs.py
       - data/raw/musique-evaluation/jerx-llm-configs/llama3.json

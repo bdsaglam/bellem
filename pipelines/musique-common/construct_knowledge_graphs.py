@@ -1,4 +1,5 @@
 import json
+import random
 import shutil
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import datetime
@@ -29,7 +30,8 @@ load_dotenv()
 
 set_seed(89)
 
-version = 20240728
+version = 20240803
+
 
 def make_trace_callback_handler(example_dir: Path):
     traces_filepath = example_dir / "traces.jsonl"
@@ -188,6 +190,8 @@ def main(
 
     with open(dataset_file) as f:
         examples = [json.loads(line) for line in f]
+
+    random.shuffle(examples)
 
     if n_workers < 2:
         for example in tqdm(examples):
