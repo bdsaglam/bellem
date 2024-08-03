@@ -13,7 +13,7 @@ from bellek.hf.transformers.generation import preprocess_generation_params
 from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
 from bellek.hf.transformers.utils import prepare_model_kwargs
 from bellek.jerx.reward.heuristic import compute_heuristic_reward
-from bellek.jerx.reward.llm import assess_triplets
+from bellek.jerx.reward.llm import assess_quality
 from bellek.jerx.reward.qa import make_qa_reward_func
 from bellek.logging import get_logger
 from bellek.ml.experiment import main
@@ -83,7 +83,7 @@ class RewardTracker:
 
         # Quality assessment reward
         with self.quality_assesment_model:
-            quality_asmt = assess_triplets(document, triplets_str)
+            quality_asmt = assess_quality(document, triplets_str)
         quality_reward = quality_asmt.reward
 
         # Combine rewards
