@@ -1,0 +1,16 @@
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":0.0,"run":1,"exact_match":0.58,"f1":0.6742194211}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":0.0,"run":1,"exact_match":0.59,"f1":0.7086811816}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":0.1,"run":1,"exact_match":0.58,"f1":0.6840289449}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":0.1,"run":1,"exact_match":0.62,"f1":0.7233478482}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":0.3,"run":1,"exact_match":0.56,"f1":0.6769910939}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":0.3,"run":1,"exact_match":0.63,"f1":0.7329337068}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":0.5,"run":1,"exact_match":0.54,"f1":0.6589593478}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":0.5,"run":1,"exact_match":0.59,"f1":0.7163625731}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":0.7,"run":1,"exact_match":0.53,"f1":0.6506003735}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":0.7,"run":1,"exact_match":0.62,"f1":0.7178716578}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":1.0,"run":1,"exact_match":0.58,"f1":0.670076564}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":1.0,"run":1,"exact_match":0.61,"f1":0.7176811816}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":1.5,"run":1,"exact_match":0.53,"f1":0.6512796093}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":1.5,"run":1,"exact_match":0.56,"f1":0.6821718021}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","temperature":2.0,"run":1,"exact_match":0.4,"f1":0.5006299811}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","temperature":2.0,"run":1,"exact_match":0.23,"f1":0.3077865468}
