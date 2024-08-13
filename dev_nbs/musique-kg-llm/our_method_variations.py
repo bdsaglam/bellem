@@ -7,12 +7,14 @@ from functools import partial
 from pathlib import Path
 
 import bm25s
+from tenacity import retry, stop_after_attempt, wait_random_exponential
 import pandas as pd
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from tqdm.auto import tqdm
 
 from bellek.musique.constants import ABLATION_RECORD_IDS
+from bellek.musique.singlehop import benchmark as benchmark_single
 from bellek.musique.multihop import benchmark as benchmark_multi
 from bellek.qa.ablation import answer_question_cte, answer_question_standard
 from bellek.utils import set_seed
@@ -30,11 +32,14 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 suffix = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
 
 N_RUNS = 1
-SAMPLE_SIZE = 1
+SAMPLE_SIZE = 100
 
 
 df = pd.read_json("../../data/generated/musique-evaluation/dataset.jsonl", orient="records", lines=True)
 df = df.set_index("id", drop=False).loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)
+
+if SAMPLE_SIZE < len(ABLATION_RECORD_IDS):
+    df = df.head(SAMPLE_SIZE)
 
 
 qd_df = pd.read_json(
@@ -57,6 +62,7 @@ def extract_triplets(example: dict):
 
 
 df = df.apply(extract_triplets, axis=1)
+
 
 # Retrieval functions
 
@@ -88,13 +94,15 @@ def perfect_retrieval(docs: list[dict], query: str, top_k: int):
 
 results = []
 
-# Hyperparamaters
+# Parameters
+qa_retry_deco = retry(stop=stop_after_attempt(3), wait=wait_random_exponential(multiplier=1, max=30))
 llm = magentic.OpenaiChatModel("gpt-3.5-turbo", temperature=0.1)
 
-# qdecomp_params = [(False, benchmark_single), (True, benchmark_multi)]
-qdecomp_params = [(True, benchmark_multi)]
+# Hyperparamaters
+qdecomp_params = [(False, benchmark_single), (True, benchmark_multi)]
 
 # ## Only paragraphs
+print("Running QA experiments with only paragraphs")
 
 with llm:
     for run in range(1, N_RUNS + 1):
@@ -107,7 +115,9 @@ with llm:
                     ("perfect", perfect_retrieval, [2]),
                 ]:
                     for top_k in top_ks:
-                        _, scores = benchmark(df, qa_func, partial(retriever, top_k=top_k), ignore_errors=True)
+                        _, scores = benchmark(
+                            df, qa_retry_deco(qa_func), partial(retriever, top_k=top_k), ignore_errors=False
+                        )
                         results.append(
                             {
                                 **scores,
@@ -120,10 +130,13 @@ with llm:
                             }
                         )
 
+print("Saving QA experiment results with only paragraphs")
 with open(f"./our-method-results-{suffix}-1.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
 
 # ## Paragraphs + Triplets
+
+print("Running QA experiments with paragraphs+triplets")
 
 
 def enhance_paragraphs_with_triplets(row):
@@ -152,7 +165,10 @@ with llm:
                 ]:
                     for top_k in top_ks:
                         _, scores = benchmark(
-                            df_paragraph_triplets, qa_func, partial(retriever, top_k=top_k), ignore_errors=True
+                            df_paragraph_triplets,
+                            qa_retry_deco(qa_func),
+                            partial(retriever, top_k=top_k),
+                            ignore_errors=False,
                         )
                         results.append(
                             {
@@ -166,10 +182,13 @@ with llm:
                             }
                         )
 
+print("Saving QA experiment results with paragraphs+triplets")
 with open(f"./our-method-results-{suffix}-2.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
 
 # ## Only triplets
+
+print("Running QA experiments with only triplets")
 
 
 def replace_paragraphs_with_triplets(row):
@@ -187,7 +206,6 @@ def replace_paragraphs_with_triplets(row):
 
 df_only_triplets = df.apply(replace_paragraphs_with_triplets, axis=1)
 
-
 with llm:
     for run in range(1, N_RUNS + 1):
         for qdecomp, benchmark in qdecomp_params:
@@ -202,9 +220,9 @@ with llm:
                         top_k_effective = top_k * 7
                         _, scores = benchmark(
                             df_only_triplets,
-                            qa_func,
+                            qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k_effective),
-                            ignore_errors=True,
+                            ignore_errors=False,
                         )
                         results.append(
                             {
@@ -218,6 +236,7 @@ with llm:
                             }
                         )
 
+print("Saving QA experiment results with only triplets")
 with open(f"./our-method-results-{suffix}-3.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
 
