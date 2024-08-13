@@ -116,7 +116,10 @@ with llm:
                 ]:
                     for top_k in top_ks:
                         _, scores = benchmark(
-                            df, qa_retry_deco(qa_func), partial(retriever, top_k=top_k), ignore_errors=False
+                            df,
+                            qa_retry_deco(qa_func),
+                            partial(retriever, top_k=top_k),
+                            ignore_errors=True,
                         )
                         results.append(
                             {
@@ -168,7 +171,7 @@ with llm:
                             df_paragraph_triplets,
                             qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k),
-                            ignore_errors=False,
+                            ignore_errors=True,
                         )
                         results.append(
                             {
@@ -222,7 +225,7 @@ with llm:
                             df_only_triplets,
                             qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k_effective),
-                            ignore_errors=False,
+                            ignore_errors=True,
                         )
                         results.append(
                             {
