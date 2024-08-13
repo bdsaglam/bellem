@@ -42,21 +42,27 @@ model_list:
       api_base: https://api.together.xyz/v1
       api_key: os.environ/TOGETHERAI_API_KEY
   
-  - model_name: llama-3-8b-tgi
-    litellm_params:
-        model: openai/meta-llama/Meta-Llama-3-8B-Instruct
-        api_base: http://host.docker.internal:8081/v1
-        api_key: "_"
-  
   - model_name: llama-3-70b-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-70B-Instruct
         api_base: http://host.docker.internal:8080/v1
         api_key: "_"
 
+  - model_name: llama-3-8b-tgi
+    litellm_params:
+        model: openai/meta-llama/Meta-Llama-3-8B-Instruct
+        api_base: http://host.docker.internal:8081/v1
+        api_key: "_"
+  
+  - model_name: llama-3-8b-sft-tgi
+    litellm_params:
+        model: openai/meta-llama/Meta-Llama-3-8B-Instruct
+        api_base: http://host.docker.internal:8082/v1
+        api_key: "_"
+  
 litellm_settings:
   # drop_params: True
   set_verbose: True
-  cache: True
-  cache_params:
-    type: "redis"
+  # cache: True
+  # cache_params:
+  #   type: "redis"
