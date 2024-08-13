@@ -1,4 +1,5 @@
 import json
+import magentic
 import logging
 from copy import deepcopy
 from datetime import datetime
@@ -13,7 +14,6 @@ from tqdm.auto import tqdm
 
 from bellek.musique.constants import ABLATION_RECORD_IDS
 from bellek.musique.multihop import benchmark as benchmark_multi
-from bellek.musique.singlehop import benchmark as benchmark_single
 from bellek.qa.ablation import answer_question_cte, answer_question_standard
 from bellek.utils import set_seed
 
@@ -29,26 +29,24 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 suffix = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
 
-N_RUNS = 3
+N_RUNS = 1
 SAMPLE_SIZE = 1
 
 
 df = pd.read_json("../../data/generated/musique-evaluation/dataset.jsonl", orient="records", lines=True)
-df.set_index("id", inplace=True, drop=False)
-df = df.loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)
-df = df.head(SAMPLE_SIZE)
+df = df.set_index("id", drop=False).loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)
 
 
 qd_df = pd.read_json(
-    "../../data/generated/musique-evaluation/question-decomposition.jsonl", orient="records", lines=True
+    "../../data/generated/musique-evaluation/question-decomposition.jsonl",
+    orient="records",
+    lines=True,
 )
 df = pd.merge(df.drop(columns=["question", "question_decomposition"]), qd_df, on="id", suffixes=("", ""))
 
 
 jerx_file = Path("../../data/raw/musique-evaluation/jerx-inferences/llama3-base.jsonl")
 jerx_df = pd.read_json(jerx_file, lines=True)
-jerx_df.head()
-
 
 jerx_mapping = {(row["id"], row["paragraph_idx"]): row["generation"] for _, row in jerx_df.iterrows()}
 
@@ -59,6 +57,8 @@ def extract_triplets(example: dict):
 
 
 df = df.apply(extract_triplets, axis=1)
+
+# Retrieval functions
 
 
 def bm25_retrieval(docs: list[dict], query: str, top_k: int):
@@ -89,34 +89,36 @@ def perfect_retrieval(docs: list[dict], query: str, top_k: int):
 results = []
 
 # Hyperparamaters
+llm = magentic.OpenaiChatModel("gpt-3.5-turbo", temperature=0.1)
+
 # qdecomp_params = [(False, benchmark_single), (True, benchmark_multi)]
 qdecomp_params = [(True, benchmark_multi)]
 
 # ## Only paragraphs
 
-
-for run in range(1, N_RUNS + 1):
-    for qdecomp, benchmark in qdecomp_params:
-        for qa_technique, qa_func in [("standard", answer_question_standard), ("cte", answer_question_cte)]:
-            for retriever_name, retriever, top_ks in [
-                ("bm25", bm25_retrieval, [3, 5, 10]),
-                ("semantic", semantic_retrieval, [3, 5, 10]),
-                ("dummy", dummy_retrieval, [20]),
-                ("perfect", perfect_retrieval, [2]),
-            ]:
-                for top_k in top_ks:
-                    _, scores = benchmark(df, qa_func, partial(retriever, top_k=top_k), ignore_errors=True)
-                    results.append(
-                        {
-                            **scores,
-                            "retrieval": retriever_name,
-                            "top_k": top_k,
-                            "context": "paragraphs",
-                            "qa": qa_technique,
-                            "qdecomp": qdecomp,
-                            "run": run,
-                        }
-                    )
+with llm:
+    for run in range(1, N_RUNS + 1):
+        for qdecomp, benchmark in qdecomp_params:
+            for qa_technique, qa_func in [("standard", answer_question_standard), ("cte", answer_question_cte)]:
+                for retriever_name, retriever, top_ks in [
+                    ("bm25", bm25_retrieval, [3, 5, 10]),
+                    ("semantic", semantic_retrieval, [3, 5, 10]),
+                    ("dummy", dummy_retrieval, [20]),
+                    ("perfect", perfect_retrieval, [2]),
+                ]:
+                    for top_k in top_ks:
+                        _, scores = benchmark(df, qa_func, partial(retriever, top_k=top_k), ignore_errors=True)
+                        results.append(
+                            {
+                                **scores,
+                                "retrieval": retriever_name,
+                                "top_k": top_k,
+                                "context": "paragraphs",
+                                "qa": qa_technique,
+                                "qdecomp": qdecomp,
+                                "run": run,
+                            }
+                        )
 
 with open(f"./our-method-results-{suffix}-1.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
@@ -124,7 +126,7 @@ with open(f"./our-method-results-{suffix}-1.jsonl", "w") as f:
 # ## Paragraphs + Triplets
 
 
-def enhance_paragraphs(row):
+def enhance_paragraphs_with_triplets(row):
     paragraphs_with_triplets = []
     for p in row["paragraphs"]:
         p = deepcopy(p)
@@ -135,33 +137,34 @@ def enhance_paragraphs(row):
     return row
 
 
-df_paragraph_triplets = df.apply(enhance_paragraphs, axis=1)
+df_paragraph_triplets = df.apply(enhance_paragraphs_with_triplets, axis=1)
 
 
-for run in range(1, N_RUNS + 1):
-    for qdecomp, benchmark in qdecomp_params:
-        for qa_technique, qa_func in [("standard", answer_question_standard)]:
-            for retriever_name, retriever, top_ks in [
-                ("bm25", bm25_retrieval, [3, 5, 10]),
-                ("semantic", semantic_retrieval, [3, 5, 10]),
-                ("dummy", dummy_retrieval, [20]),
-                ("perfect", perfect_retrieval, [2]),
-            ]:
-                for top_k in top_ks:
-                    _, scores = benchmark(
-                        df_paragraph_triplets, qa_func, partial(retriever, top_k=top_k), ignore_errors=True
-                    )
-                    results.append(
-                        {
-                            **scores,
-                            "retrieval": retriever_name,
-                            "top_k": top_k,
-                            "context": "paragraphs+triplets",
-                            "qa": qa_technique,
-                            "qdecomp": qdecomp,
-                            "run": run,
-                        }
-                    )
+with llm:
+    for run in range(1, N_RUNS + 1):
+        for qdecomp, benchmark in qdecomp_params:
+            for qa_technique, qa_func in [("standard", answer_question_standard)]:
+                for retriever_name, retriever, top_ks in [
+                    ("bm25", bm25_retrieval, [3, 5, 10]),
+                    ("semantic", semantic_retrieval, [3, 5, 10]),
+                    ("dummy", dummy_retrieval, [20]),
+                    ("perfect", perfect_retrieval, [2]),
+                ]:
+                    for top_k in top_ks:
+                        _, scores = benchmark(
+                            df_paragraph_triplets, qa_func, partial(retriever, top_k=top_k), ignore_errors=True
+                        )
+                        results.append(
+                            {
+                                **scores,
+                                "retrieval": retriever_name,
+                                "top_k": top_k,
+                                "context": "paragraphs+triplets",
+                                "qa": qa_technique,
+                                "qdecomp": qdecomp,
+                                "run": run,
+                            }
+                        )
 
 with open(f"./our-method-results-{suffix}-2.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
@@ -169,7 +172,7 @@ with open(f"./our-method-results-{suffix}-2.jsonl", "w") as f:
 # ## Only triplets
 
 
-def replace_paragraphs(row):
+def replace_paragraphs_with_triplets(row):
     paragraphs_with_triplets = []
     for p in row["paragraphs"]:
         triplets_str = str(jerx_mapping[(row["id"], p["idx"])])
@@ -182,34 +185,38 @@ def replace_paragraphs(row):
     return row
 
 
-df_only_triplets = df.apply(replace_paragraphs, axis=1)
+df_only_triplets = df.apply(replace_paragraphs_with_triplets, axis=1)
 
 
-for run in range(1, N_RUNS + 1):
-    for qdecomp, benchmark in qdecomp_params:
-        for qa_technique, qa_func in [("standard", answer_question_standard)]:
-            for retriever_name, retriever, top_ks in [
-                ("bm25", bm25_retrieval, [3, 5, 10]),
-                ("semantic", semantic_retrieval, [3, 5, 10]),
-                ("dummy", dummy_retrieval, [20]),
-                ("perfect", perfect_retrieval, [2]),
-            ]:
-                for top_k in top_ks:
-                    top_k_effective = top_k * 7
-                    _, scores = benchmark(
-                        df_only_triplets, qa_func, partial(retriever, top_k=top_k_effective), ignore_errors=True
-                    )
-                    results.append(
-                        {
-                            **scores,
-                            "retrieval": retriever_name,
-                            "top_k": top_k,
-                            "context": "triplets",
-                            "qa": qa_technique,
-                            "qdecomp": qdecomp,
-                            "run": run,
-                        }
-                    )
+with llm:
+    for run in range(1, N_RUNS + 1):
+        for qdecomp, benchmark in qdecomp_params:
+            for qa_technique, qa_func in [("standard", answer_question_standard)]:
+                for retriever_name, retriever, top_ks in [
+                    ("bm25", bm25_retrieval, [3, 5, 10]),
+                    ("semantic", semantic_retrieval, [3, 5, 10]),
+                    ("dummy", dummy_retrieval, [20]),
+                    ("perfect", perfect_retrieval, [2]),
+                ]:
+                    for top_k in top_ks:
+                        top_k_effective = top_k * 7
+                        _, scores = benchmark(
+                            df_only_triplets,
+                            qa_func,
+                            partial(retriever, top_k=top_k_effective),
+                            ignore_errors=True,
+                        )
+                        results.append(
+                            {
+                                **scores,
+                                "retrieval": retriever_name,
+                                "top_k": top_k,
+                                "context": "triplets",
+                                "qa": qa_technique,
+                                "qdecomp": qdecomp,
+                                "run": run,
+                            }
+                        )
 
 with open(f"./our-method-results-{suffix}-3.jsonl", "w") as f:
     f.write(json.dumps(results, indent=2))
