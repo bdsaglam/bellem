@@ -14,7 +14,6 @@ log = get_logger(__name__)
 
 # %% ../../nbs/musique.qa.ipynb 5
 DEFAULT_MODEL = "gpt-3.5-turbo"
-# DEFAULT_MODEL = "gpt-4-turbo"
 DEFAULT_COMPLETION_KWARGS = {"temperature": 0.1}
 
 # %% ../../nbs/musique.qa.ipynb 6
@@ -25,6 +24,13 @@ FEW_SHOT_EXAMPLES = [
         "question": "Who is the current mayor of Havana?",
         "cte_generation": "Triplets: \nGlenhis Hernández | birth place | Havana\nMarta Hernández Romero | serves as | mayor of Havana\n\nAnswer: Marta Hernández Romero",
         "cot_generation": "Reasoning:\n- The context provides that Glenhis Hernández was born in Havana.\n- The context also specifies that the current mayor of Havana is Marta Hernández Romero, who was elected on March 5, 2011.\n- Since there is no information indicating a change in mayoral leadership since that election, it can be inferred that Marta Hernández Romero remains the mayor.\n",
+    },
+    {
+        "id": "2hop__823584_776926",
+        "context": '# Rotst\u00f6ckli\nThe Rotst\u00f6ckli (2,901 m) is a peak of the Urner Alps below the Titlis, on the border between the Swiss cantons of Obwalden and Nidwalden. It is Nidwalden\'s highest point. The summit is split between the municipalities of Engelberg (Obwalden) and Wolfenschiessen (Nidwalden).\n# Uri Alps\nThe Uri Alps (also known as "Urner Alps", ) are a mountain range in Central Switzerland and part of the Western Alps. They extend into the cantons of Obwalden, Valais, Bern, Uri and Nidwalden and are bordered by the Bernese Alps (Grimsel Pass) and the Emmental Alps to the west (the four lakes: Lungerersee, Sarnersee, Wichelsee, and Alpnachersee), the Schwyzer Alps to the north (Lake Lucerne), the Lepontine Alps to the south (the valley of Urseren with Andermatt) and the Glarus Alps to the east (Reuss).',
+        "question": "What area contains the region that encompasses Rotst\u00f6ckli?",
+        "cte_generation": "Triplets:\nRotst\u00f6ckli | part of | Urner Alps\nUrner Alps | part of | Western Alps\n\nAnswer: Western Alps",
+        "cot_generation": "Reasoning:\n1. The Rotstöckli is described as a peak of the Urner Alps.\n2. The Urner Alps are also known as the Uri Alps.\n3. The Uri Alps are a mountain range in Central Switzerland and part of the Western Alps.\n\nAnswer: Western Alps",
     },
 ]
 
