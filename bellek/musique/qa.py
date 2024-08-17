@@ -3,7 +3,7 @@
 # %% auto 0
 __all__ = ['log', 'DEFAULT_MODEL', 'DEFAULT_COMPLETION_KWARGS', 'FEW_SHOT_EXAMPLES', 'USER_PROMPT', 'EXAMPLE_CONTEXT',
            'EXAMPLE_QUESTION', 'SYSTEM_PROMPT_STANDARD', 'SYSTEM_PROMPT_COT_FS', 'SYSTEM_PROMPT_CTE',
-           'answer_question_standard', 'answer_question_cot_fs', 'answer_question_cte']
+           'answer_question_standard', 'answer_question_cot_fs', 'answer_question_cot', 'answer_question_cte']
 
 # %% ../../nbs/musique.qa.ipynb 4
 import openai
@@ -160,6 +160,16 @@ def answer_question_cot_fs(
         else:
             reasoning += line.replace("Reasoning:", "") + "\n"
     return dict(reasoning=reasoning.strip(), answer=answer, generation=generation)
+
+# %% ../../nbs/musique.qa.ipynb 16
+def answer_question_cot(
+    context: str,
+    question: str,
+    model_name: str = DEFAULT_MODEL,
+    completion_kwargs: dict | None = None,
+    client=None,
+) -> dict:
+    return answer_question_cot_fs(context, question, [], model_name, completion_kwargs, client)
 
 # %% ../../nbs/musique.qa.ipynb 19
 SYSTEM_PROMPT_CTE = """
