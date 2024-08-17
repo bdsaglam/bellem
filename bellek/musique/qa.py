@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['log', 'USER_PROMPT', 'EXAMPLE_CONTEXT', 'EXAMPLE_QUESTION', 'SYSTEM_PROMPT_STANDARD', 'SYSTEM_PROMPT_COT',
-           'SYSTEM_PROMPT_COT_FS', 'EXAMPLE_COT_RESPONSE', 'SYSTEM_PROMPT_CTE', 'EXAMPLE_CTE_RESPONSE',
+           'SYSTEM_PROMPT_COT_FS', 'EXAMPLE_COT_RESPONSE', 'SYSTEM_PROMPT_CTE', 'FEW_SHOT_EXAMPLES_CTE',
            'answer_question_standard', 'answer_question_cot', 'answer_question_cot_fs', 'answer_question_cte']
 
 # %% ../../nbs/musique.qa.ipynb 4
@@ -187,59 +187,77 @@ def answer_question_cot_fs(
     return dict(reasoning=reasoning.strip(), answer=answer, generation=generation)
 
 # %% ../../nbs/musique.qa.ipynb 17
-SYSTEM_PROMPT_CTE = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
+SYSTEM_PROMPT_CTE = """
+You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
 
-Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets. 
+Before answering the question, first, you extract relevant entity-relation-entity triplets from the context. Then, you answer the question based on the triplets.
 
 # Output format
 Triplets: [A list of entity-relation-entity triplets extracted from the context.]
 Answer: [answer in 2-4 words]
-"""
-
-EXAMPLE_CTE_RESPONSE = """
-Triplets: 
-Glenhis Hernández | birth place | Havana
-Marta Hernández Romero | serves as | mayor of Havana
-
-Answer: Marta Hernández Romero
 """.strip()
+
+FEW_SHOT_EXAMPLES_CTE = [
+    {
+        "context": 'Glenhis Hernández (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World\nChampion in middleweight.\n\nThe current mayor of Havana ("President of the People\'s Power Provincial Assembly") is Marta Hernández Romero, she\nwas elected on March 5, 2011.',
+        "question": "Who is the current mayor of Havana?",
+        "generation": "Triplets: \nGlenhis Hernández | birth place | Havana\nMarta Hernández Romero | serves as | mayor of Havana\n\nAnswer: Marta Hernández Romero",
+    },
+    {
+        "context": "# Andrzej Sławiński\nAndrzej Sławiński (born July 31, 1951 in Warsaw) is a Polish economist and Professor of Economics at the Warsaw School of Economics. He is a member of the Council of Monetary Policies since 2004 and a fellow of Collegium Invisibile.\n# Warsaw\nLegislative power in Warsaw is vested in a unicameral Warsaw City Council (Rada Miasta), which comprises 60 members. Council members are elected directly every four years. Like most legislative bodies, the City Council divides itself into committees which have the oversight of various functions of the city government. Bills passed by a simple majority are sent to the mayor (the President of Warsaw), who may sign them into law. If the mayor vetoes a bill, the Council has 30 days to override the veto by a two-thirds majority vote.",
+        "question": "Who in the birthplace of Andrzej Sławiński has the power of legislative action?",
+        "generation": "Triplets:\nAndrzej Sławiński | born in | Warsaw\nWarsaw City Council | legislative power | Warsaw\n\nAnswer: Warsaw City Council",
+    },
+]
 
 def answer_question_cte(
     context: str,
     question: str,
     model_name: str = "gpt-3.5-turbo",
     completion_kwargs: dict | None = None,
-    client = None
+    client=None,
+    examples: list = FEW_SHOT_EXAMPLES_CTE,
 ) -> dict:
-
     if client is None:
         client = openai.Client()
-    
+
     completion_kwargs = completion_kwargs or {}
+    
+    # Prepare the messages
     messages = [
         {
             "role": "system",
             "content": SYSTEM_PROMPT_CTE,
         },
-        {
-            "role": "user",
-            "content": USER_PROMPT.format(context=EXAMPLE_CONTEXT, question=EXAMPLE_QUESTION),
-        },
-        {
-            "role": "assistant",
-            "content": EXAMPLE_CTE_RESPONSE
-        },
+    ]
+    for example in examples:
+        messages.append(
+            {
+                "role": "user",
+                "content": USER_PROMPT.format(context=example["context"], question=example["question"]),
+            }
+        )
+        messages.append(
+            {
+                "role": "assistant",
+                "content": example["generation"],
+            }
+        )
+    messages.append(
         {
             "role": "user",
             "content": USER_PROMPT.format(context=context, question=question),
         },
-    ]
+    )
+    
+    # Generate the response
     chat_completion = client.chat.completions.create(
-            model=model_name,
-            messages=messages,
-            **completion_kwargs,
-        )
+        model=model_name,
+        messages=messages,
+        **completion_kwargs,
+    )
     generation = chat_completion.choices[0].message.content
+    
     # Parse the response
     answer = ""
     triplets = []
