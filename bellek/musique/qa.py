@@ -69,9 +69,10 @@ def answer_question_standard(
             **completion_kwargs,
         )
     generation = chat_completion.choices[0].message.content
-    if "Answer:" not in generation:
+    parts = generation.split("Answer:")
+    if len(parts) < 2:
         return dict(answer="", generation=generation)
-    answer = generation.split("Answer: ")[1].strip()
+    answer = parts[1].strip()
     return dict(answer=answer, generation=generation)
 
 # %% ../../nbs/musique.qa.ipynb 12
