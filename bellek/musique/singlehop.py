@@ -42,14 +42,15 @@ class BaselineSingleHop:
         docs = self.retrieval_func(docs, query)
         context = "\n".join(doc['text'] for doc in docs)
         result = self.qa_func(context=context, question=question)
+        answer = result.get("answer")
         hop = {
             "question": question,
             "query" : query,
             "context": context,
-            "answer": result.answer,
+            "answer": answer,
             "llm_output": result,
         }
-        return {'answer': result.answer, 'hops': [hop]}
+        return {'answer': answer, 'hops': [hop]}
 
     def __call__(self, example, ignore_errors: bool = False) -> dict:
         try:

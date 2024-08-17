@@ -44,36 +44,38 @@ class BaselineMultiHop:
         docs1 = self.retrieval_func(docs, query1)
         context1 = "\n".join(doc['text'] for doc in docs1)
         result1 = self.qa_func(context=context1, question=question1)
+        answer1 = result1.get("answer")
         hop1 = {
             "question": question1,
             "query" : query1,
             "context": context1,
-            "answer": result1.answer,
+            "answer": answer1,
             "llm_output": result1,
         }
 
         # Second question
-        if result1.answer == "N/A":
+        if answer1.strip() == "N/A":
             return {
                 "answer": "N/A",
                 "hops": [hop1],
             }
 
         question2 = example["question_decomposition"][1]["question"]
-        question2 = question2.replace("#1", result1.answer)
+        question2 = question2.replace("#1", answer1)
         query2 = question2
         docs2 = self.retrieval_func(docs, query2)
         context2 = "\n".join(doc['text'] for doc in docs2)
         result2 = self.qa_func(context=context2, question=question2)
+        answer2 = result2.get("answer")
         hop2 = {
             "question": question2,
             "query": query2,
             "context": context2,
-            "answer": result2.answer,
+            "answer": answer2,
             "llm_output": result2,
         }
 
-        return {'answer': result2.answer, 'hops': [hop1, hop2]}
+        return {'answer': answer2, 'hops': [hop1, hop2]}
 
     def __call__(self, example, ignore_errors: bool = False) -> dict:
         try:
