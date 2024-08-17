@@ -6,9 +6,7 @@ __all__ = ['log', 'USER_PROMPT', 'EXAMPLE_CONTEXT', 'EXAMPLE_QUESTION', 'SYSTEM_
            'answer_question_standard', 'answer_question_cot', 'answer_question_cot_fs', 'answer_question_cte']
 
 # %% ../../nbs/musique.qa.ipynb 4
-import magentic
 import openai
-from pydantic import BaseModel, Field
 
 from ..logging import get_logger
 
