@@ -16,13 +16,14 @@ from tqdm.auto import tqdm
 from bellek.musique.constants import ABLATION_RECORD_IDS
 from bellek.musique.singlehop import benchmark as benchmark_single
 from bellek.musique.multihop import benchmark as benchmark_multi
-from bellek.qa.ablation import answer_question_cte, answer_question_standard
+from bellek.musique.qa import answer_question_cte, answer_question_standard
 from bellek.utils import set_seed
 
 load_dotenv()
 
 tqdm.pandas()
 pd.options.display.float_format = "{:,.3f}".format
+
 set_seed(89)
 
 logging.getLogger("bm25s").setLevel(logging.ERROR)
@@ -30,16 +31,14 @@ logging.getLogger("bm25s").setLevel(logging.ERROR)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 suffix = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
+RESULTS_FILE = Path(f"./our-method-results-{suffix}.jsonl")
+REPORT_FILE = Path(f"./our-method-report-{suffix}.jsonl")
 
 N_RUNS = 1
-SAMPLE_SIZE = 100
-
 
 df = pd.read_json("../../data/generated/musique-evaluation/dataset.jsonl", orient="records", lines=True)
 df = df.set_index("id", drop=False).loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)
-
-if SAMPLE_SIZE < len(ABLATION_RECORD_IDS):
-    df = df.head(SAMPLE_SIZE)
+# df = df.head(1)
 
 
 qd_df = pd.read_json(
@@ -119,23 +118,20 @@ with llm:
                             df,
                             qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k),
-                            ignore_errors=True,
                         )
                         results.append(
                             {
                                 **scores,
+                                "qdecomp": qdecomp,
+                                "context": "paragraphs",
                                 "retrieval": retriever_name,
                                 "top_k": top_k,
-                                "context": "paragraphs",
                                 "qa": qa_technique,
-                                "qdecomp": qdecomp,
                                 "run": run,
                             }
                         )
-
-print("Saving QA experiment results with only paragraphs")
-with open(f"./our-method-results-{suffix}-1.jsonl", "w") as f:
-    f.write(json.dumps(results, indent=2))
+                        with open(RESULTS_FILE, "a") as f:
+                            f.write(json.dumps(results[-1]) + "\n")
 
 # ## Paragraphs + Triplets
 
@@ -171,23 +167,20 @@ with llm:
                             df_paragraph_triplets,
                             qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k),
-                            ignore_errors=True,
                         )
                         results.append(
                             {
                                 **scores,
+                                "qdecomp": qdecomp,
+                                "context": "paragraphs+triplets",
                                 "retrieval": retriever_name,
                                 "top_k": top_k,
-                                "context": "paragraphs+triplets",
                                 "qa": qa_technique,
-                                "qdecomp": qdecomp,
                                 "run": run,
                             }
                         )
-
-print("Saving QA experiment results with paragraphs+triplets")
-with open(f"./our-method-results-{suffix}-2.jsonl", "w") as f:
-    f.write(json.dumps(results, indent=2))
+                        with open(RESULTS_FILE, "a") as f:
+                            f.write(json.dumps(results[-1]) + "\n")
 
 # ## Only triplets
 
@@ -225,27 +218,24 @@ with llm:
                             df_only_triplets,
                             qa_retry_deco(qa_func),
                             partial(retriever, top_k=top_k_effective),
-                            ignore_errors=True,
                         )
                         results.append(
                             {
                                 **scores,
+                                "qdecomp": qdecomp,
+                                "context": "triplets",
                                 "retrieval": retriever_name,
                                 "top_k": top_k,
-                                "context": "triplets",
                                 "qa": qa_technique,
-                                "qdecomp": qdecomp,
                                 "run": run,
                             }
                         )
-
-print("Saving QA experiment results with only triplets")
-with open(f"./our-method-results-{suffix}-3.jsonl", "w") as f:
-    f.write(json.dumps(results, indent=2))
+                        with open(RESULTS_FILE, "a") as f:
+                            f.write(json.dumps(results[-1]) + "\n")
 
 # # Report
 report_df = pd.DataFrame.from_records(
     results,
     columns=["qdecomp", "context", "retrieval", "top_k", "qa", "run", "exact_match", "f1"],
 )
-report_df.to_json(f"./our-method-report-{suffix}.jsonl", orient="records", lines=True)
+report_df.to_json(REPORT_FILE, orient="records", lines=True)

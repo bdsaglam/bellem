@@ -1,0 +1,4 @@
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","run":1,"exact_match":0.51,"f1":0.6201684982}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-zs","run":1,"exact_match":0.49,"f1":0.6163015873}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-fs","run":1,"exact_match":0.53,"f1":0.6529297092}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","run":1,"exact_match":0.52,"f1":0.6502161172}

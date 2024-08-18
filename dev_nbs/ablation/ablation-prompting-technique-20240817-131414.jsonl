@@ -1,0 +1,12 @@
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","run":1,"exact_match":0.49,"f1":0.5744848485}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","run":2,"exact_match":0.5,"f1":0.6188658009}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"standard","run":3,"exact_match":0.5,"f1":0.6291385281}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-zs","run":1,"exact_match":0.55,"f1":0.6851565934}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-zs","run":2,"exact_match":0.51,"f1":0.6381868132}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-zs","run":3,"exact_match":0.57,"f1":0.6812796093}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-fs","run":1,"exact_match":0.51,"f1":0.6274703075}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-fs","run":2,"exact_match":0.48,"f1":0.6303113553}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cot-fs","run":3,"exact_match":0.52,"f1":0.6520530581}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","run":1,"exact_match":0.48,"f1":0.5981269841}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","run":2,"exact_match":0.58,"f1":0.6843982684}
+{"context":"paragraphs","retrieval":"groundtruth","qa":"cte","run":3,"exact_match":0.53,"f1":0.6653809524}

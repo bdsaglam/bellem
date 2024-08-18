@@ -1,0 +1,14 @@
+[
+  {
+    "id": "2hop__16777_419765",
+    "context": "# Coningsby Disraeli\nBorn in Kensington, London, Disraeli was the son of Ralph Disraeli (1809\u20131898, the younger son of the writer Isaac D'Israeli). He was educated at Charterhouse School and New College, Oxford. The Prime Minister Benjamin Disraeli was his uncle. He inherited the Hughenden Manor estate acquired by his uncle on his father's death in 1898.\n# Queen Victoria\nPalmerston died in 1865, and after a brief ministry led by Russell, Derby returned to power. In 1866, Victoria attended the State Opening of Parliament for the first time since Albert's death. The following year she supported the passing of the Reform Act 1867 which doubled the electorate by extending the franchise to many urban working men, though she was not in favour of votes for women. Derby resigned in 1868, to be replaced by Benjamin Disraeli, who charmed Victoria. \"Everyone likes flattery,\" he said, \"and when you come to royalty you should lay it on with a trowel.\" With the phrase \"we authors, Ma'am\", he complimented her. Disraeli's ministry only lasted a matter of months, and at the end of the year his Liberal rival, William Ewart Gladstone, was appointed prime minister. Victoria found Gladstone's demeanour far less appealing; he spoke to her, she is thought to have complained, as though she were \"a public meeting rather than a woman\".",
+    "question": "Who was the father of the person who replaced Derby when he resigned in 1868?",
+    "cte_generation": "Triplets:\nBenjamin Disraeli | replaced | Derby\nRalph Disraeli | is father of | Coningsby Disraeli\nIsaac D'Israeli | is grandfather of | Coningsby Disraeli\n\nAnswer: Isaac D'Israeli"
+  },
+  {
+    "id": "2hop__823584_776926",
+    "context": "# Rotst\u00f6ckli\nThe Rotst\u00f6ckli (2,901 m) is a peak of the Urner Alps below the Titlis, on the border between the Swiss cantons of Obwalden and Nidwalden. It is Nidwalden's highest point. The summit is split between the municipalities of Engelberg (Obwalden) and Wolfenschiessen (Nidwalden).\n# Uri Alps\nThe Uri Alps (also known as \"Urner Alps\", ) are a mountain range in Central Switzerland and part of the Western Alps. They extend into the cantons of Obwalden, Valais, Bern, Uri and Nidwalden and are bordered by the Bernese Alps (Grimsel Pass) and the Emmental Alps to the west (the four lakes: Lungerersee, Sarnersee, Wichelsee, and Alpnachersee), the Schwyzer Alps to the north (Lake Lucerne), the Lepontine Alps to the south (the valley of Urseren with Andermatt) and the Glarus Alps to the east (Reuss).",
+    "question": "What area contains the region that encompasses Rotst\u00f6ckli?",
+    "cte_generation": "Triplets:\nRotst\u00f6ckli | part of | Urner Alps\nUrner Alps | part of | Western Alps\n\nAnswer: Western Alps"
+  }
+]
