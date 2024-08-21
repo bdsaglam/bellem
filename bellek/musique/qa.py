@@ -24,7 +24,7 @@ FEW_SHOT_EXAMPLES = [
         "question": "Who is the current mayor of the city Glenhis Hern\u00e1ndez was born?",
         "answers": ["Marta Hern\u00e1ndez Romero"],
         "cte_generation": "Triplets: \nGlenhis Hern\u00e1ndez | birth place | Havana\nMarta Hern\u00e1ndez Romero | serves as | mayor of Havana\n\nAnswer: Marta Hern\u00e1ndez Romero",
-        "cot_generation": "1. Glenhis Hernández was born in Havana, as mentioned in the context.\n2. The current mayor of Havana mentioned in the context is Marta Hernández Romero.\n3. Therefore, the current mayor of the city where Glenhis Hernández was born is Marta Hernández Romero.\nMarta Hernández Romero",
+        "cot_generation": "Reasoning:\n1. Glenhis Hernández was born in Havana, as mentioned in the context.\n2. The current mayor of Havana mentioned in the context is Marta Hernández Romero.\n3. Therefore, the current mayor of the city where Glenhis Hernández was born is Marta Hernández Romero.\n\nAnswer: Marta Hernández Romero",
     },
     {
         "id": "2hop__823584_776926",
