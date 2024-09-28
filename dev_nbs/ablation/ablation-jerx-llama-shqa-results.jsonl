@@ -1,0 +1,3 @@
+{"exact_match": 0.55, "f1": 0.646136752136752, "fuzzy_match": 0.69, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 1}
+{"exact_match": 0.55, "f1": 0.6383993783993783, "fuzzy_match": 0.68, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 2}
+{"exact_match": 0.57, "f1": 0.6543993783993785, "fuzzy_match": 0.68, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 3}

@@ -1,0 +1,16 @@
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":0.0,"Run":1,"exact_match":0.53,"f1":0.6388658009}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":0.0,"Run":1,"exact_match":0.56,"f1":0.6945411255}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":0.1,"Run":1,"exact_match":0.54,"f1":0.6591991342}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":0.1,"Run":1,"exact_match":0.57,"f1":0.6977316017}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":0.3,"Run":1,"exact_match":0.52,"f1":0.6334848485}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":0.3,"Run":1,"exact_match":0.55,"f1":0.6757633478}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":0.5,"Run":1,"exact_match":0.51,"f1":0.6291991342}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":0.5,"Run":1,"exact_match":0.58,"f1":0.6911601732}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":0.7,"Run":1,"exact_match":0.48,"f1":0.5948658009}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":0.7,"Run":1,"exact_match":0.58,"f1":0.7044412254}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":1.0,"Run":1,"exact_match":0.45,"f1":0.5571245421}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":1.0,"Run":1,"exact_match":0.52,"f1":0.6663823954}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":1.5,"Run":1,"exact_match":0.48,"f1":0.5873200133}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":1.5,"Run":1,"exact_match":0.56,"f1":0.6836507937}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"Standard","Temperature":2.0,"Run":1,"exact_match":0.37,"f1":0.4695718592}
+{"Context":"paragraphs","Retrieval":"Perfect","Prompting":"CTE","Temperature":2.0,"Run":1,"exact_match":0.1,"f1":0.1496531987}

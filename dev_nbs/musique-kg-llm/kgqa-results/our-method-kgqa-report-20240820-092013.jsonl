@@ -1,0 +1,16 @@
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":5,"qa":"Standard","run":1,"exact_match":0.29,"f1":0.3608181818}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":10,"qa":"Standard","run":1,"exact_match":0.34,"f1":0.4376031746}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":15,"qa":"Standard","run":1,"exact_match":0.35,"f1":0.4492698413}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":20,"qa":"Standard","run":1,"exact_match":0.38,"f1":0.4977460317}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":30,"qa":"Standard","run":1,"exact_match":0.39,"f1":0.4847142857}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":40,"qa":"Standard","run":1,"exact_match":0.4,"f1":0.4978888889}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":50,"qa":"Standard","run":1,"exact_match":0.37,"f1":0.4706031746}
+{"qdecomp":true,"context":"Triplets","retrieval":"Sparse","top_k":70,"qa":"Standard","run":1,"exact_match":0.37,"f1":0.4439365079}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":5,"qa":"Standard","run":1,"exact_match":0.37,"f1":0.4505555556}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":10,"qa":"Standard","run":1,"exact_match":0.39,"f1":0.4702626263}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":15,"qa":"Standard","run":1,"exact_match":0.42,"f1":0.4962626263}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":20,"qa":"Standard","run":1,"exact_match":0.43,"f1":0.5158888889}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":30,"qa":"Standard","run":1,"exact_match":0.46,"f1":0.5158888889}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":40,"qa":"Standard","run":1,"exact_match":0.42,"f1":0.5008888889}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":50,"qa":"Standard","run":1,"exact_match":0.44,"f1":0.5227777778}
+{"qdecomp":true,"context":"Triplets","retrieval":"Dense","top_k":70,"qa":"Standard","run":1,"exact_match":0.43,"f1":0.5214444444}

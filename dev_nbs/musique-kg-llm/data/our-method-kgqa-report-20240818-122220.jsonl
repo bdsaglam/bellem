@@ -1,0 +1,12 @@
+{"qdecomp":false,"context":"triplets","retrieval":"Sparse","top_k":3,"qa":"standard","run":1,"exact_match":0.15,"f1":0.2399047619}
+{"qdecomp":false,"context":"triplets","retrieval":"Sparse","top_k":5,"qa":"standard","run":1,"exact_match":0.2,"f1":0.314047619}
+{"qdecomp":false,"context":"triplets","retrieval":"Sparse","top_k":10,"qa":"standard","run":1,"exact_match":0.22,"f1":0.3401269841}
+{"qdecomp":false,"context":"triplets","retrieval":"Dense","top_k":3,"qa":"standard","run":1,"exact_match":0.15,"f1":0.2563333333}
+{"qdecomp":false,"context":"triplets","retrieval":"Dense","top_k":5,"qa":"standard","run":1,"exact_match":0.2,"f1":0.3183809524}
+{"qdecomp":false,"context":"triplets","retrieval":"Dense","top_k":10,"qa":"standard","run":1,"exact_match":0.14,"f1":0.2475714286}
+{"qdecomp":true,"context":"triplets","retrieval":"Sparse","top_k":3,"qa":"standard","run":1,"exact_match":0.2,"f1":0.2723737374}
+{"qdecomp":true,"context":"triplets","retrieval":"Sparse","top_k":5,"qa":"standard","run":1,"exact_match":0.28,"f1":0.3663737374}
+{"qdecomp":true,"context":"triplets","retrieval":"Sparse","top_k":10,"qa":"standard","run":1,"exact_match":0.36,"f1":0.4576031746}
+{"qdecomp":true,"context":"triplets","retrieval":"Dense","top_k":3,"qa":"standard","run":1,"exact_match":0.34,"f1":0.4038888889}
+{"qdecomp":true,"context":"triplets","retrieval":"Dense","top_k":5,"qa":"standard","run":1,"exact_match":0.38,"f1":0.4538888889}
+{"qdecomp":true,"context":"triplets","retrieval":"Dense","top_k":10,"qa":"standard","run":1,"exact_match":0.4,"f1":0.4785959596}

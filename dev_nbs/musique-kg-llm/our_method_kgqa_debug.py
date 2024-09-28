@@ -16,7 +16,7 @@ from tqdm.auto import tqdm
 from bellek.musique.constants import ABLATION_RECORD_IDS
 from bellek.musique.singlehop import benchmark as benchmark_single
 from bellek.musique.multihop import benchmark as benchmark_multi
-from bellek.musique.qa import answer_question_cte, answer_question_standard
+from bellek.musique.qa import answer_question_standard
 from bellek.utils import set_seed
 
 load_dotenv()
@@ -31,14 +31,13 @@ logging.getLogger("bm25s").setLevel(logging.ERROR)
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 suffix = datetime.utcnow().strftime("%Y%m%d-%H%M%S")
-RESULTS_FILE = Path(f"./our-method-results-{suffix}.jsonl")
-REPORT_FILE = Path(f"./our-method-report-{suffix}.jsonl")
+RESULTS_FILE = Path(f"./debug-our-method-kgqa-results-{suffix}.jsonl")
+REPORT_FILE = Path(f"./debug-our-method-kgqa-report-{suffix}.jsonl")
 
-N_RUNS = 1
+N_RUNS = 3
 
 df = pd.read_json("../../data/generated/musique-evaluation/dataset.jsonl", orient="records", lines=True)
 df = df.set_index("id", drop=False).loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)
-# df = df.head(1)
 
 
 qd_df = pd.read_json(
@@ -98,94 +97,25 @@ qa_retry_deco = retry(stop=stop_after_attempt(3), wait=wait_random_exponential(m
 llm = magentic.OpenaiChatModel("gpt-3.5-turbo", temperature=0.1)
 
 # Hyperparamaters
-qdecomp_params = [(False, benchmark_single), (True, benchmark_multi)]
+qdecomp_params = [
+    # (False, benchmark_single),
+    (True, benchmark_multi),
+]
 
-# ## Only paragraphs
-print("Running QA experiments with only paragraphs")
+prompting_params = [
+    ("Standard", answer_question_standard),
+]
 
-with llm:
-    for run in range(1, N_RUNS + 1):
-        for qdecomp, benchmark in qdecomp_params:
-            for qa_technique, qa_func in [("Standard", answer_question_standard), ("CTE", answer_question_cte)]:
-                for retriever_name, retriever, top_ks in [
-                    ("Sparse", bm25_retrieval, [3, 5, 10]),
-                    ("Dense", semantic_retrieval, [3, 5, 10]),
-                    ("Dummy", dummy_retrieval, [20]),
-                    ("Perfect", perfect_retrieval, [2]),
-                ]:
-                    for top_k in top_ks:
-                        _, scores = benchmark(
-                            df,
-                            qa_retry_deco(qa_func),
-                            partial(retriever, top_k=top_k),
-                        )
-                        results.append(
-                            {
-                                **scores,
-                                "qdecomp": qdecomp,
-                                "context": "paragraphs",
-                                "retrieval": retriever_name,
-                                "top_k": top_k,
-                                "qa": qa_technique,
-                                "run": run,
-                            }
-                        )
-                        with open(RESULTS_FILE, "a") as f:
-                            f.write(json.dumps(results[-1]) + "\n")
-
-# ## Paragraphs + Triplets
-
-print("Running QA experiments with paragraphs+triplets")
-
-
-def enhance_paragraphs_with_triplets(row):
-    paragraphs_with_triplets = []
-    for p in row["paragraphs"]:
-        p = deepcopy(p)
-        triplets_str = str(jerx_mapping[(row["id"], p["idx"])])
-        p["paragraph_text"] = "\n".join([p["paragraph_text"], "# Entity-relation-entity triplets", triplets_str])
-        paragraphs_with_triplets.append(p)
-    row["paragraphs"] = paragraphs_with_triplets
-    return row
-
-
-df_paragraph_triplets = df.apply(enhance_paragraphs_with_triplets, axis=1)
-
-
-with llm:
-    for run in range(1, N_RUNS + 1):
-        for qdecomp, benchmark in qdecomp_params:
-            for qa_technique, qa_func in [("standard", answer_question_standard)]:
-                for retriever_name, retriever, top_ks in [
-                    ("Sparse", bm25_retrieval, [3, 5, 10]),
-                    ("Dense", semantic_retrieval, [3, 5, 10]),
-                    ("Dummy", dummy_retrieval, [20]),
-                    ("Perfect", perfect_retrieval, [2]),
-                ]:
-                    for top_k in top_ks:
-                        _, scores = benchmark(
-                            df_paragraph_triplets,
-                            qa_retry_deco(qa_func),
-                            partial(retriever, top_k=top_k),
-                        )
-                        results.append(
-                            {
-                                **scores,
-                                "qdecomp": qdecomp,
-                                "context": "paragraphs+triplets",
-                                "retrieval": retriever_name,
-                                "top_k": top_k,
-                                "qa": qa_technique,
-                                "run": run,
-                            }
-                        )
-                        with open(RESULTS_FILE, "a") as f:
-                            f.write(json.dumps(results[-1]) + "\n")
+retrieval_params = [
+    ("Sparse", bm25_retrieval, [40]),
+    # ("Dense", semantic_retrieval, [5, 10, 15, 20, 30, 40, 50, 70]),
+    # ("Dummy", dummy_retrieval, [0]),
+    # ("Perfect", perfect_retrieval, [0]),
+]
 
 # ## Only triplets
 
 print("Running QA experiments with only triplets")
-
 
 def replace_paragraphs_with_triplets(row):
     paragraphs_with_triplets = []
@@ -202,36 +132,31 @@ def replace_paragraphs_with_triplets(row):
 
 df_only_triplets = df.apply(replace_paragraphs_with_triplets, axis=1)
 
+
 with llm:
     for run in range(1, N_RUNS + 1):
         for qdecomp, benchmark in qdecomp_params:
-            for qa_technique, qa_func in [("standard", answer_question_standard)]:
-                for retriever_name, retriever, top_ks in [
-                    ("Sparse", bm25_retrieval, [3, 5, 10]),
-                    ("Dense", semantic_retrieval, [3, 5, 10]),
-                    ("Dummy", dummy_retrieval, [20]),
-                    ("Perfect", perfect_retrieval, [2]),
-                ]:
+            for qa_technique, qa_func in prompting_params:
+                for retriever_name, retriever, top_ks in retrieval_params:
                     for top_k in top_ks:
-                        top_k_effective = top_k * 7
                         _, scores = benchmark(
                             df_only_triplets,
                             qa_retry_deco(qa_func),
-                            partial(retriever, top_k=top_k_effective),
+                            partial(retriever, top_k=top_k),
                         )
                         results.append(
                             {
                                 **scores,
                                 "qdecomp": qdecomp,
-                                "context": "triplets",
+                                "context": "Triplets",
                                 "retrieval": retriever_name,
                                 "top_k": top_k,
                                 "qa": qa_technique,
                                 "run": run,
                             }
                         )
-                        with open(RESULTS_FILE, "a") as f:
-                            f.write(json.dumps(results[-1]) + "\n")
+                        # with open(RESULTS_FILE, "a") as f:
+                        #     f.write(json.dumps(results[-1]) + "\n")
 
 # # Report
 report_df = pd.DataFrame.from_records(
