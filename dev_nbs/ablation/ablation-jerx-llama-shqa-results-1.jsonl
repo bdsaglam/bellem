@@ -1,0 +1,9 @@
+{"exact_match": 0.55, "f1": 0.622064935064935, "fuzzy_match": 0.64, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-zero-shot", "run": 1}
+{"exact_match": 0.56, "f1": 0.6267619047619047, "fuzzy_match": 0.65, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-zero-shot", "run": 2}
+{"exact_match": 0.53, "f1": 0.5984285714285713, "fuzzy_match": 0.64, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-zero-shot", "run": 3}
+{"exact_match": 0.54, "f1": 0.6359062049062049, "fuzzy_match": 0.67, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-few-shot", "run": 1}
+{"exact_match": 0.56, "f1": 0.6545581085581085, "fuzzy_match": 0.71}
+{"exact_match": 0.51, "f1": 0.6276435786435787, "fuzzy_match": 0.67, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-few-shot", "run": 3}
+{"exact_match": 0.55, "f1": 0.646136752136752, "fuzzy_match": 0.69, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 1}
+{"exact_match": 0.55, "f1": 0.6383993783993783, "fuzzy_match": 0.68, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 2}
+{"exact_match": 0.57, "f1": 0.6543993783993785, "fuzzy_match": 0.68, "retrieval": "groundtruth", "context": "triplets", "jerx": "llama-sft", "run": 3}

@@ -16,7 +16,7 @@ log = get_logger(__name__)
 DEFAULT_MODEL = "gpt-3.5-turbo"
 DEFAULT_COMPLETION_KWARGS = {"temperature": 0.1}
 
-# %% ../../nbs/musique.qa.ipynb 6
+# %% ../../nbs/musique.qa.ipynb 7
 FEW_SHOT_EXAMPLES = [
     {
         "id": "2hop__784447_126070",
@@ -35,7 +35,7 @@ FEW_SHOT_EXAMPLES = [
     },
 ]
 
-# %% ../../nbs/musique.qa.ipynb 8
+# %% ../../nbs/musique.qa.ipynb 9
 USER_PROMPT = """The context information is provided below.
 ---------------------
 {context}
@@ -44,7 +44,7 @@ Given the context information and not prior knowledge, answer the question.
 {question}
 """
 
-# %% ../../nbs/musique.qa.ipynb 10
+# %% ../../nbs/musique.qa.ipynb 11
 SYSTEM_PROMPT_STANDARD = """
 You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. 
 
@@ -89,7 +89,7 @@ def answer_question_standard(
     answer = parts[1].strip()
     return dict(answer=answer, generation=generation)
 
-# %% ../../nbs/musique.qa.ipynb 13
+# %% ../../nbs/musique.qa.ipynb 14
 SYSTEM_PROMPT_COT_FS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your response.
 
 # Output format
@@ -150,7 +150,7 @@ def answer_question_cot_fs(
             reasoning += line.replace("Reasoning:", "") + "\n"
     return dict(reasoning=reasoning.strip(), answer=answer, generation=generation)
 
-# %% ../../nbs/musique.qa.ipynb 15
+# %% ../../nbs/musique.qa.ipynb 16
 def answer_question_cot(
     context: str,
     question: str,
@@ -160,7 +160,7 @@ def answer_question_cot(
 ) -> dict:
     return answer_question_cot_fs(context, question, [], model_name, completion_kwargs, client)
 
-# %% ../../nbs/musique.qa.ipynb 18
+# %% ../../nbs/musique.qa.ipynb 19
 SYSTEM_PROMPT_CTE = """
 You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
 
