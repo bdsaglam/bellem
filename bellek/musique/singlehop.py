@@ -39,16 +39,17 @@ class BaselineSingleHop:
         docs = list(make_docs(example))
         question = example["question"]
         query = question
-        docs = self.retrieval_func(docs, query)
-        context = "\n".join(doc['text'] for doc in docs)
-        result = self.qa_func(context=context, question=question)
-        answer = result.get("answer")
+        retrieved_docs = self.retrieval_func(docs, query)
+        context = "\n\n".join(doc['text'] for doc in retrieved_docs)
+        qa_result = self.qa_func(context=context, question=question)
+        answer = qa_result.get("answer")
         hop = {
             "question": question,
             "query" : query,
+            "retrieved_docs": retrieved_docs,
             "context": context,
             "answer": answer,
-            "llm_output": result,
+            "qa_result": qa_result,
         }
         return {'answer': answer, 'hops': [hop]}
 

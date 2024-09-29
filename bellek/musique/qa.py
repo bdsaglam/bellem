@@ -3,9 +3,10 @@
 # %% auto 0
 __all__ = ['log', 'DEFAULT_MODEL', 'DEFAULT_COMPLETION_KWARGS', 'FEW_SHOT_EXAMPLES', 'USER_PROMPT', 'SYSTEM_PROMPT_STANDARD',
            'SYSTEM_PROMPT_COT_FS', 'SYSTEM_PROMPT_CTE', 'answer_question_standard', 'answer_question_cot_fs',
-           'answer_question_cot', 'answer_question_cte']
+           'answer_question_cot', 'answer_question_cte', 'load_qa_func']
 
 # %% ../../nbs/musique.qa.ipynb 4
+from typing import Callable
 import openai
 
 from ..logging import get_logger
@@ -229,3 +230,17 @@ def answer_question_cte(
         elif "|" in line:
             triplets.append(line.strip())
     return dict(triplets=triplets, answer=answer, generation=generation)
+
+# %% ../../nbs/musique.qa.ipynb 21
+def load_qa_func(prompt_technique: str) -> Callable:
+    prompt_technique = prompt_technique.lower()
+    if prompt_technique == "standard":
+        return answer_question_standard
+    elif prompt_technique == "cot-zs":
+        return answer_question_cot
+    elif prompt_technique == "cot-fs":
+        return answer_question_cot_fs
+    elif prompt_technique == "cte":
+        return answer_question_cte
+    else:
+        raise ValueError(f"Unknown prompt technique: {prompt_technique}")
