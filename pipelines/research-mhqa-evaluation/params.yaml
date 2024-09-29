@@ -1,4 +1,4 @@
-model: gpt-3.5-turbo
+model: 'gpt-3.5-turbo'
 temperature: 0.1
-prompt: standard
-run: 1
+prompt: 'standard'
+run: '1'
