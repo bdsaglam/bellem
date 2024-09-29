@@ -2,8 +2,8 @@ schema: '2.0'
 stages:
   answer-questions:
     cmd: python answer_questions.py --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
-      --out ../../data/generated/research-mhqa-evaluation/qa-results/ --prompt cte
-      --model gpt-3.5-turbo --temperature 0.1
+      --out ../../data/generated/research-mhqa-evaluation/qa-results/ --prompt standard
+      --model llama3-70b-togetherai --temperature 0.1
     deps:
     - path: ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
@@ -15,15 +15,15 @@ stages:
       size: 2788
     params:
       params.yaml:
-        model: gpt-3.5-turbo
-        prompt: cte
+        model: llama3-70b-togetherai
+        prompt: standard
         run: 3
         temperature: 0.1
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 5cc9025a5ba7d21392d9b837c0a8741f.dir
-      size: 256239
+      md5: 0e681401268bfa2722b925e6faab6475.dir
+      size: 232473
       nfiles: 101
   evaluate-answers:
     cmd: python evaluate_answers.py --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
@@ -31,8 +31,8 @@ stages:
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 5cc9025a5ba7d21392d9b837c0a8741f.dir
-      size: 256239
+      md5: 0e681401268bfa2722b925e6faab6475.dir
+      size: 232473
       nfiles: 101
     - path: ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
@@ -45,8 +45,8 @@ stages:
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: d946b9f2f4074be4b0e555ef27190c7a.dir
-      size: 16732
+      md5: 8e9e16240f6bd2ca178321979fbdd7dc.dir
+      size: 16592
       nfiles: 101
   report:
     cmd: python report.py --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
@@ -55,13 +55,13 @@ stages:
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: d946b9f2f4074be4b0e555ef27190c7a.dir
-      size: 16732
+      md5: 8e9e16240f6bd2ca178321979fbdd7dc.dir
+      size: 16592
       nfiles: 101
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 5cc9025a5ba7d21392d9b837c0a8741f.dir
-      size: 256239
+      md5: 0e681401268bfa2722b925e6faab6475.dir
+      size: 232473
       nfiles: 101
     - path: ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
@@ -74,9 +74,9 @@ stages:
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
       hash: md5
-      md5: 09b5be9fa60d0889e73786b4158827f5
-      size: 1084584
+      md5: 3d693676c89bca8b2ef1f5310bf84b6d
+      size: 1064432
     - path: ../../data/generated/research-mhqa-evaluation/reports/scores.json
       hash: md5
-      md5: 5d1cab8c2bdd1f79718a50af72235abc
-      size: 75
+      md5: d2494ff81ea1f77201fbcc30ef4f5fe7
+      size: 76
