@@ -83,10 +83,10 @@ def main(
         )
 
     df = pd.DataFrame(processed_examples)
-    aggregated_scores = df[["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean()
+    scores = df[["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean()
 
-    with open(out / "aggregated_scores.json", "w") as f:
-        f.write(json.dumps(aggregated_scores.to_dict(), ensure_ascii=False, indent=2))
+    with open(out / "scores.json", "w") as f:
+        f.write(json.dumps(scores.to_dict(), ensure_ascii=False, indent=2))
 
     df.to_json(out / "results.jsonl", orient="records", lines=True)
 

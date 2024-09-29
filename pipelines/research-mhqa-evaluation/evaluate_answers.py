@@ -36,7 +36,6 @@ def process_example(
 
     predicted_answer = qa_result.get("answer")
     reference_answers = example["answers"]
-    print((predicted_answer, reference_answers))
     scores = compute_scores(predicted_answer, reference_answers)
     result = {
         "predicted_answer": predicted_answer,

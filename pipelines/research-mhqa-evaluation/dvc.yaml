@@ -5,7 +5,6 @@ stages:
       python pipelines/research-mhqa-evaluation/answer_questions.py
       --dataset-file data/raw/research-mhqa-evaluation/dataset.jsonl
       --out data/generated/research-mhqa-evaluation/qa-results/
-      --subset 10
     deps:
       - pipelines/musique-common/answer_questions.py
       - data/raw/research-mhqa-evaluation/dataset.jsonl

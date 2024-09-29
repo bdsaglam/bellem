@@ -3,12 +3,11 @@ stages:
   answer-questions:
     cmd: python pipelines/research-mhqa-evaluation/answer_questions.py --dataset-file
       data/raw/research-mhqa-evaluation/dataset.jsonl --out data/generated/research-mhqa-evaluation/qa-results/
-      --subset 10
     deps:
     - path: data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
-      md5: a2f049d70d39f2fb3758df65fb316c83
-      size: 14982567
+      md5: ec388e26652fca9fedf55f0dcd5c5727
+      size: 843919
     - path: pipelines/musique-common/answer_questions.py
       hash: md5
       md5: f9bc1c1f4f3b93a44861b585b1cc5380
@@ -16,9 +15,9 @@ stages:
     outs:
     - path: data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e6b0f0e10946c80bff80c7016fa7e5cd.dir
-      size: 20732
-      nfiles: 11
+      md5: 1a62705ebd2eae324789312bcfb81f87.dir
+      size: 231110
+      nfiles: 101
   evaluate-answers:
     cmd: python pipelines/research-mhqa-evaluation/evaluate_answers.py --dataset-file
       data/raw/research-mhqa-evaluation/dataset.jsonl --qa-dir data/generated/research-mhqa-evaluation/qa-results/
@@ -26,23 +25,23 @@ stages:
     deps:
     - path: data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e6b0f0e10946c80bff80c7016fa7e5cd.dir
-      size: 20732
-      nfiles: 11
+      md5: 1a62705ebd2eae324789312bcfb81f87.dir
+      size: 231110
+      nfiles: 101
     - path: data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
-      md5: a2f049d70d39f2fb3758df65fb316c83
-      size: 14982567
+      md5: ec388e26652fca9fedf55f0dcd5c5727
+      size: 843919
     - path: pipelines/research-mhqa-evaluation/evaluate_answers.py
       hash: md5
-      md5: fbf412b8b92c67b277c1b75a537851a0
-      size: 2174
+      md5: 3858b02e7d68844708392a0f05a28da1
+      size: 2125
     outs:
     - path: data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 4c6ae743510695b75b460d40edf63899.dir
-      size: 1655
-      nfiles: 11
+      md5: 2f6bded91f8c199ea269926590e59f0d.dir
+      size: 16246
+      nfiles: 101
   report:
     cmd: python pipelines/research-mhqa-evaluation/report.py --dataset-file data/raw/research-mhqa-evaluation/dataset.jsonl
       --qa-dir data/generated/research-mhqa-evaluation/qa-results/ --evals-dir data/generated/research-mhqa-evaluation/evals/
@@ -50,25 +49,25 @@ stages:
     deps:
     - path: data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 4c6ae743510695b75b460d40edf63899.dir
-      size: 1655
-      nfiles: 11
+      md5: 2f6bded91f8c199ea269926590e59f0d.dir
+      size: 16246
+      nfiles: 101
     - path: data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e6b0f0e10946c80bff80c7016fa7e5cd.dir
-      size: 20732
-      nfiles: 11
+      md5: 1a62705ebd2eae324789312bcfb81f87.dir
+      size: 231110
+      nfiles: 101
     - path: data/raw/research-mhqa-evaluation/dataset.jsonl
       hash: md5
-      md5: a2f049d70d39f2fb3758df65fb316c83
-      size: 14982567
+      md5: ec388e26652fca9fedf55f0dcd5c5727
+      size: 843919
     - path: pipelines/research-mhqa-evaluation/report.py
       hash: md5
-      md5: 3ae52fa1fbb6564c5419883e864d5090
-      size: 2578
+      md5: 39612329a0819eab5fff4a4220d4e067
+      size: 2545
     outs:
     - path: data/generated/research-mhqa-evaluation/reports/
       hash: md5
-      md5: f27fbe252ff0dd907dd9399c1f0eacb4.dir
-      size: 83563
+      md5: cc5c9a866304d76817104388f97ba168.dir
+      size: 1062761
       nfiles: 3
