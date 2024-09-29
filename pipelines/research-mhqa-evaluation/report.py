@@ -7,7 +7,6 @@ import pandas as pd
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
-from tqdm import tqdm
 
 from bellek.utils import set_seed
 
