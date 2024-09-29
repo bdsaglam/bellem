@@ -88,7 +88,7 @@ def main(
     with open(out / "aggregated_scores.json", "w") as f:
         f.write(json.dumps(aggregated_scores.to_dict(), ensure_ascii=False, indent=2))
 
-    df.to_json(out / "report.jsonl", orient="records", lines=True)
+    df.to_json(out / "results.jsonl", orient="records", lines=True)
 
     with open(out / "timestamp.txt", "w") as f:
         f.write(datetime.now().isoformat())
