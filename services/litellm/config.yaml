@@ -1,29 +1,4 @@
 model_list:
-  - model_name: text-embedding-3-large
-    litellm_params:
-      model: text-embedding-3-large
-      api_key: os.environ/OPENAI_API_KEY
-  
-  - model_name: gpt-3.5-turbo
-    litellm_params:
-      model: gpt-3.5-turbo-0125
-      api_key: os.environ/OPENAI_API_KEY
-  
-  - model_name: gpt-4o-mini
-    litellm_params:
-      model: gpt-4o-mini
-      api_key: os.environ/OPENAI_API_KEY
-  
-  - model_name: gpt-4-turbo
-    litellm_params:
-      model: gpt-4-turbo
-      api_key: os.environ/OPENAI_API_KEY
-  
-  - model_name: gpt-4o
-    litellm_params:
-      model: gpt-4o
-      api_key: os.environ/OPENAI_API_KEY
-  
   - model_name: llama3-70b-groq
     litellm_params:
       model: groq/llama3-70b-8192
@@ -60,8 +35,17 @@ model_list:
         api_base: http://host.docker.internal:8082/v1
         api_key: "_"
   
+  - model_name: '*'
+    litellm_params:
+      model: openai/*
+      api_key: os.environ/OPENAI_API_KEY
+  
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+
 litellm_settings:
-  # drop_params: True
+  drop_params: True
   set_verbose: True
   # cache: True
   # cache_params:
