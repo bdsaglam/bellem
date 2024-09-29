@@ -1,4 +1,4 @@
-model: llama3-70b-togetherai
+model: "llama3-70b-togetherai"
 temperature: 0.1
-prompt: standard
-run: 3
+prompt: "cte"
+run: "3"
