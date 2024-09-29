@@ -1,42 +1,49 @@
 stages:
   answer-questions:
-    wdir: ../..
     cmd: >-
-      python pipelines/research-mhqa-evaluation/answer_questions.py
-      --dataset-file data/raw/research-mhqa-evaluation/dataset.jsonl
-      --out data/generated/research-mhqa-evaluation/qa-results/
+      python answer_questions.py
+      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --prompt ${prompt}
+      --model ${model}
+      --temperature ${temperature}
     deps:
-      - pipelines/musique-common/answer_questions.py
-      - data/raw/research-mhqa-evaluation/dataset.jsonl
+      - answer_questions.py
+      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
     outs:
-      - data/generated/research-mhqa-evaluation/qa-results/
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
+    params:
+      - prompt
+      - model
+      - temperature
+      - run
   
   evaluate-answers:
-    wdir: ../..
     cmd: >-
-      python pipelines/research-mhqa-evaluation/evaluate_answers.py
-      --dataset-file data/raw/research-mhqa-evaluation/dataset.jsonl
-      --qa-dir data/generated/research-mhqa-evaluation/qa-results/
-      --out data/generated/research-mhqa-evaluation/evals/
+      python evaluate_answers.py
+      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --out ../../data/generated/research-mhqa-evaluation/evals/
     deps:
-      - pipelines/research-mhqa-evaluation/evaluate_answers.py
-      - data/raw/research-mhqa-evaluation/dataset.jsonl
-      - data/generated/research-mhqa-evaluation/qa-results/
+      - evaluate_answers.py
+      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
     outs:
-      - data/generated/research-mhqa-evaluation/evals/
+      - ../../data/generated/research-mhqa-evaluation/evals/
 
   report:
-    wdir: ../..
     cmd: >-
-      python pipelines/research-mhqa-evaluation/report.py
-      --dataset-file data/raw/research-mhqa-evaluation/dataset.jsonl
-      --qa-dir data/generated/research-mhqa-evaluation/qa-results/
-      --evals-dir data/generated/research-mhqa-evaluation/evals/
-      --out data/generated/research-mhqa-evaluation/reports/
+      python report.py
+      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --evals-dir ../../data/generated/research-mhqa-evaluation/evals/
+      --out ../../data/generated/research-mhqa-evaluation/reports/
     deps:
-      - pipelines/research-mhqa-evaluation/report.py
-      - data/raw/research-mhqa-evaluation/dataset.jsonl
-      - data/generated/research-mhqa-evaluation/qa-results/
-      - data/generated/research-mhqa-evaluation/evals/
+      - report.py
+      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
+      - ../../data/generated/research-mhqa-evaluation/evals/
     outs:
-      - data/generated/research-mhqa-evaluation/reports/
+      - ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
+    metrics:
+      - ../../data/generated/research-mhqa-evaluation/reports/scores.json

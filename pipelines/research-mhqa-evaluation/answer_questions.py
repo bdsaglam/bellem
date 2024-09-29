@@ -1,3 +1,4 @@
+from functools import partial
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
@@ -55,7 +56,9 @@ def process_example(
 def main(
     dataset_file: Path = typer.Option(...),
     out: Path = typer.Option(...),
-    prompt_technique: str = typer.Option("standard"),
+    prompt: str = typer.Option("standard"),
+    model: str = typer.Option("gpt-3.5-turbo"),
+    temperature: float = typer.Option(0.1),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
     subset: int = typer.Option(0),
@@ -68,7 +71,10 @@ def main(
     if subset:
         examples = examples[:subset]
 
-    qa_pipeline = BaselineSingleHop(load_qa_func(prompt_technique), perfect_retrieval_func)
+    qa_func = load_qa_func(prompt)
+    qa_func = partial(qa_func, model_name=model, completion_kwargs={"temperature": temperature})
+
+    qa_pipeline = BaselineSingleHop(qa_func, perfect_retrieval_func)
 
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [

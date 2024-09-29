@@ -17,17 +17,17 @@ def fuzzy_match_metric(prediction: str, references: list[str]) -> float:
 musique_metric = evaluate.load("bdsaglam/musique")
 
 
-def compute_scores(predicted_answer: str, reference_answers: list) -> dict:
-    musique_scores =  musique_metric.compute(predictions=[predicted_answer], references=[reference_answers])
+def compute_scores(predicted_answer: str, reference_answers: list[str]) -> dict:
+    musique_scores = musique_metric.compute(predictions=[predicted_answer], references=[reference_answers])
     fuzzy_match = fuzzy_match_metric(predicted_answer, reference_answers)
     return {**musique_scores, "fuzzy_match": fuzzy_match}
 
-
 # %% ../../nbs/musique.eval.ipynb 7
 def calculate_metrics(dataf: pd.DataFrame) -> dict:
-    predictions = dataf["predicted_answer"].tolist()
-    references = dataf["answers"].tolist()
-    return compute_scores(predictions, references)
+    prediction_list = dataf["predicted_answer"].tolist()
+    references_list = dataf["answers"].tolist()
+    scores_list = [compute_scores(prediction, references) for prediction, references in zip(prediction_list, references_list)]
+    return pd.DataFrame(scores_list).mean().to_dict()
 
 # %% ../../nbs/musique.eval.ipynb 8
 def _exact_match(example):
