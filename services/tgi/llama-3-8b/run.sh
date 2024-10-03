@@ -16,4 +16,4 @@ docker run \
     -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
     -e CUDA_VISIBLE_DEVICES=0 \
     $IMAGE \
-    --trust-remote-code --model-id $MODEL --dtype bfloat16 --quantize bitsandbytes-nf4 --max-input-tokens 7168 --max-total-tokens 8192
+    --trust-remote-code --model-id $MODEL --dtype bfloat16 --max-input-tokens 7168 --max-total-tokens 8192
