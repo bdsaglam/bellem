@@ -1,4 +1,5 @@
-model: "llama3-70b-togetherai"
-temperature: 0.1
-prompt: "cte"
-run: "3"
+model: llama-3-70b-tgi
+temperature: 1.0
+prompt: standard
+run: 3
+dataset.subset: 0

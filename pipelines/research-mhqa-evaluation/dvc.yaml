@@ -4,6 +4,7 @@ stages:
       python answer_questions.py
       --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --subset ${dataset.subset}
       --prompt ${prompt}
       --model ${model}
       --temperature ${temperature}
