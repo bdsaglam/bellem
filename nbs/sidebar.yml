@@ -21,6 +21,7 @@ website:
           - notes/craft.colab.ipynb
           - notes/craft.conda.ipynb
           - notes/craft.docker.ipynb
+          - notes/craft.dvc.ipynb
           - notes/craft.fastai.ipynb
           - notes/craft.git.ipynb
           - notes/craft.java.ipynb
