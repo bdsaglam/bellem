@@ -17,14 +17,14 @@ log = get_logger(__name__)
 DEFAULT_MODEL = "gpt-3.5-turbo"
 DEFAULT_COMPLETION_KWARGS = {"temperature": 0.1}
 
-# %% ../../nbs/musique.qa.ipynb 7
+# %% ../../nbs/musique.qa.ipynb 6
 FEW_SHOT_EXAMPLES = [
     {
         "id": "2hop__784447_126070",
         "context": 'Glenhis Hern\u00e1ndez (born 7 October 1990 in Havana) is a taekwondo practitioner from Cuba. She was the 2013 World\nChampion in middleweight.\n\nThe current mayor of Havana ("President of the People\'s Power Provincial Assembly") is Marta Hern\u00e1ndez Romero, she\nwas elected on March 5, 2011.',
         "question": "Who is the current mayor of the city Glenhis Hern\u00e1ndez was born?",
         "answers": ["Marta Hern\u00e1ndez Romero"],
-        "cte_generation": "Triplets: \nGlenhis Hern\u00e1ndez | birth place | Havana\nMarta Hern\u00e1ndez Romero | serves as | mayor of Havana\n\nAnswer: Marta Hern\u00e1ndez Romero",
+        "cte_generation": "Triplets: \nGlenhis Hern\u00e1ndez | birth place | Havana\nMarta Hern\u00e1ndez Romero | mayor of| Havana\n\nAnswer: Marta Hern\u00e1ndez Romero",
         "cot_generation": "Reasoning:\n1. Glenhis Hernández was born in Havana, as mentioned in the context.\n2. The current mayor of Havana mentioned in the context is Marta Hernández Romero.\n3. Therefore, the current mayor of the city where Glenhis Hernández was born is Marta Hernández Romero.\n\nAnswer: Marta Hernández Romero",
     },
     {
@@ -36,7 +36,7 @@ FEW_SHOT_EXAMPLES = [
     },
 ]
 
-# %% ../../nbs/musique.qa.ipynb 9
+# %% ../../nbs/musique.qa.ipynb 8
 USER_PROMPT = """The context information is provided below.
 ---------------------
 {context}
@@ -45,12 +45,12 @@ Given the context information and not prior knowledge, answer the question.
 {question}
 """
 
-# %% ../../nbs/musique.qa.ipynb 11
+# %% ../../nbs/musique.qa.ipynb 10
 SYSTEM_PROMPT_STANDARD = """
 You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. 
 
 # Output format
-Answer: [answer in 2-4 words]
+Answer: [answer in least number of words possible]
 """.strip()
 
 def answer_question_standard(
@@ -90,12 +90,12 @@ def answer_question_standard(
     answer = parts[1].strip()
     return dict(answer=answer, generation=generation)
 
-# %% ../../nbs/musique.qa.ipynb 14
+# %% ../../nbs/musique.qa.ipynb 13
 SYSTEM_PROMPT_COT_FS = """You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge. Always provide clear and logical step-by-step reasoning in your response.
 
 # Output format
 Reasoning: [Step-by-step reasoning for the answer.]
-Answer: [answer in 2-4 words]
+Answer: [answer in least number of words possible]
 """
 
 def answer_question_cot_fs(
@@ -151,7 +151,7 @@ def answer_question_cot_fs(
             reasoning += line.replace("Reasoning:", "") + "\n"
     return dict(reasoning=reasoning.strip(), answer=answer, generation=generation)
 
-# %% ../../nbs/musique.qa.ipynb 16
+# %% ../../nbs/musique.qa.ipynb 15
 def answer_question_cot(
     context: str,
     question: str,
@@ -161,7 +161,7 @@ def answer_question_cot(
 ) -> dict:
     return answer_question_cot_fs(context, question, [], model_name, completion_kwargs, client)
 
-# %% ../../nbs/musique.qa.ipynb 19
+# %% ../../nbs/musique.qa.ipynb 18
 SYSTEM_PROMPT_CTE = """
 You are an excellent question-answering system known for providing accurate and reliable answers. Your responses should be solely based on the context information given, without drawing on prior knowledge.
 
@@ -169,7 +169,7 @@ Before answering the question, first, you extract relevant entity-relation-entit
 
 # Output format
 Triplets: [A list of entity-relation-entity triplets extracted from the context.]
-Answer: [answer in 2-4 words]
+Answer: [answer in least number of words possible]
 """.strip()
 
 def answer_question_cte(
@@ -231,7 +231,7 @@ def answer_question_cte(
             triplets.append(line.strip())
     return dict(triplets=triplets, answer=answer, generation=generation)
 
-# %% ../../nbs/musique.qa.ipynb 21
+# %% ../../nbs/musique.qa.ipynb 20
 def load_qa_func(prompt_technique: str) -> Callable:
     prompt_technique = prompt_technique.lower()
     if prompt_technique == "standard":
