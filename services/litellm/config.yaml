@@ -22,18 +22,21 @@ model_list:
         model: openai/meta-llama/Meta-Llama-3-70B-Instruct
         api_base: http://host.docker.internal:8080/v1
         api_key: "_"
+        do_sample: true
 
   - model_name: llama-3-8b-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-8B-Instruct
         api_base: http://host.docker.internal:8081/v1
         api_key: "_"
+        do_sample: true
   
   - model_name: llama-3-8b-sft-tgi
     litellm_params:
         model: openai/meta-llama/Meta-Llama-3-8B-Instruct
         api_base: http://host.docker.internal:8082/v1
         api_key: "_"
+        do_sample: true
   
   - model_name: '*'
     litellm_params:
@@ -45,8 +48,8 @@ general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 
 litellm_settings:
-  drop_params: True
   set_verbose: True
+  drop_params: False
   # cache: True
   # cache_params:
   #   type: "redis"
