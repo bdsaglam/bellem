@@ -5,18 +5,19 @@ stages:
       --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       --out ../../data/generated/research-mhqa-evaluation/qa-results/
       --subset ${dataset.subset}
-      --prompt ${prompt}
-      --model ${model}
-      --temperature ${temperature}
+      --prompt ${qa.prompt}
+      --model ${qa.model}
+      --temperature ${qa.temperature}
     deps:
       - answer_questions.py
       - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
     outs:
       - ../../data/generated/research-mhqa-evaluation/qa-results/
     params:
-      - prompt
-      - model
-      - temperature
+      - dataset.subset
+      - qa.prompt
+      - qa.model
+      - qa.temperature
       - run
   
   evaluate-answers:

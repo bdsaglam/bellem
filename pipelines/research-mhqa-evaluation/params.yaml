@@ -1,5 +1,7 @@
-model: llama-3-70b-tgi
-temperature: 1.0
-prompt: standard
+dataset:
+  subset: 0
+qa:
+  model: llama-3-70b-tgi
+  temperature: 1.0
+  prompt: standard
 run: 3
-dataset.subset: 0
