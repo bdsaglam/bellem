@@ -1,7 +1,7 @@
 dataset:
   path: bdsaglam/musique-2hop
   name: answerable
-  split: validation[:100]
+  split: validation
 qa:
   model: llama-3-70b-tgi
   temperature: 0.7
