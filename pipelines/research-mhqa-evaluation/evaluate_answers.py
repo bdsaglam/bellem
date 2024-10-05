@@ -36,7 +36,7 @@ def process_example(
     result_file.unlink(missing_ok=True)
 
     predicted_answer = qa_result.get("answer")
-    reference_answers = example["answers"]
+    reference_answers = list(set([example["answer"], *example['answer_aliases']]))
     scores = compute_scores(predicted_answer, reference_answers)
     result = {
         "predicted_answer": predicted_answer,
