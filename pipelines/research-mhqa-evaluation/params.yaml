@@ -6,4 +6,4 @@ qa:
   model: llama-3-70b-tgi
   temperature: 1.0
   prompt: standard
-run: 3
+run: 1
