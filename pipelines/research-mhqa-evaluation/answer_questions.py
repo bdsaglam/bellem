@@ -68,7 +68,7 @@ def main(
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    examples = load_dataset(dataset_path, dataset_name, dataset_split)
+    examples = load_dataset(dataset_path, name=dataset_name, split=dataset_split)
 
     qa_func = load_qa_func(prompt)
     openai_client = OpenAI(max_retries=3)
