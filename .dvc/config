@@ -1,7 +1,5 @@
 [core]
     remote = s3-remote
-['remote "localfs"']
-    url = /tmp/dvcstore
 ['remote "s3-remote"']
-    url = s3://bds-dvc/bellek/
+    url = s3://bds-dvc/bellem/
     profile = dvc
