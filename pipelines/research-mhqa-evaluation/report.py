@@ -2,12 +2,13 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from bellek.musique.eval import compute_scores
 import pandas as pd
 import typer
+from datasets import load_dataset
 from dotenv import load_dotenv
 from rich.console import Console
 
+from bellek.musique.eval import compute_scores
 from bellek.utils import set_seed
 
 print = Console(stderr=True).print
@@ -49,15 +50,16 @@ def process_example(
 
 
 def main(
-    dataset_file: Path = typer.Option(...),
+    dataset_path: str = typer.Option(...),
+    dataset_name: str = typer.Option(...),
+    dataset_split: str = typer.Option(...),
     qa_dir: Path = typer.Option(...),
     evals_dir: Path = typer.Option(...),
     out: Path = typer.Option(...),
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    with open(dataset_file) as f:
-        examples = [json.loads(line) for line in f]
+    examples = load_dataset(dataset_path, dataset_name, dataset_split)
 
     processed_examples = []
     for example in examples:
@@ -65,10 +67,12 @@ def main(
 
         qa_file = qa_dir / f"{example_id}.json"
         if not qa_file.exists():
+            print(f"Skipping the sample {example_id} because it does not have a QA result.")
             continue
 
         eval_file = evals_dir / f"{example_id}.json"
         if not eval_file.exists():
+            print(f"Skipping the sample {example_id} because it does not have an evaluation result.")
             continue
 
         qa_result = json.loads(qa_file.read_text())

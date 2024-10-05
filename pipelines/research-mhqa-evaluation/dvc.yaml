@@ -2,19 +2,21 @@ stages:
   answer-questions:
     cmd: >-
       python answer_questions.py
-      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
       --out ../../data/generated/research-mhqa-evaluation/qa-results/
-      --subset ${dataset.subset}
       --prompt ${qa.prompt}
       --model ${qa.model}
       --temperature ${qa.temperature}
     deps:
       - answer_questions.py
-      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
     outs:
       - ../../data/generated/research-mhqa-evaluation/qa-results/
     params:
-      - dataset.subset
+      - dataset.path
+      - dataset.name
+      - dataset.split
       - qa.prompt
       - qa.model
       - qa.temperature
@@ -23,29 +25,39 @@ stages:
   evaluate-answers:
     cmd: >-
       python evaluate_answers.py
-      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
       --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --out ../../data/generated/research-mhqa-evaluation/evals/
     deps:
       - evaluate_answers.py
-      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       - ../../data/generated/research-mhqa-evaluation/qa-results/
     outs:
       - ../../data/generated/research-mhqa-evaluation/evals/
+    params:
+      - dataset.path
+      - dataset.name
+      - dataset.split
 
   report:
     cmd: >-
       python report.py
-      --dataset-file ../../data/raw/research-mhqa-evaluation/dataset.jsonl
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
       --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --evals-dir ../../data/generated/research-mhqa-evaluation/evals/
       --out ../../data/generated/research-mhqa-evaluation/reports/
     deps:
       - report.py
-      - ../../data/raw/research-mhqa-evaluation/dataset.jsonl
       - ../../data/generated/research-mhqa-evaluation/qa-results/
       - ../../data/generated/research-mhqa-evaluation/evals/
     outs:
       - ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
     metrics:
       - ../../data/generated/research-mhqa-evaluation/reports/scores.json
+    params:
+      - dataset.path
+      - dataset.name
+      - dataset.split

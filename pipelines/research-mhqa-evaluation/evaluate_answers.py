@@ -2,12 +2,13 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from bellek.musique.eval import compute_scores
 import typer
+from datasets import load_dataset
 from dotenv import load_dotenv
 from rich.console import Console
 from tqdm import tqdm
 
+from bellek.musique.eval import compute_scores
 from bellek.utils import set_seed
 
 print = Console(stderr=True).print
@@ -48,15 +49,16 @@ def process_example(
 
 
 def main(
-    dataset_file: Path = typer.Option(...),
+    dataset_path: str = typer.Option(...),
+    dataset_name: str = typer.Option(...),
+    dataset_split: str = typer.Option(...),
     qa_dir: Path = typer.Option(...),
     out: Path = typer.Option(...),
     resume: bool = typer.Option(False),
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    with open(dataset_file) as f:
-        examples = [json.loads(line) for line in f]
+    examples = load_dataset(dataset_path, dataset_name, dataset_split)
 
     examples_with_answers = []
     for example in examples:

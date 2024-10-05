@@ -1,18 +1,19 @@
-from functools import partial
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from functools import partial
 from pathlib import Path
 from typing import Callable
 
-from bellek.musique.singlehop import BaselineSingleHop
 import typer
+from datasets import load_dataset
 from dotenv import load_dotenv
 from rich.console import Console
 from tqdm import tqdm
 
-from bellek.utils import set_seed
 from bellek.musique.qa import load_qa_func
+from bellek.musique.singlehop import BaselineSingleHop
+from bellek.utils import set_seed
 
 print = Console(stderr=True).print
 
@@ -54,22 +55,19 @@ def process_example(
 
 
 def main(
-    dataset_file: Path = typer.Option(...),
+    dataset_path: str = typer.Option(...),
+    dataset_name: str = typer.Option(...),
+    dataset_split: str = typer.Option(...),
     out: Path = typer.Option(...),
     prompt: str = typer.Option("standard"),
     model: str = typer.Option("gpt-3.5-turbo"),
     temperature: float = typer.Option(0.1),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
-    subset: int = typer.Option(0),
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    with open(dataset_file) as f:
-        examples = [json.loads(line) for line in f]
-
-    if subset:
-        examples = examples[:subset]
+    examples = load_dataset(dataset_path, dataset_name, dataset_split)
 
     qa_func = load_qa_func(prompt)
     qa_func = partial(qa_func, model_name=model, completion_kwargs={"temperature": temperature})
