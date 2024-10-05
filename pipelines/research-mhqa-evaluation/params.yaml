@@ -1,9 +1,9 @@
 dataset:
   path: bdsaglam/musique
   name: answerable
-  split: validation[:100]
+  split: "validation[:100]"
 qa:
   model: llama-3-70b-tgi
-  temperature: 1.0
+  temperature: 0.7
   prompt: standard
 run: 1
