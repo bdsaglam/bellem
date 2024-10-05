@@ -59,7 +59,7 @@ def main(
 ):
     out.mkdir(exist_ok=True, parents=True)
 
-    examples = load_dataset(dataset_path, dataset_name, dataset_split)
+    examples = load_dataset(dataset_path, name=dataset_name, split=dataset_split)
 
     processed_examples = []
     for example in examples:
