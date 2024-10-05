@@ -2,8 +2,8 @@ schema: '2.0'
 stages:
   answer-questions:
     cmd: python answer_questions.py --dataset-path bdsaglam/musique-2hop --dataset-name
-      answerable --dataset-split validation[:10] --out ../../data/generated/research-mhqa-evaluation/qa-results/
-      --prompt standard --model llama-3-70b-tgi --temperature 0.7
+      answerable --dataset-split validation --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --prompt cte --model llama-3-70b-tgi --temperature 0.1
     deps:
     - path: answer_questions.py
       hash: md5
@@ -13,27 +13,27 @@ stages:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.split: validation
         qa.model: llama-3-70b-tgi
-        qa.prompt: standard
-        qa.temperature: 0.7
-        run: 1
+        qa.prompt: cte
+        qa.temperature: 0.1
+        run: 2
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: 76563075ccfb470f82e47514481a6cd3.dir
+      size: 4047216
+      nfiles: 1253
   evaluate-answers:
     cmd: python evaluate_answers.py --dataset-path bdsaglam/musique-2hop --dataset-name
-      answerable --dataset-split validation[:10] --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      answerable --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --out ../../data/generated/research-mhqa-evaluation/evals/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: 76563075ccfb470f82e47514481a6cd3.dir
+      size: 4047216
+      nfiles: 1253
     - path: evaluate_answers.py
       hash: md5
       md5: 9d72c6580f226e5fc293b92dd93bf952
@@ -42,28 +42,28 @@ stages:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.split: validation
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 3190f37dbb1fbb844b9750368c89c586.dir
-      size: 1609
-      nfiles: 11
+      md5: 6747c5735b6574e11de904aadb9a2904.dir
+      size: 210844
+      nfiles: 1253
   report:
     cmd: python report.py --dataset-path bdsaglam/musique-2hop --dataset-name answerable
-      --dataset-split validation[:10] --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --evals-dir ../../data/generated/research-mhqa-evaluation/evals/ --out ../../data/generated/research-mhqa-evaluation/reports/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 3190f37dbb1fbb844b9750368c89c586.dir
-      size: 1609
-      nfiles: 11
+      md5: 6747c5735b6574e11de904aadb9a2904.dir
+      size: 210844
+      nfiles: 1253
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: 76563075ccfb470f82e47514481a6cd3.dir
+      size: 4047216
+      nfiles: 1253
     - path: report.py
       hash: md5
       md5: f8c440f3944cc6c32cfaa78d46723446
@@ -72,13 +72,13 @@ stages:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.split: validation
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
       hash: md5
-      md5: 44a83d57107f2d419c641ae95839813e
-      size: 135133
+      md5: 03b4aea4a2d6f67b877a0859c74f12df
+      size: 18753181
     - path: ../../data/generated/research-mhqa-evaluation/reports/scores.json
       hash: md5
-      md5: 01ec2d52ed57f4f7a45293d20b8de044
-      size: 74
+      md5: 990451b36e540141b31a3a6ad078685f
+      size: 103
