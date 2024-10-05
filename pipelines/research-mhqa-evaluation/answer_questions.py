@@ -5,6 +5,7 @@ from functools import partial
 from pathlib import Path
 from typing import Callable
 
+from openai import OpenAI
 import typer
 from datasets import load_dataset
 from dotenv import load_dotenv
@@ -70,7 +71,8 @@ def main(
     examples = load_dataset(dataset_path, dataset_name, dataset_split)
 
     qa_func = load_qa_func(prompt)
-    qa_func = partial(qa_func, model_name=model, completion_kwargs={"temperature": temperature})
+    openai_client = OpenAI(max_retries=3)
+    qa_func = partial(qa_func, model_name=model, completion_kwargs={"temperature": temperature}, client=openai_client)
 
     qa_pipeline = BaselineSingleHop(qa_func, perfect_retrieval_func)
 
