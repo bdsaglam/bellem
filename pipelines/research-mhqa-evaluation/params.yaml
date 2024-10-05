@@ -4,6 +4,6 @@ dataset:
   split: validation
 qa:
   model: llama-3-70b-tgi
-  temperature: 0.7
-  prompt: standard
+  temperature: 0.5
+  prompt: cte
 run: 1
