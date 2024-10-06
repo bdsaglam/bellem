@@ -8,7 +8,6 @@ from datasets import load_dataset
 from dotenv import load_dotenv
 from rich.console import Console
 
-from bellek.musique.eval import compute_scores
 from bellek.utils import set_seed
 
 print = Console(stderr=True).print
@@ -16,37 +15,6 @@ print = Console(stderr=True).print
 load_dotenv()
 
 set_seed(89)
-
-
-def process_example(
-    example: dict,
-    qa_result: dict,
-    out: Path,
-    resume: bool,
-):
-    example_id = example["id"]
-
-    # Check if the example is already processed
-    result_file = out / f"{example_id}.json"
-    if resume and result_file.exists():
-        print(f"Skipping the sample {example_id} because it is already processed.")
-        return
-
-    # Calculate the scores
-    result_file.unlink(missing_ok=True)
-
-    predicted_answer = qa_result.get("answer")
-    reference_answers = example["answers"]
-    print((predicted_answer, reference_answers))
-    scores = compute_scores(predicted_answer, reference_answers)
-    result = {
-        "predicted_answer": predicted_answer,
-        "reference_answers": reference_answers,
-        **scores,
-    }
-
-    with open(result_file, "w") as f:
-        f.write(json.dumps(result, ensure_ascii=False, indent=2))
 
 
 def main(
@@ -61,7 +29,7 @@ def main(
 
     examples = load_dataset(dataset_path, name=dataset_name, split=dataset_split)
 
-    processed_examples = []
+    results = []
     for example in examples:
         example_id = example["id"]
 
@@ -77,15 +45,15 @@ def main(
 
         qa_result = json.loads(qa_file.read_text())
         eval_result = json.loads(eval_file.read_text())
-        processed_examples.append(
+        results.append(
             {
-                **example,
+                "id": example_id,
                 **qa_result,
                 **eval_result,
             }
         )
 
-    df = pd.DataFrame(processed_examples)
+    df = pd.DataFrame(results)
     scores = df[["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean()
 
     with open(out / "scores.json", "w") as f:

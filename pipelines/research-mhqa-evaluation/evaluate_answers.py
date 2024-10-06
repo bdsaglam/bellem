@@ -22,21 +22,11 @@ def process_example(
     example: dict,
     qa_result: dict,
     out: Path,
-    resume: bool,
 ):
     example_id = example["id"]
 
-    # Check if the example is already processed
-    result_file = out / f"{example_id}.json"
-    if resume and result_file.exists():
-        print(f"Skipping the sample {example_id} because it is already processed.")
-        return
-
-    # Calculate the scores
-    result_file.unlink(missing_ok=True)
-
     predicted_answer = qa_result.get("answer")
-    reference_answers = list(set([example["answer"], *example['answer_aliases']]))
+    reference_answers = list(set([example["answer"], *example["answer_aliases"]]))
     scores = compute_scores(predicted_answer, reference_answers)
     result = {
         "predicted_answer": predicted_answer,
@@ -44,6 +34,7 @@ def process_example(
         **scores,
     }
 
+    result_file = out / f"{example_id}.json"
     with open(result_file, "w") as f:
         f.write(json.dumps(result, ensure_ascii=False, indent=2))
 
@@ -54,7 +45,6 @@ def main(
     dataset_split: str = typer.Option(...),
     qa_dir: Path = typer.Option(...),
     out: Path = typer.Option(...),
-    resume: bool = typer.Option(False),
 ):
     out.mkdir(exist_ok=True, parents=True)
 
@@ -75,7 +65,6 @@ def main(
             example=example,
             qa_result=qa_result,
             out=out,
-            resume=resume,
         )
 
     with open(out / "timestamp.txt", "w") as f:
