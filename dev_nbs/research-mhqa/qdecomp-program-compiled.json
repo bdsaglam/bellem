@@ -1,0 +1,44 @@
+{
+  "decompose": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "question": "What is the most popular hotel in the city where MeatCo Namibia is headquartered?",
+        "decomposition": "1. MeatCo Namibia >> headquarters\n2. What is the most popular hotel in #1?"
+      },
+      {
+        "question": "When did swedish become the official language of the country that contains the Embassy of France in the city where Christer Str\u00f6mholm died?",
+        "decomposition": "1. In what city did Christer Str\u00f6mholm die?\n2. Embassy of France, #1 >> country\n3. when did swedish become the official language of #2"
+      },
+      {
+        "question": "Was there any debate about the voting process in the state where the Seven Ranges Terminus is located?",
+        "decomposition": "1. What state is Seven Ranges Terminus located?\n2. Was there any debate about the voting process in #1 ?"
+      },
+      {
+        "question": "Whose life do the largest religious group in the country where Amin visited for the second time learn from?",
+        "decomposition": "1. Where did Amin visit for the second time?\n2. what is the largest religious group in #1\n3. Whose life do #2 learn from?"
+      },
+      {
+        "question": "The film Ever After is based on an old story with many versions. How many species of fungi are found in the country with the oldest version?",
+        "decomposition": "1. Which is the basis of Ever After?\n2. when does the story of #1 take place\n3. How many species of fungi were recorded in #2 ?"
+      },
+      {
+        "question": "How many people responsible for the great migration of the Slavs live in the colonial holding governed by Portugal on the continent where Saramacca District is located?",
+        "decomposition": "1. Saramacca District >> continent\n2. what was the colonial holding in #1 that was governed by portugal\n3. Who started the great migration of the Slavs?\n4. How many #3 live in #2 ?"
+      },
+      {
+        "question": "How many states in the continent that was mentioned are recognized by the organization that authorized giving troops the ability to follow North Korean forces north?",
+        "decomposition": "1. What continent is mentioned?\n2. Who authorized giving troops the ability to follow the North Korean forces north?\n3. the #2 recognises how many regions in #1"
+      },
+      {
+        "question": "How many households were in the city Paycom's headquarters are located?",
+        "decomposition": "1. Paycom >> headquarters location\n2. How many households were in #1 ?"
+      }
+    ],
+    "signature_instructions": "Decompose a complex question into simpler sub-questions.",
+    "signature_prefix": "Decomposition:"
+  }
+}
