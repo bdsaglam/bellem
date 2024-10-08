@@ -6,36 +6,39 @@
     "demos": [
       {
         "augmented": true,
-        "question": "What is the most popular hotel in the city where MeatCo Namibia is headquartered?",
-        "decomposition": "1. MeatCo Namibia >> headquarters\n2. What is the most popular hotel in #1?"
+        "question": "What is one of the main papers of the city where Spectre filming took place after the place where Cum nimi absurdum's author died?",
+        "decomposition": "1. Cum nimi absurdum >> author\n2. Where did #1 die?\n3. Where did Spectre filming take place after #2?\n4. What is one of the main papers of #3?"
       },
       {
-        "question": "When did swedish become the official language of the country that contains the Embassy of France in the city where Christer Str\u00f6mholm died?",
-        "decomposition": "1. In what city did Christer Str\u00f6mholm die?\n2. Embassy of France, #1 >> country\n3. when did swedish become the official language of #2"
+        "augmented": true,
+        "question": "Who failed to start an English colony off the coast of the state that borders the east of the state where Hello Love's performer lived in when he died?",
+        "decomposition": "1. Hello Love's performer >> place of death\n2. #1 >> state\n3. What state borders #2 to the east?\n4. Who failed to start an English colony off the coast of #3?"
       },
       {
-        "question": "Was there any debate about the voting process in the state where the Seven Ranges Terminus is located?",
-        "decomposition": "1. What state is Seven Ranges Terminus located?\n2. Was there any debate about the voting process in #1 ?"
+        "augmented": true,
+        "question": "In which episode of Doctor Who did a character based on the creator of Trees and Undergrowth appear?",
+        "decomposition": "1. Trees and Undergrowth >> creator\n2. In which Doctor Who episode is a character based on #1?"
       },
       {
-        "question": "Whose life do the largest religious group in the country where Amin visited for the second time learn from?",
-        "decomposition": "1. Where did Amin visit for the second time?\n2. what is the largest religious group in #1\n3. Whose life do #2 learn from?"
+        "augmented": true,
+        "question": "The county where Tiffany Scott was born shares a border with what county?",
+        "decomposition": "1. Tiffany Scott >> birthplace\n2. What county is #1 in?\n3. Which county shares a border with #2?"
       },
       {
-        "question": "The film Ever After is based on an old story with many versions. How many species of fungi are found in the country with the oldest version?",
-        "decomposition": "1. Which is the basis of Ever After?\n2. when does the story of #1 take place\n3. How many species of fungi were recorded in #2 ?"
+        "question": "In what year was a project to connect the continent on which Cesar Boutteville was born and rural Alaska announced?",
+        "decomposition": "1. C\u00e9sar Boutteville >> place of birth\n2. What continent is #1 found on?\n3. In what year was a project to connect #2 and rural Alaska announced?"
       },
       {
-        "question": "How many people responsible for the great migration of the Slavs live in the colonial holding governed by Portugal on the continent where Saramacca District is located?",
-        "decomposition": "1. Saramacca District >> continent\n2. what was the colonial holding in #1 that was governed by portugal\n3. Who started the great migration of the Slavs?\n4. How many #3 live in #2 ?"
+        "question": "In what period did Islamic armies conquer the country known for its Muslims and people who traded slaves into the Middle East?",
+        "decomposition": "1. Who traded slaves into the Middle East?\n2. What country is known for its #1 and Muslims?\n3. In what period did Islamic armies conquer #2 ?"
       },
       {
-        "question": "How many states in the continent that was mentioned are recognized by the organization that authorized giving troops the ability to follow North Korean forces north?",
-        "decomposition": "1. What continent is mentioned?\n2. Who authorized giving troops the ability to follow the North Korean forces north?\n3. the #2 recognises how many regions in #1"
+        "question": "An institution like a German Fachhochschule is referred to by what term in \u00c9ric Losfeld's birth country and the Dutch Reform Church's country?",
+        "decomposition": "1. \u00c9ric Losfeld >> place of birth\n2. Arrondissement of #1 >> country\n3. where does the dutch reformed church come from\n4. What term is used in #2 and the #3 to refer to an institution like a German Fachhochschule?"
       },
       {
-        "question": "How many households were in the city Paycom's headquarters are located?",
-        "decomposition": "1. Paycom >> headquarters location\n2. How many households were in #1 ?"
+        "question": "In what year did voters of the state with Raleigh as its capital, once again vote for a member of the political party Mayor Sylvester Turner belongs to?",
+        "decomposition": "1. What state is Raleigh the capital of?\n2. To what political party is Mayor Turner aligned?\n3. What year did #1 voters once again vote for a #2 ?"
       }
     ],
     "signature_instructions": "Decompose a complex question into simpler sub-questions.",
