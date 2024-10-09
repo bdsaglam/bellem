@@ -1,84 +1,88 @@
 schema: '2.0'
 stages:
   answer-questions:
-    cmd: python answer_questions.py --dataset-path bdsaglam/musique-2hop --dataset-name
-      answerable --dataset-split validation[:10] --out ../../data/generated/research-mhqa-evaluation/qa-results/
-      --prompt standard --model llama-3-70b-tgi --temperature 0.7
+    cmd: python answer_questions.py --dataset-path bdsaglam/musique-thesis --dataset-name
+      answerable --dataset-split validation --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --model llama-3-70b-tgi --temperature 0.1 --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/excellent-qa.txt
+      --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/line-break.txt
+      --few-shot-examples-filepath None
     deps:
     - path: answer_questions.py
       hash: md5
-      md5: 4e1a960e19e7b9a067ab9b674e132ec8
-      size: 2906
+      md5: 8dc8f08c0c8dc74258354b9025f2a8e9
+      size: 3719
     params:
       params.yaml:
         dataset.name: answerable
-        dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.path: bdsaglam/musique-thesis
+        dataset.split: validation
+        qa.few_shot_examples: None
         qa.model: llama-3-70b-tgi
-        qa.prompt: standard
-        qa.temperature: 0.7
+        qa.system_prompt: ../../data/raw/research-mhqa-evaluation/system-prompts/excellent-qa.txt
+        qa.temperature: 0.1
+        qa.user_prompt_template: ../../data/raw/research-mhqa-evaluation/user-prompt-templates/line-break.txt
         run: 1
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: f14a9dac4e385d1af82a73b9278fcfd7.dir
+      size: 234569
+      nfiles: 101
   evaluate-answers:
-    cmd: python evaluate_answers.py --dataset-path bdsaglam/musique-2hop --dataset-name
-      answerable --dataset-split validation[:10] --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+    cmd: python evaluate_answers.py --dataset-path bdsaglam/musique-thesis --dataset-name
+      answerable --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --out ../../data/generated/research-mhqa-evaluation/evals/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: f14a9dac4e385d1af82a73b9278fcfd7.dir
+      size: 234569
+      nfiles: 101
     - path: evaluate_answers.py
       hash: md5
-      md5: 9d72c6580f226e5fc293b92dd93bf952
-      size: 2281
+      md5: 959c3effd5a2abd57858463f9f8e4471
+      size: 1940
     params:
       params.yaml:
         dataset.name: answerable
-        dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.path: bdsaglam/musique-thesis
+        dataset.split: validation
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 3190f37dbb1fbb844b9750368c89c586.dir
-      size: 1609
-      nfiles: 11
+      md5: d1a1a8b33e51fcf763457d320ae11203.dir
+      size: 17163
+      nfiles: 101
   report:
-    cmd: python report.py --dataset-path bdsaglam/musique-2hop --dataset-name answerable
-      --dataset-split validation[:10] --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+    cmd: python report.py --dataset-path bdsaglam/musique-thesis --dataset-name answerable
+      --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --evals-dir ../../data/generated/research-mhqa-evaluation/evals/ --out ../../data/generated/research-mhqa-evaluation/reports/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: 3190f37dbb1fbb844b9750368c89c586.dir
-      size: 1609
-      nfiles: 11
+      md5: d1a1a8b33e51fcf763457d320ae11203.dir
+      size: 17163
+      nfiles: 101
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: 6498b4153d7c72e1a3e1cf1257d00966.dir
-      size: 24435
-      nfiles: 11
+      md5: f14a9dac4e385d1af82a73b9278fcfd7.dir
+      size: 234569
+      nfiles: 101
     - path: report.py
       hash: md5
-      md5: f8c440f3944cc6c32cfaa78d46723446
-      size: 2834
+      md5: af612f6d675e74726892132b94a607f8
+      size: 1887
     params:
       params.yaml:
         dataset.name: answerable
-        dataset.path: bdsaglam/musique-2hop
-        dataset.split: validation[:10]
+        dataset.path: bdsaglam/musique-thesis
+        dataset.split: validation
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
       hash: md5
-      md5: 44a83d57107f2d419c641ae95839813e
-      size: 135133
+      md5: 9d8320ccff7eb3cd5b00f804122c75f2
+      size: 229112
     - path: ../../data/generated/research-mhqa-evaluation/reports/scores.json
       hash: md5
-      md5: 01ec2d52ed57f4f7a45293d20b8de044
-      size: 74
+      md5: 556f8a1a34bd1f03379a2a2fae68984e
+      size: 75

@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from rich.console import Console
 from tqdm import tqdm
 
-from bellek.musique.qa import load_qa_func
+from bellek.musique.qa import make_qa_func
 from bellek.musique.singlehop import BaselineSingleHop
 from bellek.utils import set_seed
 
@@ -60,9 +60,11 @@ def main(
     dataset_name: str = typer.Option(...),
     dataset_split: str = typer.Option(...),
     out: Path = typer.Option(...),
-    prompt: str = typer.Option("standard"),
     model: str = typer.Option("gpt-3.5-turbo"),
     temperature: float = typer.Option(0.1),
+    system_prompt_filepath: str = typer.Option(default="None"),
+    user_prompt_template_filepath: str = typer.Option(default="None"),
+    few_shot_examples_filepath: str = typer.Option(default="None"),
     ignore_errors: bool = typer.Option(False),
     resume: bool = typer.Option(False),
 ):
@@ -70,12 +72,28 @@ def main(
 
     examples = load_dataset(dataset_path, name=dataset_name, split=dataset_split)
 
-    qa_func = load_qa_func(prompt)
+    # Prepare the QA pipeline
+    qa_kwargs = {}
+
+    if system_prompt_filepath and system_prompt_filepath != "None":
+        with open(system_prompt_filepath) as f:
+            qa_kwargs["system_prompt"] = f.read().strip()
+
+    if user_prompt_template_filepath and user_prompt_template_filepath != "None":
+        with open(user_prompt_template_filepath) as f:
+            qa_kwargs["user_prompt_template"] = f.read().strip()
+
+    if few_shot_examples_filepath and few_shot_examples_filepath != "None":
+        with open(few_shot_examples_filepath) as f:
+            qa_kwargs["few_shot_examples"] = json.load(f)
+
+    qa_func = make_qa_func(**qa_kwargs)
     openai_client = OpenAI(max_retries=3)
     qa_func = partial(qa_func, model_name=model, completion_kwargs={"temperature": temperature}, client=openai_client)
 
     qa_pipeline = BaselineSingleHop(qa_func, perfect_retrieval_func)
 
+    # Process the samples
     with ThreadPoolExecutor(max_workers=4) as executor:
         futures = [
             executor.submit(
