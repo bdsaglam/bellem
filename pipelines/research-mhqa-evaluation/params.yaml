@@ -5,7 +5,7 @@ dataset:
 qa:
   model: llama-3-70b-tgi
   temperature: 0.1
-  system_prompt: excellent-qa.txt
+  system_prompt: no-role.txt
   user_prompt_template: qc.txt
   few_shot_examples: empty.json
 run: 1
