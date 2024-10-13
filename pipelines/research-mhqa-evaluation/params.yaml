@@ -1,5 +1,5 @@
 dataset:
-  path: bdsaglam/musique-thesis
+  path: bdsaglam/musique
   name: answerable
   split: validation
 qa:
