@@ -17,6 +17,10 @@ load_dotenv()
 set_seed(89)
 
 
+def aggregate_scores(df: pd.DataFrame):
+    return df[["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean().to_dict()
+
+
 def main(
     dataset_path: str = typer.Option(...),
     dataset_name: str = typer.Option(...),
@@ -55,11 +59,10 @@ def main(
         )
 
     df = pd.DataFrame(results)
-    scores = df[["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean().to_dict()
+    scores = aggregate_scores(df)
 
     for n_hops in df["n_hops"].unique():
-        mask = df["n_hops"] == n_hops
-        scores[f"{n_hops}hops"] = df[mask][["exact_match", "f1", "fuzzy_match"]].apply(pd.to_numeric).mean()
+        scores[f"{n_hops}hops"] = aggregate_scores(df[df["n_hops"] == n_hops])
 
     with open(out / "scores.json", "w") as f:
         f.write(json.dumps(scores, ensure_ascii=False, indent=2))
