@@ -1,7 +1,7 @@
 dataset:
-  path: bdsaglam/musique
+  path: bdsaglam/musique-mini
   name: answerable
-  split: validation
+  split: train
 qa:
   model: llama-3-70b-tgi
   temperature: 0.1
