@@ -6,6 +6,6 @@ qa:
   model: llama-3-70b-tgi
   temperature: 0.1
   system_prompt: excellent-qa.txt
-  user_prompt_template: qc.txt
+  user_prompt_template: icq-line.txt
   few_shot_examples: empty.json
 run: 1
