@@ -1,0 +1,88 @@
+schema: '2.0'
+stages:
+  answer-questions:
+    cmd: python answer_questions.py --dataset-path bdsaglam/musique-mini --dataset-name
+      answerable --dataset-split train --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --model llama-3-70b-tgi --temperature 0.1 --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/excellent-qa.txt
+      --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/iqc.txt
+      --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/empty.json
+    deps:
+    - path: answer_questions.py
+      hash: md5
+      md5: 7dab1ff2b395a71e86fb452478cba565
+      size: 3711
+    params:
+      params.yaml:
+        dataset.name: answerable
+        dataset.path: bdsaglam/musique-mini
+        dataset.split: train
+        qa.few_shot_examples: empty.json
+        qa.model: llama-3-70b-tgi
+        qa.system_prompt: excellent-qa.txt
+        qa.temperature: 0.1
+        qa.user_prompt_template: iqc.txt
+        run: 3
+    outs:
+    - path: ../../data/generated/research-mhqa-evaluation/qa-results/
+      hash: md5
+      md5: 2e4f68af8a550d8f3d26d638e7a78d7f.dir
+      size: 1324973
+      nfiles: 301
+  evaluate-answers:
+    cmd: python evaluate_answers.py --dataset-path bdsaglam/musique-mini --dataset-name
+      answerable --dataset-split train --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --out ../../data/generated/research-mhqa-evaluation/evals/
+    deps:
+    - path: ../../data/generated/research-mhqa-evaluation/qa-results/
+      hash: md5
+      md5: 2e4f68af8a550d8f3d26d638e7a78d7f.dir
+      size: 1324973
+      nfiles: 301
+    - path: evaluate_answers.py
+      hash: md5
+      md5: 959c3effd5a2abd57858463f9f8e4471
+      size: 1940
+    params:
+      params.yaml:
+        dataset.name: answerable
+        dataset.path: bdsaglam/musique-mini
+        dataset.split: train
+    outs:
+    - path: ../../data/generated/research-mhqa-evaluation/evals/
+      hash: md5
+      md5: 4a55b55c84b38d626eb587b82430c146.dir
+      size: 48852
+      nfiles: 301
+  report:
+    cmd: python report.py --dataset-path bdsaglam/musique-mini --dataset-name answerable
+      --dataset-split train --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --evals-dir ../../data/generated/research-mhqa-evaluation/evals/ --out ../../data/generated/research-mhqa-evaluation/reports/
+    deps:
+    - path: ../../data/generated/research-mhqa-evaluation/evals/
+      hash: md5
+      md5: 4a55b55c84b38d626eb587b82430c146.dir
+      size: 48852
+      nfiles: 301
+    - path: ../../data/generated/research-mhqa-evaluation/qa-results/
+      hash: md5
+      md5: 2e4f68af8a550d8f3d26d638e7a78d7f.dir
+      size: 1324973
+      nfiles: 301
+    - path: report.py
+      hash: md5
+      md5: 5e6c18bc9c310dc222026920268cbb6b
+      size: 2148
+    params:
+      params.yaml:
+        dataset.name: answerable
+        dataset.path: bdsaglam/musique-mini
+        dataset.split: train
+    outs:
+    - path: ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
+      hash: md5
+      md5: 7debc7136bd0fc8f249b4b0c41c647bb
+      size: 1297675
+    - path: ../../data/generated/research-mhqa-evaluation/reports/scores.json
+      hash: md5
+      md5: 00f84f1237ca40d0fbccfbc4c0e172e9
+      size: 394
