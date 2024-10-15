@@ -8,4 +8,4 @@ qa:
   system_prompt: excellent-qa.txt
   user_prompt_template: qc.txt
   few_shot_examples: empty.json
-run: 1
+run: 2
