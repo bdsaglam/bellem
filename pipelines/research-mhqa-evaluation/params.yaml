@@ -1,11 +1,11 @@
 dataset:
-  path: bdsaglam/musique
+  path: bdsaglam/musique-mini
   name: answerable
   split: train
 qa:
   model: llama-3-70b-tgi
   temperature: 0.1
-  system_prompt: no-role.txt
+  system_prompt: no-role-cot.txt
   user_prompt_template: cq.txt
   few_shot_examples: empty.json
 run: 1
