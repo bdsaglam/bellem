@@ -1,0 +1,12 @@
+{
+  "self": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [],
+    "signature_instructions": "Answer the question based on the given context.",
+    "signature_prefix": "Answer:",
+    "extended_signature_instructions": "\u00abInstruction: Carefully read the provided context, identify the key question, and respond with a clear, concise, and accurate answer based on the relevant information.\u00bb",
+    "extended_signature_prefix": "\u00abResponse:\u00bb"
+  }
+}
