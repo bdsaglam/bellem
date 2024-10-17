@@ -1,5 +1,5 @@
 dataset:
-  path: bdsaglam/musique
+  path: bdsaglam/musique-mini
   name: answerable
   split: train
 qa:
@@ -8,4 +8,4 @@ qa:
   system_prompt: no-role.txt
   user_prompt_template: cq.txt
   few_shot_examples: empty.json
-run: 1
+run: 2
