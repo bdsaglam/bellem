@@ -1,0 +1,41 @@
+{
+  "self": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "question": "Who was president when the place where the majority of sweet corn is grown became a state?",
+        "context": "# Corn production in the United States\nIowa, the largest producer of corn in the US, grows three times as much corn as Mexico. Iowa harvested 3,548 acres (1,436 ha) of sweet corn in 2007. In 2011, the state had 92,300 corn farms on 30,700,000 acres (12,400,000 ha), the average size being 333 acres (135 ha), and the average dollar value per acre being US $6,708. In the same year, there were 13.7 million harvested acres of corn for grain, producing 2.36 billion bushels, which yielded 172.0 bu \/ acre, with US $14.5 billion of corn value of production. Almost 1.88 billion bushels of corn were grown in the state in 2012 on 13.7 million acres of land, while the 2013 projections are 2.45 billion bushels of corn on 13.97 million acres of land.\n\n# Iowa\nAlmost immediately after achieving territorial status, a clamor arose for statehood. On December 28, 1846, Iowa became the 29th state in the Union when President James K. Polk signed Iowa's admission bill into law. Once admitted to the Union, the state's boundary issues resolved, and most of its land purchased from the Indians, Iowa set its direction to development and organized campaigns for settlers and investors, boasting the young frontier state's rich farmlands, fine citizens, free and open society, and good government.",
+        "reasoning": "Not supplied for this particular example.",
+        "answer": "James K. Polk"
+      },
+      {
+        "augmented": true,
+        "question": "What is the area code for the state where Thomas H. Makiyama was born?",
+        "context": "# Thomas H. Makiyama\nThomas H. Makiyama (1928\u20132005), born in Hawaii, was an aikido teacher and founder of Keijutsukai Aikido and the Keijutsukai International Federation (Keijutsukai Kokusai Renmei), based in Tokyo. The organization teaches Keijutsukai Aikido and Keijutsu (a specialized method of defensive tactics for law enforcement personnel).\n\n# Area code 808\nThe 808 telephone area code covers the inhabited, developed and uninhabited areas of the Hawaiian Islands out to Midway Island and Wake Island. 808 was issued as Hawaii's area code in 1957, not long before its statehood in August of 1959.",
+        "reasoning": "Not supplied for this particular example.",
+        "answer": "808"
+      },
+      {
+        "augmented": true,
+        "question": "Who is the spouse of the performer of Mistletoe and Holly?",
+        "context": "# The Night We Called It a Day (film)\nThe Night We Called It a Day, also known as All the Way, is a 2003 Australian-American comedy drama film directed by Paul Goldman and starring Dennis Hopper as Frank Sinatra and Melanie Griffith as Barbara Marx. It also features Portia de Rossi, Joel Edgerton, Rose Byrne and David Hemmings. The movie is based on the true events surrounding Sinatra's 1974 tour in Australia. When the singer calls a local reporter (de Rossi) a \"two-bit hooker\", every union in the country black-bans the star until he issues an apology.\n\n# Mistletoe and Holly\n\"Mistletoe and Holly\" is a 1957 Christmas song recorded and co-written by Frank Sinatra. The song was released as a single on Capitol Records.",
+        "reasoning": "Not supplied for this particular example.",
+        "answer": "Barbara Marx"
+      },
+      {
+        "augmented": true,
+        "question": "What county is the city where Kristen Graczyk was born located in?",
+        "context": "# Bernalillo County Metropolitan Court\nThe Bernalillo County Metropolitan Court is the Judicial system of the metropolitan areas of Albuquerque, New Mexico and Bernalillo County, New Mexico. The Metropolitan Courthouse is located in Downtown Albuquerque.\n\n# Kristen Graczyk\nKristen Marie Graczyk (born June 27, 1983, in Albuquerque, New Mexico) is an American former soccer forward and defender who played for FC Gold Pride of Women's Professional Soccer. Her brother, Mike Graczyk, is a goalkeeper and played for San Jose Earthquakes in Major League Soccer.",
+        "reasoning": "Not supplied for this particular example.",
+        "answer": "Bernalillo County"
+      }
+    ],
+    "signature_instructions": "Answer the question based on the given context.",
+    "signature_prefix": "Answer:",
+    "extended_signature_instructions": "Answer the question based on the given context.",
+    "extended_signature_prefix": "Answer:"
+  }
+}

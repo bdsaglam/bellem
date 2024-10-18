@@ -6,9 +6,11 @@ stages:
       --dataset-name ${dataset.name}
       --dataset-split ${dataset.split}
       --out ../../data/generated/research-mhqa-evaluation/qa-results/
-      --prompt ${qa.prompt}
       --model ${qa.model}
       --temperature ${qa.temperature}
+      --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
+      --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
+      --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
     deps:
       - answer_questions.py
     outs:
@@ -17,9 +19,11 @@ stages:
       - dataset.path
       - dataset.name
       - dataset.split
-      - qa.prompt
       - qa.model
       - qa.temperature
+      - qa.system_prompt
+      - qa.user_prompt_template
+      - qa.few_shot_examples
       - run
   
   evaluate-answers:

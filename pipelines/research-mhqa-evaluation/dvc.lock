@@ -2,38 +2,42 @@ schema: '2.0'
 stages:
   answer-questions:
     cmd: python answer_questions.py --dataset-path bdsaglam/musique --dataset-name
-      answerable --dataset-split validation --out ../../data/generated/research-mhqa-evaluation/qa-results/
-      --prompt standard --model llama-3-70b-tgi --temperature 0.1
+      answerable --dataset-split train --out ../../data/generated/research-mhqa-evaluation/qa-results/
+      --model llama-3-70b-tgi --temperature 0.1 --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/excellent-qa.txt
+      --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/icq-line.txt
+      --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/empty.json
     deps:
     - path: answer_questions.py
       hash: md5
-      md5: 4e1a960e19e7b9a067ab9b674e132ec8
-      size: 2906
+      md5: 7dab1ff2b395a71e86fb452478cba565
+      size: 3711
     params:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique
-        dataset.split: validation
+        dataset.split: train
+        qa.few_shot_examples: empty.json
         qa.model: llama-3-70b-tgi
-        qa.prompt: standard
+        qa.system_prompt: excellent-qa.txt
         qa.temperature: 0.1
-        run: 1
+        qa.user_prompt_template: icq-line.txt
+        run: 2
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e0dfbc9fc7279be5e853806ce905fa9d.dir
-      size: 9436599
-      nfiles: 2418
+      md5: 71f63c58861ae953592e01953b879386.dir
+      size: 67015840
+      nfiles: 19939
   evaluate-answers:
     cmd: python evaluate_answers.py --dataset-path bdsaglam/musique --dataset-name
-      answerable --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      answerable --dataset-split train --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --out ../../data/generated/research-mhqa-evaluation/evals/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e0dfbc9fc7279be5e853806ce905fa9d.dir
-      size: 9436599
-      nfiles: 2418
+      md5: 71f63c58861ae953592e01953b879386.dir
+      size: 67015840
+      nfiles: 19939
     - path: evaluate_answers.py
       hash: md5
       md5: 959c3effd5a2abd57858463f9f8e4471
@@ -42,28 +46,28 @@ stages:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique
-        dataset.split: validation
+        dataset.split: train
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: ec77659db11adf5ab71a163ed9bf8e84.dir
-      size: 400671
-      nfiles: 2418
+      md5: fd78c589b2033633ad846460cea20f19.dir
+      size: 3219986
+      nfiles: 19939
   report:
     cmd: python report.py --dataset-path bdsaglam/musique --dataset-name answerable
-      --dataset-split validation --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --dataset-split train --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
       --evals-dir ../../data/generated/research-mhqa-evaluation/evals/ --out ../../data/generated/research-mhqa-evaluation/reports/
     deps:
     - path: ../../data/generated/research-mhqa-evaluation/evals/
       hash: md5
-      md5: ec77659db11adf5ab71a163ed9bf8e84.dir
-      size: 400671
-      nfiles: 2418
+      md5: fd78c589b2033633ad846460cea20f19.dir
+      size: 3219986
+      nfiles: 19939
     - path: ../../data/generated/research-mhqa-evaluation/qa-results/
       hash: md5
-      md5: e0dfbc9fc7279be5e853806ce905fa9d.dir
-      size: 9436599
-      nfiles: 2418
+      md5: 71f63c58861ae953592e01953b879386.dir
+      size: 67015840
+      nfiles: 19939
     - path: report.py
       hash: md5
       md5: 5e6c18bc9c310dc222026920268cbb6b
@@ -72,13 +76,13 @@ stages:
       params.yaml:
         dataset.name: answerable
         dataset.path: bdsaglam/musique
-        dataset.split: validation
+        dataset.split: train
     outs:
     - path: ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
       hash: md5
-      md5: ac8f0ec04ba4ee56e08351f401315437
-      size: 9257000
+      md5: 1b26584d39e36356aa87bba95c902d21
+      size: 65699378
     - path: ../../data/generated/research-mhqa-evaluation/reports/scores.json
       hash: md5
-      md5: 1f116ef12bf50e87ed04ab5b09a6bf19
-      size: 480
+      md5: c2376b7e50a0e00db0eda8bdb93b5f46
+      size: 479
