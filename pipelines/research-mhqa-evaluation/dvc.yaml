@@ -5,14 +5,17 @@ stages:
       --dataset-path ${dataset.path}
       --dataset-name ${dataset.name}
       --dataset-split ${dataset.split}
-      --out ../../data/generated/research-mhqa-evaluation/qa-results/
       --model ${qa.model}
       --temperature ${qa.temperature}
       --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
       --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
       --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
+      --out ../../data/generated/research-mhqa-evaluation/qa-results/
     deps:
       - answer_questions.py
+      - ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
+      - ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
+      - ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
     outs:
       - ../../data/generated/research-mhqa-evaluation/qa-results/
     params:
