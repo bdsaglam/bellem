@@ -21,7 +21,8 @@ from .utils import load_tokenizer_model
 from ..datasets.utils import load_datasets
 from ...lang.dataset import partition_input_output_messages
 from ...logging import get_logger
-from ...utils import NestedDict, generate_time_id
+from ...utils import generate_time_id
+from ...ds import NestedDict
 from ...torch.dataset.utils import ListDataset
 
 log = get_logger(__name__)

@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import wandb
 import json
-from ..utils import NestedDict, flatten_dict
+from ..ds import NestedDict, flatten_dict
 
 # %% ../../nbs/ml.experiment.ipynb 4
 def make_experiment_dir(root=".experiments", name=None):

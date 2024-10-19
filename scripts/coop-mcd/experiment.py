@@ -27,6 +27,7 @@ from bellek.ml.experiment import *
 from bellek.ml.mcd import *
 from bellek.ml.vision import *
 from bellek.utils import *
+from bellek.ds import *
 
 imagenet_label_map = get_imagenet_id_label_map()
 
