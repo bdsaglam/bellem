@@ -1,0 +1,58 @@
+{
+  "generate_answer": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "context": "# Hezekiah Augur\nAugur was born in New Haven, Connecticut. The son of a carpenter, he learned his trade as a woodcarver, carving table legs and other furniture ornament. Borrowing $2,000 from his father, he was invited to join a grocery store business venture. Three years later he discovered, to his shock and amazement, that not only was his money gone, but that he owed his partners $7,000. While thus engaged he invented a lace-making machine that lifted the financial burdens that he had assumed and thus allowed him to take up carving full-time. Around that time he also invented a machine for carving piano legs. He switched to marble later in his career, being among the first native born Americans to do so. Chauncey Ives studied briefly with Augug.\n\n# America-Lite\nAmerica-Lite: How Imperial Academia Dismantled Our Culture (and Ushered in the Obamacrats) is a 2012 book by David Gelernter, published by Encounter Books.\n\n# David Gelernter\nDavid Hillel Gelernter (born March 5, 1955) is an American artist, writer, and professor of computer science at Yale University. He is a former national fellow at the American Enterprise Institute and senior fellow in Jewish thought at the Shalem Center, and sat on the National Endowment for the Arts. He publishes widely; his work has appeared in \"The Wall Street Journal\", \"New York Post\", \"Los Angeles Times\", \"The Weekly Standard\", \"Frankfurter Allgemeine Zeitung\", and elsewhere. His paintings have been exhibited in New Haven and Manhattan.\n\n# New Haven, Connecticut\nNew Haven is served by the daily New Haven Register, the weekly \"alternative\" New Haven Advocate (which is run by Tribune, the corporation owning the Hartford Courant), the online daily New Haven Independent, and the monthly Grand News Community Newspaper. Downtown New Haven is covered by an in-depth civic news forum, Design New Haven. The Register also backs PLAY magazine, a weekly entertainment publication. The city is also served by several student-run papers, including the Yale Daily News, the weekly Yale Herald and a humor tabloid, Rumpus Magazine. WTNH Channel 8, the ABC affiliate for Connecticut, WCTX Channel 59, the MyNetworkTV affiliate for the state, and Connecticut Public Television station WEDY channel 65, a PBS affiliate, broadcast from New Haven. All New York City news and sports team stations broadcast to New Haven County.",
+        "question": "What weekly publication in the birth city of Hezekiah Augur is issued by the employer of the author of America-Lite: How Imperial Academia Dismantled Our Culture?",
+        "reasoning": "The birth city of Hezekiah Augur is New Haven, Connecticut. The author of America-Lite: How Imperial Academia Dismantled Our Culture is David Gelernter, who is a professor of computer science at Yale University. The weekly publication issued by Yale University is the Yale Herald.",
+        "answer": "Yale Herald"
+      }
+    ],
+    "signature": {
+      "instructions": "Answer the question based on the given context.",
+      "fields": [
+        {
+          "prefix": "Context:",
+          "description": "may contain relevant facts"
+        },
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Reasoning: Let's identify the relevant entity-relation-entity triples in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Answer:",
+          "description": "often between 1 and 5 words"
+        }
+      ]
+    },
+    "extended_signature": {
+      "instructions": "Answer the question based on the given context.",
+      "fields": [
+        {
+          "prefix": "Context:",
+          "description": "may contain relevant facts"
+        },
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Reasoning: Let's identify the relevant entity-relation-entity triples in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Answer:",
+          "description": "often between 1 and 5 words"
+        }
+      ]
+    }
+  }
+}

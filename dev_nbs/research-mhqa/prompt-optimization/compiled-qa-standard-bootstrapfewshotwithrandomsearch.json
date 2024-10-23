@@ -1,0 +1,84 @@
+{
+  "generate_answer": {
+    "lm": null,
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "context": "# The Pride of the Clan\nThe Pride of the Clan is a 1917 American silent romantic drama film directed by Maurice Tourneur, and starring Mary Pickford and Matt Moore.\n\n# Exit Smiling\nExit Smiling is a 1926 comedy film directed by Sam Taylor and starring New York and London revues star Beatrice Lillie in her first (and only silent) film role and Jack Pickford, the brother of star Mary Pickford. The film was also the debut of actor Franklin Pangborn. This film is available on DVD from the Warner Archives Collection.",
+        "question": "Who is the sibling of the cast member from The Pride of the Clan?",
+        "answer": "Jack Pickford"
+      },
+      {
+        "augmented": true,
+        "context": "# Washington University in St. Louis\nWashington University in St. Louis (WashU, or WUSTL) is a private research university in St. Louis, Missouri. Founded in 1853, and named after George Washington, the university has students and faculty from all 50 U.S. states and more than 120 countries. As of 2017, 24 Nobel laureates in economics, physiology and medicine, chemistry, and physics have been affiliated with Washington University, nine having done the major part of their pioneering research at the university.Washington University is made up of seven graduate and undergraduate schools that encompass a broad range of academic fields. To prevent confusion over its location, the Board of Trustees added the phrase \"in St. Louis\" in 1976.\n\n# List of governors of Missouri\nGovernor of Missouri Seal of Missouri Incumbent Mike Parson since June 1, 2018 Style The Honorable Residence Missouri Governor's Mansion Term length Four years, renewable once (maximumly lifetime) Inaugural holder Alexander McNair Formation Constitution of Missouri Salary $133,821 (2013) Website governor.mo.gov\n\n# Don Ebert\nDon \"Mad Hatter\" Ebert is a retired U.S. soccer forward who spent most of his career with two indoor clubs, the St. Louis Steamers and the Los Angeles Lazers.",
+        "question": "Who was the first governor of the state that contains Washington University in the city where Don Ebert was born?",
+        "answer": "Alexander McNair"
+      },
+      {
+        "augmented": true,
+        "context": "# 11\/6\/00 \u2013 Seattle, Washington\n11\/6\/00\u00a0\u2013 Seattle, Washington is a three-disc live album and the seventy-second and final in a long series of live bootlegs that the American alternative rock band Pearl Jam released from the band's 2000 Binaural Tour. It was released along with the other official bootlegs from the second North American leg of the tour on March 27, 2001.\n\n# Flett Glacier\nFlett Glacier refers to two glaciers on the northwestern flank of Mount Rainier in the U.S. state of Washington. The glaciers lie on a subsidiary peak of Rainier, the Observation Rock. There are two sections of glacial ice, an eastern lobe at about to in elevation, a smaller western lobe at about in elevation. Meltwater from the glacier flows into the Puyallup River.\n\n# Maktub\nMaktub is a Seattle, Washington-based music group formed in the late 1990s that combines elements of hip-hop, rhythm and blues, soul, and funk, with a sprinkling of jazz and rock.\n\n# Subtle Ways\nSubtle Ways is the first studio album released by Maktub. It was voted 1999 Northwest soul album of the year by the Grammy Association and Billboard Magazine called it \"fresh and original.\"",
+        "question": "What is the country of origin of the album called 11\/6\/00 - from the city where the performer of Subtle Ways was formed in the state where Fleet Glacier is located?",
+        "answer": "United States"
+      },
+      {
+        "augmented": true,
+        "context": "# Rio Vista (Fort Lauderdale)\nThe Rio Vista neighborhood is an affluent community of over 1,000 homes, situated next to downtown Fort Lauderdale, Florida. Its name means \"River View\" in Spanish. It is one of the oldest communities in Fort Lauderdale and features tree-lined streets, sidewalks and unique architecture.\n\n# Fort Lauderdale, Florida\nFort Lauderdale (\/ \u02ccf\u0254\u02d0rt \u02c8l\u0254\u02d0d\u0259rde\u026al \/; frequently abbreviated as Ft. Lauderdale) is a city in the U.S. state of Florida, 28 miles (45 km) north of Miami. It is the county seat of Broward County. As of the 2010 census, the city had a population of 165,521 in 2010.",
+        "question": "What is the population of the city in Florida where Rio Vista is located?",
+        "answer": "165,521"
+      },
+      {
+        "question": "When did the US and Britain invade the country that seized the country Al-Berka is located from the empire the Gallipoli Campaign fought against?",
+        "context": "# Ottoman Tripolitania\nAs a result of this conflict, the Ottoman Turks ceded the provinces of Tripolitania, Fezzan, and Cyrenaica to Italy. These provinces together formed what became known as Libya.\n\n# British Empire\nThe British declaration of war on Germany and its allies also committed the colonies and Dominions, which provided invaluable military, financial and material support. Over 2.5 million men served in the armies of the Dominions, as well as many thousands of volunteers from the Crown colonies. The contributions of Australian and New Zealand troops during the 1915 Gallipoli Campaign against the Ottoman Empire had a great impact on the national consciousness at home, and marked a watershed in the transition of Australia and New Zealand from colonies to nations in their own right. The countries continue to commemorate this occasion on Anzac Day. Canadians viewed the Battle of Vimy Ridge in a similar light. The important contribution of the Dominions to the war effort was recognised in 1917 by the British Prime Minister David Lloyd George when he invited each of the Dominion Prime Ministers to join an Imperial War Cabinet to co-ordinate imperial policy.\n\n# Al-Berka\nAl-Berka (Arabic:\u0627\u0644\u0628\u0631\u0643\u0629) is a Basic People's Congress administrative division of Benghazi, Libya. As of the 2011 Libyan revolution, the area is simply known as a district of Benghazi after the Gaddafi era Basic People's Congresses were disbanded.\n\n# Allied invasion of Italy\nThe Allied invasion of Italy was the Allied amphibious landing on mainland Italy that took place on 3 September 1943 during the early stages of the Italian Campaign of World War II. The operation was undertaken by General Sir Harold Alexander's 15th Army Group (comprising General Mark W. Clark's Fifth Army and General Bernard Montgomery's British Eighth Army) and followed the successful invasion of Sicily. The main invasion force landed around Salerno on 9 September on the western coast in Operation Avalanche, while two supporting operations took place in Calabria (Operation Baytown) and Taranto (Operation Slapstick).",
+        "answer": "3 September 1943",
+        "answers": [
+          "3 September 1943"
+        ]
+      },
+      {
+        "question": "What are the spirits associated with Shintoism called in the language of Five Treasure Island?",
+        "context": "# Kami\nKami is the Japanese word for a god, deity, divinity, or spirit. It has been used to describe mind (\u5fc3\u970a), God (\u30b4\u30c3\u30c9), supreme being (\u81f3\u4e0a\u8005), one of the Shinto deities, an effigy, a principle, and anything that is worshipped.\n\n# Five Treasure Island\nFive Treasure Island is the first major label Japanese-language studio album by South Korean rock band F.T. Island, released by Warner Music Japan on 18 May, 2011. The album placed first on the Oricon daily chart.",
+        "answer": "Kami",
+        "answers": [
+          "Kami",
+          "kami"
+        ]
+      },
+      {
+        "question": "Where did the plane crash in the largest river in the state Tito visited when he saw the organization offering possible solutions Arab-Israeli conflict supported by Nasser?",
+        "context": "# US Airways Flight 1549\nUS Airways Flight 1549 was an Airbus A320 - 214 which, in the climbout after takeoff from New York City's LaGuardia Airport on January 15, 2009, struck a flock of Canada geese just northeast of the George Washington Bridge and consequently lost all engine power. Unable to reach any airport, pilots Chesley Sullenberger and Jeffrey Skiles glided the plane to a ditching in the Hudson River off Midtown Manhattan. All 155 people aboard were rescued by nearby boats and there were few serious injuries.\n\n# Hudson River\nThe Hudson River is a 315 - mile (507 km) river that flows from north to south primarily through eastern New York in the United States. The river originates in the Adirondack Mountains of Upstate New York, flows through the Hudson Valley, and eventually drains into the Atlantic Ocean, between New York City and Jersey City. The river serves as a political boundary between the states of New Jersey and New York, and further north between New York counties. The lower half of the river is a tidal estuary occupying the Hudson Fjord, an inlet which formed during the most recent period of North American glaciation, estimated at 26,000 to 13,300 years ago. Tidal waters influence the Hudson's flow from as far north as Troy.\n\n# Gamal Abdel Nasser\nNasser mediated discussions between the pro-Western, pro-Soviet, and neutralist conference factions over the composition of the \"Final Communique\" addressing colonialism in Africa and Asia and the fostering of global peace amid the Cold War between the West and the Soviet Union. At Bandung Nasser sought a proclamation for the avoidance of international defense alliances, support for the independence of Tunisia, Algeria, and Morocco from French rule, support for the Palestinian right of return, and the implementation of UN resolutions regarding the Arab\u2013Israeli conflict. He succeeded in lobbying the attendees to pass resolutions on each of these issues, notably securing the strong support of China and India.\n\n# Josip Broz Tito\nTito's visits to the United States avoided most of the Northeast due to large minorities of Yugoslav emigrants bitter about communism in Yugoslavia. Security for the state visits was usually high to keep him away from protesters, who would frequently burn the Yugoslav flag. During a visit to the United Nations in the late 1970s emigrants shouted \"Tito murderer\" outside his New York hotel, for which he protested to United States authorities.",
+        "answer": "off Midtown Manhattan",
+        "answers": [
+          "off Midtown Manhattan",
+          "Manhattan"
+        ]
+      },
+      {
+        "question": "Where on the world map is the country where the Cycle of Violence author was born?",
+        "context": "# Colin Bateman (footballer)\nColin Bateman (born 22 October 1930 in Hemel Hempstead) is an English former professional footballer who played in the Football League as a full back for Watford. He joined the club from Hemel Hempstead in 1953 and made 50 league appearances between the 1954\u201355 and 1957\u201358 seasons, before returning to non-league football with Sittingbourne.\n\n# United Kingdom\nThe United Kingdom of Great Britain and Northern Ireland, commonly known as the United Kingdom (UK) and colloquially Great Britain (GB) or simply Britain, is a sovereign country in western Europe. Lying off the north - western coast of the European mainland, the United Kingdom includes the island of Great Britain, the north - eastern part of the island of Ireland and many smaller islands. Northern Ireland is the only part of the United Kingdom that shares a land border with another sovereign state\u200d -- \u200cthe Republic of Ireland. Apart from this land border, the United Kingdom is surrounded by the Atlantic Ocean, with the North Sea to its east, the English Channel to its south and the Celtic Sea to its south - south - west, giving it the 12th - longest coastline in the world. The Irish Sea lies between Great Britain and Ireland. With an area of 242,500 square kilometres (93,600 sq mi), the United Kingdom is the 78th - largest sovereign state in the world and the 11th - largest in Europe. It is also the 21st-most populous country, with an estimated 65.1 million inhabitants. Together, this makes it the fourth-most densely populated country in the European Union (EU).\n\n# Cycle of Violence\nCycle of Violence, also known as Crossmaheart, is the first stand-alone novel by Northern Irish author, Colin Bateman, released on 13 November 1995 through HarperCollins. The novel follows a journalist named Miller and his appointment in the hostile town of Crossmaheart; it was well received by reviewers. A movie adaptation has been made, named \"Crossmaheart\" also, and was featured in a number of film festivals.\n\n# Abbot's Hill School\nAbbot's Hill School is an independent day school for girls aged 4\u201316 years and a day nursery and pre-school for girls and boys from 6 months in Hemel Hempstead, Hertfordshire in the United Kingdom.",
+        "answer": "off the north - western coast of the European mainland",
+        "answers": [
+          "off the north - western coast of the European mainland"
+        ]
+      }
+    ],
+    "signature": {
+      "instructions": "Answer the question based on the given context.",
+      "fields": [
+        {
+          "prefix": "Context:",
+          "description": "may contain relevant facts"
+        },
+        {
+          "prefix": "Question:",
+          "description": "${question}"
+        },
+        {
+          "prefix": "Answer:",
+          "description": "often between 1 and 5 words"
+        }
+      ]
+    }
+  }
+}
