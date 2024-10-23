@@ -2,17 +2,17 @@ train:
   dataset:
     path: bdsaglam/musique-mini
     name: answerable
-    split: train[:10]
+    split: train
   optimizer: 
     class: BootstrapFewShotWithRandomSearch
-    num_candidate_programs: 2
-    max_rounds: 1
+    num_candidate_programs: 16
+    max_rounds: 10
 
 evaluation:
   dataset:
     path: bdsaglam/musique-mini
     name: answerable
-    split: validation[:16]
+    split: validation
 
 qa:
   model: llama-3-70b-tgi
