@@ -1,0 +1,22 @@
+train:
+  dataset:
+    path: bdsaglam/musique-mini
+    name: answerable
+    split: train[:10]
+  optimizer: 
+    class: BootstrapFewShotWithRandomSearch
+    num_candidate_programs: 2
+    max_rounds: 1
+
+evaluation:
+  dataset:
+    path: bdsaglam/musique-mini
+    name: answerable
+    split: validation[:16]
+
+qa:
+  model: llama-3-70b-tgi
+  temperature: 0.1
+  technique: standard
+
+run: 1

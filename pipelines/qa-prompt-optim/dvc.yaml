@@ -1,0 +1,79 @@
+stages:
+  evaluate-pre-training:
+    cmd: >-
+      python main.py evaluate
+      --dataset-path ${evaluation.dataset.path}
+      --dataset-name ${evaluation.dataset.name}
+      --dataset-split ${evaluation.dataset.split}
+      --model ${qa.model}
+      --temperature ${qa.temperature}
+      --technique ${qa.technique}
+      --out ../../data/generated/qa-prompt-optim/pre-training/
+    deps:
+      - main.py
+    outs:
+      - ../../data/generated/qa-prompt-optim/pre-training/results.json
+    metrics:
+      - ../../data/generated/qa-prompt-optim/pre-training/scores.json
+    params:
+      - evaluation.dataset.path
+      - evaluation.dataset.name
+      - evaluation.dataset.split
+      - qa.model
+      - qa.temperature
+      - qa.technique
+      - run
+  
+  train:
+    cmd: >-
+      python main.py train
+      --dataset-path ${train.dataset.path}
+      --dataset-name ${train.dataset.name}
+      --dataset-split ${train.dataset.split}
+      --model ${qa.model}
+      --temperature ${qa.temperature}
+      --technique ${qa.technique}
+      --optimizer ${train.optimizer.class}
+      --num-candidate-programs ${train.optimizer.num_candidate_programs}
+      --max-rounds ${train.optimizer.max_rounds}
+      --out ../../data/generated/qa-prompt-optim/training/trained-program.json
+    deps:
+      - main.py
+    outs:
+      - ../../data/generated/qa-prompt-optim/training/trained-program.json
+    params:
+      - train.dataset.path
+      - train.dataset.name
+      - train.dataset.split
+      - train.optimizer.class
+      - train.optimizer.num_candidate_programs
+      - train.optimizer.max_rounds
+      - qa.model
+      - qa.temperature
+      - qa.technique
+
+  evaluate-post-training:
+    cmd: >-
+      python main.py evaluate
+      --dataset-path ${evaluation.dataset.path}
+      --dataset-name ${evaluation.dataset.name}
+      --dataset-split ${evaluation.dataset.split}
+      --model ${qa.model}
+      --temperature ${qa.temperature}
+      --technique ${qa.technique}
+      --load-from ../../data/generated/qa-prompt-optim/training/trained-program.json
+      --out ../../data/generated/qa-prompt-optim/post-training/
+    deps:
+      - main.py
+    outs:
+      - ../../data/generated/qa-prompt-optim/post-training/results.json
+    metrics:
+      - ../../data/generated/qa-prompt-optim/post-training/scores.json
+    params:
+      - evaluation.dataset.path
+      - evaluation.dataset.name
+      - evaluation.dataset.split
+      - qa.model
+      - qa.temperature
+      - qa.technique
+      - run
