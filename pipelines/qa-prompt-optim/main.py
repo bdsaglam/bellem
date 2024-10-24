@@ -91,13 +91,14 @@ def dynamic_import(module, name):
     return getattr(importlib.import_module(module), name)
 
 
-def make_optimizer(optimizer_name: str, **kwargs):
-    cls = dynamic_import("dspy.teleprompt", optimizer_name)
-    return cls(
-        metric=evaluate_answer,
-        num_threads=16,
-        **kwargs,
-    )
+def make_optimizer(optimizer_path: Path):
+    with open(optimizer_path) as f:
+        optimizer_config = json.load(f)
+    cls = dynamic_import("dspy.teleprompt", optimizer_config["class"])
+    kwargs = optimizer_config["params"].deepcopy()
+    if optimizer_config["with_metric"]:
+        kwargs["metric"] = evaluate_answer
+    return cls(**kwargs)
 
 
 def preprocess_result(result):
@@ -169,9 +170,7 @@ def train_main(
     temperature: float = typer.Option(..., help="Temperature parameter for the model"),
     technique: str = typer.Option(..., help="Prompting technique to use"),
     load_from: str = typer.Option(default="UNSET", help="Path to a saved model to load"),
-    optimizer: str = typer.Option(..., help="Name of the optimizer to use"),
-    num_candidate_programs: int = typer.Option(..., help="Number of candidate programs to consider"),
-    max_rounds: int = typer.Option(..., help="Number of rounds to train the program"),
+    optimizer_path: Path = typer.Option(..., help="Path to the optimizer config"),
     out: Path = typer.Option(..., help="Output file for trained program"),
 ):
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -191,12 +190,8 @@ def train_main(
         program.load(load_from)
 
     # Train the program
-    optim = make_optimizer(
-        optimizer,
-        num_candidate_programs=num_candidate_programs,
-        max_rounds=max_rounds,
-    )
-    trained_program = optim.compile(program, trainset=examples)
+    optimizer = make_optimizer(optimizer_path)
+    trained_program = optimizer.compile(program, trainset=examples)
 
     # Save the trained program
     trained_program.save(out)

@@ -3,10 +3,7 @@ train:
     path: bdsaglam/musique-mini
     name: answerable
     split: train
-  optimizer: 
-    class: BootstrapFewShotWithRandomSearch
-    num_candidate_programs: 16
-    max_rounds: 10
+  optimizer: bfs-medium
 
 evaluation:
   dataset:

@@ -33,21 +33,18 @@ stages:
       --model ${qa.model}
       --temperature ${qa.temperature}
       --technique ${qa.technique}
-      --optimizer ${train.optimizer.class}
-      --num-candidate-programs ${train.optimizer.num_candidate_programs}
-      --max-rounds ${train.optimizer.max_rounds}
+      --optimizer-path ../../data/raw/qa-prompt-optim/optimizer-configs/${train.optimizer}.json
       --out ../../data/generated/qa-prompt-optim/training/trained-program.json
     deps:
       - main.py
+      - ../../data/raw/qa-prompt-optim/optimizer-configs/${train.optimizer}.json
     outs:
       - ../../data/generated/qa-prompt-optim/training/trained-program.json
     params:
       - train.dataset.path
       - train.dataset.name
       - train.dataset.split
-      - train.optimizer.class
-      - train.optimizer.num_candidate_programs
-      - train.optimizer.max_rounds
+      - train.optimizer
       - qa.model
       - qa.temperature
       - qa.technique

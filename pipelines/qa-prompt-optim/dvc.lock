@@ -2,14 +2,18 @@ schema: '2.0'
 stages:
   train:
     cmd: python main.py train --dataset-path bdsaglam/musique-mini --dataset-name
-      answerable --dataset-split train[:10] --model llama-3-70b-tgi --temperature
-      0.1 --technique standard --optimizer BootstrapFewShotWithRandomSearch --num-candidate-programs
-      2 --max-rounds 1 --out ../../data/generated/qa-prompt-optim/training/trained-program.json
+      answerable --dataset-split train[:20] --model llama-3-70b-tgi --temperature
+      0.1 --technique standard --optimizer-path ../../data/raw/qa-prompt-optim/optimizer-configs/debug.json
+      --out ../../data/generated/qa-prompt-optim/training/trained-program.json
     deps:
+    - path: ../../data/raw/qa-prompt-optim/optimizer-configs/debug.json
+      hash: md5
+      md5: fc8b761c526b1b7e9e01e31f6b5bc6e0
+      size: 287
     - path: main.py
       hash: md5
-      md5: 9c72c839095eda728a2c0f001280fa90
-      size: 6608
+      md5: 6f19831da26dc80a6423c8880e54e13a
+      size: 6411
     params:
       params.yaml:
         qa.model: llama-3-70b-tgi
@@ -17,30 +21,28 @@ stages:
         qa.temperature: 0.1
         train.dataset.name: answerable
         train.dataset.path: bdsaglam/musique-mini
-        train.dataset.split: train[:10]
-        train.optimizer.class: BootstrapFewShotWithRandomSearch
-        train.optimizer.max_rounds: 1
-        train.optimizer.num_candidate_programs: 2
+        train.dataset.split: train[:20]
+        train.optimizer: debug
     outs:
     - path: ../../data/generated/qa-prompt-optim/training/trained-program.json
       hash: md5
-      md5: e676304a8f6eff193d6300ae46d3f768
-      size: 13957
+      md5: c9697c8b7111e4fb64655b0ac8bd3896
+      size: 5740
   evaluate-post-training:
     cmd: python main.py evaluate --dataset-path bdsaglam/musique-mini --dataset-name
-      answerable --dataset-split validation[:16] --model llama-3-70b-tgi --temperature
+      answerable --dataset-split validation[:10] --model llama-3-70b-tgi --temperature
       0.1 --technique standard --load-from ../../data/generated/qa-prompt-optim/training/trained-program.json
       --out ../../data/generated/qa-prompt-optim/post-training/
     deps:
     - path: main.py
       hash: md5
-      md5: 9c72c839095eda728a2c0f001280fa90
-      size: 6608
+      md5: 6f19831da26dc80a6423c8880e54e13a
+      size: 6411
     params:
       params.yaml:
         evaluation.dataset.name: answerable
         evaluation.dataset.path: bdsaglam/musique-mini
-        evaluation.dataset.split: validation[:16]
+        evaluation.dataset.split: validation[:10]
         qa.model: llama-3-70b-tgi
         qa.technique: standard
         qa.temperature: 0.1
@@ -48,26 +50,26 @@ stages:
     outs:
     - path: ../../data/generated/qa-prompt-optim/post-training/results.json
       hash: md5
-      md5: 64ca1768d6f071f0a9319717f9525ebb
-      size: 19791
+      md5: 2b5f36a7f60f300fac80ae21301e4c49
+      size: 12999
     - path: ../../data/generated/qa-prompt-optim/post-training/scores.json
       hash: md5
-      md5: 6d0118ac800e86b3ee9a37f92d3f6725
-      size: 100
+      md5: 02698eedab27a5dc185f1bb513ae3aa6
+      size: 96
   evaluate-pre-training:
     cmd: python main.py evaluate --dataset-path bdsaglam/musique-mini --dataset-name
-      answerable --dataset-split validation[:16] --model llama-3-70b-tgi --temperature
+      answerable --dataset-split validation[:10] --model llama-3-70b-tgi --temperature
       0.1 --technique standard --out ../../data/generated/qa-prompt-optim/pre-training/
     deps:
     - path: main.py
       hash: md5
-      md5: 9c72c839095eda728a2c0f001280fa90
-      size: 6608
+      md5: 6f19831da26dc80a6423c8880e54e13a
+      size: 6411
     params:
       params.yaml:
         evaluation.dataset.name: answerable
         evaluation.dataset.path: bdsaglam/musique-mini
-        evaluation.dataset.split: validation[:16]
+        evaluation.dataset.split: validation[:10]
         qa.model: llama-3-70b-tgi
         qa.technique: standard
         qa.temperature: 0.1
@@ -75,9 +77,9 @@ stages:
     outs:
     - path: ../../data/generated/qa-prompt-optim/pre-training/results.json
       hash: md5
-      md5: 51e019184663b29e8fa8a4c1af75ca9b
-      size: 19758
+      md5: 508ba5b4434f83b51c35141a3f8cb2bc
+      size: 12986
     - path: ../../data/generated/qa-prompt-optim/pre-training/scores.json
       hash: md5
-      md5: 28c759ebdfc8740c6512e5fc4940b8f1
-      size: 100
+      md5: afe0b4f09f7a2f657d54b21a1752e794
+      size: 95
