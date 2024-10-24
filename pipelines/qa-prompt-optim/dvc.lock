@@ -1,0 +1,62 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python main.py train --dataset-path bdsaglam/musique-mini --dataset-name
+      answerable --dataset-split train --model llama-3-70b-tgi --temperature 0.1 --technique
+      standard --optimizer-path ../../data/raw/qa-prompt-optim/optimizer-configs/noop.json
+      --out ../../data/generated/qa-prompt-optim/training/trained-program.json
+    deps:
+    - path: ../../data/raw/qa-prompt-optim/optimizer-configs/noop.json
+      hash: md5
+      md5: 37a6259cc0c1dae299a7866489dff0bd
+      size: 4
+    - path: main.py
+      hash: md5
+      md5: d5a8df30d7f82ea25a3d86190945fff1
+      size: 6653
+    params:
+      params.yaml:
+        qa.model: llama-3-70b-tgi
+        qa.technique: standard
+        qa.temperature: 0.1
+        train.dataset.name: answerable
+        train.dataset.path: bdsaglam/musique-mini
+        train.dataset.split: train
+        train.optimizer: noop
+    outs:
+    - path: ../../data/generated/qa-prompt-optim/training/trained-program.json
+      hash: md5
+      md5: e5542f827baec8c8a90f98af3f5cbf64
+      size: 528
+  evaluate:
+    cmd: python main.py evaluate --dataset-path bdsaglam/musique-mini --dataset-name
+      answerable --dataset-split validation --model llama-3-70b-tgi --temperature
+      0.1 --technique standard --load-from ../../data/generated/qa-prompt-optim/training/trained-program.json
+      --out ../../data/generated/qa-prompt-optim/evaluation/
+    deps:
+    - path: ../../data/generated/qa-prompt-optim/training/trained-program.json
+      hash: md5
+      md5: e5542f827baec8c8a90f98af3f5cbf64
+      size: 528
+    - path: main.py
+      hash: md5
+      md5: d5a8df30d7f82ea25a3d86190945fff1
+      size: 6653
+    params:
+      params.yaml:
+        evaluation.dataset.name: answerable
+        evaluation.dataset.path: bdsaglam/musique-mini
+        evaluation.dataset.split: validation
+        qa.model: llama-3-70b-tgi
+        qa.technique: standard
+        qa.temperature: 0.1
+        run: 1
+    outs:
+    - path: ../../data/generated/qa-prompt-optim/evaluation/results.jsonl
+      hash: md5
+      md5: 6fed97f4b50c86863de624abea6b5a9b
+      size: 622415
+    - path: ../../data/generated/qa-prompt-optim/evaluation/scores.json
+      hash: md5
+      md5: 10ebf5d8f8725d2e96200af1f7f5aca1
+      size: 90
