@@ -12,8 +12,8 @@ stages:
       size: 237
     - path: main.py
       hash: md5
-      md5: dcec41637215a4e9be55ff39d569e6cb
-      size: 6467
+      md5: c388b71e2a2e64463c915f7c8e53fe3c
+      size: 6552
     params:
       params.yaml:
         qa.model: llama-3-70b-tgi
@@ -36,8 +36,8 @@ stages:
     deps:
     - path: main.py
       hash: md5
-      md5: dcec41637215a4e9be55ff39d569e6cb
-      size: 6467
+      md5: c388b71e2a2e64463c915f7c8e53fe3c
+      size: 6552
     params:
       params.yaml:
         evaluation.dataset.name: answerable
@@ -50,12 +50,12 @@ stages:
     outs:
     - path: ../../data/generated/qa-prompt-optim/post-training/results.json
       hash: md5
-      md5: 48b1d877d3929a2ccad0cde405d88ca4
-      size: 609392
+      md5: dc99733e3e9ac4aacb057ba87f618c23
+      size: 622947
     - path: ../../data/generated/qa-prompt-optim/post-training/scores.json
       hash: md5
-      md5: 9f33fce80097844e681fcd56a7782a3f
-      size: 112
+      md5: ff820a544dfb02c86f4c5198acea4da6
+      size: 110
   evaluate-pre-training:
     cmd: python main.py evaluate --dataset-path bdsaglam/musique-mini --dataset-name
       answerable --dataset-split validation --model llama-3-70b-tgi --temperature
@@ -63,8 +63,8 @@ stages:
     deps:
     - path: main.py
       hash: md5
-      md5: dcec41637215a4e9be55ff39d569e6cb
-      size: 6467
+      md5: c388b71e2a2e64463c915f7c8e53fe3c
+      size: 6552
     params:
       params.yaml:
         evaluation.dataset.name: answerable
@@ -77,9 +77,9 @@ stages:
     outs:
     - path: ../../data/generated/qa-prompt-optim/pre-training/results.json
       hash: md5
-      md5: 896dd58a27bacf25dd82100441962541
-      size: 608640
+      md5: 930a2a7837769890f5637f530f8f02f3
+      size: 622391
     - path: ../../data/generated/qa-prompt-optim/pre-training/scores.json
       hash: md5
-      md5: 6e3c277082b15af94c9e7481a7862a55
-      size: 111
+      md5: 86ffe40288b7daf121cf0d2b178a8962
+      size: 110

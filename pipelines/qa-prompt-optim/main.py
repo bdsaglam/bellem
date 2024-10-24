@@ -10,8 +10,6 @@ from datasets import load_dataset
 from bellek.utils import set_seed
 from bellek.musique.eval import (
     aggregate_scores,
-    calculate_metrics,
-    compare_answers,
     compute_scores,
     compute_scores_dataframe,
 )
