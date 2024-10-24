@@ -8,7 +8,13 @@ import dspy
 from dspy.evaluate import Evaluate
 from datasets import load_dataset
 from bellek.utils import set_seed
-from bellek.musique.eval import calculate_metrics, compute_scores
+from bellek.musique.eval import (
+    aggregate_scores,
+    calculate_metrics,
+    compare_answers,
+    compute_scores,
+    compute_scores_dataframe,
+)
 from dotenv import load_dotenv
 from rich.console import Console
 
@@ -108,7 +114,8 @@ def preprocess_result(result):
 
 
 def make_results_dataframe(results):
-    return pd.json_normalize([preprocess_result(result) for result in results])
+    dataf = pd.json_normalize([preprocess_result(result) for result in results])
+    return compute_scores_dataframe(dataf)
 
 
 @app.command("evaluate")
@@ -150,7 +157,7 @@ def evaluate_main(
     )
     _, results = evaluate_program(program)
     result_df = make_results_dataframe(results)
-    scores = calculate_metrics(result_df)
+    scores = aggregate_scores(result_df)
 
     # Save the results
     result_df.to_json(out / "results.json", orient="records", lines=True)

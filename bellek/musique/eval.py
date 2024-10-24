@@ -2,7 +2,7 @@
 
 # %% auto 0
 __all__ = ['fuzzy_match_metric', 'normalize_answer', 'get_tokens', 'compute_exact_match', 'compute_f1',
-           'metric_max_over_ground_truths', 'compute_scores', 'calculate_metrics', 'compare_answers']
+           'metric_max_over_ground_truths', 'compute_scores', 'compute_scores_dataframe', 'aggregate_scores']
 
 # %% ../../nbs/musique.eval.ipynb 3
 import collections
@@ -84,23 +84,10 @@ def compute_scores(prediction: str, reference: list[str]) -> dict:
     return {"exact_match": exact_match, "f1": f1, "fuzzy_match": fuzzy_match}
 
 # %% ../../nbs/musique.eval.ipynb 7
-def calculate_metrics(dataf: pd.DataFrame) -> dict:
-    prediction_list = dataf["predicted_answer"].tolist()
-    references_list = dataf["answers"].tolist()
-    scores_list = [compute_scores(prediction, references) for prediction, references in zip(prediction_list, references_list)]
-    return pd.DataFrame(scores_list).mean().to_dict()
+def compute_scores_dataframe(dataf: pd.DataFrame) -> pd.DataFrame:
+    scores = dataf.apply(lambda row: compute_scores(row["predicted_answer"], row["answers"]), axis=1, result_type="expand")
+    return pd.concat([dataf, scores], axis=1)
 
-# %% ../../nbs/musique.eval.ipynb 8
-def _exact_match(example):
-    pred = example['predicted_answer']
-    return pred is not None and any(pred == ref for ref in example['answers'])
-
-def _fuzzy_match(example):
-    pred = example['predicted_answer']
-    return pred is not None and any((pred in ref) or (ref in pred) or fuzzy_match(pred, ref) for ref in example['answers'])
-
-
-def compare_answers(dataf: pd.DataFrame) -> pd.DataFrame:
-    dataf['exact_match'] = dataf.apply(_exact_match, axis=1)
-    dataf['fuzzy_match'] = dataf.apply(_fuzzy_match, axis=1)
-    return dataf
+# %% ../../nbs/musique.eval.ipynb 9
+def aggregate_scores(dataf: pd.DataFrame) -> dict:
+    return dataf[["exact_match", "f1", "fuzzy_match"]].mean().to_dict()
