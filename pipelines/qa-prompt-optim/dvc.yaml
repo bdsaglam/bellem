@@ -62,6 +62,7 @@ stages:
       --out ../../data/generated/qa-prompt-optim/post-training/
     deps:
       - main.py
+      - ../../data/generated/qa-prompt-optim/training/trained-program.json
     outs:
       - ../../data/generated/qa-prompt-optim/post-training/results.json
     metrics:

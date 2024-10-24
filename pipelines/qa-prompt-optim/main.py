@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import os
 import pandas as pd
@@ -95,11 +96,9 @@ def dynamic_import(module, name):
     return getattr(importlib.import_module(module), name)
 
 
-def make_optimizer(optimizer_path: Path):
-    with open(optimizer_path) as f:
-        optimizer_config = json.load(f)
+def make_optimizer(optimizer_config: dict):
     cls = dynamic_import("dspy.teleprompt", optimizer_config["class"])
-    kwargs = optimizer_config["params"]
+    kwargs = deepcopy(optimizer_config["params"])
     if optimizer_config["with_metric"]:
         kwargs["metric"] = evaluate_answer
     return cls(**kwargs)
@@ -195,8 +194,11 @@ def train_main(
         program.load(load_from)
 
     # Train the program
-    optimizer = make_optimizer(optimizer_path)
-    trained_program = optimizer.compile(program, trainset=examples)
+    with open(optimizer_path) as f:
+        optimizer_config = json.load(f)
+    optimizer = make_optimizer(optimizer_config)
+    compile_params = optimizer_config.get("compile_params", {})
+    trained_program = optimizer.compile(program, trainset=examples, **compile_params)
 
     # Save the trained program
     trained_program.save(out)
