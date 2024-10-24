@@ -95,7 +95,7 @@ def make_optimizer(optimizer_path: Path):
     with open(optimizer_path) as f:
         optimizer_config = json.load(f)
     cls = dynamic_import("dspy.teleprompt", optimizer_config["class"])
-    kwargs = optimizer_config["params"].deepcopy()
+    kwargs = optimizer_config["params"]
     if optimizer_config["with_metric"]:
         kwargs["metric"] = evaluate_answer
     return cls(**kwargs)
