@@ -3,7 +3,7 @@ train:
     path: bdsaglam/musique-mini
     name: answerable
     split: train
-  optimizer: noop
+  optimizer: bfs-medium
 
 evaluation:
   dataset:
