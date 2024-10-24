@@ -155,7 +155,7 @@ def evaluate_main(
     scores = aggregate_scores(result_df)
 
     # Save the results
-    result_df.to_json(out / "results.json", orient="records", lines=True)
+    result_df.to_json(out / "results.jsonl", orient="records", lines=True)
 
     # Save the scores
     with open(out / "scores.json", "w") as f:

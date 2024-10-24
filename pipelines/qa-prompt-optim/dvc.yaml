@@ -39,7 +39,7 @@ stages:
       - main.py
       - ../../data/generated/qa-prompt-optim/training/trained-program.json
     outs:
-      - ../../data/generated/qa-prompt-optim/evaluation/results.json
+      - ../../data/generated/qa-prompt-optim/evaluation/results.jsonl
     metrics:
       - ../../data/generated/qa-prompt-optim/evaluation/scores.json
     params:
