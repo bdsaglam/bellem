@@ -138,11 +138,9 @@ def evaluate_main(
 
     # Create the program
     program = QAModule(predict_cls=get_predict_cls(technique))
-    is_trained = False
     if load_from and load_from != "UNSET":
         print(f"Loading model from {load_from}")
         program.load(load_from)
-        is_trained = True
 
     # Evaluate the program
     evaluate_program = Evaluate(
@@ -160,9 +158,8 @@ def evaluate_main(
     result_df.to_json(out / "results.json", orient="records", lines=True)
 
     # Save the scores
-    prefix = "post" if is_trained else "pre"
     with open(out / "scores.json", "w") as f:
-        json.dump({prefix: scores}, f, indent=2)
+        json.dump(scores, f, indent=2)
 
 
 @app.command("train")
@@ -196,9 +193,13 @@ def train_main(
     # Train the program
     with open(optimizer_path) as f:
         optimizer_config = json.load(f)
-    optimizer = make_optimizer(optimizer_config)
-    compile_params = optimizer_config.get("compile_params", {})
-    trained_program = optimizer.compile(program, trainset=examples, **compile_params)
+
+    if optimizer_config:
+        optimizer = make_optimizer(optimizer_config)
+        compile_params = optimizer_config.get("compile_params", {})
+        trained_program = optimizer.compile(program, trainset=examples, **compile_params)
+    else:
+        trained_program = program
 
     # Save the trained program
     trained_program.save(out)
