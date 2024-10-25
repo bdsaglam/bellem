@@ -49,6 +49,7 @@ def make_example(record):
     return dspy.Example(
         id=record["id"],
         question=record["question"],
+        question_decomposition=record["question_decomposition"],
         context=context,
         answer=record["answer"],
         answers=[record["answer"], *record["answer_aliases"]],
@@ -112,54 +113,8 @@ def preprocess_result(result):
 
 def make_results_dataframe(results):
     dataf = pd.json_normalize([preprocess_result(result) for result in results])
+    dataf["n_hops"] = dataf["question_decomposition"].apply(len)
     return compute_scores_dataframe(dataf)
-
-
-@app.command("evaluate")
-def evaluate_main(
-    dataset_path: str = typer.Option(..., help="Path to the dataset"),
-    dataset_name: str = typer.Option(..., help="Name of the dataset"),
-    dataset_split: str = typer.Option(..., help="Dataset split to use (e.g., 'train', 'validation')"),
-    model: str = typer.Option(..., help="Name of the model to use"),
-    temperature: float = typer.Option(..., help="Temperature parameter for the model"),
-    technique: str = typer.Option(..., help="Prompting technique to use"),
-    load_from: str = typer.Option(default="UNSET", help="Path to a saved model to load"),
-    out: Path = typer.Option(..., help="Output directory for generated results"),
-):
-    out.mkdir(parents=True, exist_ok=True)
-
-    # Set up LLM
-    configure_lm(model, temperature)
-
-    # Load and preprocess datasets
-    ds = load_dataset(dataset_path, dataset_name, split=dataset_split)
-    examples = [make_example(record) for record in ds]
-    print(f"Loaded {len(examples)} examples")
-
-    # Create the program
-    program = QAModule(predict_cls=get_predict_cls(technique))
-    if load_from and load_from != "UNSET":
-        print(f"Loading model from {load_from}")
-        program.load(load_from)
-
-    # Evaluate the program
-    evaluate_program = Evaluate(
-        metric=evaluate_answer,
-        devset=examples,
-        num_threads=16,
-        display_progress=True,
-        return_outputs=True,
-    )
-    _, results = evaluate_program(program)
-    result_df = make_results_dataframe(results)
-    scores = aggregate_scores(result_df)
-
-    # Save the results
-    result_df.to_json(out / "results.jsonl", orient="records", lines=True)
-
-    # Save the scores
-    with open(out / "scores.json", "w") as f:
-        json.dump(scores, f, indent=2)
 
 
 @app.command("train")
@@ -203,6 +158,56 @@ def train_main(
 
     # Save the trained program
     trained_program.save(out)
+
+
+@app.command("evaluate")
+def evaluate_main(
+    dataset_path: str = typer.Option(..., help="Path to the dataset"),
+    dataset_name: str = typer.Option(..., help="Name of the dataset"),
+    dataset_split: str = typer.Option(..., help="Dataset split to use (e.g., 'train', 'validation')"),
+    model: str = typer.Option(..., help="Name of the model to use"),
+    temperature: float = typer.Option(..., help="Temperature parameter for the model"),
+    technique: str = typer.Option(..., help="Prompting technique to use"),
+    load_from: str = typer.Option(default="UNSET", help="Path to a saved model to load"),
+    out: Path = typer.Option(..., help="Output directory for generated results"),
+):
+    out.mkdir(parents=True, exist_ok=True)
+
+    # Set up LLM
+    configure_lm(model, temperature)
+
+    # Load and preprocess datasets
+    ds = load_dataset(dataset_path, dataset_name, split=dataset_split)
+    examples = [make_example(record) for record in ds]
+    print(f"Loaded {len(examples)} examples")
+
+    # Create the program
+    program = QAModule(predict_cls=get_predict_cls(technique))
+    if load_from and load_from != "UNSET":
+        print(f"Loading model from {load_from}")
+        program.load(load_from)
+
+    # Evaluate the program
+    evaluate_program = Evaluate(
+        metric=evaluate_answer,
+        devset=examples,
+        num_threads=16,
+        display_progress=True,
+        return_outputs=True,
+    )
+    _, results = evaluate_program(program)
+
+    # Save the results
+    result_df = make_results_dataframe(results)
+    result_df.to_json(out / "results.jsonl", orient="records", lines=True)
+
+    # Save the scores
+    scores = aggregate_scores(result_df)
+    for n_hops in result_df["n_hops"].unique():
+        scores[f"{n_hops}hops"] = aggregate_scores(result_df[result_df["n_hops"] == n_hops])
+
+    with open(out / "scores.json", "w") as f:
+        json.dump(scores, f, indent=2)
 
 
 if __name__ == "__main__":
