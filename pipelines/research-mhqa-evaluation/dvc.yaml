@@ -1,70 +1,70 @@
-# stages:
-#   answer-questions:
-#     cmd: >-
-#       python answer_questions.py
-#       --dataset-path ${dataset.path}
-#       --dataset-name ${dataset.name}
-#       --dataset-split ${dataset.split}
-#       --model ${qa.model}
-#       --temperature ${qa.temperature}
-#       --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
-#       --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
-#       --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
-#       --out ../../data/generated/research-mhqa-evaluation/qa-results/
-#     deps:
-#       - answer_questions.py
-#       - ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
-#       - ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
-#       - ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
-#     outs:
-#       - ../../data/generated/research-mhqa-evaluation/qa-results/
-#     params:
-#       - dataset.path
-#       - dataset.name
-#       - dataset.split
-#       - qa.model
-#       - qa.temperature
-#       - qa.system_prompt
-#       - qa.user_prompt_template
-#       - qa.few_shot_examples
-#       - run
+stages:
+  answer-questions:
+    cmd: >-
+      python answer_questions.py
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
+      --model ${qa.model}
+      --temperature ${qa.temperature}
+      --system-prompt-filepath ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
+      --user-prompt-template-filepath ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
+      --few-shot-examples-filepath ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
+      --out ../../data/generated/research-mhqa-evaluation/qa-results/
+    deps:
+      - answer_questions.py
+      - ../../data/raw/research-mhqa-evaluation/system-prompts/${qa.system_prompt}
+      - ../../data/raw/research-mhqa-evaluation/user-prompt-templates/${qa.user_prompt_template}
+      - ../../data/raw/research-mhqa-evaluation/few-shot-examples/${qa.few_shot_examples}
+    outs:
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
+    params:
+      - dataset.path
+      - dataset.name
+      - dataset.split
+      - qa.model
+      - qa.temperature
+      - qa.system_prompt
+      - qa.user_prompt_template
+      - qa.few_shot_examples
+      - run
   
-#   evaluate-answers:
-#     cmd: >-
-#       python evaluate_answers.py
-#       --dataset-path ${dataset.path}
-#       --dataset-name ${dataset.name}
-#       --dataset-split ${dataset.split}
-#       --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
-#       --out ../../data/generated/research-mhqa-evaluation/evals/
-#     deps:
-#       - evaluate_answers.py
-#       - ../../data/generated/research-mhqa-evaluation/qa-results/
-#     outs:
-#       - ../../data/generated/research-mhqa-evaluation/evals/
-#     params:
-#       - dataset.path
-#       - dataset.name
-#       - dataset.split
+  evaluate-answers:
+    cmd: >-
+      python evaluate_answers.py
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
+      --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --out ../../data/generated/research-mhqa-evaluation/evals/
+    deps:
+      - evaluate_answers.py
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
+    outs:
+      - ../../data/generated/research-mhqa-evaluation/evals/
+    params:
+      - dataset.path
+      - dataset.name
+      - dataset.split
 
-#   report:
-#     cmd: >-
-#       python report.py
-#       --dataset-path ${dataset.path}
-#       --dataset-name ${dataset.name}
-#       --dataset-split ${dataset.split}
-#       --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
-#       --evals-dir ../../data/generated/research-mhqa-evaluation/evals/
-#       --out ../../data/generated/research-mhqa-evaluation/reports/
-#     deps:
-#       - report.py
-#       - ../../data/generated/research-mhqa-evaluation/qa-results/
-#       - ../../data/generated/research-mhqa-evaluation/evals/
-#     outs:
-#       - ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
-#     metrics:
-#       - ../../data/generated/research-mhqa-evaluation/reports/scores.json
-#     params:
-#       - dataset.path
-#       - dataset.name
-#       - dataset.split
+  report:
+    cmd: >-
+      python report.py
+      --dataset-path ${dataset.path}
+      --dataset-name ${dataset.name}
+      --dataset-split ${dataset.split}
+      --qa-dir ../../data/generated/research-mhqa-evaluation/qa-results/
+      --evals-dir ../../data/generated/research-mhqa-evaluation/evals/
+      --out ../../data/generated/research-mhqa-evaluation/reports/
+    deps:
+      - report.py
+      - ../../data/generated/research-mhqa-evaluation/qa-results/
+      - ../../data/generated/research-mhqa-evaluation/evals/
+    outs:
+      - ../../data/generated/research-mhqa-evaluation/reports/results.jsonl
+    metrics:
+      - ../../data/generated/research-mhqa-evaluation/reports/scores.json
+    params:
+      - dataset.path
+      - dataset.name
+      - dataset.split

@@ -9,7 +9,7 @@ from typing import Callable
 import pandas as pd
 from tqdm.auto import tqdm
 
-from .eval import calculate_metrics, compare_answers
+from .eval import compute_scores_dataframe, aggregate_scores
 
 tqdm.pandas()
 
@@ -102,10 +102,10 @@ def benchmark(
         output = pipeline(example, ignore_errors=ignore_errors)
         example["predicted_answer"] = output['answer']
         example["raw_output"] = output
+        example["answers"] = [example["answer"], *example["answer_aliases"]]
         return example
 
     dataf = dataf.progress_apply(process, axis=1)
-    dataf = compare_answers(dataf)
-    scores = calculate_metrics(dataf)
-    scores["fuzzy_match"] = dataf["fuzzy_match"].mean()
+    dataf = compute_scores_dataframe(dataf)
+    scores = aggregate_scores(dataf)
     return dataf, scores
