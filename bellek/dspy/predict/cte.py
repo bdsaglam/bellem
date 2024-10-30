@@ -21,7 +21,7 @@ class ConnectTheEntities(Module):
 
         self.signature = signature = ensure_signature(signature)
 
-        prefix = "Let's identify the relevant entity-relation-entity triples in the format of 'subj;relation;obj'\n"
+        prefix = "Let's identify the relevant entity-relation-entity triples in the format of 'subj | relation | obj', .e.g Glenhis Hernández | birth place | Havana\nMarta Hernández Romero | mayor of| Havana\n"
         desc = "${triples}"
         rationale_type = rationale_type or dspy.OutputField(prefix=prefix, desc=desc)
 

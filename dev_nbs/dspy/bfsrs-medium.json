@@ -1,0 +1,14 @@
+{
+    "class": "BootstrapFewShotWithRandomSearch",
+    "params": {
+        "max_bootstrapped_demos": 4,
+        "max_labeled_demos": 4,
+        "max_rounds": 10,
+        "num_candidate_programs": 16,
+        "num_threads": 16,
+        "max_errors": 10,
+        "metric_threshold": null,
+        "stop_at_score": null
+    },
+    "with_metric": true
+}

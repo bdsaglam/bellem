@@ -114,6 +114,7 @@ def preprocess_result(result):
 def make_results_dataframe(results):
     dataf = pd.json_normalize([preprocess_result(result) for result in results])
     dataf["n_hops"] = dataf["question_decomposition"].apply(len)
+    dataf['predicted_answer'] = dataf['predicted_answer'].fillna("No Answer")
     return compute_scores_dataframe(dataf)
 
 
