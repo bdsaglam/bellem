@@ -13,11 +13,11 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from tqdm.auto import tqdm
 
-from bellek.musique.constants import ABLATION_RECORD_IDS
-from bellek.musique.singlehop import benchmark as benchmark_single
-from bellek.musique.multihop import benchmark as benchmark_multi
-from bellek.musique.qa import answer_question_cte, answer_question_standard
-from bellek.utils import set_seed
+from bellem.musique.constants import ABLATION_RECORD_IDS
+from bellem.musique.singlehop import benchmark as benchmark_single
+from bellem.musique.multihop import benchmark as benchmark_multi
+from bellem.musique.qa import answer_question_cte, answer_question_standard
+from bellem.utils import set_seed
 
 load_dotenv()
 

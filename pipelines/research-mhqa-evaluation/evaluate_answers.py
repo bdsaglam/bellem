@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 from rich.console import Console
 from tqdm import tqdm
 
-from bellek.musique.eval import compute_scores
-from bellek.utils import set_seed
+from bellem.musique.eval import compute_scores
+from bellem.utils import set_seed
 
 print = Console(stderr=True).print
 

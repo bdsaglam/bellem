@@ -7,17 +7,17 @@ from tqdm import tqdm
 from transformers import AutoTokenizer
 from trl import AutoModelForCausalLMWithValueHead, PPOConfig, PPOTrainer, set_seed
 
-from bellek.hf.datasets.utils import load_datasets
-from bellek.hf.transformers.experiment import preprocess_config
-from bellek.hf.transformers.generation import preprocess_generation_params
-from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
-from bellek.hf.transformers.utils import prepare_model_kwargs
-from bellek.jerx.reward.heuristic import compute_heuristic_reward
-from bellek.jerx.reward.llm import assess_quality
-from bellek.jerx.reward.qa import make_qa_reward_func
-from bellek.logging import get_logger
-from bellek.ml.experiment import main
-from bellek.utils import NestedDict, flatten_dict
+from bellem.hf.datasets.utils import load_datasets
+from bellem.hf.transformers.experiment import preprocess_config
+from bellem.hf.transformers.generation import preprocess_generation_params
+from bellem.hf.transformers.llama3 import prepare_llama3_for_inference
+from bellem.hf.transformers.utils import prepare_model_kwargs
+from bellem.jerx.reward.heuristic import compute_heuristic_reward
+from bellem.jerx.reward.llm import assess_quality
+from bellem.jerx.reward.qa import make_qa_reward_func
+from bellem.logging import get_logger
+from bellem.ml.experiment import main
+from bellem.utils import NestedDict, flatten_dict
 
 load_dotenv()
 

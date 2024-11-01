@@ -8,8 +8,8 @@ from pathlib import Path
 import dspy
 from dspy.evaluate import Evaluate
 from datasets import load_dataset
-from bellek.utils import set_seed
-from bellek.musique.eval import (
+from bellem.utils import set_seed
+from bellem.musique.eval import (
     aggregate_scores,
     compute_scores,
     compute_scores_dataframe,
@@ -79,7 +79,7 @@ def get_predict_cls(technique):
     elif technique == "cot":
         return dspy.ChainOfThought
     elif technique == "cte":
-        from bellek.dspy.predict.cte import ConnectTheEntities
+        from bellem.dspy.predict.cte import ConnectTheEntities
 
         return ConnectTheEntities
     else:

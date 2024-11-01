@@ -1,12 +1,12 @@
 import pandas as pd
 import wandb
 
-from bellek.hf.transformers.experiment import evaluate_, preprocess_config
-from bellek.jerx.eval import parse_triplet_strings
-from bellek.logging import get_logger
-from bellek.ml.experiment import main
-from bellek.text.utils import fuzzy_match
-from bellek.utils import NestedDict
+from bellem.hf.transformers.experiment import evaluate_, preprocess_config
+from bellem.jerx.eval import parse_triplet_strings
+from bellem.logging import get_logger
+from bellem.ml.experiment import main
+from bellem.text.utils import fuzzy_match
+from bellem.utils import NestedDict
 
 log = get_logger(__name__)
 

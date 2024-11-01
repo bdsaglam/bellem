@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from bellek.ml.data import IMAGENET_LABEL_IDS
+from bellem.ml.data import IMAGENET_LABEL_IDS
 
 
 class ClassCopier:
