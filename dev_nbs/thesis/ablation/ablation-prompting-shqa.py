@@ -9,9 +9,9 @@ from pathlib import Path
 from copy import deepcopy
 from functools import partial
 
-from bellek.musique.qa import answer_question_standard, answer_question_cot, answer_question_cot_fs, answer_question_cte
-from bellek.utils import set_seed, jprint
-from bellek.musique.singlehop import benchmark
+from bellem.musique.qa import answer_question_standard, answer_question_cot, answer_question_cot_fs, answer_question_cte
+from bellem.utils import set_seed, jprint
+from bellem.musique.singlehop import benchmark
 
 set_seed(89)
 
@@ -30,7 +30,7 @@ def perfect_retrieval_func(docs, query):
 N_RUNS = 3
 
 # %%
-from bellek.musique.constants import ABLATION_RECORD_IDS
+from bellem.musique.constants import ABLATION_RECORD_IDS
 
 df = pd.read_json('../../data/generated/musique-common/base-dataset-validation.jsonl', orient='records', lines=True)
 df = df.set_index('id', drop=False).loc[ABLATION_RECORD_IDS].copy().reset_index(drop=True)

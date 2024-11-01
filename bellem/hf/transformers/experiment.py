@@ -108,13 +108,13 @@ def prepare_model_for_training(tokenizer, model):
     model_id = model.name_or_path.lower()
 
     if "llama-2" in model_id:
-        from bellek.hf.transformers.llama2 import prepare_llama2_for_training
+        from bellem.hf.transformers.llama2 import prepare_llama2_for_training
 
         log.info("Base model is a llama-2 model, preparing it for training.")
         prepare_llama2_for_training(tokenizer, model)
     
     elif "llama-3" in model_id:
-        from bellek.hf.transformers.llama3 import prepare_llama3_for_training
+        from bellem.hf.transformers.llama3 import prepare_llama3_for_training
 
         log.info("Base model is a llama-3 model, preparing it for training.")
         prepare_llama3_for_training(tokenizer, model)
@@ -222,13 +222,13 @@ def prepare_model_for_inference(tokenizer, model):
     model_id = model.name_or_path.lower()
 
     if "llama-2" in model_id:
-        from bellek.hf.transformers.llama2 import prepare_llama2_for_inference
+        from bellem.hf.transformers.llama2 import prepare_llama2_for_inference
 
         log.info("Base model is a llama-2 model, preparing it for inference.")
         prepare_llama2_for_inference(tokenizer, model)
     
     elif "llama-3" in model_id:
-        from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
+        from bellem.hf.transformers.llama3 import prepare_llama3_for_inference
 
         log.info("Base model is a llama-3 model, preparing it for inference.")
         prepare_llama3_for_inference(tokenizer, model)

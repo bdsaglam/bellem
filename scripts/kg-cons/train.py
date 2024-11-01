@@ -1,7 +1,7 @@
-from bellek.hf.transformers.experiment import fine_tune, preprocess_config
-from bellek.logging import get_logger
-from bellek.ml.experiment import main
-from bellek.utils import NestedDict, flatten_dict
+from bellem.hf.transformers.experiment import fine_tune, preprocess_config
+from bellem.logging import get_logger
+from bellem.ml.experiment import main
+from bellem.utils import NestedDict, flatten_dict
 
 log = get_logger(__name__)
 

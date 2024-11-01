@@ -6,7 +6,7 @@
       "batch_size": 16
     },
     "imagenet_sketch": {
-      "path": "/Users/bdsaglam/knowledge/bellek/tmp/imagenette-sketch",
+      "path": "/Users/bdsaglam/knowledge/bellem/tmp/imagenette-sketch",
       "valid_pct": 0.3,
       "batch_size": 16
     }

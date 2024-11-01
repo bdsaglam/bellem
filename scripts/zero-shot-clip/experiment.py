@@ -19,15 +19,15 @@ from fastai.vision.all import *
 from fastcore.basics import ifnone, store_attr
 from torchvision import transforms
 
-from bellek.ml.clip import *
-from bellek.ml.coop import *
-from bellek.ml.data import *
-from bellek.ml.evaluation import evaluate_slmc
-from bellek.ml.experiment import *
-from bellek.ml.mcd import *
-from bellek.ml.vision import *
-from bellek.utils import *
-from bellek.ds import *
+from bellem.ml.clip import *
+from bellem.ml.coop import *
+from bellem.ml.data import *
+from bellem.ml.evaluation import evaluate_slmc
+from bellem.ml.experiment import *
+from bellem.ml.mcd import *
+from bellem.ml.vision import *
+from bellem.utils import *
+from bellem.ds import *
 
 imagenet_label_map = get_imagenet_id_label_map()
 

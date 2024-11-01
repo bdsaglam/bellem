@@ -12,9 +12,9 @@ from dotenv import load_dotenv
 from rich.console import Console
 from tqdm import tqdm
 
-from bellek.musique.qa import make_qa_func
-from bellek.musique.singlehop import BaselineSingleHop
-from bellek.utils import set_seed
+from bellem.musique.qa import make_qa_func
+from bellem.musique.singlehop import BaselineSingleHop
+from bellem.utils import set_seed
 
 print = Console(stderr=True).print
 

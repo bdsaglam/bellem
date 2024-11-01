@@ -339,7 +339,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/00f97fb18633c37b63bef579e0fd0a1a7e521d50/00f97fb18633c37b63bef579e0fd0a1a7e521d50.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/00f97fb18633c37b63bef579e0fd0a1a7e521d50/00f97fb18633c37b63bef579e0fd0a1a7e521d50.out",
                         "pid": 1126591,
                         "returncode": 0,
                         "task_id": "00f97fb18633c37b63bef579e0fd0a1a7e521d50"
@@ -466,7 +466,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/0af9b76723add290985848edeb17c3f3c8fd4344/0af9b76723add290985848edeb17c3f3c8fd4344.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/0af9b76723add290985848edeb17c3f3c8fd4344/0af9b76723add290985848edeb17c3f3c8fd4344.out",
                         "pid": 1126560,
                         "returncode": 0,
                         "task_id": "0af9b76723add290985848edeb17c3f3c8fd4344"
@@ -593,7 +593,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/5f5a45b5b6bfc67fef3809d97a11b4a8dc6d783e/5f5a45b5b6bfc67fef3809d97a11b4a8dc6d783e.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/5f5a45b5b6bfc67fef3809d97a11b4a8dc6d783e/5f5a45b5b6bfc67fef3809d97a11b4a8dc6d783e.out",
                         "pid": 1126490,
                         "returncode": 0,
                         "task_id": "5f5a45b5b6bfc67fef3809d97a11b4a8dc6d783e"
@@ -720,7 +720,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/847d1d57b80a1513de8c785e9dbef71190db5a13/847d1d57b80a1513de8c785e9dbef71190db5a13.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/847d1d57b80a1513de8c785e9dbef71190db5a13/847d1d57b80a1513de8c785e9dbef71190db5a13.out",
                         "pid": 1126507,
                         "returncode": 0,
                         "task_id": "847d1d57b80a1513de8c785e9dbef71190db5a13"
@@ -847,7 +847,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/a24af3a18ea076875a4728744a9562f46069ead5/a24af3a18ea076875a4728744a9562f46069ead5.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/a24af3a18ea076875a4728744a9562f46069ead5/a24af3a18ea076875a4728744a9562f46069ead5.out",
                         "pid": 1126457,
                         "returncode": 0,
                         "task_id": "a24af3a18ea076875a4728744a9562f46069ead5"
@@ -974,7 +974,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/7fee50588f5bae56af8994b649402197a4d5524d/7fee50588f5bae56af8994b649402197a4d5524d.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/7fee50588f5bae56af8994b649402197a4d5524d/7fee50588f5bae56af8994b649402197a4d5524d.out",
                         "pid": 1126433,
                         "returncode": 0,
                         "task_id": "7fee50588f5bae56af8994b649402197a4d5524d"
@@ -1101,7 +1101,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/cb952caa32cef870c33d257602b74e06be29a840/cb952caa32cef870c33d257602b74e06be29a840.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/cb952caa32cef870c33d257602b74e06be29a840/cb952caa32cef870c33d257602b74e06be29a840.out",
                         "pid": 1126454,
                         "returncode": 0,
                         "task_id": "cb952caa32cef870c33d257602b74e06be29a840"
@@ -1228,7 +1228,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/511fdd646dd90df7c89ee7f775722cf32919f105/511fdd646dd90df7c89ee7f775722cf32919f105.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/511fdd646dd90df7c89ee7f775722cf32919f105/511fdd646dd90df7c89ee7f775722cf32919f105.out",
                         "pid": 1126493,
                         "returncode": 0,
                         "task_id": "511fdd646dd90df7c89ee7f775722cf32919f105"
@@ -1355,7 +1355,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/0b8b6b3a262cc752a9b65b2493bcbc7814bea637/0b8b6b3a262cc752a9b65b2493bcbc7814bea637.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/0b8b6b3a262cc752a9b65b2493bcbc7814bea637/0b8b6b3a262cc752a9b65b2493bcbc7814bea637.out",
                         "pid": 1126414,
                         "returncode": 0,
                         "task_id": "0b8b6b3a262cc752a9b65b2493bcbc7814bea637"
@@ -1482,7 +1482,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/41129cf9d1f1f509410862aa494dad707102b73f/41129cf9d1f1f509410862aa494dad707102b73f.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/41129cf9d1f1f509410862aa494dad707102b73f/41129cf9d1f1f509410862aa494dad707102b73f.out",
                         "pid": 1126424,
                         "returncode": 0,
                         "task_id": "41129cf9d1f1f509410862aa494dad707102b73f"
@@ -1609,7 +1609,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/7abac03ee5c9585d3c6231f1bf67be2c108b79ed/7abac03ee5c9585d3c6231f1bf67be2c108b79ed.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/7abac03ee5c9585d3c6231f1bf67be2c108b79ed/7abac03ee5c9585d3c6231f1bf67be2c108b79ed.out",
                         "pid": 1126418,
                         "returncode": 0,
                         "task_id": "7abac03ee5c9585d3c6231f1bf67be2c108b79ed"
@@ -1736,7 +1736,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/0885bfbb39d9936ca65aa99050a901f8cb5e51ab/0885bfbb39d9936ca65aa99050a901f8cb5e51ab.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/0885bfbb39d9936ca65aa99050a901f8cb5e51ab/0885bfbb39d9936ca65aa99050a901f8cb5e51ab.out",
                         "pid": 1126439,
                         "returncode": 0,
                         "task_id": "0885bfbb39d9936ca65aa99050a901f8cb5e51ab"
@@ -1863,7 +1863,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/d19042d9c7d3206352544ed00dd228cd65d9ce74/d19042d9c7d3206352544ed00dd228cd65d9ce74.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/d19042d9c7d3206352544ed00dd228cd65d9ce74/d19042d9c7d3206352544ed00dd228cd65d9ce74.out",
                         "pid": 1126407,
                         "returncode": 0,
                         "task_id": "d19042d9c7d3206352544ed00dd228cd65d9ce74"
@@ -1990,7 +1990,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/d89fad7b25b3095a2ee3ecb26b988c1d3080aa79/d89fad7b25b3095a2ee3ecb26b988c1d3080aa79.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/d89fad7b25b3095a2ee3ecb26b988c1d3080aa79/d89fad7b25b3095a2ee3ecb26b988c1d3080aa79.out",
                         "pid": 1126417,
                         "returncode": 0,
                         "task_id": "d89fad7b25b3095a2ee3ecb26b988c1d3080aa79"
@@ -2117,7 +2117,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/7edb806a6f207a82a106ec276375150c9ce2d79e/7edb806a6f207a82a106ec276375150c9ce2d79e.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/7edb806a6f207a82a106ec276375150c9ce2d79e/7edb806a6f207a82a106ec276375150c9ce2d79e.out",
                         "pid": 1124743,
                         "returncode": 0,
                         "task_id": "7edb806a6f207a82a106ec276375150c9ce2d79e"
@@ -2244,7 +2244,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/d6f055e301d460545fc573aab2837bc1b5d452f2/d6f055e301d460545fc573aab2837bc1b5d452f2.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/d6f055e301d460545fc573aab2837bc1b5d452f2/d6f055e301d460545fc573aab2837bc1b5d452f2.out",
                         "pid": 984766,
                         "returncode": 0,
                         "task_id": "d6f055e301d460545fc573aab2837bc1b5d452f2"
@@ -2371,7 +2371,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/23365fe0d2229c42e6e42350187a81cba536d2e4/23365fe0d2229c42e6e42350187a81cba536d2e4.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/23365fe0d2229c42e6e42350187a81cba536d2e4/23365fe0d2229c42e6e42350187a81cba536d2e4.out",
                         "pid": 984770,
                         "returncode": 0,
                         "task_id": "23365fe0d2229c42e6e42350187a81cba536d2e4"
@@ -2498,7 +2498,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/fbaf1fa69d56deecab2624a099e0910c2654b89e/fbaf1fa69d56deecab2624a099e0910c2654b89e.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/fbaf1fa69d56deecab2624a099e0910c2654b89e/fbaf1fa69d56deecab2624a099e0910c2654b89e.out",
                         "pid": 984777,
                         "returncode": 0,
                         "task_id": "fbaf1fa69d56deecab2624a099e0910c2654b89e"
@@ -2625,7 +2625,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/f0e4e8ea45c2427537c41ef318b82ada478d6a93/f0e4e8ea45c2427537c41ef318b82ada478d6a93.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/f0e4e8ea45c2427537c41ef318b82ada478d6a93/f0e4e8ea45c2427537c41ef318b82ada478d6a93.out",
                         "pid": 984745,
                         "returncode": 0,
                         "task_id": "f0e4e8ea45c2427537c41ef318b82ada478d6a93"
@@ -2752,7 +2752,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/dc09d81c1b6b41d2d8717c885af14c021561c74e/dc09d81c1b6b41d2d8717c885af14c021561c74e.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/dc09d81c1b6b41d2d8717c885af14c021561c74e/dc09d81c1b6b41d2d8717c885af14c021561c74e.out",
                         "pid": 984760,
                         "returncode": 0,
                         "task_id": "dc09d81c1b6b41d2d8717c885af14c021561c74e"
@@ -2879,7 +2879,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/baad7987ec9cad9d72752761f7810e65559fa96b/baad7987ec9cad9d72752761f7810e65559fa96b.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/baad7987ec9cad9d72752761f7810e65559fa96b/baad7987ec9cad9d72752761f7810e65559fa96b.out",
                         "pid": 984756,
                         "returncode": 0,
                         "task_id": "baad7987ec9cad9d72752761f7810e65559fa96b"
@@ -3006,7 +3006,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/febe1da7426f50f053cd03767ac698fc7bff642f/febe1da7426f50f053cd03767ac698fc7bff642f.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/febe1da7426f50f053cd03767ac698fc7bff642f/febe1da7426f50f053cd03767ac698fc7bff642f.out",
                         "pid": 986114,
                         "returncode": 0,
                         "task_id": "febe1da7426f50f053cd03767ac698fc7bff642f"
@@ -3133,7 +3133,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/1664dd48570f8be609cfd07d77db9199c0b1740e/1664dd48570f8be609cfd07d77db9199c0b1740e.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/1664dd48570f8be609cfd07d77db9199c0b1740e/1664dd48570f8be609cfd07d77db9199c0b1740e.out",
                         "pid": 986112,
                         "returncode": 0,
                         "task_id": "1664dd48570f8be609cfd07d77db9199c0b1740e"
@@ -3260,7 +3260,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/593fb3f1fcce64ee495b483368fdfadac70518da/593fb3f1fcce64ee495b483368fdfadac70518da.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/593fb3f1fcce64ee495b483368fdfadac70518da/593fb3f1fcce64ee495b483368fdfadac70518da.out",
                         "pid": 985963,
                         "returncode": 0,
                         "task_id": "593fb3f1fcce64ee495b483368fdfadac70518da"
@@ -3387,7 +3387,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/70048c569501bbb2ab05413d56cb5f287caad5f2/70048c569501bbb2ab05413d56cb5f287caad5f2.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/70048c569501bbb2ab05413d56cb5f287caad5f2/70048c569501bbb2ab05413d56cb5f287caad5f2.out",
                         "pid": 986116,
                         "returncode": 0,
                         "task_id": "70048c569501bbb2ab05413d56cb5f287caad5f2"
@@ -3514,7 +3514,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/92285c5bc3ccd23c220ffe292db8974bed27c13c/92285c5bc3ccd23c220ffe292db8974bed27c13c.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/92285c5bc3ccd23c220ffe292db8974bed27c13c/92285c5bc3ccd23c220ffe292db8974bed27c13c.out",
                         "pid": 986109,
                         "returncode": 0,
                         "task_id": "92285c5bc3ccd23c220ffe292db8974bed27c13c"
@@ -3641,7 +3641,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/6031a6625123f84c4974c6dfa90b6a9e758ddb78/6031a6625123f84c4974c6dfa90b6a9e758ddb78.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/6031a6625123f84c4974c6dfa90b6a9e758ddb78/6031a6625123f84c4974c6dfa90b6a9e758ddb78.out",
                         "pid": 986102,
                         "returncode": 0,
                         "task_id": "6031a6625123f84c4974c6dfa90b6a9e758ddb78"
@@ -3768,7 +3768,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/d75d215f9b82aee0d2ab9b689977161f1c76b1d6/d75d215f9b82aee0d2ab9b689977161f1c76b1d6.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/d75d215f9b82aee0d2ab9b689977161f1c76b1d6/d75d215f9b82aee0d2ab9b689977161f1c76b1d6.out",
                         "pid": 987302,
                         "returncode": 0,
                         "task_id": "d75d215f9b82aee0d2ab9b689977161f1c76b1d6"
@@ -3895,7 +3895,7 @@
                     "name": "dvc-task",
                     "local": {
                         "root": null,
-                        "log": "/home/pc/Documents/baris/bellek/.dvc/tmp/exps/run/a2a8ae70926e4983261eea857c0536c776c3c3b1/a2a8ae70926e4983261eea857c0536c776c3c3b1.out",
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/a2a8ae70926e4983261eea857c0536c776c3c3b1/a2a8ae70926e4983261eea857c0536c776c3c3b1.out",
                         "pid": 987372,
                         "returncode": 0,
                         "task_id": "a2a8ae70926e4983261eea857c0536c776c3c3b1"

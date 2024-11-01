@@ -1,9 +1,9 @@
 import wandb
 
-from bellek.hf.transformers.experiment import predict, preprocess_config
-from bellek.logging import get_logger
-from bellek.ml.experiment import main
-from bellek.utils import NestedDict
+from bellem.hf.transformers.experiment import predict, preprocess_config
+from bellem.logging import get_logger
+from bellem.ml.experiment import main
+from bellem.utils import NestedDict
 
 log = get_logger(__name__)
 

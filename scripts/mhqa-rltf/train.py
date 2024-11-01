@@ -8,15 +8,15 @@ from tqdm import tqdm
 from transformers import AutoTokenizer
 from trl import AutoModelForCausalLMWithValueHead, PPOConfig, PPOTrainer, set_seed
 
-from bellek.hf.datasets.utils import load_datasets
-from bellek.hf.transformers.experiment import preprocess_config
-from bellek.hf.transformers.generation import preprocess_generation_params
-from bellek.hf.transformers.llama3 import prepare_llama3_for_inference
-from bellek.hf.transformers.utils import prepare_model_kwargs
-from bellek.logging import get_logger
-from bellek.mhqa.llm import parse_llm_generation
-from bellek.ml.experiment import main
-from bellek.utils import NestedDict, flatten_dict
+from bellem.hf.datasets.utils import load_datasets
+from bellem.hf.transformers.experiment import preprocess_config
+from bellem.hf.transformers.generation import preprocess_generation_params
+from bellem.hf.transformers.llama3 import prepare_llama3_for_inference
+from bellem.hf.transformers.utils import prepare_model_kwargs
+from bellem.logging import get_logger
+from bellem.mhqa.llm import parse_llm_generation
+from bellem.ml.experiment import main
+from bellem.utils import NestedDict, flatten_dict
 
 load_dotenv()
 

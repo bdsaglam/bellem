@@ -1,7 +1,7 @@
 import json
 
-from bellek.hf.transformers.utils import merge_adapters_and_publish
-from bellek.utils import NestedDict
+from bellem.hf.transformers.utils import merge_adapters_and_publish
+from bellem.utils import NestedDict
 
 
 def main(args):

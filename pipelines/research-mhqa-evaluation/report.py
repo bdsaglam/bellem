@@ -8,7 +8,7 @@ from datasets import load_dataset
 from dotenv import load_dotenv
 from rich.console import Console
 
-from bellek.utils import set_seed
+from bellem.utils import set_seed
 
 print = Console(stderr=True).print
 

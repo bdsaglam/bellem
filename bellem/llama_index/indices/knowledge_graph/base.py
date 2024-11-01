@@ -105,7 +105,7 @@ class KnowledgeGraphIndex(BaseIndex[KG]):
         return self._graph_store
 
     def as_retriever(self, **kwargs: Any) -> BaseRetriever:
-        from bellek.llama_index.indices.knowledge_graph.retrievers import KGTableRetriever
+        from bellem.llama_index.indices.knowledge_graph.retrievers import KGTableRetriever
         from llama_index.indices.knowledge_graph.retrievers import KGRetrieverMode
         if len(self.index_struct.embedding_dict) > 0 and "retriever_mode" not in kwargs:
             kwargs["retriever_mode"] = KGRetrieverMode.HYBRID

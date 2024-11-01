@@ -2,8 +2,8 @@ project:
   output-dir: _docs
 
 website:
-  title: "bellek"
-  site-url: "https://bdsaglam.github.io/bellek"
+  title: "bellem"
+  site-url: "https://bdsaglam.github.io/bellem"
   description: "My digital memory"
   repo-branch: master
-  repo-url: "https://github.com/bdsaglam/bellek"
+  repo-url: "https://github.com/bdsaglam/bellem"

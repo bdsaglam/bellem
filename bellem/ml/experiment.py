@@ -13,7 +13,7 @@ from ..ds import NestedDict, flatten_dict
 # %% ../../nbs/ml.experiment.ipynb 4
 def make_experiment_dir(root=".experiments", name=None):
     if name is None:
-        from bellek.utils import generate_time_id
+        from bellem.utils import generate_time_id
         name = generate_time_id()
     experiment_dir = Path(root) / name
     experiment_dir.mkdir(parents=True, exist_ok=True)
