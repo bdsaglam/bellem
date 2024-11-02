@@ -1,5 +1,5 @@
 [core]
     remote = s3-remote
 ['remote "s3-remote"']
-    url = s3://bellek-dvc
+    url = s3://bellem-dvc
     profile = dvc
