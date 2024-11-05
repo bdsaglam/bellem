@@ -7,7 +7,7 @@ train:
 
 evaluation:
   dataset:
-    path: bdsaglam/musique
+    path: bdsaglam/hotpotqa-distractor
     name: answerable
     split: validation
 
