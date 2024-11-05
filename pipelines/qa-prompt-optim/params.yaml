@@ -8,7 +8,7 @@ train:
 evaluation:
   dataset:
     path: bdsaglam/hotpotqa-distractor
-    name: answerable
+    name: default
     split: validation
 
 qa:
