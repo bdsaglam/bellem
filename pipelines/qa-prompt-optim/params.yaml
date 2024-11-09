@@ -1,6 +1,6 @@
 train:
   dataset:
-    path: hotpotqa-distractor-mini
+    path: bdsaglam/hotpotqa-distractor-mini
     name: default
     split: train
   optimizer: noop
