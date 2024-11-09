@@ -1,7 +1,7 @@
 train:
   dataset:
-    path: bdsaglam/musique-mini
-    name: answerable
+    path: hotpotqa-distractor-mini
+    name: default
     split: train
   optimizer: noop
 
