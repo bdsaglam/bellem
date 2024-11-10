@@ -1,6 +1,6 @@
 dataset:
-  path: bdsaglam/hotpotqa-distractor
-  name: default
+  path: bdsaglam/musique
+  name: answerable
   split: validation
 
 qa:
