@@ -1,1 +1,1539 @@
-[{"rev": "workspace", "name": null, "data": {"rev": "workspace", "timestamp": null, "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "noop"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.55, "f1": 0.6629834609834611, "fuzzy_match": 0.61, "2hops": {"exact_match": 0.6, "f1": 0.7348075258075258, "fuzzy_match": 0.68}, "3hops": {"exact_match": 0.59, "f1": 0.6825476190476191, "fuzzy_match": 0.64}, "4hops": {"exact_match": 0.46, "f1": 0.5715952380952382, "fuzzy_match": 0.51}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "32a3b06f59271b13ab0119fc92c3b701", "size": 6925, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {"hash": "37a6259cc0c1dae299a7866489dff0bd", "size": 4, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "a5b8571b578ecf10fd095cd7ebcbe4dc", "size": 741013, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}, {"rev": "d2d20798ebf29c7dd3ad956626990d4097c2943d", "name": "master", "data": {"rev": "d2d20798ebf29c7dd3ad956626990d4097c2943d", "timestamp": "2024-11-05T21:55:13", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "noop"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"error": {"type": "FileNotFoundError", "msg": "[Errno 2] No storage files available: 'data/generated/qa-prompt-optim/evaluation/scores.json'"}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "32a3b06f59271b13ab0119fc92c3b701", "size": 6925, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {"hash": "37a6259cc0c1dae299a7866489dff0bd", "size": 4, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "a5b8571b578ecf10fd095cd7ebcbe4dc", "size": 741013, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": [{"revs": [{"rev": "9aa812f8e20dea6167aeff9954902ec2fc91f850", "name": "alpha-jags", "data": {"rev": "9aa812f8e20dea6167aeff9954902ec2fc91f850", "timestamp": "2024-11-08T04:16:04", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfsrs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cte"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845, "2hops": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {"hash": "253f31f23b1c8125194a15dd875856ce", "size": 349, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "319454059e61243317e1711d8fbfd905", "size": 12529561, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/749101987e01116ddde41d3590c61108be8c30e5/749101987e01116ddde41d3590c61108be8c30e5.out", "pid": 926993, "returncode": 0, "task_id": "749101987e01116ddde41d3590c61108be8c30e5"}}, "name": "alpha-jags"}, {"revs": [{"rev": "55198d4da80b2a04a679a59f6a0d9e1b6c784a26", "name": "toned-halm", "data": {"rev": "55198d4da80b2a04a679a59f6a0d9e1b6c784a26", "timestamp": "2024-11-08T02:30:45", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "miprov2-light"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cte"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845, "2hops": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/miprov2-light.json": {"hash": "a16066ffb8f60bddf153060df57c05b2", "size": 296, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "319454059e61243317e1711d8fbfd905", "size": 12529561, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/b913d3b503d256c054aa573b757c90b420c876bd/b913d3b503d256c054aa573b757c90b420c876bd.out", "pid": 956034, "returncode": 0, "task_id": "b913d3b503d256c054aa573b757c90b420c876bd"}}, "name": "toned-halm"}, {"revs": [{"rev": "435a1d39d24414490ee042d33f8f85a22fac3697", "name": "rimed-pice", "data": {"rev": "435a1d39d24414490ee042d33f8f85a22fac3697", "timestamp": "2024-11-08T02:30:15", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cte"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6649561107359891, "f1": 0.8144546841289102, "fuzzy_match": 0.7106009453072248, "2hops": {"exact_match": 0.6649561107359891, "f1": 0.8144546841289102, "fuzzy_match": 0.7106009453072248}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {"hash": "364d059ff2dca2bea9de918a51319023", "size": 237, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a144ba22658a283a9c059253ccb1e4a6", "size": 6600, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a144ba22658a283a9c059253ccb1e4a6", "size": 6600, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "e3cf7edd5182fd960866a848a31d8f36", "size": 12087014, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/2cd63a12c5c139348cd3575c9b5470174c836bc2/2cd63a12c5c139348cd3575c9b5470174c836bc2.out", "pid": 846966, "returncode": 0, "task_id": "2cd63a12c5c139348cd3575c9b5470174c836bc2"}}, "name": "rimed-pice"}, {"revs": [{"rev": "61275a7acb54b369d8b8c6d81221bc153d6bd5f7", "name": "flown-bate", "data": {"rev": "61275a7acb54b369d8b8c6d81221bc153d6bd5f7", "timestamp": "2024-11-08T01:28:47", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "miprov2-light"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cot"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6582039162727886, "f1": 0.8102545562212395, "fuzzy_match": 0.7068197164078326, "2hops": {"exact_match": 0.6582039162727886, "f1": 0.8102545562212395, "fuzzy_match": 0.7068197164078326}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/miprov2-light.json": {"hash": "a16066ffb8f60bddf153060df57c05b2", "size": 296, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "bf76252094e789520d57bb57885a9457", "size": 5755, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "bf76252094e789520d57bb57885a9457", "size": 5755, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "de563af1f3b70628c02cccbc7e695956", "size": 12943418, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/04301ee68548814724c21575b3e66a093c5532e2/04301ee68548814724c21575b3e66a093c5532e2.out", "pid": 788481, "returncode": 0, "task_id": "04301ee68548814724c21575b3e66a093c5532e2"}}, "name": "flown-bate"}, {"revs": [{"rev": "a8346bb5158d0bcc679d7580aa89d45dc99520b9", "name": "truer-term", "data": {"rev": "a8346bb5158d0bcc679d7580aa89d45dc99520b9", "timestamp": "2024-11-07T22:35:04", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfsrs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cot"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.662120189061445, "f1": 0.811369481393756, "fuzzy_match": 0.7085752869682647, "2hops": {"exact_match": 0.662120189061445, "f1": 0.811369481393756, "fuzzy_match": 0.7085752869682647}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {"hash": "253f31f23b1c8125194a15dd875856ce", "size": 349, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "ed8e7fffb8e48b1eec5d6ee2ca4e2794", "size": 6826, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "ed8e7fffb8e48b1eec5d6ee2ca4e2794", "size": 6826, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "6c4af75ab5d38fa0d23aa08a39f44700", "size": 12173837, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/176552d962047034ca1c83f85301b3c234784d33/176552d962047034ca1c83f85301b3c234784d33.out", "pid": 722129, "returncode": 0, "task_id": "176552d962047034ca1c83f85301b3c234784d33"}}, "name": "truer-term"}, {"revs": [{"rev": "24dc6b8a90f6093202a47d290ccf83e06add9517", "name": "cagey-scab", "data": {"rev": "24dc6b8a90f6093202a47d290ccf83e06add9517", "timestamp": "2024-11-07T20:36:52", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cot"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6617150573936529, "f1": 0.8132349403301753, "fuzzy_match": 0.7073598919648886, "2hops": {"exact_match": 0.6617150573936529, "f1": 0.8132349403301753, "fuzzy_match": 0.7073598919648886}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {"hash": "364d059ff2dca2bea9de918a51319023", "size": 237, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "91ec21d4f2b5b754f207fe407cf82309", "size": 6304, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "91ec21d4f2b5b754f207fe407cf82309", "size": 6304, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "0d8dc4e1df797955ec737df6a9df9111", "size": 12157841, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/dfde193778de5eca81a3bbdb3860147b39d825e1/dfde193778de5eca81a3bbdb3860147b39d825e1.out", "pid": 684594, "returncode": 0, "task_id": "dfde193778de5eca81a3bbdb3860147b39d825e1"}}, "name": "cagey-scab"}, {"revs": [{"rev": "acac5eacdc745062e1448f2d06ce061b96915c51", "name": "heady-ceps", "data": {"rev": "acac5eacdc745062e1448f2d06ce061b96915c51", "timestamp": "2024-11-07T18:17:17", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "miprov2-light"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6641458474004052, "f1": 0.8117849993228059, "fuzzy_match": 0.7111411208642809, "2hops": {"exact_match": 0.6641458474004052, "f1": 0.8117849993228059, "fuzzy_match": 0.7111411208642809}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/miprov2-light.json": {"hash": "a16066ffb8f60bddf153060df57c05b2", "size": 296, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "742cc0be2c010bf4a08a4a51eb78a93e", "size": 5382, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "742cc0be2c010bf4a08a4a51eb78a93e", "size": 5382, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "b710e391d6148d9a3354dc47f4e2c073", "size": 11601401, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/bd93f29778b28caf4c0c6640009a758b7a1dc418/bd93f29778b28caf4c0c6640009a758b7a1dc418.out", "pid": 659369, "returncode": 0, "task_id": "bd93f29778b28caf4c0c6640009a758b7a1dc418"}}, "name": "heady-ceps"}, {"revs": [{"rev": "9eebc0b969921988fe582a8e690c66f25f37c6f8", "name": "buggy-cors", "data": {"rev": "9eebc0b969921988fe582a8e690c66f25f37c6f8", "timestamp": "2024-11-07T16:19:47", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfsrs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6664415935178933, "f1": 0.811328572837894, "fuzzy_match": 0.7097906819716407, "2hops": {"exact_match": 0.6664415935178933, "f1": 0.811328572837894, "fuzzy_match": 0.7097906819716407}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {"hash": "253f31f23b1c8125194a15dd875856ce", "size": 349, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "37d3fd8d1e84307281d3f9136460b2b5", "size": 8728, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "37d3fd8d1e84307281d3f9136460b2b5", "size": 8728, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "e7dbb0b43a79865a4a8407902783a029", "size": 11597572, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/b8d9e054a5a8412bd55cbbc00fc23970048efdeb/b8d9e054a5a8412bd55cbbc00fc23970048efdeb.out", "pid": 645163, "returncode": 0, "task_id": "b8d9e054a5a8412bd55cbbc00fc23970048efdeb"}}, "name": "buggy-cors"}, {"revs": [{"rev": "d0788a7beac1120a1ede0e9789cc2585f40f5099", "name": "lushy-data", "data": {"rev": "d0788a7beac1120a1ede0e9789cc2585f40f5099", "timestamp": "2024-11-07T14:34:12", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "noop"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cte"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845, "2hops": {"exact_match": 0.6428089128966914, "f1": 0.8029698761484035, "fuzzy_match": 0.7058744091829845}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {"hash": "37a6259cc0c1dae299a7866489dff0bd", "size": 4, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "a210fdd14059ad681912863fde77539e", "size": 1536, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "319454059e61243317e1711d8fbfd905", "size": 12529561, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/05b50de1ddb3d5b0939d2884f7869c73ea3a087b/05b50de1ddb3d5b0939d2884f7869c73ea3a087b.out", "pid": 616166, "returncode": 0, "task_id": "05b50de1ddb3d5b0939d2884f7869c73ea3a087b"}}, "name": "lushy-data"}, {"revs": [{"rev": "389f922ba033ab64750a7571af0e1bce82c3ee95", "name": "dated-nine", "data": {"rev": "389f922ba033ab64750a7571af0e1bce82c3ee95", "timestamp": "2024-11-07T13:03:41", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "bfs-medium"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6642808912896692, "f1": 0.8117793444940221, "fuzzy_match": 0.7106009453072248, "2hops": {"exact_match": 0.6642808912896692, "f1": 0.8117793444940221, "fuzzy_match": 0.7106009453072248}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {"hash": "364d059ff2dca2bea9de918a51319023", "size": 237, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "ba3b21c3afebf1509e762386df2b408e", "size": 5336, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "ba3b21c3afebf1509e762386df2b408e", "size": 5336, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "e4a370f8e8377fdaef0dd855e2a5f630", "size": 11602486, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/e7d3fdb3f9fd211df7f7dee477e3701aaf08d854/e7d3fdb3f9fd211df7f7dee477e3701aaf08d854.out", "pid": 616188, "returncode": 0, "task_id": "e7d3fdb3f9fd211df7f7dee477e3701aaf08d854"}}, "name": "dated-nine"}, {"revs": [{"rev": "4e043929c98605b0835f306cfdc4f682e872572a", "name": "glare-ossa", "data": {"rev": "4e043929c98605b0835f306cfdc4f682e872572a", "timestamp": "2024-11-05T23:30:35", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "noop"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "cot"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6325455773126266, "f1": 0.7959422638808719, "fuzzy_match": 0.7065496286293045, "2hops": {"exact_match": 0.6325455773126266, "f1": 0.7959422638808719, "fuzzy_match": 0.7065496286293045}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {"hash": "37a6259cc0c1dae299a7866489dff0bd", "size": 4, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "da2a768a393210d9b00c0dd297129f77", "size": 1232, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "da2a768a393210d9b00c0dd297129f77", "size": 1232, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "f82d26f07b9430785ed07c6d9f2bd304", "size": 13316018, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/048d4e32cac5f32978ea22c3e104f6c3eccb35e7/048d4e32cac5f32978ea22c3e104f6c3eccb35e7.out", "pid": 302980, "returncode": 0, "task_id": "048d4e32cac5f32978ea22c3e104f6c3eccb35e7"}}, "name": "glare-ossa"}, {"revs": [{"rev": "c7362662ad676fca7c693de8e345609179e2e587", "name": "taunt-coed", "data": {"rev": "c7362662ad676fca7c693de8e345609179e2e587", "timestamp": "2024-11-05T22:55:30", "params": {"pipelines/qa-prompt-optim/params.yaml": {"data": {"train": {"dataset": {"path": "bdsaglam/musique-mini", "name": "answerable", "split": "train"}, "optimizer": "noop"}, "qa": {"model": "llama-3-70b-tgi", "temperature": 0.1, "technique": "standard"}, "evaluation": {"dataset": {"path": "bdsaglam/hotpotqa-distractor", "name": "default", "split": "validation"}}, "run": 1}}}, "metrics": {"data/generated/qa-prompt-optim/evaluation/scores.json": {"data": {"exact_match": 0.6318703578663065, "f1": 0.7926342238978084, "fuzzy_match": 0.7015530047265361, "2hops": {"exact_match": 0.6318703578663065, "f1": 0.7926342238978084, "fuzzy_match": 0.7015530047265361}}}}, "deps": {"pipelines/qa-prompt-optim/main.py": {"hash": "c3dffe3d948da37e08bc3dd06ad2da56", "size": 7003, "nfiles": null}, "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {"hash": "37a6259cc0c1dae299a7866489dff0bd", "size": 4, "nfiles": null}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null}}, "outs": {"data/raw": {"hash": "0598c65d8afd37282d02a8b1337ff922.dir", "size": 11799, "nfiles": 36, "use_cache": true, "is_data_source": true}, "data/generated/qa-prompt-optim/training/trained-program.json": {"hash": "e5542f827baec8c8a90f98af3f5cbf64", "size": 528, "nfiles": null, "use_cache": true, "is_data_source": false}, "data/generated/qa-prompt-optim/evaluation/results.jsonl": {"hash": "4898232ace46ce222bf12f572d6e83bf", "size": 11597301, "nfiles": null, "use_cache": true, "is_data_source": false}}, "meta": {}}, "error": null, "experiments": null}], "executor": {"state": "success", "name": "dvc-task", "local": {"root": null, "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/3489aaa543b8e4fab7a2c8dd299e1226254f488a/3489aaa543b8e4fab7a2c8dd299e1226254f488a.out", "pid": 302883, "returncode": 0, "task_id": "3489aaa543b8e4fab7a2c8dd299e1226254f488a"}}, "name": "taunt-coed"}]}]
+[
+    {
+        "rev": "workspace",
+        "name": null,
+        "data": {
+            "rev": "workspace",
+            "timestamp": null,
+            "params": {
+                "pipelines/qa-prompt-optim/params.yaml": {
+                    "data": {
+                        "train": {
+                            "dataset": {
+                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                "name": "default",
+                                "split": "train"
+                            },
+                            "optimizer": "noop"
+                        },
+                        "qa": {
+                            "model": "llama-3-70b-tgi",
+                            "temperature": 0.1,
+                            "technique": "standard"
+                        },
+                        "evaluation": {
+                            "dataset": {
+                                "path": "bdsaglam/hotpotqa-distractor",
+                                "name": "default",
+                                "split": "validation"
+                            }
+                        },
+                        "run": 1
+                    }
+                }
+            },
+            "metrics": {
+                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                    "data": {
+                        "exact_match": 0.55,
+                        "f1": 0.6629834609834611,
+                        "fuzzy_match": 0.61,
+                        "2hops": {
+                            "exact_match": 0.6,
+                            "f1": 0.7348075258075258,
+                            "fuzzy_match": 0.68
+                        },
+                        "3hops": {
+                            "exact_match": 0.59,
+                            "f1": 0.6825476190476191,
+                            "fuzzy_match": 0.64
+                        },
+                        "4hops": {
+                            "exact_match": 0.46,
+                            "f1": 0.5715952380952382,
+                            "fuzzy_match": 0.51
+                        }
+                    }
+                }
+            },
+            "deps": {
+                "pipelines/qa-prompt-optim/main.py": {
+                    "hash": "32a3b06f59271b13ab0119fc92c3b701",
+                    "size": 6925,
+                    "nfiles": null
+                },
+                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                    "size": 4,
+                    "nfiles": null
+                },
+                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                    "size": 528,
+                    "nfiles": null
+                }
+            },
+            "outs": {
+                "data/raw": {
+                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                    "size": 11799,
+                    "nfiles": 36,
+                    "use_cache": true,
+                    "is_data_source": true
+                },
+                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                    "size": 528,
+                    "nfiles": null,
+                    "use_cache": true,
+                    "is_data_source": false
+                },
+                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                    "hash": "a5b8571b578ecf10fd095cd7ebcbe4dc",
+                    "size": 741013,
+                    "nfiles": null,
+                    "use_cache": true,
+                    "is_data_source": false
+                }
+            },
+            "meta": {}
+        },
+        "error": null,
+        "experiments": null
+    },
+    {
+        "rev": "86235ef8a25eba95d1a2d299585b39e77d437c89",
+        "name": "master",
+        "data": {
+            "rev": "86235ef8a25eba95d1a2d299585b39e77d437c89",
+            "timestamp": "2024-11-09T12:54:15",
+            "params": {
+                "pipelines/qa-prompt-optim/params.yaml": {
+                    "data": {
+                        "train": {
+                            "dataset": {
+                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                "name": "default",
+                                "split": "train"
+                            },
+                            "optimizer": "noop"
+                        },
+                        "qa": {
+                            "model": "llama-3-70b-tgi",
+                            "temperature": 0.1,
+                            "technique": "standard"
+                        },
+                        "evaluation": {
+                            "dataset": {
+                                "path": "bdsaglam/hotpotqa-distractor",
+                                "name": "default",
+                                "split": "validation"
+                            }
+                        },
+                        "run": 1
+                    }
+                }
+            },
+            "metrics": {
+                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                    "error": {
+                        "type": "FileNotFoundError",
+                        "msg": "[Errno 2] No storage files available: 'data/generated/qa-prompt-optim/evaluation/scores.json'"
+                    }
+                }
+            },
+            "deps": {
+                "pipelines/qa-prompt-optim/main.py": {
+                    "hash": "32a3b06f59271b13ab0119fc92c3b701",
+                    "size": 6925,
+                    "nfiles": null
+                },
+                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                    "size": 4,
+                    "nfiles": null
+                },
+                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                    "size": 528,
+                    "nfiles": null
+                }
+            },
+            "outs": {
+                "data/raw": {
+                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                    "size": 11799,
+                    "nfiles": 36,
+                    "use_cache": true,
+                    "is_data_source": true
+                },
+                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                    "size": 528,
+                    "nfiles": null,
+                    "use_cache": true,
+                    "is_data_source": false
+                },
+                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                    "hash": "a5b8571b578ecf10fd095cd7ebcbe4dc",
+                    "size": 741013,
+                    "nfiles": null,
+                    "use_cache": true,
+                    "is_data_source": false
+                }
+            },
+            "meta": {}
+        },
+        "error": null,
+        "experiments": [
+            {
+                "revs": [
+                    {
+                        "rev": "abdbe44453f9f88247cd17e749b64593f2729f6d",
+                        "name": "sorer-bind",
+                        "data": {
+                            "rev": "abdbe44453f9f88247cd17e749b64593f2729f6d",
+                            "timestamp": "2024-11-10T06:47:12",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfsrs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cte"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6730587440918299,
+                                        "f1": 0.8193138126136105,
+                                        "fuzzy_match": 0.7155975692099933,
+                                        "2hops": {
+                                            "exact_match": 0.6751503006012024,
+                                            "f1": 0.8182146745013795,
+                                            "fuzzy_match": 0.6949899799599198
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6510710259301015,
+                                            "f1": 0.8099416289703733,
+                                            "fuzzy_match": 0.7480270574971815
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.7875,
+                                            "f1": 0.9016071428571429,
+                                            "fuzzy_match": 0.775
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.7094972067039106,
+                                            "f1": 0.8468576078582651,
+                                            "fuzzy_match": 0.7932960893854749
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.7142857142857143,
+                                            "f1": 0.8761904761904761,
+                                            "fuzzy_match": 0.7142857142857143
+                                        },
+                                        "8hops": {
+                                            "exact_match": 1.0,
+                                            "f1": 1.0,
+                                            "fuzzy_match": 1.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {
+                                    "hash": "253f31f23b1c8125194a15dd875856ce",
+                                    "size": 349,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e86bf99ae862a7fbb5d4a8642f0e65ad",
+                                    "size": 8264,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e86bf99ae862a7fbb5d4a8642f0e65ad",
+                                    "size": 8264,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "c76e5a378805c1d1d8f910d95eace988",
+                                    "size": 12650963,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/49285567e9faed7d3db2ba554995d6ac9abf29cd/49285567e9faed7d3db2ba554995d6ac9abf29cd.out",
+                        "pid": 1704972,
+                        "returncode": 0,
+                        "task_id": "49285567e9faed7d3db2ba554995d6ac9abf29cd"
+                    }
+                },
+                "name": "sorer-bind"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "da196b5645445e8e913e1763532e14673c2e584b",
+                        "name": "herby-taco",
+                        "data": {
+                            "rev": "da196b5645445e8e913e1763532e14673c2e584b",
+                            "timestamp": "2024-11-10T03:51:58",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfsrs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cot"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6710330857528697,
+                                        "f1": 0.8212240644528331,
+                                        "fuzzy_match": 0.7411208642808913,
+                                        "2hops": {
+                                            "exact_match": 0.6743486973947895,
+                                            "f1": 0.8209624506862553,
+                                            "fuzzy_match": 0.7288577154308618
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6471251409244645,
+                                            "f1": 0.8113144968252471,
+                                            "fuzzy_match": 0.7576099210822999
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.775,
+                                            "f1": 0.8953571428571427,
+                                            "fuzzy_match": 0.7875
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.7039106145251397,
+                                            "f1": 0.8453185838961937,
+                                            "fuzzy_match": 0.7970204841713222
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.7142857142857143,
+                                            "f1": 0.8279761904761905,
+                                            "fuzzy_match": 0.7142857142857143
+                                        },
+                                        "8hops": {
+                                            "exact_match": 1.0,
+                                            "f1": 1.0,
+                                            "fuzzy_match": 1.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {
+                                    "hash": "253f31f23b1c8125194a15dd875856ce",
+                                    "size": 349,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "ae6744a414621ef03204053343fd7625",
+                                    "size": 6900,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "ae6744a414621ef03204053343fd7625",
+                                    "size": 6900,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "137da2002a177a52d44716709031da80",
+                                    "size": 12759543,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/f4349a166a33aa49e3168d2cfc51e1bc268896d6/f4349a166a33aa49e3168d2cfc51e1bc268896d6.out",
+                        "pid": 1593427,
+                        "returncode": 0,
+                        "task_id": "f4349a166a33aa49e3168d2cfc51e1bc268896d6"
+                    }
+                },
+                "name": "herby-taco"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "280262ac35bea51ec7d6ebdc7515819f6b24c0f0",
+                        "name": "zonal-whit",
+                        "data": {
+                            "rev": "280262ac35bea51ec7d6ebdc7515819f6b24c0f0",
+                            "timestamp": "2024-11-10T01:49:45",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cte"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6607697501688049,
+                                        "f1": 0.811347971134978,
+                                        "fuzzy_match": 0.7049291019581364,
+                                        "2hops": {
+                                            "exact_match": 0.6641282565130261,
+                                            "f1": 0.8101299482272967,
+                                            "fuzzy_match": 0.685370741482966
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6364148816234498,
+                                            "f1": 0.8020323334521832,
+                                            "fuzzy_match": 0.7361894024802705
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.7875,
+                                            "f1": 0.9099404761904761,
+                                            "fuzzy_match": 0.775
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.6927374301675978,
+                                            "f1": 0.837823572419855,
+                                            "fuzzy_match": 0.776536312849162
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.7142857142857143,
+                                            "f1": 0.8761904761904761,
+                                            "fuzzy_match": 0.7142857142857143
+                                        },
+                                        "8hops": {
+                                            "exact_match": 0.0,
+                                            "f1": 0.5714285714285715,
+                                            "fuzzy_match": 0.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {
+                                    "hash": "364d059ff2dca2bea9de918a51319023",
+                                    "size": 237,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e26d4b0eb5d1745c78e790a2bc7cca83",
+                                    "size": 6885,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e26d4b0eb5d1745c78e790a2bc7cca83",
+                                    "size": 6885,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "325676df3a651b62815f73e905b1cf6f",
+                                    "size": 12655066,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/7db697d18e813beea7755f76c3dac4024b62c246/7db697d18e813beea7755f76c3dac4024b62c246.out",
+                        "pid": 1636362,
+                        "returncode": 0,
+                        "task_id": "7db697d18e813beea7755f76c3dac4024b62c246"
+                    }
+                },
+                "name": "zonal-whit"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "33b32c5e56b7c5eac5949ec28ee5c8d1cb34a9d5",
+                        "name": "liked-tale",
+                        "data": {
+                            "rev": "33b32c5e56b7c5eac5949ec28ee5c8d1cb34a9d5",
+                            "timestamp": "2024-11-09T21:42:05",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "noop"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cte"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6428089128966914,
+                                        "f1": 0.8029698761484035,
+                                        "fuzzy_match": 0.7058744091829845,
+                                        "2hops": {
+                                            "exact_match": 0.6428089128966914,
+                                            "f1": 0.8029698761484035,
+                                            "fuzzy_match": 0.7058744091829845
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                                    "size": 4,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "a210fdd14059ad681912863fde77539e",
+                                    "size": 1536,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "a210fdd14059ad681912863fde77539e",
+                                    "size": 1536,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "319454059e61243317e1711d8fbfd905",
+                                    "size": 12529561,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/a17d299be84f665d581192e2ff48959ecae95437/a17d299be84f665d581192e2ff48959ecae95437.out",
+                        "pid": 1636018,
+                        "returncode": 0,
+                        "task_id": "a17d299be84f665d581192e2ff48959ecae95437"
+                    }
+                },
+                "name": "liked-tale"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "3971e81fa13981d1d40c1d31c7052e0d417ba92b",
+                        "name": "keyed-pons",
+                        "data": {
+                            "rev": "3971e81fa13981d1d40c1d31c7052e0d417ba92b",
+                            "timestamp": "2024-11-09T21:41:46",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cot"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6584740040513167,
+                                        "f1": 0.8086054100109897,
+                                        "fuzzy_match": 0.7034436191762323,
+                                        "2hops": {
+                                            "exact_match": 0.6615230460921844,
+                                            "f1": 0.8071655116433291,
+                                            "fuzzy_match": 0.6807615230460922
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6347237880496054,
+                                            "f1": 0.8006367218010895,
+                                            "fuzzy_match": 0.7406989853438557
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.7625,
+                                            "f1": 0.8849404761904761,
+                                            "fuzzy_match": 0.775
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.6945996275605214,
+                                            "f1": 0.8375090790703845,
+                                            "fuzzy_match": 0.7839851024208566
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.6428571428571429,
+                                            "f1": 0.7833333333333333,
+                                            "fuzzy_match": 0.6428571428571429
+                                        },
+                                        "8hops": {
+                                            "exact_match": 1.0,
+                                            "f1": 1.0,
+                                            "fuzzy_match": 1.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {
+                                    "hash": "364d059ff2dca2bea9de918a51319023",
+                                    "size": 237,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "b3a9ffa43f28dc8e401fdbf42229f63b",
+                                    "size": 6781,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "b3a9ffa43f28dc8e401fdbf42229f63b",
+                                    "size": 6781,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "8f37c2f7e7059c19c88df3a9f00b5cef",
+                                    "size": 13503190,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/a2a3d7a2df93110a429566247798dc4143f13376/a2a3d7a2df93110a429566247798dc4143f13376.out",
+                        "pid": 1526492,
+                        "returncode": 0,
+                        "task_id": "a2a3d7a2df93110a429566247798dc4143f13376"
+                    }
+                },
+                "name": "keyed-pons"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "8df5badd5894e760ee898a7c4f697b821c5f3c44",
+                        "name": "lucky-rein",
+                        "data": {
+                            "rev": "8df5badd5894e760ee898a7c4f697b821c5f3c44",
+                            "timestamp": "2024-11-09T19:48:04",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfsrs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "standard"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6704929101958136,
+                                        "f1": 0.8158472057337142,
+                                        "fuzzy_match": 0.713166779203241,
+                                        "2hops": {
+                                            "exact_match": 0.6727454909819639,
+                                            "f1": 0.8142248153808981,
+                                            "fuzzy_match": 0.6919839679358717
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6499436302142052,
+                                            "f1": 0.8094451716975628,
+                                            "fuzzy_match": 0.7485907553551296
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.775,
+                                            "f1": 0.895357142857143,
+                                            "fuzzy_match": 0.775
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.702048417132216,
+                                            "f1": 0.838700975209355,
+                                            "fuzzy_match": 0.7858472998137802
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.7142857142857143,
+                                            "f1": 0.8761904761904761,
+                                            "fuzzy_match": 0.7142857142857143
+                                        },
+                                        "8hops": {
+                                            "exact_match": 1.0,
+                                            "f1": 1.0,
+                                            "fuzzy_match": 1.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfsrs-medium.json": {
+                                    "hash": "253f31f23b1c8125194a15dd875856ce",
+                                    "size": 349,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "431b07060d3b9577f24430c55a3910e9",
+                                    "size": 7128,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "431b07060d3b9577f24430c55a3910e9",
+                                    "size": 7128,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "56be3437803e438d4d49fe71e7143e67",
+                                    "size": 12169080,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/0c1b814f9ceacaca373efe03555664f90cdc8e85/0c1b814f9ceacaca373efe03555664f90cdc8e85.out",
+                        "pid": 1412036,
+                        "returncode": 0,
+                        "task_id": "0c1b814f9ceacaca373efe03555664f90cdc8e85"
+                    }
+                },
+                "name": "lucky-rein"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "858bac7d690ff078dd5a9a48e3e05ed38e47bee6",
+                        "name": "snuff-halm",
+                        "data": {
+                            "rev": "858bac7d690ff078dd5a9a48e3e05ed38e47bee6",
+                            "timestamp": "2024-11-09T16:37:47",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "noop"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cot"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6325455773126266,
+                                        "f1": 0.7959422638808719,
+                                        "fuzzy_match": 0.7065496286293045,
+                                        "2hops": {
+                                            "exact_match": 0.6325455773126266,
+                                            "f1": 0.7959422638808719,
+                                            "fuzzy_match": 0.7065496286293045
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                                    "size": 4,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "da2a768a393210d9b00c0dd297129f77",
+                                    "size": 1232,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "da2a768a393210d9b00c0dd297129f77",
+                                    "size": 1232,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "f82d26f07b9430785ed07c6d9f2bd304",
+                                    "size": 13316018,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/056cd318a7f438bd2205869330545b145af2b38c/056cd318a7f438bd2205869330545b145af2b38c.out",
+                        "pid": 1526398,
+                        "returncode": 0,
+                        "task_id": "056cd318a7f438bd2205869330545b145af2b38c"
+                    }
+                },
+                "name": "snuff-halm"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "74b7ca60cbe9116d702e31e7c7e10b111cc9af44",
+                        "name": "pucka-waws",
+                        "data": {
+                            "rev": "74b7ca60cbe9116d702e31e7c7e10b111cc9af44",
+                            "timestamp": "2024-11-09T16:37:40",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "bfs-medium"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "standard"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6614449696151249,
+                                        "f1": 0.8091706030288555,
+                                        "fuzzy_match": 0.7049291019581364,
+                                        "2hops": {
+                                            "exact_match": 0.6629258517034068,
+                                            "f1": 0.8063870236729158,
+                                            "fuzzy_match": 0.6833667334669339
+                                        },
+                                        "3hops": {
+                                            "exact_match": 0.6386696730552424,
+                                            "f1": 0.8029867416678784,
+                                            "fuzzy_match": 0.7390078917700112
+                                        },
+                                        "5hops": {
+                                            "exact_match": 0.8,
+                                            "f1": 0.9120238095238096,
+                                            "fuzzy_match": 0.8
+                                        },
+                                        "4hops": {
+                                            "exact_match": 0.7039106145251397,
+                                            "f1": 0.8391159296995815,
+                                            "fuzzy_match": 0.7821229050279329
+                                        },
+                                        "7hops": {
+                                            "exact_match": 0.5555555555555556,
+                                            "f1": 0.7925925925925925,
+                                            "fuzzy_match": 0.5555555555555556
+                                        },
+                                        "6hops": {
+                                            "exact_match": 0.7142857142857143,
+                                            "f1": 0.8761904761904761,
+                                            "fuzzy_match": 0.7142857142857143
+                                        },
+                                        "8hops": {
+                                            "exact_match": 0.0,
+                                            "f1": 0.5714285714285715,
+                                            "fuzzy_match": 0.0
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/bfs-medium.json": {
+                                    "hash": "364d059ff2dca2bea9de918a51319023",
+                                    "size": 237,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "d055b5680c32f9239584d32dddf6b50a",
+                                    "size": 5621,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "d055b5680c32f9239584d32dddf6b50a",
+                                    "size": 5621,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "a256538a8e25414b2430c1e704215c6f",
+                                    "size": 12171936,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/5f3cf18aba7d0bdd76ca5b4f07f5d5929006cd2a/5f3cf18aba7d0bdd76ca5b4f07f5d5929006cd2a.out",
+                        "pid": 1411868,
+                        "returncode": 0,
+                        "task_id": "5f3cf18aba7d0bdd76ca5b4f07f5d5929006cd2a"
+                    }
+                },
+                "name": "pucka-waws"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "4509d64005aee332e05af90d7d53cb300f44d6d5",
+                        "name": "paper-yapp",
+                        "data": {
+                            "rev": "4509d64005aee332e05af90d7d53cb300f44d6d5",
+                            "timestamp": "2024-11-09T13:04:30",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "noop"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "standard"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6318703578663065,
+                                        "f1": 0.7926342238978084,
+                                        "fuzzy_match": 0.7015530047265361,
+                                        "2hops": {
+                                            "exact_match": 0.6318703578663065,
+                                            "f1": 0.7926342238978084,
+                                            "fuzzy_match": 0.7015530047265361
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                                    "size": 4,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                                    "size": 528,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                                    "size": 528,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "4898232ace46ce222bf12f572d6e83bf",
+                                    "size": 11597301,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": {
+                    "state": "success",
+                    "name": "dvc-task",
+                    "local": {
+                        "root": null,
+                        "log": "/home/pc/Documents/baris/bellem/.dvc/tmp/exps/run/124cfdb6659fcc18f0c91fa92aa9aba075ea3d1a/124cfdb6659fcc18f0c91fa92aa9aba075ea3d1a.out",
+                        "pid": 1411867,
+                        "returncode": 0,
+                        "task_id": "124cfdb6659fcc18f0c91fa92aa9aba075ea3d1a"
+                    }
+                },
+                "name": "paper-yapp"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "48fca8aadcc360cd57a65e96a37d9ee50995e6f2",
+                        "name": "pasty-choc",
+                        "data": {
+                            "rev": "48fca8aadcc360cd57a65e96a37d9ee50995e6f2",
+                            "timestamp": "2024-11-09T12:55:54",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "noop"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "cot"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6325455773126266,
+                                        "f1": 0.7959422638808719,
+                                        "fuzzy_match": 0.7065496286293045,
+                                        "2hops": {
+                                            "exact_match": 0.6325455773126266,
+                                            "f1": 0.7959422638808719,
+                                            "fuzzy_match": 0.7065496286293045
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                                    "size": 4,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "da2a768a393210d9b00c0dd297129f77",
+                                    "size": 1232,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "da2a768a393210d9b00c0dd297129f77",
+                                    "size": 1232,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "f82d26f07b9430785ed07c6d9f2bd304",
+                                    "size": 13316018,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": null,
+                "name": "pasty-choc"
+            },
+            {
+                "revs": [
+                    {
+                        "rev": "f4a980d3b7025072ba64129854e1341ce38ea669",
+                        "name": "runty-drab",
+                        "data": {
+                            "rev": "f4a980d3b7025072ba64129854e1341ce38ea669",
+                            "timestamp": "2024-11-09T12:54:59",
+                            "params": {
+                                "pipelines/qa-prompt-optim/params.yaml": {
+                                    "data": {
+                                        "train": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor-mini",
+                                                "name": "default",
+                                                "split": "train"
+                                            },
+                                            "optimizer": "noop"
+                                        },
+                                        "qa": {
+                                            "model": "llama-3-70b-tgi",
+                                            "temperature": 0.1,
+                                            "technique": "standard"
+                                        },
+                                        "evaluation": {
+                                            "dataset": {
+                                                "path": "bdsaglam/hotpotqa-distractor",
+                                                "name": "default",
+                                                "split": "validation"
+                                            }
+                                        },
+                                        "run": 1
+                                    }
+                                }
+                            },
+                            "metrics": {
+                                "data/generated/qa-prompt-optim/evaluation/scores.json": {
+                                    "data": {
+                                        "exact_match": 0.6318703578663065,
+                                        "f1": 0.7926342238978084,
+                                        "fuzzy_match": 0.7015530047265361,
+                                        "2hops": {
+                                            "exact_match": 0.6318703578663065,
+                                            "f1": 0.7926342238978084,
+                                            "fuzzy_match": 0.7015530047265361
+                                        }
+                                    }
+                                }
+                            },
+                            "deps": {
+                                "pipelines/qa-prompt-optim/main.py": {
+                                    "hash": "c3dffe3d948da37e08bc3dd06ad2da56",
+                                    "size": 7003,
+                                    "nfiles": null
+                                },
+                                "data/raw/qa-prompt-optim/optimizer-configs/noop.json": {
+                                    "hash": "37a6259cc0c1dae299a7866489dff0bd",
+                                    "size": 4,
+                                    "nfiles": null
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                                    "size": 528,
+                                    "nfiles": null
+                                }
+                            },
+                            "outs": {
+                                "data/raw": {
+                                    "hash": "0598c65d8afd37282d02a8b1337ff922.dir",
+                                    "size": 11799,
+                                    "nfiles": 36,
+                                    "use_cache": true,
+                                    "is_data_source": true
+                                },
+                                "data/generated/qa-prompt-optim/training/trained-program.json": {
+                                    "hash": "e5542f827baec8c8a90f98af3f5cbf64",
+                                    "size": 528,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                },
+                                "data/generated/qa-prompt-optim/evaluation/results.jsonl": {
+                                    "hash": "4898232ace46ce222bf12f572d6e83bf",
+                                    "size": 11597301,
+                                    "nfiles": null,
+                                    "use_cache": true,
+                                    "is_data_source": false
+                                }
+                            },
+                            "meta": {}
+                        },
+                        "error": null,
+                        "experiments": null
+                    }
+                ],
+                "executor": null,
+                "name": "runty-drab"
+            }
+        ]
+    }
+]
