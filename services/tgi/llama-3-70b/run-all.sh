@@ -14,11 +14,10 @@ docker run \
     -p 8080:80 \
     -v "${VOLUME}":/data \
     -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
-    -e CUDA_VISIBLE_DEVICES=0,1 \
     $IMAGE \
     --trust-remote-code \
     --model-id $MODEL \
     --dtype bfloat16 \
-    --num-shard 2 --sharded true \
+    --num-shard 4 --sharded true \
     --max-input-tokens 7168 \
     --max-total-tokens 8192
