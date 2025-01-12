@@ -14,7 +14,7 @@ log = get_logger(__name__)
 # %% ../../nbs/dspy.utils.ipynb 4
 def configure_lm(
     model: str = "openai/gpt-4o-mini",
-    temperature: float = 0.3,
+    temperature: float = 0.0,
     cache: bool = False,
     **kwargs,
 ):
@@ -27,4 +27,5 @@ def configure_lm(
         **kwargs,
     )
     dspy.configure(lm=lm)
+    return lm
 
