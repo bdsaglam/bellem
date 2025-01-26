@@ -1,15 +1,16 @@
 #!/bin/bash
 HUGGING_FACE_HUB_TOKEN="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"
 
-MODEL="meta-llama/Llama-3.3-70B-Instruct"
+MODEL="meta-llama/Meta-Llama-3-70B-Instruct"
 
 VOLUME="${HOME}/.cache/huggingface/tgi"
 mkdir -p $VOLUME
 
-IMAGE=ghcr.io/huggingface/text-generation-inference:3.0.1
+IMAGE=ghcr.io/huggingface/text-generation-inference:2.3.0
 
 docker run \
     --gpus all \
+    --shm-size 64g \
     -p 8080:80 \
     -v "${VOLUME}":/data \
     -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
@@ -18,5 +19,6 @@ docker run \
     --trust-remote-code \
     --model-id $MODEL \
     --dtype bfloat16 \
+    --num-shard 4 --sharded true \
     --max-input-tokens 7168 \
     --max-total-tokens 8192
