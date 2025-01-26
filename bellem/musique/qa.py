@@ -4,9 +4,10 @@
 __all__ = ['log', 'DEFAULT_MODEL', 'DEFAULT_COMPLETION_KWARGS', 'DEFAULT_USER_PROMPT_TEMPLATE', 'SYSTEM_PROMPT_STANDARD',
            'answer_question_standard', 'SYSTEM_PROMPT_COT', 'answer_question_cot_zs', 'FEW_SHOT_EXAMPLES_COT',
            'answer_question_cot_fs', 'SYSTEM_PROMPT_CTE', 'answer_question_cte_zs', 'FEW_SHOT_EXAMPLES_CTE',
-           'answer_question_cte_fs', 'make_qa_func', 'load_qa_func']
+           'answer_question_cte_fs', 'make_qa_func', 'load_qa_func', 'self_consistency_decorator']
 
 # %% ../../nbs/musique.qa.ipynb 4
+from collections import Counter
 from typing import Callable
 
 import openai
@@ -16,8 +17,8 @@ from ..logging import get_logger
 log = get_logger(__name__)
 
 # %% ../../nbs/musique.qa.ipynb 5
-DEFAULT_MODEL = "gpt-3.5-turbo"
-DEFAULT_COMPLETION_KWARGS = {"temperature": 0.1}
+DEFAULT_MODEL = "gpt-4o-mini"
+DEFAULT_COMPLETION_KWARGS = {"temperature": 0.5}
 
 # %% ../../nbs/musique.qa.ipynb 7
 DEFAULT_USER_PROMPT_TEMPLATE = """The context information is provided below.
@@ -184,3 +185,20 @@ def load_qa_func(prompt_technique: str) -> Callable:
         return answer_question_cte_fs
     else:
         raise ValueError(f"Unknown prompt technique: {prompt_technique}")
+
+# %% ../../nbs/musique.qa.ipynb 22
+def self_consistency_decorator(qa_func: Callable, n_samples: int = 10) -> Callable:
+    """A decorator for Self-Consistency Prompting technique, which will apply majority voting on the answers."""
+    def self_consistent_qa_func(
+        context: str,
+        question: str,
+        *args,
+        **kwargs,
+    ) -> dict:
+        results =  [qa_func(context, question, *args, **kwargs) for _ in range(n_samples)]
+        answers = [result["answer"] for result in results]
+        majority_answer = Counter(answers).most_common(1)[0][0]
+        generation = "\n\n".join(result["generation"] for result in results)
+        return dict(answer=majority_answer, generation=generation)
+
+    return self_consistent_qa_func
